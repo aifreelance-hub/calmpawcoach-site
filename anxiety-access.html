@@ -396,5 +396,42 @@
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
+  <script>
+  (function () {
+    const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
+    const token = localStorage.getItem("calmpaw_token");
+
+    function goAuth() {
+      const redirect = window.location.pathname + window.location.search;
+      window.location.href = "/auth.html?redirect=" + encodeURIComponent(redirect);
+    }
+
+    if (!token) {
+      goAuth();
+      return;
+    }
+
+    fetch(API_BASE + "/auth/check-plan?slug=anxiety", {
+      method: "GET",
+      headers: { Authorization: "Bearer " + token },
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          localStorage.removeItem("calmpaw_token");
+          localStorage.removeItem("calmpaw_email");
+          goAuth();
+          return;
+        }
+        const data = await res.json();
+        if (!data.ok || !data.access) {
+          // 登录但没买 anxiety → 回到对应介绍页
+          window.location.href = "/program-anxiety.html";
+        }
+      })
+      .catch(() => {
+        goAuth();
+      });
+  })();
+</script>
 </body>
 </html>
