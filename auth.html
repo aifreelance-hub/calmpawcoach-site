@@ -295,8 +295,8 @@
         </div>
       </div>
       <p class="hint">
-        For now, the code will appear in the internal logs (while we connect email).
-        In production, your clients will receive it in their inbox.
+        While testing, the code is printed in the Worker logs.  
+        In production, your clients will receive it by email.
       </p>
       <button class="btn btn-primary" id="btn-register">
         Create account & sign in
@@ -323,7 +323,7 @@
         </div>
       </div>
       <p class="hint">
-        Use this when you forget your password. You&rsquo;ll receive a code and then create a new one.
+        Use this when you forget your password. You’ll receive a code and then create a new one.
       </p>
       <button class="btn btn-primary" id="btn-reset">
         Set new password & sign in
@@ -338,100 +338,263 @@
   </div>
 
   <script>
-const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
+    // ====== 这里是你 Worker 的 URL（后端接口）======
+    const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
 
-const emailInput = document.getElementById("email");
-const codeInput = document.getElementById("code");
-const passwordInput = document.getElementById("password");
-const btnSendCode = document.getElementById("sendCodeBtn");
-const btnRegister = document.getElementById("registerBtn");
-const btnLogin = document.getElementById("loginBtn");
+    const tabs = document.querySelectorAll(".tab-btn");
+    const forms = {
+      login: document.getElementById("form-login"),
+      register: document.getElementById("form-register"),
+      reset: document.getElementById("form-reset"),
+    };
+    const statusEl = document.getElementById("status");
 
-// 读取 redirect 参数（从 access pages 跳过来的）
-const urlParams = new URLSearchParams(window.location.search);
-const redirectTo = urlParams.get("redirect") || "/programs.html";
+    const loginEmail = document.getElementById("login-email");
+    const loginPassword = document.getElementById("login-password");
+    const btnLogin = document.getElementById("btn-login");
 
-// ========== 发送验证码 ==========
-btnSendCode.onclick = async function () {
-  const email = emailInput.value.trim();
-  if (!email) {
-    alert("Please enter your email");
-    return;
-  }
+    const regEmail = document.getElementById("reg-email");
+    const regPassword = document.getElementById("reg-password");
+    const regCode = document.getElementById("reg-code");
+    const btnSendRegCode = document.getElementById("btn-send-reg-code");
+    const btnRegister = document.getElementById("btn-register");
 
-  const res = await fetch(API_BASE + "/auth/send-code", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email }),
-  });
+    const resetEmail = document.getElementById("reset-email");
+    const resetPassword = document.getElementById("reset-password");
+    const resetCode = document.getElementById("reset-code");
+    const btnSendResetCode = document.getElementById("btn-send-reset-code");
+    const btnReset = document.getElementById("btn-reset");
 
-  const data = await res.json();
-  if (res.ok && data.ok) {
-    alert("Verification code sent!");
-  } else {
-    alert(data.msg || "Failed to send code");
-  }
-};
+    const linkToRegister = document.getElementById("link-to-register");
+    const linkToReset = document.getElementById("link-to-reset");
 
-// ========== 注册（验证码 + 设置密码） ==========
-btnRegister.onclick = async function () {
-  const email = emailInput.value.trim();
-  const code = codeInput.value.trim();
-  const password = passwordInput.value.trim();
+    function showStatus(msg, type = "ok") {
+      statusEl.textContent = msg || "";
+      statusEl.classList.remove("ok", "err");
+      if (msg) statusEl.classList.add(type === "ok" ? "ok" : "err");
+    }
 
-  if (!email || !code || !password) {
-    alert("Please complete all fields.");
-    return;
-  }
+    function setLoading(button, loading) {
+      if (!button) return;
+      if (loading) {
+        button.disabled = true;
+        button.dataset._text = button.textContent;
+        button.textContent = "Working…";
+      } else {
+        button.disabled = false;
+        if (button.dataset._text) {
+          button.textContent = button.dataset._text;
+          delete button.dataset._text;
+        }
+      }
+    }
 
-  const res = await fetch(API_BASE + "/auth/register", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, code, password }),
-  });
+    // 切换 Tab
+    function activateTab(name) {
+      tabs.forEach((t) => t.classList.toggle("active", t.dataset.tab === name));
+      Object.keys(forms).forEach((key) => {
+        forms[key].classList.toggle("active", key === name);
+      });
+      showStatus("");
+    }
 
-  const data = await res.json();
+    tabs.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        activateTab(btn.dataset.tab);
+      });
+    });
 
-  if (res.ok && data.ok) {
-    alert("Registration successful, logging in...");
-    saveUser(data.token, email);
-    window.location.href = redirectTo;
-  } else {
-    alert(data.msg || "Registration failed");
-  }
-};
+    linkToRegister.addEventListener("click", (e) => {
+      e.preventDefault();
+      activateTab("register");
+      regEmail.value = loginEmail.value || "";
+    });
 
-// ========== 登录 ==========
-btnLogin.onclick = async function () {
-  const email = emailInput.value.trim();
-  const password = passwordInput.value.trim();
+    linkToReset.addEventListener("click", (e) => {
+      e.preventDefault();
+      activateTab("reset");
+      resetEmail.value = loginEmail.value || "";
+    });
 
-  if (!email || !password) {
-    alert("Enter email and password");
-    return;
-  }
+    // 通用：拿 redirect 参数
+    function getRedirectPath() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("redirect") || "/programs.html";
+    }
 
-  const res = await fetch(API_BASE + "/auth/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password }),
-  });
+    function finishLogin(token, email) {
+      localStorage.setItem("calmpaw_token", token);
+      localStorage.setItem("calmpaw_email", email);
+      const redirect = getRedirectPath();
+      window.location.href = redirect;
+    }
 
-  const data = await res.json();
+    // === 注册：发送验证码 ===
+    btnSendRegCode.addEventListener("click", async () => {
+      const email = regEmail.value.trim().toLowerCase();
+      if (!email) {
+        showStatus("Please enter your email first.", "err");
+        return;
+      }
+      setLoading(btnSendRegCode, true);
+      showStatus("");
+      try {
+        const res = await fetch(API_BASE + "/auth/send-code", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, purpose: "register" }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data || data.error) {
+          showStatus(data.error || "Failed to send code.", "err");
+        } else {
+          showStatus("Code sent. Check logs / email.", "ok");
+        }
+      } catch (e) {
+        console.error(e);
+        showStatus("Network error when sending code.", "err");
+      } finally {
+        setLoading(btnSendRegCode, false);
+      }
+    });
 
-  if (res.ok && data.ok) {
-    saveUser(data.token, email);
-    window.location.href = redirectTo;
-  } else {
-    alert(data.msg || "Login failed");
-  }
-};
+    // === 注册：完成注册 ===
+    btnRegister.addEventListener("click", async () => {
+      const email = regEmail.value.trim().toLowerCase();
+      const password = regPassword.value;
+      const code = regCode.value.trim();
 
-// ========== 保存 token 到 localStorage ==========
-function saveUser(token, email) {
-  localStorage.setItem("calmpaw_token", token);
-  localStorage.setItem("calmpaw_email", email);
-}
-</script>
+      if (!email || !password || !code) {
+        showStatus("Email, password and code are all required.", "err");
+        return;
+      }
+      if (password.length < 8) {
+        showStatus("Password must be at least 8 characters.", "err");
+        return;
+      }
+
+      setLoading(btnRegister, true);
+      showStatus("");
+      try {
+        const res = await fetch(API_BASE + "/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password, code }),
+        });
+        const data = await res.json();
+        if (!res.ok || data.error || !data.ok) {
+          showStatus(data.error || "Registration failed.", "err");
+        } else {
+          showStatus("Account created. Redirecting…", "ok");
+          finishLogin(data.token, data.email);
+        }
+      } catch (e) {
+        console.error(e);
+        showStatus("Network error during registration.", "err");
+      } finally {
+        setLoading(btnRegister, false);
+      }
+    });
+
+    // === 登录 ===
+    btnLogin.addEventListener("click", async () => {
+      const email = loginEmail.value.trim().toLowerCase();
+      const password = loginPassword.value;
+
+      if (!email || !password) {
+        showStatus("Please enter email and password.", "err");
+        return;
+      }
+
+      setLoading(btnLogin, true);
+      showStatus("");
+      try {
+        const res = await fetch(API_BASE + "/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+        const data = await res.json();
+        if (!res.ok || data.error || !data.ok) {
+          showStatus(data.error || "Login failed.", "err");
+        } else {
+          showStatus("Login successful. Redirecting…", "ok");
+          finishLogin(data.token, data.email);
+        }
+      } catch (e) {
+        console.error(e);
+        showStatus("Network error during login.", "err");
+      } finally {
+        setLoading(btnLogin, false);
+      }
+    });
+
+    // === 重置密码：发送验证码 ===
+    btnSendResetCode.addEventListener("click", async () => {
+      const email = resetEmail.value.trim().toLowerCase();
+      if (!email) {
+        showStatus("Please enter your email first.", "err");
+        return;
+      }
+      setLoading(btnSendResetCode, true);
+      showStatus("");
+      try {
+        const res = await fetch(API_BASE + "/auth/send-code", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, purpose: "reset" }),
+        });
+        const data = await res.json();
+        if (!res.ok || data.error || !data.ok) {
+          showStatus(data.error || "Failed to send reset code.", "err");
+        } else {
+          showStatus("Reset code sent. Check logs / email.", "ok");
+        }
+      } catch (e) {
+        console.error(e);
+        showStatus("Network error when sending reset code.", "err");
+      } finally {
+        setLoading(btnSendResetCode, false);
+      }
+    });
+
+    // === 重置密码：提交新密码 ===
+    btnReset.addEventListener("click", async () => {
+      const email = resetEmail.value.trim().toLowerCase();
+      const password = resetPassword.value;
+      const code = resetCode.value.trim();
+
+      if (!email || !password || !code) {
+        showStatus("Email, new password and code are all required.", "err");
+        return;
+      }
+      if (password.length < 8) {
+        showStatus("New password must be at least 8 characters.", "err");
+        return;
+      }
+
+      setLoading(btnReset, true);
+      showStatus("");
+      try {
+        const res = await fetch(API_BASE + "/auth/reset-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password, code }),
+        });
+        const data = await res.json();
+        if (!res.ok || data.error || !data.ok) {
+          showStatus(data.error || "Reset password failed.", "err");
+        } else {
+          showStatus("Password updated. Redirecting…", "ok");
+          finishLogin(data.token, data.email);
+        }
+      } catch (e) {
+        console.error(e);
+        showStatus("Network error during password reset.", "err");
+      } finally {
+        setLoading(btnReset, false);
+      }
+    });
+  </script>
 </body>
 </html>
