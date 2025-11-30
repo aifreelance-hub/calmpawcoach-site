@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Leash Plan Access — CalmPaw 10-Day Walking Plan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --bg:#fff7f0;--accent:#ffb86b;--accent-strong:#ff914d;
+      --text-main:#3b2824;--text-soft:#8a6a63;
+      --border-soft:#f3d9c4;--radius-lg:26px;--radius-md:18px;--radius-pill:999px;
+      --shadow-soft:0 24px 60px rgba(210,145,110,0.32);
+    }
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(circle at 5% 0%, #ffe0c0 0%, transparent 55%),
+        radial-gradient(circle at 100% 0%, #ffd4d4 0%, transparent 55%),
+        linear-gradient(180deg,#fff7f0 0%,#fff2e7 40%,#fff8f2 100%);
+      color:var(--text-main);min-height:100vh;-webkit-font-smoothing:antialiased;
+    }
+    a{text-decoration:none;color:inherit;}
+    header{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter:blur(18px);
+      background:linear-gradient(to bottom,rgba(255,248,240,0.98),rgba(255,248,240,0.9));
+      border-bottom:1px solid rgba(243,217,196,0.8);
+    }
+    .nav-inner{
+      max-width:1120px;margin:0 auto;padding:10px 20px;
+      display:flex;align-items:center;justify-content:space-between;gap:14px;
+    }
+    .brand{display:flex;align-items:center;gap:10px;}
+    .brand-logo{
+      width:40px;height:40px;border-radius:18px;
+      background:radial-gradient(circle at 20% 15%,#fff9f3 0%,#ffb86b 40%,#ff914d 84%);
+      display:flex;align-items:center;justify-content:center;
+      font-size:22px;box-shadow:0 16px 40px rgba(214,139,86,0.6);
+    }
+    .brand-text-main{font-weight:750;letter-spacing:.03em;font-size:18px;}
+    .brand-text-sub{font-size:11px;color:var(--text-soft);}
+    .nav-links{display:flex;align-items:center;gap:16px;font-size:14px;color:var(--text-soft);}
+    .nav-links a{padding:6px 11px;border-radius:999px;transition:background .18s ease,color .18s ease,transform .12s ease;}
+    .nav-links a:hover{background:rgba(255,222,186,0.7);color:var(--text-main);transform:translateY(-1px);}
+    @media(max-width:880px){.nav-links{display:none;}}
+    .btn-primary{
+      padding:7px 16px;border-radius:var(--radius-pill);border:none;
+      font-size:13px;font-weight:600;cursor:pointer;
+      background:linear-gradient(135deg,#ffb86b,#ff914d);color:#4a251a;
+      box-shadow:0 16px 36px rgba(214,139,86,0.6);
+      display:inline-flex;align-items:center;gap:6px;
+    }
+    .btn-primary:hover{transform:translateY(-1px) scale(1.01);}
+    .btn-outline{
+      padding:7px 14px;border-radius:var(--radius-pill);
+      border:1px solid var(--border-soft);font-size:13px;
+      background:#fff8f2;color:var(--text-soft);cursor:pointer;
+    }
+    main{max-width:1120px;margin:0 auto;padding:24px 20px 40px;}
+    .hero{
+      display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1.1fr);
+      gap:22px;margin-bottom:26px;align-items:flex-start;
+    }
+    @media(max-width:860px){.hero{grid-template-columns:minmax(0,1fr);}}
+    .hero-tag{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:4px 10px;border-radius:999px;
+      background:rgba(212,241,255,0.9);font-size:11px;color:#2b6a82;
+      margin-bottom:8px;
+    }
+    .hero-title{font-size:22px;margin-bottom:6px;}
+    .hero-sub{font-size:13px;color:var(--text-soft);margin-bottom:10px;max-width:540px;line-height:1.6;}
+    .hero-note{
+      font-size:11px;color:var(--text-soft);margin-bottom:10px;
+      padding:6px 10px;border-radius:var(--radius-pill);
+      background:rgba(240,250,255,0.9);display:inline-flex;align-items:center;gap:6px;
+    }
+    .hero-note span{font-weight:600;color:#2b6a82;}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
+    .hero-card{
+      border-radius:var(--radius-lg);
+      background:rgba(240,250,255,0.96);
+      border:1px solid rgba(200,228,245,0.9);
+      padding:14px 14px 12px;
+      box-shadow:0 16px 34px rgba(167,200,224,0.5);
+      font-size:11px;color:#35596f;
+    }
+    .hero-card h2{font-size:14px;margin-bottom:6px;}
+    .hero-card ul{margin-left:14px;margin-bottom:4px;}
+    .hero-card li{margin-bottom:4px;}
+    .section{margin-bottom:24px;}
+    .section h2{font-size:16px;margin-bottom:6px;}
+    .section p{font-size:13px;color:var(--text-soft);margin-bottom:6px;line-height:1.6;}
+    .days-grid{
+      border-radius:18px;
+      background:#fffaf5;border:1px solid rgba(243,217,196,0.9);
+      padding:12px;font-size:12px;color:var(--text-soft);
+    }
+    .day-block{margin-bottom:10px;padding-bottom:8px;border-bottom:1px dashed rgba(243,217,196,0.8);}
+    .day-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+    .day-title-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;}
+    .day-title{font-weight:600;color:#2f647b;font-size:13px;}
+    .day-time{font-size:11px;color:#547d93;}
+    .day-focus{font-size:11px;color:#a36b4b;margin-bottom:4px;}
+    .day-steps{margin-left:16px;margin-bottom:4px;}
+    .day-steps li{margin-bottom:3px;}
+    .day-tip{font-size:11px;color:#9a6b4e;margin-top:3px;}
+    .highlight-box{
+      border-radius:18px;
+      background:rgba(240,250,255,0.96);
+      border:1px solid rgba(200,228,245,0.9);
+      padding:12px;font-size:12px;color:#35596f;
+    }
+    footer{
+      border-top:1px solid rgba(243,217,196,0.8);
+      background:rgba(255,248,241,0.96);margin-top:10px;
+    }
+    .footer-inner{
+      max-width:1120px;margin:0 auto;
+      padding:12px 20px 16px;
+      display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;
+      font-size:11px;color:var(--text-soft);
+    }
+    .footer-links{display:flex;gap:12px;flex-wrap:wrap;}
+    .footer-links a:hover{color:#b05825;}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-logo">🐾</div>
+        <div>
+          <div class="brand-text-main">CalmPaw Coach</div>
+          <div class="brand-text-sub">Gentle, realistic dog training</div>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="programs.html">Programs</a>
+        <a href="bundle.html">Complete Pack</a>
+        <a href="club.html">Monthly Club</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="hero-tag">Access page · 10-day leash plan unlocked</div>
+        <h1 class="hero-title">Your 10-Day Leash Walking Plan</h1>
+        <p class="hero-sub">
+          This page contains your full 10-day structure for calmer, more
+          enjoyable walks. You can bookmark it and come back anytime.
+        </p>
+        <div class="hero-note">
+          <span>Tip:</span> keep sessions short. It’s better to do 5 quality
+          minutes than 40 minutes of pulling and frustration.
+        </div>
+        <div class="hero-actions">
+          <a href="bundle.html" class="btn-primary">See Complete Pack →</a>
+          <a href="programs.html" class="btn-outline">View other programs</a>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <h2>How to use this plan</h2>
+        <ul>
+          <li>Choose one or two short sessions per day (5–15 minutes).</li>
+          <li>Practice indoors or in quiet areas first, then build outwards.</li>
+          <li>End sessions while your dog is still thinking, not overwhelmed.</li>
+        </ul>
+        <p style="margin-top:6px;">
+          Progress is measured in more moments of slack leash, faster recovery
+          from distractions and walks you don’t dread.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>10-day schedule</h2>
+      <div class="days-grid">
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 1 — Gear & expectations</div>
+            <div class="day-time">10–15 minutes</div>
+          </div>
+          <div class="day-focus">
+            Set up safe equipment and a calm “walk start” routine.
+          </div>
+          <ul class="day-steps">
+            <li>Choose a well-fitted harness or flat collar and a non-retractable leash.</li>
+            <li>Before you clip the leash, wait for a brief moment of calm — then clip and praise.</li>
+            <li>Practice clipping / unclipping 5–10 times while rewarding calm, not jumping.</li>
+          </ul>
+          <div class="day-tip">
+            🎯 Goal: Your dog learns that walks begin with a pause, not a launch.
+          </div>
+        </div>
+
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 2 — “Check-in” indoors</div>
+            <div class="day-time">10 minutes</div>
+          </div>
+          <div class="day-focus">
+            Teach your dog to look back at you and reconnect.
+          </div>
+          <ul class="day-steps">
+            <li>In a quiet room with the leash on, take a few steps.</li>
+            <li>When your dog glances back at you, softly mark it (“yes” / “nice”) and reward by your leg.</li>
+            <li>Repeat 10–15 times. You’re building a habit: checking in is valuable.</li>
+          </ul>
+        </div>
+
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 3 — Loose leash game inside</div>
+            <div class="day-time">10–15 minutes</div>
+          </div>
+          <div class="day-focus">
+            Reward slack leash before you go outside.
+          </div>
+          <ul class="day-steps">
+            <li>Walk slowly around the room. When the leash hangs in a “J” shape, reward by your leg.</li>
+            <li>If the leash goes tight, stop moving. Wait for your dog to step back or turn, then reward and walk again.</li>
+            <li>Keep the tone light — this is a game, not a battle.</li>
+          </ul>
+        </div>
+
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 4 — First short outside session</div>
+            <div class="day-time">5–10 minutes</div>
+          </div>
+          <div class="day-focus">
+            Take the indoor game to a quiet outdoor spot.
+          </div>
+          <ul class="day-steps">
+            <li>Pick the calmest area near your home (courtyard, quiet street, parking lot).</li>
+            <li>Walk small loops, rewarding slack leash and check-ins.</li>
+            <li>End before your dog gets over-excited or tired.</li>
+          </ul>
+        </div>
+
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 5 — Start, stop, start</div>
+            <div class="day-time">10–15 minutes</div>
+          </div>
+          <div class="day-focus">
+            Show your dog that pulling stops the walk, connection restarts it.
+          </div>
+          <ul class="day-steps">
+            <li>On a normal route, walk at a comfortable pace.</li>
+            <li>If your dog pulls hard, gently stop and plant your feet.</li>
+            <li>When your dog softens the leash or looks back, mark it and walk again.</li>
+          </ul>
+        </div>
+
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 6 — Focus near mild distractions</div>
+            <div class="day-time">10–15 minutes</div>
+          </div>
+          <div class="day-focus">
+            Practice near distant people, cars or dogs.
+          </div>
+          <ul class="day-steps">
+            <li>Stay far enough away that your dog can still think and take treats.</li>
+            <li>Reward check-ins and slack leash while the distraction is visible.</li>
+            <li>If your dog locks on and can’t respond, move further away and try again.</li>
+          </ul>
+        </div>
+
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 7 — “Choose you” game</div>
+            <div class="day-time">10 minutes</div>
+          </div>
+          <div class="day-focus">
+            Make you the most interesting part of the walk.
+          </div>
+          <ul class="day-steps">
+            <li>Randomly change direction or speed for a few steps.</li>
+            <li>Each time your dog follows and reconnects, reward warmly.</li>
+            <li>Keep sessions short and playful, not dizzy or chaotic.</li>
+          </ul>
+        </div>
+
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 8 — Real route rehearsal</div>
+            <div class="day-time">15–20 minutes</div>
+          </div>
+          <div class="day-focus">
+            Use your usual walk route and apply all your tools.
+          </div>
+          <ul class="day-steps">
+            <li>Plan one “training walk” with extra time, separate from potty needs.</li>
+            <li>Use stop/start, check-ins and changes of direction when needed.</li>
+            <li>Notice where your dog struggles most and plan extra practice there.</li>
+          </ul>
+        </div>
+
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 9 — Busy-day backup plan</div>
+            <div class="day-time">10 minutes</div>
+          </div>
+          <div class="day-focus">
+            Create a version of the walk for days when you’re tired or rushed.
+          </div>
+          <ul class="day-steps">
+            <li>Choose a shorter, easier route for “busy days”.</li>
+            <li>Focus on one skill only (for example, check-ins) instead of everything.</li>
+            <li>End with a simple sniffing break so your dog still feels satisfied.</li>
+          </ul>
+        </div>
+
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 10 — Review & future routine</div>
+            <div class="day-time">10–15 minutes</div>
+          </div>
+          <div class="day-focus">
+            Lock in habits and decide how you’ll maintain them.
+          </div>
+          <ul class="day-steps">
+            <li>Notice how your walks feel compared to Day 1.</li>
+            <li>Pick 1–2 core rules (for example: “we don’t move forward on a tight leash”).</li>
+            <li>Schedule 1 “training-focused” walk per week to keep progress strong.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>On days when it feels hopeless</h2>
+      <div class="highlight-box">
+        <p style="margin-bottom:6px;">
+          Every dog-human pair has bad walks. Progress is rarely a straight line.
+        </p>
+        <ul style="margin-left:16px;margin-bottom:6px;">
+          <li>Shorten your walk and lower your expectations that day.</li>
+          <li>Celebrate small wins: one calmer corner, one easier passing of a dog.</li>
+          <li>Remember: your dog is not trying to annoy you. They’re excited, curious or anxious.</li>
+        </ul>
+        <p>
+          You can revisit any day of this plan whenever you need a reset.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Want help with other struggles too?</h2>
+      <p>
+        If barking at doors or alone-time panic also affect your life, the
+        <strong>CalmPaw Complete Pack</strong> combines leash walking, barking
+        and separation anxiety plans in one bundle.
+      </p>
+      <div style="margin-top:8px;">
+        <a href="bundle.html" class="btn-primary">View Complete Pack →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© <span id="year"></span> CalmPaw Coach. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="programs.html">Programs</a>
+        <a href="bundle.html">Complete Pack</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
