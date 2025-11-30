@@ -48,7 +48,7 @@
       color: inherit;
     }
 
-    /* 动画 */
+    /* Animations */
 
     @keyframes float-soft {
       0% { transform: translateY(0px); }
@@ -180,6 +180,7 @@
       flex: 1;
       justify-content: center;
       min-width: 0;
+      flex-wrap: wrap;
     }
 
     .nav-links a {
@@ -188,6 +189,7 @@
       position: relative;
       overflow: hidden;
       transition: color 0.18s ease, transform 0.12s ease;
+      white-space: nowrap;
     }
 
     .nav-links a::before {
@@ -295,7 +297,8 @@
       font-size: 14px;
     }
 
-    /* 登录状态区域样式 */
+    /* Auth area */
+
     .nav-auth {
       display: flex;
       align-items: center;
@@ -332,17 +335,30 @@
       color: #7a3410;
     }
 
+    /* Tablet & small desktop */
+
     @media (max-width: 880px) {
-      .nav-links { display: none; }
       .nav-inner {
         align-items: flex-start;
+        flex-wrap: wrap;
+        row-gap: 8px;
+      }
+      .brand {
+        width: 100%;
+      }
+      .nav-links {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        row-gap: 6px;
       }
       .nav-cta {
         margin-left: 0;
       }
     }
 
-    /* 小屏导航：拆成两行，按钮不压住文字 */
+    /* Small mobile */
+
     @media (max-width: 640px) {
       .nav-inner {
         padding: 8px 14px;
@@ -363,6 +379,10 @@
       }
       .brand-text-sub {
         font-size: 10px;
+      }
+      .nav-links {
+        font-size: 13px;
+        gap: 10px;
       }
       .nav-cta {
         width: 100%;
@@ -698,7 +718,7 @@
       font-size: 12px;
     }
 
-    /* Section header & cards */
+    /* Sections */
 
     .section-header {
       display: flex;
@@ -994,6 +1014,8 @@
 
     .test-dog { font-size: 16px; }
 
+    /* Footer */
+
     footer {
       border-top: 1px solid rgba(243, 217, 196, 0.8);
       background: rgba(255, 248, 241, 0.96);
@@ -1052,9 +1074,9 @@
         <a href="contact.html">Contact</a>
       </nav>
       <div class="nav-cta">
-        <!-- 登录状态区域：未登录默认显示 Log in -->
+        <!-- default: Log in -->
         <div id="nav-auth-area">
-          <a class="btn-outline" href="auth.html?redirect=/programs.html">
+          <a class="btn-outline" href="auth.html?redirect=/index.html">
             <span class="nav-login-emoji">🔑</span> Log in
           </a>
         </div>
@@ -1325,15 +1347,19 @@
         <a href="club.html">Monthly Club</a>
         <a href="about.html">About</a>
         <a href="contact.html">Contact</a>
+        <a href="refund.html">Refund Policy</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="legal.html">Legal Notice</a>
       </div>
     </div>
   </footer>
 
   <script>
-    // 年份
+    // year
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // 滚动渐显
+    // scroll reveal
     const reveals = document.querySelectorAll(".reveal");
     const onScroll = () => {
       const trigger = window.innerHeight * 0.9;
@@ -1345,7 +1371,7 @@
     document.addEventListener("scroll", onScroll);
     window.addEventListener("load", onScroll);
 
-    // ===== 登录状态同步 =====
+    // auth state
     const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
 
     async function hydrateNavAuth() {
@@ -1355,7 +1381,6 @@
       const token = localStorage.getItem("calmpaw_token");
       const email = localStorage.getItem("calmpaw_email");
 
-      // 未登录：保持默认的 Log in 按钮
       if (!token) {
         area.innerHTML = `
           <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent(window.location.pathname || '/index.html')}">
@@ -1371,7 +1396,6 @@
         const data = await res.json();
 
         if (!res.ok || !data.ok) {
-          // token 失效，清除并回到未登录状态
           localStorage.removeItem("calmpaw_token");
           localStorage.removeItem("calmpaw_email");
           area.innerHTML = `
@@ -1391,7 +1415,6 @@
           </div>
         `;
 
-        // 切换账号：清掉旧 token，跳转登录页，redirect 回当前页面
         const switchBtn = document.getElementById("nav-switch-account");
         if (switchBtn) {
           switchBtn.addEventListener("click", () => {
@@ -1402,7 +1425,6 @@
           });
         }
 
-        // 退出账号：清掉 token，回首页
         const logoutBtn = document.getElementById("nav-logout");
         if (logoutBtn) {
           logoutBtn.addEventListener("click", () => {
@@ -1413,7 +1435,6 @@
         }
       } catch (e) {
         console.error("auth hydrate error", e);
-        // 出错时也回到未登录按钮
         area.innerHTML = `
           <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent(window.location.pathname || '/index.html')}">
             <span class="nav-login-emoji">🔑</span> Log in
