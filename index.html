@@ -208,6 +208,31 @@
       gap: 8px;
     }
 
+    /* 顶部登录按钮（新加） */
+    .nav-login {
+      font-size: 13px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      background: transparent;
+      border: none;
+      color: var(--text-soft);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.18s ease, color 0.18s ease, transform 0.12s ease;
+    }
+
+    .nav-login span {
+      font-size: 14px;
+    }
+
+    .nav-login:hover {
+      background: rgba(255, 242, 228, 0.9);
+      color: var(--text-main);
+      transform: translateY(-1px);
+    }
+
     .btn-outline {
       padding: 7px 16px;
       border-radius: var(--radius-pill);
@@ -873,6 +898,10 @@
         <a href="contact.html">Contact</a>
       </nav>
       <div class="nav-cta">
+        <!-- 新增登录按钮 -->
+        <a class="nav-login" href="login.html">
+          <span>🔑</span> Log in
+        </a>
         <a class="btn-outline" href="programs.html">View programs</a>
         <a class="btn-primary" href="bundle.html">
           Get Complete Pack <span>→</span>
