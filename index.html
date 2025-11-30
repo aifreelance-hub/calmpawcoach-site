@@ -294,11 +294,16 @@
       .nav-links { display: none; }
     }
 
-    /* 小屏导航再缩小一点 */
+    /* 小屏导航：拆成两行，按钮不压住文字 */
     @media (max-width: 640px) {
       .nav-inner {
         padding: 8px 14px;
-        gap: 10px;
+        gap: 6px;
+        flex-wrap: wrap;
+        align-items: flex-start;
+      }
+      .brand {
+        width: 100%;
       }
       .brand-logo {
         width: 34px;
@@ -311,13 +316,14 @@
       .brand-text-sub {
         font-size: 10px;
       }
+      .nav-cta {
+        width: 100%;
+        justify-content: flex-end;
+      }
       .btn-outline,
       .btn-primary {
         padding: 6px 10px;
         font-size: 12px;
-      }
-      .nav-cta {
-        gap: 6px;
       }
     }
 
