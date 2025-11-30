@@ -114,6 +114,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 14px;
+      flex-wrap: wrap;
     }
 
     .brand {
@@ -176,6 +177,9 @@
       gap: 16px;
       font-size: 14px;
       color: var(--text-soft);
+      flex: 1;
+      justify-content: center;
+      min-width: 0;
     }
 
     .nav-links a {
@@ -210,6 +214,7 @@
       align-items: center;
       gap: 8px;
       flex-shrink: 0;
+      margin-left: auto;
     }
 
     .btn-outline {
@@ -290,8 +295,51 @@
       font-size: 14px;
     }
 
+    /* 登录状态区域样式 */
+    .nav-auth {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-auth-email {
+      max-width: 160px;
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 250, 244, 0.95);
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      font-size: 12px;
+      color: #6b4532;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-auth-btn {
+      border: none;
+      background: transparent;
+      font-size: 11px;
+      color: #b05825;
+      padding: 4px 7px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .nav-auth-btn:hover {
+      background: rgba(255, 237, 213, 0.95);
+      color: #7a3410;
+    }
+
     @media (max-width: 880px) {
       .nav-links { display: none; }
+      .nav-inner {
+        align-items: flex-start;
+      }
+      .nav-cta {
+        margin-left: 0;
+      }
     }
 
     /* 小屏导航：拆成两行，按钮不压住文字 */
@@ -319,11 +367,16 @@
       .nav-cta {
         width: 100%;
         justify-content: flex-end;
+        gap: 6px;
       }
       .btn-outline,
       .btn-primary {
         padding: 6px 10px;
         font-size: 12px;
+      }
+      .nav-auth-email {
+        max-width: 130px;
+        font-size: 11px;
       }
     }
 
@@ -999,9 +1052,12 @@
         <a href="contact.html">Contact</a>
       </nav>
       <div class="nav-cta">
-        <a class="btn-outline" href="auth.html?redirect=/programs.html">
-          <span class="nav-login-emoji">🔑</span> Log in
-        </a>
+        <!-- 登录状态区域：未登录默认显示 Log in -->
+        <div id="nav-auth-area">
+          <a class="btn-outline" href="auth.html?redirect=/programs.html">
+            <span class="nav-login-emoji">🔑</span> Log in
+          </a>
+        </div>
         <a class="btn-primary" href="bundle.html">
           Get Complete Pack <span>→</span>
         </a>
@@ -1274,8 +1330,10 @@
   </footer>
 
   <script>
+    // 年份
     document.getElementById("year").textContent = new Date().getFullYear();
 
+    // 滚动渐显
     const reveals = document.querySelectorAll(".reveal");
     const onScroll = () => {
       const trigger = window.innerHeight * 0.9;
@@ -1286,6 +1344,84 @@
     };
     document.addEventListener("scroll", onScroll);
     window.addEventListener("load", onScroll);
+
+    // ===== 登录状态同步 =====
+    const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
+
+    async function hydrateNavAuth() {
+      const area = document.getElementById("nav-auth-area");
+      if (!area) return;
+
+      const token = localStorage.getItem("calmpaw_token");
+      const email = localStorage.getItem("calmpaw_email");
+
+      // 未登录：保持默认的 Log in 按钮
+      if (!token) {
+        area.innerHTML = `
+          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent(window.location.pathname || '/index.html')}">
+            <span class="nav-login-emoji">🔑</span> Log in
+          </a>`;
+        return;
+      }
+
+      try {
+        const res = await fetch(API_BASE + "/auth/me", {
+          headers: { "Authorization": "Bearer " + token }
+        });
+        const data = await res.json();
+
+        if (!res.ok || !data.ok) {
+          // token 失效，清除并回到未登录状态
+          localStorage.removeItem("calmpaw_token");
+          localStorage.removeItem("calmpaw_email");
+          area.innerHTML = `
+            <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent(window.location.pathname || '/index.html')}">
+              <span class="nav-login-emoji">🔑</span> Log in
+            </a>`;
+          return;
+        }
+
+        const showEmail = email || data.email || "Member";
+
+        area.innerHTML = `
+          <div class="nav-auth">
+            <span class="nav-auth-email" title="${showEmail}">${showEmail}</span>
+            <button class="nav-auth-btn" id="nav-switch-account">Switch</button>
+            <button class="nav-auth-btn" id="nav-logout">Log out</button>
+          </div>
+        `;
+
+        // 切换账号：清掉旧 token，跳转登录页，redirect 回当前页面
+        const switchBtn = document.getElementById("nav-switch-account");
+        if (switchBtn) {
+          switchBtn.addEventListener("click", () => {
+            localStorage.removeItem("calmpaw_token");
+            localStorage.removeItem("calmpaw_email");
+            const redirect = encodeURIComponent(window.location.pathname || "/index.html");
+            window.location.href = `auth.html?redirect=${redirect}`;
+          });
+        }
+
+        // 退出账号：清掉 token，回首页
+        const logoutBtn = document.getElementById("nav-logout");
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", () => {
+            localStorage.removeItem("calmpaw_token");
+            localStorage.removeItem("calmpaw_email");
+            window.location.href = "/index.html";
+          });
+        }
+      } catch (e) {
+        console.error("auth hydrate error", e);
+        // 出错时也回到未登录按钮
+        area.innerHTML = `
+          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent(window.location.pathname || '/index.html')}">
+            <span class="nav-login-emoji">🔑</span> Log in
+          </a>`;
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", hydrateNavAuth);
   </script>
 </body>
 </html>
