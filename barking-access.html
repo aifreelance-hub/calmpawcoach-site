@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Barking Plan Access — CalmPaw 7-Day Quiet Home Plan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root{
+      --bg:#fff7f0;--accent:#ffb86b;--accent-strong:#ff914d;
+      --text-main:#3b2824;--text-soft:#8a6a63;
+      --border-soft:#f3d9c4;--radius-lg:26px;--radius-md:18px;--radius-pill:999px;
+      --shadow-soft:0 24px 60px rgba(210,145,110,0.32);
+    }
+
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(circle at 5% 0%, #ffe0c0 0%, transparent 55%),
+        radial-gradient(circle at 100% 0%, #ffd4d4 0%, transparent 55%),
+        linear-gradient(180deg,#fff7f0 0%,#fff2e7 40%,#fff8f2 100%);
+      color:var(--text-main);min-height:100vh;-webkit-font-smoothing:antialiased;
+    }
+    a{text-decoration:none;color:inherit;}
+
+    header{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter:blur(18px);
+      background:linear-gradient(to bottom,rgba(255,248,240,0.98),rgba(255,248,240,0.9));
+      border-bottom:1px solid rgba(243,217,196,0.8);
+    }
+    .nav-inner{
+      max-width:1120px;margin:0 auto;padding:10px 20px;
+      display:flex;align-items:center;justify-content:space-between;gap:14px;
+    }
+    .brand{display:flex;align-items:center;gap:10px;}
+    .brand-logo{
+      width:40px;height:40px;border-radius:18px;
+      background:radial-gradient(circle at 20% 15%,#fff9f3 0%,#ffb86b 40%,#ff914d 84%);
+      display:flex;align-items:center;justify-content:center;
+      font-size:22px;box-shadow:0 16px 40px rgba(214,139,86,0.6);
+    }
+    .brand-text-main{font-weight:750;letter-spacing:.03em;font-size:18px;}
+    .brand-text-sub{font-size:11px;color:var(--text-soft);}
+    .nav-links{
+      display:flex;align-items:center;gap:16px;font-size:14px;color:var(--text-soft);
+    }
+    .nav-links a{
+      padding:6px 11px;border-radius:999px;
+      transition:background .18s ease,color .18s.ease,transform .12s ease;
+    }
+    .nav-links a:hover{
+      background:rgba(255,222,186,0.7);color:var(--text-main);transform:translateY(-1px);
+    }
+    @media(max-width:880px){.nav-links{display:none;}}
+
+    .btn-primary{
+      padding:7px 16px;border-radius:var(--radius-pill);border:none;
+      font-size:13px;font-weight:600;cursor:pointer;
+      background:linear-gradient(135deg,#ffb86b,#ff914d);color:#4a251a;
+      box-shadow:0 16px 36px rgba(214,139,86,0.6);
+      display:inline-flex;align-items:center;gap:6px;
+    }
+    .btn-primary:hover{transform:translateY(-1px) scale(1.01);}
+    .btn-outline{
+      padding:7px 14px;border-radius:var(--radius-pill);
+      border:1px solid var(--border-soft);font-size:13px;
+      background:#fff8f2;color:var(--text-soft);cursor:pointer;
+    }
+
+    main{max-width:1120px;margin:0 auto;padding:24px 20px 40px;}
+
+    .hero{
+      display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1.1fr);
+      gap:22px;margin-bottom:26px;align-items:flex-start;
+    }
+    @media(max-width:860px){.hero{grid-template-columns:minmax(0,1fr);}}
+
+    .hero-tag{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:4px 10px;border-radius:999px;
+      background:rgba(255,222,186,0.9);font-size:11px;color:#6b4532;
+      margin-bottom:8px;
+    }
+    .hero-title{font-size:22px;margin-bottom:6px;}
+    .hero-sub{font-size:13px;color:var(--text-soft);margin-bottom:10px;max-width:540px;line-height:1.6;}
+    .hero-note{
+      font-size:11px;color:var(--text-soft);margin-bottom:10px;
+      padding:6px 10px;border-radius:var(--radius-pill);
+      background:rgba(255,249,242,0.9);display:inline-flex;align-items:center;gap:6px;
+    }
+    .hero-note span{font-weight:600;color:#b05526;}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
+
+    .hero-card{
+      border-radius:var(--radius-lg);
+      background:rgba(255,246,238,0.96);
+      border:1px solid rgba(243,217,196,0.9);
+      padding:14px 14px 12px;
+      box-shadow:var(--shadow-soft);
+      font-size:11px;color:#7b5847;
+      position:relative;overflow:hidden;
+    }
+    .hero-card::before{
+      content:"";position:absolute;width:180px;height:180px;
+      border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.7),transparent 70%);
+      top:-90px;right:-60px;opacity:.8;pointer-events:none;
+    }
+    .hero-card h2{font-size:14px;margin-bottom:6px;}
+    .hero-card ul{margin-left:14px;margin-bottom:4px;}
+    .hero-card li{margin-bottom:4px;}
+
+    .section{margin-bottom:24px;}
+    .section h2{font-size:16px;margin-bottom:6px;}
+    .section p{font-size:13px;color:var(--text-soft);margin-bottom:6px;line-height:1.6;}
+
+    .days-grid{
+      border-radius:18px;
+      background:#fffaf5;border:1px solid rgba(243,217,196,0.9);
+      padding:12px;font-size:12px;color:var(--text-soft);
+    }
+    .day-block{margin-bottom:10px;padding-bottom:8px;border-bottom:1px dashed rgba(243,217,196,0.8);}
+    .day-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+    .day-title-row{
+      display:flex;justify-content:space-between;align-items:center;
+      margin-bottom:2px;
+    }
+    .day-title{
+      font-weight:600;color:#a0522b;font-size:13px;
+    }
+    .day-time{font-size:11px;color:#b07a5b;}
+    .day-focus{font-size:11px;color:#a36b4b;margin-bottom:4px;}
+    .day-steps{margin-left:16px;margin-bottom:4px;}
+    .day-steps li{margin-bottom:3px;}
+    .day-tip{font-size:11px;color:#9a6b4e;margin-top:3px;}
+
+    .checklist{
+      margin-left:16px;font-size:13px;color:var(--text-soft);
+    }
+    .checklist li{margin-bottom:4px;}
+
+    .faq-item{margin-bottom:10px;}
+    .faq-q{font-size:13px;font-weight:600;margin-bottom:2px;}
+    .faq-a{font-size:12px;color:var(--text-soft);line-height:1.6;}
+
+    .highlight-box{
+      border-radius:18px;
+      background:rgba(255,247,238,0.96);
+      border:1px solid rgba(243,217,196,0.9);
+      padding:12px;font-size:12px;color:#7b5847;
+    }
+
+    footer{
+      border-top:1px solid rgba(243,217,196,0.8);
+      background:rgba(255,248,241,0.96);margin-top:10px;
+    }
+    .footer-inner{
+      max-width:1120px;margin:0 auto;
+      padding:12px 20px 16px;
+      display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;
+      font-size:11px;color:var(--text-soft);
+    }
+    .footer-links{display:flex;gap:12px;flex-wrap:wrap;}
+    .footer-links a:hover{color:#b05825;}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-logo">🐾</div>
+        <div>
+          <div class="brand-text-main">CalmPaw Coach</div>
+          <div class="brand-text-sub">Gentle, realistic dog training</div>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="programs.html">Programs</a>
+        <a href="bundle.html">Complete Pack</a>
+        <a href="club.html">Monthly Club</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero / Welcome -->
+    <section class="hero">
+      <div>
+        <div class="hero-tag">Access page · 7-day barking plan unlocked</div>
+        <h1 class="hero-title">Your 7-Day Quiet Home Plan</h1>
+        <p class="hero-sub">
+          Thank you for getting the CalmPaw barking plan. This page contains your
+          full 7-day training schedule. You can bookmark this page and come back
+          anytime.
+        </p>
+        <div class="hero-note">
+          <span>Bookmark this page</span> or save it to your notes — this is your
+          access link to the full plan. You can repeat the 7 days whenever life
+          changes (moves, neighbors, schedules).
+        </div>
+        <div class="hero-actions">
+          <a href="bundle.html" class="btn-primary">
+            Upgrade to Complete Pack →
+          </a>
+          <a href="programs.html" class="btn-outline">
+            View other programs
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <h2>How to use this plan</h2>
+        <ul>
+          <li>Pick a starting day (for example, this evening or tomorrow).</li>
+          <li>Each day has a focus + 10–15 minutes of simple exercises.</li>
+          <li>If you miss a day, repeat the last completed day — don’t rush.</li>
+          <li>Notice small progress: shorter barking, faster recovery, more calm.</li>
+        </ul>
+        <p style="margin-top:6px;">
+          You don’t need perfection. Your goal is <strong>“quieter and calmer than before”</strong>,
+          not a robot dog. Progress over pressure.
+        </p>
+      </div>
+    </section>
+
+    <!-- Day-by-day plan -->
+    <section class="section">
+      <h2>Your 7-day schedule</h2>
+      <p>
+        Below is the full training plan. You can read everything first, or just
+        focus on <strong>today’s day</strong> and scroll as you go through the week.
+      </p>
+
+      <div class="days-grid">
+        <!-- Day 1 -->
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 1 — Observe & create a calm corner</div>
+            <div class="day-time">10–15 minutes total</div>
+          </div>
+          <div class="day-focus">
+            Understand when your dog barks most and give them a “safe, quiet place” to relax.
+          </div>
+          <ul class="day-steps">
+            <li><strong>1. Notice patterns (all day, low effort).</strong>  
+              Make quick mental notes: When does your dog bark? Door, footsteps,
+              elevator, neighbors, outside voices?</li>
+            <li><strong>2. Set up a calm corner (5–8 min).</strong>  
+              Choose a spot away from the main door if possible. Add a soft bed,
+              blanket that smells like you, and maybe a chew or stuffed toy.</li>
+            <li><strong>3. Pair the calm corner with good things (5 min).</strong>  
+              Sit near the spot for a moment, gently praise calm behaviour and
+              give a few treats when your dog chooses to relax there.</li>
+          </ul>
+          <div class="day-tip">
+            📝 If your home is small, the calm corner can be a bed in the same
+            room — the key is that you consistently reward calmness there.
+          </div>
+        </div>
+
+        <!-- Day 2 -->
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 2 — Teach a soft “quiet” cue</div>
+            <div class="day-time">10–15 minutes</div>
+          </div>
+          <div class="day-focus">
+            Start rewarding short moments of silence so your dog learns that quiet is valuable.
+          </div>
+          <ul class="day-steps">
+            <li><strong>1. Choose a cue and hand signal.</strong>  
+              For example, softly say “quiet” or “shh” and use a calm hand
+              lowering gesture. Avoid shouting.</li>
+            <li><strong>2. Capture natural quiet (5–7 min).</strong>  
+              When your dog pauses barking or is calmly lying down, quietly say
+              your cue (“quiet”) and immediately give a treat.</li>
+            <li><strong>3. Practice 10–15 quick reps.</strong>  
+              Look for tiny moments of silence and mark them with your cue +
+              reward. Keep the session light and positive.</li>
+          </ul>
+          <div class="day-tip">
+            🌱 At this stage, you are not “stopping barking” yet — you’re building
+            a <strong>strong meaning</strong> for the word “quiet” = calm + rewards.
+          </div>
+        </div>
+
+        <!-- Day 3 -->
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 3 — Practice with low-level door sounds</div>
+            <div class="day-time">10–15 minutes</div>
+          </div>
+          <div class="day-focus">
+            Introduce gentle “door triggers” at a low level while you reward calm.
+          </div>
+          <ul class="day-steps">
+            <li><strong>1. Play or create soft door sounds (5 min).</strong>  
+              Light knocking, a recording of footsteps, or a soft doorbell on
+              low volume. Keep it easy.</li>
+            <li><strong>2. When your dog stays calm or stops quickly, say “quiet”.</strong>  
+              Reward them with a treat tossed to the calm corner or by your feet.</li>
+            <li><strong>3. Do 3–4 short mini-sessions.</strong>  
+              2–3 minutes each, with breaks. If your dog becomes overwhelmed,
+              reduce the volume or distance from the sound.</li>
+          </ul>
+          <div class="day-tip">
+            🔉 If any sound makes your dog explode, lower intensity (softer, further
+            away, shorter) until they can hear it and <em>think</em>, not just react.
+          </div>
+        </div>
+
+        <!-- Day 4 -->
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 4 — Real door routine (practice with a helper)</div>
+            <div class="day-time">10–15 minutes</div>
+          </div>
+          <div class="day-focus">
+            Practice a step-by-step routine for when someone actually comes to the door.
+          </div>
+          <ul class="day-steps">
+            <li><strong>1. Ask a friend/family member to help.</strong>  
+              Plan 3–4 fake “visits” in a row so you can practice.</li>
+            <li><strong>2. Before the knock, get your dog in the calm corner.</strong>  
+              Give a chew or a small treat scatter. Then your helper knocks/uses the bell.</li>
+            <li><strong>3. If your dog barks, wait for <em>one second</em> of quiet.</strong>  
+              Softly say “quiet”, reward at the calm corner, then calmly go to the door.</li>
+            <li><strong>4. Repeat the same pattern.</strong>  
+              Your dog learns: “Knock → go to calm spot → quiet → good things happen.”</li>
+          </ul>
+          <div class="day-tip">
+            🚪 Don’t open the door in the middle of a barking explosion. Pause,
+            wait for a brief quiet moment, then continue.
+          </div>
+        </div>
+
+        <!-- Day 5 -->
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 5 — Hallway & neighbor noises</div>
+            <div class="day-time">10–15 minutes</div>
+          </div>
+          <div class="day-focus">
+            Teach your dog that most everyday building sounds are “background noise”.
+          </div>
+          <ul class="day-steps">
+            <li><strong>1. Sit calmly near the door with your dog.</strong>  
+              Have some small, soft treats ready.</li>
+            <li><strong>2. Every time there is a mild noise + your dog stays calm, mark it.</strong>  
+              Softly say “good quiet” or “nice” and give a treat.</li>
+            <li><strong>3. If your dog barks, wait for a pause.</strong>  
+              When they pause, say “quiet” and reward — then lower the difficulty
+              (more distance from door, or move to calm corner).</li>
+          </ul>
+          <div class="day-tip">
+            🎧 You can also play hallway sounds from your phone at a low volume
+            for extra practice when the building is quiet.
+          </div>
+        </div>
+
+        <!-- Day 6 -->
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 6 — “Busy evening” rehearsal</div>
+            <div class="day-time">10–20 minutes (broken into short blocks)</div>
+          </div>
+          <div class="day-focus">
+            Combine what you’ve practiced into a realistic “busy evening” scenario.
+          </div>
+          <ul class="day-steps">
+            <li><strong>1. Choose a time you’re usually home.</strong>  
+              For example, 7–8 pm, when there might already be some activity.</li>
+            <li><strong>2. Add 2–3 planned triggers.</strong>  
+              A few knocks from a helper, opening/closing your own door, or
+              playing door sounds at intervals.</li>
+            <li><strong>3. Run the full routine each time.</strong>  
+              Calm corner → barking → wait for a pause → “quiet” → reward →
+              continue what you were doing.</li>
+          </ul>
+          <div class="day-tip">
+            📉 Don’t worry if there are setbacks. Notice if your dog recovers
+            faster now than on Day 1 — that’s real progress.
+          </div>
+        </div>
+
+        <!-- Day 7 -->
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 7 — Review, adjust & long-term habits</div>
+            <div class="day-time">10–15 minutes</div>
+          </div>
+          <div class="day-focus">
+            Lock in what’s working and create a simple maintenance routine.
+          </div>
+          <ul class="day-steps">
+            <li><strong>1. Review your week.</strong>  
+              When is barking clearly better? Which triggers are still hardest?</li>
+            <li><strong>2. Choose 2 “non-negotiables”.</strong>  
+              For example:  
+              – Always use the calm corner at the door  
+              – Always reward quiet after a knock or hallway noise</li>
+            <li><strong>3. Plan your maintenance.</strong>  
+              2–3 times per week, do a short 5-minute “quiet practice” session
+              with door sounds or hallway noises.</li>
+          </ul>
+          <div class="day-tip">
+            🔁 You can repeat this 7-day plan whenever a big change happens (new
+            neighbors, moving home, schedule changes).
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reminders & checklist -->
+    <section class="section">
+      <h2>Quick reminders when you feel stuck</h2>
+      <ul class="checklist">
+        <li><strong>Lower the difficulty</strong> if your dog can’t think — softer sounds, more distance, shorter sessions.</li>
+        <li><strong>Reward what you want more of</strong>: quiet, turning away from the door, going to the calm corner.</li>
+        <li><strong>Avoid shouting</strong> — it usually adds more noise and tension, and can make barking worse.</li>
+        <li><strong>Bad days are normal</strong>. Look at trends over a week, not a single evening.</li>
+      </ul>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section">
+      <h2>FAQ for this barking plan</h2>
+      <div class="faq-item">
+        <div class="faq-q">What if my dog barks the whole time?</div>
+        <div class="faq-a">
+          Go back a step and make the trigger easier: softer sounds, further
+          away, or shorter sessions. Wait for very small pauses in barking (even
+          half a second), say your “quiet” cue and reward. Over time, those
+          pauses will get longer.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Is it too late for an older dog?</div>
+        <div class="faq-a">
+          No. Older dogs can absolutely learn new routines — but you may need to
+          go slower and keep sessions extra short. Focus on calm, predictable
+          patterns and high-value rewards.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">My dog is also anxious when alone. What should I do?</div>
+        <div class="faq-a">
+          This barking plan will still help with general calmness, but for
+          serious alone-time panic, combine it with a <strong>separation
+          anxiety plan</strong>. You can upgrade to the Complete Pack for that
+          additional step-by-step program.
+        </div>
+      </div>
+    </section>
+
+    <!-- Upsell / Next step -->
+    <section class="section">
+      <h2>Next steps for a calmer life together</h2>
+      <div class="highlight-box">
+        <p style="margin-bottom:6px;">
+          If barking is your main struggle, repeating this 7-day plan and doing
+          2–3 short “quiet practice” sessions per week will keep progress going.
+        </p>
+        <p style="margin-bottom:6px;">
+          If you’re also dealing with separation anxiety or stressful walks, the
+          <strong>CalmPaw Complete Pack</strong> combines:
+        </p>
+        <ul style="margin-left:16px;margin-bottom:6px;">
+          <li>🔕 7-day barking plan (this one)</li>
+          <li>🏡 14-day separation anxiety reset</li>
+          <li>🚶‍♀️ 10-day leash walking plan</li>
+        </ul>
+        <p>
+          You can explore the full bundle here:
+        </p>
+        <div style="margin-top:8px;">
+          <a href="bundle.html" class="btn-primary">View Complete Pack →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© <span id="year"></span> CalmPaw Coach. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="programs.html">Programs</a>
+        <a href="bundle.html">Complete Pack</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
