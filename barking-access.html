@@ -4,174 +4,567 @@
   <meta charset="UTF-8" />
   <title>Barking Plan Access — CalmPaw 7-Day Quiet Home Plan</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <link rel="icon" type="image/png" href="favicon.png" />
 
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root{
-      --bg:#fff7f0;--accent:#ffb86b;--accent-strong:#ff914d;
-      --text-main:#3b2824;--text-soft:#8a6a63;
-      --border-soft:#f3d9c4;--radius-lg:26px;--radius-md:18px;--radius-pill:999px;
-      --shadow-soft:0 24px 60px rgba(210,145,110,0.32);
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    body{
-      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"Segoe UI",sans-serif;
+    :root {
+      --bg: #fff7f0;
+      --bg-soft: #ffeede;
+      --accent: #ffb86b;
+      --accent-strong: #ff914d;
+      --accent-soft: #ffe0b8;
+      --text-main: #3b2824;
+      --text-soft: #8a6a63;
+      --border-soft: #f3d9c4;
+      --radius-lg: 26px;
+      --radius-md: 18px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 24px 60px rgba(210, 145, 110, 0.32);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        system-ui, "Segoe UI", sans-serif;
       background:
         radial-gradient(circle at 5% 0%, #ffe0c0 0%, transparent 55%),
         radial-gradient(circle at 100% 0%, #ffd4d4 0%, transparent 55%),
-        linear-gradient(180deg,#fff7f0 0%,#fff2e7 40%,#fff8f2 100%);
-      color:var(--text-main);min-height:100vh;-webkit-font-smoothing:antialiased;
-    }
-    a{text-decoration:none;color:inherit;}
-
-    header{
-      position:sticky;top:0;z-index:50;
-      backdrop-filter:blur(18px);
-      background:linear-gradient(to bottom,rgba(255,248,240,0.98),rgba(255,248,240,0.9));
-      border-bottom:1px solid rgba(243,217,196,0.8);
-    }
-    .nav-inner{
-      max-width:1120px;margin:0 auto;padding:10px 20px;
-      display:flex;align-items:center;justify-content:space-between;gap:14px;
-    }
-    .brand{display:flex;align-items:center;gap:10px;}
-    .brand-logo{
-      width:40px;height:40px;border-radius:18px;
-      background:radial-gradient(circle at 20% 15%,#fff9f3 0%,#ffb86b 40%,#ff914d 84%);
-      display:flex;align-items:center;justify-content:center;
-      font-size:22px;box-shadow:0 16px 40px rgba(214,139,86,0.6);
-    }
-    .brand-text-main{font-weight:750;letter-spacing:.03em;font-size:18px;}
-    .brand-text-sub{font-size:11px;color:var(--text-soft);}
-    .nav-links{
-      display:flex;align-items:center;gap:16px;font-size:14px;color:var(--text-soft);
-    }
-    .nav-links a{
-      padding:6px 11px;border-radius:999px;
-      transition:background .18s ease,color .18s.ease,transform .12s ease;
-    }
-    .nav-links a:hover{
-      background:rgba(255,222,186,0.7);color:var(--text-main);transform:translateY(-1px);
-    }
-    @media(max-width:880px){.nav-links{display:none;}}
-
-    .btn-primary{
-      padding:7px 16px;border-radius:var(--radius-pill);border:none;
-      font-size:13px;font-weight:600;cursor:pointer;
-      background:linear-gradient(135deg,#ffb86b,#ff914d);color:#4a251a;
-      box-shadow:0 16px 36px rgba(214,139,86,0.6);
-      display:inline-flex;align-items:center;gap:6px;
-    }
-    .btn-primary:hover{transform:translateY(-1px) scale(1.01);}
-    .btn-outline{
-      padding:7px 14px;border-radius:var(--radius-pill);
-      border:1px solid var(--border-soft);font-size:13px;
-      background:#fff8f2;color:var(--text-soft);cursor:pointer;
+        linear-gradient(180deg, #fff7f0 0%, #fff2e7 40%, #fff8f2 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
 
-    main{max-width:1120px;margin:0 auto;padding:24px 20px 40px;}
-
-    .hero{
-      display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1.1fr);
-      gap:22px;margin-bottom:26px;align-items:flex-start;
-    }
-    @media(max-width:860px){.hero{grid-template-columns:minmax(0,1fr);}}
-
-    .hero-tag{
-      display:inline-flex;align-items:center;gap:6px;
-      padding:4px 10px;border-radius:999px;
-      background:rgba(255,222,186,0.9);font-size:11px;color:#6b4532;
-      margin-bottom:8px;
-    }
-    .hero-title{font-size:22px;margin-bottom:6px;}
-    .hero-sub{font-size:13px;color:var(--text-soft);margin-bottom:10px;max-width:540px;line-height:1.6;}
-    .hero-note{
-      font-size:11px;color:var(--text-soft);margin-bottom:10px;
-      padding:6px 10px;border-radius:var(--radius-pill);
-      background:rgba(255,249,242,0.9);display:inline-flex;align-items:center;gap:6px;
-    }
-    .hero-note span{font-weight:600;color:#b05526;}
-    .hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
-
-    .hero-card{
-      border-radius:var(--radius-lg);
-      background:rgba(255,246,238,0.96);
-      border:1px solid rgba(243,217,196,0.9);
-      padding:14px 14px 12px;
-      box-shadow:var(--shadow-soft);
-      font-size:11px;color:#7b5847;
-      position:relative;overflow:hidden;
-    }
-    .hero-card::before{
-      content:"";position:absolute;width:180px;height:180px;
-      border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.7),transparent 70%);
-      top:-90px;right:-60px;opacity:.8;pointer-events:none;
-    }
-    .hero-card h2{font-size:14px;margin-bottom:6px;}
-    .hero-card ul{margin-left:14px;margin-bottom:4px;}
-    .hero-card li{margin-bottom:4px;}
-
-    .section{margin-bottom:24px;}
-    .section h2{font-size:16px;margin-bottom:6px;}
-    .section p{font-size:13px;color:var(--text-soft);margin-bottom:6px;line-height:1.6;}
-
-    .days-grid{
-      border-radius:18px;
-      background:#fffaf5;border:1px solid rgba(243,217,196,0.9);
-      padding:12px;font-size:12px;color:var(--text-soft);
-    }
-    .day-block{margin-bottom:10px;padding-bottom:8px;border-bottom:1px dashed rgba(243,217,196,0.8);}
-    .day-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
-    .day-title-row{
-      display:flex;justify-content:space-between;align-items:center;
-      margin-bottom:2px;
-    }
-    .day-title{
-      font-weight:600;color:#a0522b;font-size:13px;
-    }
-    .day-time{font-size:11px;color:#b07a5b;}
-    .day-focus{font-size:11px;color:#a36b4b;margin-bottom:4px;}
-    .day-steps{margin-left:16px;margin-bottom:4px;}
-    .day-steps li{margin-bottom:3px;}
-    .day-tip{font-size:11px;color:#9a6b4e;margin-top:3px;}
-
-    .checklist{
-      margin-left:16px;font-size:13px;color:var(--text-soft);
-    }
-    .checklist li{margin-bottom:4px;}
-
-    .faq-item{margin-bottom:10px;}
-    .faq-q{font-size:13px;font-weight:600;margin-bottom:2px;}
-    .faq-a{font-size:12px;color:var(--text-soft);line-height:1.6;}
-
-    .highlight-box{
-      border-radius:18px;
-      background:rgba(255,247,238,0.96);
-      border:1px solid rgba(243,217,196,0.9);
-      padding:12px;font-size:12px;color:#7b5847;
+    a {
+      text-decoration: none;
+      color: inherit;
     }
 
-    footer{
-      border-top:1px solid rgba(243,217,196,0.8);
-      background:rgba(255,248,241,0.96);margin-top:10px;
+    /* Header - unified with index.html */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 248, 240, 0.98),
+        rgba(255, 248, 240, 0.9),
+        rgba(255, 248, 240, 0.8)
+      );
+      border-bottom: 1px solid rgba(243, 217, 196, 0.8);
     }
-    .footer-inner{
-      max-width:1120px;margin:0 auto;
-      padding:12px 20px 16px;
-      display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;
-      font-size:11px;color:var(--text-soft);
+
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
     }
-    .footer-links{display:flex;gap:12px;flex-wrap:wrap;}
-    .footer-links a:hover{color:#b05825;}
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-logo-wrap {
+      position: relative;
+    }
+
+    .brand-orbit {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 160deg,
+        rgba(255, 184, 107, 0.15),
+        rgba(255, 145, 77, 0.3),
+        rgba(255, 230, 190, 0.2),
+        rgba(255, 184, 107, 0.15)
+      );
+      filter: blur(4px);
+      opacity: 0.9;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 18px;
+      background: radial-gradient(circle at 20% 15%, #fff9f3 0%, #ffb86b 40%, #ff914d 84%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 16px 40px rgba(214, 139, 86, 0.6);
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-text-main {
+      font-weight: 750;
+      letter-spacing: 0.03em;
+      font-size: 18px;
+      white-space: nowrap;
+    }
+
+    .brand-text-sub {
+      font-size: 11px;
+      color: var(--text-soft);
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 14px;
+      color: var(--text-soft);
+      flex: 1;
+      justify-content: center;
+      min-width: 0;
+    }
+
+    .nav-links a {
+      padding: 6px 11px;
+      border-radius: 999px;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.18s ease, transform 0.12s ease, background 0.18s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-main);
+      background: rgba(255, 222, 186, 0.8);
+      transform: translateY(-1px);
+    }
+
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+
+    .btn-outline {
+      padding: 7px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-soft);
+      font-size: 13px;
+      background: #fff8f2;
+      color: var(--text-soft);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: all 0.18s ease;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--text-main);
+      box-shadow: 0 14px 32px rgba(204, 145, 107, 0.28);
+      transform: translateY(-1px);
+      background: #fffaf5;
+    }
+
+    .btn-primary {
+      padding: 7px 16px;
+      border-radius: var(--radius-pill);
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, #ffb86b, #ff914d);
+      color: #4a251a;
+      box-shadow: 0 16px 36px rgba(214, 139, 86, 0.6);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px) scale(1.01);
+      box-shadow: 0 20px 44px rgba(214, 139, 86, 0.75);
+    }
+
+    .nav-login-emoji {
+      font-size: 14px;
+    }
+
+    /* Login state area */
+
+    .nav-auth {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-auth-email {
+      max-width: 160px;
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 250, 244, 0.95);
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      font-size: 12px;
+      color: #6b4532;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-auth-btn {
+      border: none;
+      background: transparent;
+      font-size: 11px;
+      color: #b05825;
+      padding: 4px 7px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .nav-auth-btn:hover {
+      background: rgba(255, 237, 213, 0.95);
+      color: #7a3410;
+    }
+
+    @media (max-width: 880px) {
+      .nav-links {
+        display: none;
+      }
+      .nav-inner {
+        align-items: flex-start;
+      }
+      .nav-cta {
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-inner {
+        padding: 8px 14px;
+        gap: 6px;
+        flex-wrap: wrap;
+        align-items: flex-start;
+      }
+      .brand {
+        width: 100%;
+      }
+      .brand-logo {
+        width: 34px;
+        height: 34px;
+        font-size: 20px;
+      }
+      .brand-text-main {
+        font-size: 16px;
+      }
+      .brand-text-sub {
+        font-size: 10px;
+      }
+      .nav-cta {
+        width: 100%;
+        justify-content: flex-end;
+        gap: 6px;
+      }
+      .btn-outline,
+      .btn-primary {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+      .nav-auth-email {
+        max-width: 130px;
+        font-size: 11px;
+      }
+    }
+
+    /* Main layout & sections */
+
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px 20px 40px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr);
+      gap: 22px;
+      margin-bottom: 26px;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255, 222, 186, 0.9);
+      font-size: 11px;
+      color: #6b4532;
+      margin-bottom: 8px;
+    }
+
+    .hero-title {
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+
+    .hero-sub {
+      font-size: 13px;
+      color: var(--text-soft);
+      margin-bottom: 10px;
+      max-width: 540px;
+      line-height: 1.6;
+    }
+
+    .hero-note {
+      font-size: 11px;
+      color: var(--text-soft);
+      margin-bottom: 10px;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 249, 242, 0.9);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-note span {
+      font-weight: 600;
+      color: #b05526;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .hero-card {
+      border-radius: var(--radius-lg);
+      background: rgba(255, 246, 238, 0.96);
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      padding: 14px 14px 12px;
+      box-shadow: var(--shadow-soft);
+      font-size: 11px;
+      color: #7b5847;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.7), transparent 70%);
+      top: -90px;
+      right: -60px;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .hero-card h2 {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .hero-card ul {
+      margin-left: 14px;
+      margin-bottom: 4px;
+    }
+
+    .hero-card li {
+      margin-bottom: 4px;
+    }
+
+    .section {
+      margin-bottom: 24px;
+    }
+
+    .section h2 {
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+
+    .section p {
+      font-size: 13px;
+      color: var(--text-soft);
+      margin-bottom: 6px;
+      line-height: 1.6;
+    }
+
+    .days-grid {
+      border-radius: 18px;
+      background: #fffaf5;
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      padding: 12px;
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+
+    .day-block {
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed rgba(243, 217, 196, 0.8);
+    }
+
+    .day-block:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .day-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+
+    .day-title {
+      font-weight: 600;
+      color: #a0522b;
+      font-size: 13px;
+    }
+
+    .day-time {
+      font-size: 11px;
+      color: #b07a5b;
+    }
+
+    .day-focus {
+      font-size: 11px;
+      color: #a36b4b;
+      margin-bottom: 4px;
+    }
+
+    .day-steps {
+      margin-left: 16px;
+      margin-bottom: 4px;
+    }
+
+    .day-steps li {
+      margin-bottom: 3px;
+    }
+
+    .day-tip {
+      font-size: 11px;
+      color: #9a6b4e;
+      margin-top: 3px;
+    }
+
+    .checklist {
+      margin-left: 16px;
+      font-size: 13px;
+      color: var(--text-soft);
+    }
+
+    .checklist li {
+      margin-bottom: 4px;
+    }
+
+    .faq-item {
+      margin-bottom: 10px;
+    }
+
+    .faq-q {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .faq-a {
+      font-size: 12px;
+      color: var(--text-soft);
+      line-height: 1.6;
+    }
+
+    .highlight-box {
+      border-radius: 18px;
+      background: rgba(255, 247, 238, 0.96);
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      padding: 12px;
+      font-size: 12px;
+      color: #7b5847;
+    }
+
+    /* Footer - with legal links */
+
+    footer {
+      border-top: 1px solid rgba(243, 217, 196, 0.8);
+      background: rgba(255, 248, 241, 0.96);
+      margin-top: 10px;
+    }
+
+    .footer-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 12px 20px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a:hover {
+      color: #b05825;
+    }
+
+    @media (max-width: 640px) {
+      .footer-inner {
+        padding: 10px 14px 14px;
+        font-size: 10px;
+      }
+      .footer-links {
+        gap: 10px;
+      }
+    }
   </style>
 </head>
 <body>
   <header>
     <div class="nav-inner">
       <a href="index.html" class="brand">
-        <div class="brand-logo">🐾</div>
+        <div class="brand-logo-wrap">
+          <div class="brand-orbit"></div>
+          <div class="brand-logo">🐾</div>
+        </div>
         <div>
           <div class="brand-text-main">CalmPaw Coach</div>
           <div class="brand-text-sub">Gentle, realistic dog training</div>
@@ -184,15 +577,242 @@
         <a href="about.html">About</a>
         <a href="contact.html">Contact</a>
       </nav>
+      <div class="nav-cta">
+        <!-- Login area: default is Log in -->
+        <div id="nav-auth-area">
+          <a class="btn-outline" href="auth.html?redirect=/barking-access.html">
+            <span class="nav-login-emoji">🔑</span> Log in
+          </a>
+        </div>
+      </div>
     </div>
   </header>
 
   <main>
+    <!-- Hero / intro -->
+    <section class="hero">
+      <div>
+        <div class="hero-tag">Access page · 7-day barking plan unlocked</div>
+        <h1 class="hero-title">Your 7-Day Quiet Home Barking Plan</h1>
+        <p class="hero-sub">
+          Thank you for getting the CalmPaw barking plan. This page contains your
+          full 7-day schedule to help your dog understand when to stay calm and quiet,
+          especially in apartments and busy neighborhoods.
+        </p>
+        <div class="hero-note">
+          <span>Bookmark this page</span> — this is your permanent access to the full
+          plan. You can repeat weeks, slow down, or start again after moves or big changes.
+        </div>
+        <div class="hero-actions">
+          <a href="bundle.html" class="btn-primary">See Complete Pack →</a>
+          <a href="programs.html" class="btn-outline">View other programs</a>
+        </div>
+      </div>
 
-    <!-- 你的原始内容（完整保留） -->
-    <!-- —— 从这里一直到结尾我完全没动 —— -->
-    <!--（中间内容已省略，只是为了缩短回复长度。实际你会复制整页内容）-->
+      <div class="hero-card">
+        <h2>How to use this plan</h2>
+        <ul>
+          <li>Short, consistent sessions (5–15 minutes) are better than long battles.</li>
+          <li>We want your dog <em>thinking</em>, not shouting — no harsh tools, no yelling.</li>
+          <li>When in doubt, step back to an easier level instead of pushing through barking.</li>
+        </ul>
+        <p style="margin-top:6px;">
+          Your dog is not “being bad” — they’re reacting to sounds, surprises and habits.
+          This plan shows you exactly how to build a calmer routine step by step.
+        </p>
+      </div>
+    </section>
 
+    <!-- Overview structure -->
+    <section class="section">
+      <h2>7-day structure overview</h2>
+      <p>
+        The plan is divided into seven focused days. You can treat each day as a
+        “module” and repeat any day that still feels challenging before moving on.
+      </p>
+
+      <div class="days-grid">
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 1 — Understanding triggers</div>
+            <div class="day-time">15–20 minutes total</div>
+          </div>
+          <div class="day-focus">Notice when, where and why your dog barks the most.</div>
+          <ul class="day-steps">
+            <li>Keep a simple log of barking: time, sound, what your dog does.</li>
+            <li>Identify top 1–2 triggers (for example: door knocks, elevator sounds).</li>
+            <li>Begin saying a calm phrase like “Thank you, all done” in a steady voice.</li>
+          </ul>
+          <div class="day-tip">
+            📝 Goal: You understand your dog’s biggest barking patterns instead of feeling overwhelmed.
+          </div>
+        </div>
+
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 2 — Calm “thank you” response</div>
+            <div class="day-time">10–15 minutes</div>
+          </div>
+          <div class="day-focus">Teach your dog that “thank you” means “you can relax now”.</div>
+          <ul class="day-steps">
+            <li>Play a very low-volume trigger (or gently knock yourself).</li>
+            <li>As soon as your dog notices but before full bark mode, say “Thank you, all done”.</li>
+            <li>Toss a treat onto a mat or bed behind them so they turn away from the door.</li>
+          </ul>
+          <div class="day-tip">
+            🎯 Reward the moment of turning away and taking a breath, not the barking itself.
+          </div>
+        </div>
+
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 3 — Mat training near the trigger</div>
+            <div class="day-time">10–15 minutes</div>
+          </div>
+          <div class="day-focus">Create a “quiet mat” where good things happen.</div>
+          <ul class="day-steps">
+            <li>Place a mat or bed in a spot away from the window/door but still in the room.</li>
+            <li>Scatter a few treats on the mat so your dog chooses to stand or lie there.</li>
+            <li>Pair the mat with chews or a stuffed toy during calm periods.</li>
+          </ul>
+          <div class="day-tip">
+            🛏 The mat becomes the “calm zone” your dog can go to instead of running to the door.
+          </div>
+        </div>
+
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 4 — Practicing fake “events”</div>
+            <div class="day-time">15 minutes</div>
+          </div>
+          <div class="day-focus">Rehearse what happens when someone “arrives”.</div>
+          <ul class="day-steps">
+            <li>Do 5–8 fake events: light knock, door handle sound, or play a door sound on your phone.</li>
+            <li>Each time: trigger → “Thank you, all done” → guide to mat → reward calm.</li>
+            <li>End the session before your dog gets too wound up.</li>
+          </ul>
+          <div class="day-tip">
+            🎬 Think of this as a movie rehearsal: same script, many easy repetitions.
+          </div>
+        </div>
+
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 5 — Real-world practice (light version)</div>
+            <div class="day-time">A few moments during the day</div>
+          </div>
+          <div class="day-focus">Use the script during actual everyday noises.</div>
+          <ul class="day-steps">
+            <li>When real sounds happen (elevator, neighbors), pause and breathe first.</li>
+            <li>Use your practiced phrase, guide to mat, reward any attempt to settle.</li>
+            <li>If your dog is too loud to think, shorten the session next time.</li>
+          </ul>
+          <div class="day-tip">
+            🌡️ Treat barking like a volume knob — we’re trying to turn it down, not demand perfection.
+          </div>
+        </div>
+
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 6 — Harder triggers, softer response</div>
+            <div class="day-time">10–15 minutes</div>
+          </div>
+          <div class="day-focus">Gently increase the difficulty while keeping your dog under “panic level”.</div>
+          <ul class="day-steps">
+            <li>Ask a friend or family member to knock or ring in a planned way.</li>
+            <li>Use your full routine: phrase → mat → reward → calm exit.</li>
+            <li>Take breaks between reps; you want your dog to reset, not escalate.</li>
+          </ul>
+          <div class="day-tip">
+            📉 If barking spikes, go back to easier practice instead of pushing through.
+          </div>
+        </div>
+
+        <div class="day-block">
+          <div class="day-title-row">
+            <div class="day-title">Day 7 — Maintenance & future plan</div>
+            <div class="day-time">10 minutes</div>
+          </div>
+          <div class="day-focus">Create a simple routine you can keep using weekly.</div>
+          <ul class="day-steps">
+            <li>Choose 1–2 days each week for “quiet practice sessions”.</li>
+            <li>Decide on your non-negotiables: no shouting, no hitting, no scary tools.</li>
+            <li>Write down what helped the most so you can repeat it after moves or new neighbors.</li>
+          </ul>
+          <div class="day-tip">
+            🔁 Quiet living with a dog is an ongoing habit, not a one-time trick — and that’s okay.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- When barking spikes / reminders -->
+    <section class="section">
+      <h2>When barking spikes again</h2>
+      <ul class="checklist">
+        <li><strong>Check the environment.</strong> New building noises, visitors or changes can temporarily make things louder.</li>
+        <li><strong>Go back a step.</strong> It’s completely normal to return to an easier day and build back up.</li>
+        <li><strong>Protect your own nerves.</strong> Use white noise, a fan or background sound so every small bark doesn’t feel huge.</li>
+        <li><strong>Take short breaks.</strong> If you feel angry, pause training. Your calmness matters more than one perfect rep.</li>
+      </ul>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section">
+      <h2>FAQ</h2>
+
+      <div class="faq-item">
+        <div class="faq-q">What if my dog barks at everything all day?</div>
+        <div class="faq-a">
+          Start with the most stressful trigger first (often the door or hallway sounds)
+          instead of trying to fix everything at once. Once your dog has a clear “quiet
+          routine” for one situation, it becomes easier to copy to others.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Is it okay to tell my dog “no” when they bark?</div>
+        <div class="faq-a">
+          You can use a calm, short word like “enough” or “thank you”, but shouting,
+          punishing or startling usually makes anxious or reactive dogs worse. This
+          plan focuses on giving them something clear to <em>do</em> instead.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Will my dog ever stop barking completely?</div>
+        <div class="faq-a">
+          Probably not — and that’s okay. Dogs bark. The realistic goal is fewer,
+          shorter barking episodes that are easier to interrupt, so your home feels
+          livable again and neighbors are happier.
+        </div>
+      </div>
+    </section>
+
+    <!-- Next steps / bundle -->
+    <section class="section">
+      <h2>Next steps</h2>
+      <div class="highlight-box">
+        <p style="margin-bottom:6px;">
+          You can return to this page any time and repeat the full 7-day plan whenever
+          life changes — new neighbors, a move, a baby, or other big shifts.
+        </p>
+        <p style="margin-bottom:6px;">
+          If you’d also like support with <strong>separation anxiety</strong> or
+          <strong>stressful leash walks</strong>, the
+          <strong>CalmPaw Complete Pack</strong> includes:
+        </p>
+        <ul style="margin-left:16px;margin-bottom:6px;">
+          <li>🔕 Barking plan (7 days — this one)</li>
+          <li>🏡 Separation anxiety plan (14 days)</li>
+          <li>🚶‍♀️ Leash walking plan (10 days)</li>
+        </ul>
+        <p>Most owners start with the bundle and move between plans as life changes.</p>
+        <div style="margin-top:8px;">
+          <a href="bundle.html" class="btn-primary">View Complete Pack →</a>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer>
@@ -201,54 +821,126 @@
       <div class="footer-links">
         <a href="programs.html">Programs</a>
         <a href="bundle.html">Complete Pack</a>
+        <a href="club.html">Monthly Club</a>
+        <a href="refund.html">Refund policy</a>
+        <a href="terms.html">Terms of service</a>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="legal.html">Legal / Imprint</a>
         <a href="contact.html">Contact</a>
       </div>
     </div>
   </footer>
 
   <script>
+    // Year
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 
-  <!-- 🔥 登录检查脚本（与 anxiety 页面一致） -->
+  <!-- Login state sync in header -->
   <script>
-  (function () {
-    const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
-    const token = localStorage.getItem("calmpaw_token");
+    document.addEventListener("DOMContentLoaded", function () {
+      const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
+      const area = document.getElementById("nav-auth-area");
+      if (!area) return;
 
-    function goAuth() {
-      const redirect = window.location.pathname + window.location.search;
-      window.location.href = "/auth.html?redirect=" + encodeURIComponent(redirect);
-    }
+      function renderLoggedOut() {
+        const redirect = window.location.pathname + window.location.search;
+        area.innerHTML = `
+          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent(redirect)}">
+            <span class="nav-login-emoji">🔑</span> Log in
+          </a>
+        `;
+      }
 
-    if (!token) {
-      goAuth();
-      return;
-    }
+      const token = localStorage.getItem("calmpaw_token");
+      const email = localStorage.getItem("calmpaw_email");
 
-    // 检查是否已购买 barking
-    fetch(API_BASE + "/auth/check-plan?slug=barking", {
-      method: "GET",
-      headers: { Authorization: "Bearer " + token },
-    })
-      .then(async (res) => {
-        if (!res.ok) {
-          localStorage.removeItem("calmpaw_token");
-          localStorage.removeItem("calmpaw_email");
-          goAuth();
-          return;
-        }
-        const data = await res.json();
-        if (!data.ok || !data.access) {
-          // 已登录但没购买 barking → 跳转到 barking 介绍页
-          window.location.href = "/program-barking.html";
-        }
+      if (!token) {
+        renderLoggedOut();
+        return;
+      }
+
+      fetch(API_BASE + "/auth/me", {
+        headers: { "Authorization": "Bearer " + token }
       })
-      .catch(() => {
-        goAuth();
-      });
-  })();
+        .then(res => res.json().then(data => ({ ok: res.ok, data })))
+        .then(({ ok, data }) => {
+          if (!ok || !data.ok) {
+            localStorage.removeItem("calmpaw_token");
+            localStorage.removeItem("calmpaw_email");
+            renderLoggedOut();
+            return;
+          }
+          const showEmail = email || data.email || "Member";
+          area.innerHTML = `
+            <div class="nav-auth">
+              <span class="nav-auth-email" title="${showEmail}">${showEmail}</span>
+              <button class="nav-auth-btn" id="nav-switch-account">Switch</button>
+              <button class="nav-auth-btn" id="nav-logout">Log out</button>
+            </div>
+          `;
+          const switchBtn = document.getElementById("nav-switch-account");
+          if (switchBtn) {
+            switchBtn.addEventListener("click", () => {
+              localStorage.removeItem("calmpaw_token");
+              localStorage.removeItem("calmpaw_email");
+              const redirect = window.location.pathname + window.location.search;
+              window.location.href = "auth.html?redirect=" + encodeURIComponent(redirect);
+            });
+          }
+          const logoutBtn = document.getElementById("nav-logout");
+          if (logoutBtn) {
+            logoutBtn.addEventListener("click", () => {
+              localStorage.removeItem("calmpaw_token");
+              localStorage.removeItem("calmpaw_email");
+              window.location.href = "/index.html";
+            });
+          }
+        })
+        .catch(err => {
+          console.error("auth hydrate error", err);
+          renderLoggedOut();
+        });
+    });
   </script>
 
+  <!-- Access control: must be logged in & have barking plan -->
+  <script>
+    (function () {
+      const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
+      const token = localStorage.getItem("calmpaw_token");
+
+      function goAuth() {
+        const redirect = window.location.pathname + window.location.search;
+        window.location.href = "/auth.html?redirect=" + encodeURIComponent(redirect);
+      }
+
+      if (!token) {
+        goAuth();
+        return;
+      }
+
+      fetch(API_BASE + "/auth/check-plan?slug=barking", {
+        method: "GET",
+        headers: { Authorization: "Bearer " + token },
+      })
+        .then(async (res) => {
+          if (!res.ok) {
+            localStorage.removeItem("calmpaw_token");
+            localStorage.removeItem("calmpaw_email");
+            goAuth();
+            return;
+          }
+          const data = await res.json();
+          if (!data.ok || !data.access) {
+            // Logged in but not purchased barking → back to barking program intro
+            window.location.href = "/program-barking.html";
+          }
+        })
+        .catch(() => {
+          goAuth();
+        });
+    })();
+  </script>
 </body>
 </html>
