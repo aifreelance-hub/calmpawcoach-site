@@ -114,6 +114,22 @@
     }
     .btn-primary:hover{transform:translateY(-1px) scale(1.01);}
 
+    /* 统一 nav 登录按钮用的 outline 风格 */
+    .btn-outline{
+      padding:7px 14px;
+      border-radius:var(--radius-pill);
+      border:1px solid var(--border-soft);
+      font-size:13px;
+      background:#fff8f2;
+      color:var(--text-soft);
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .btn-outline:hover{
+      border-color:var(--accent);
+      color:var(--text-main);
+    }
+
     @keyframes orbit{
       0%{transform:translate(0,0) scale(1);}
       50%{transform:translate(6px,-8px) scale(1.05);}
@@ -134,6 +150,10 @@
       }
       .btn-primary{
         padding:7px 12px;
+        font-size:12px;
+      }
+      .btn-outline{
+        padding:6px 10px;
         font-size:12px;
       }
       .nav-login-email{
@@ -340,7 +360,7 @@
 
   <footer>
     <div class="footer-inner">
-      <div>© <span id="year"></span> CalmPaw Coach. All rights reserved.</div>
+      <div>© <span id="year"></span> CalmPaw Coach. All rights reserved。</div>
       <div class="footer-links">
         <a href="programs.html">Programs</a>
         <a href="bundle.html">Complete Pack</a>
@@ -392,7 +412,7 @@
         document.getElementById("btn-logout").onclick = logoutAndStay;
       } else {
         loginArea.innerHTML = `
-          <button class="btn-mini" id="btn-login-nav">Log in</button>
+          <button class="btn-outline" id="btn-login-nav">Log in</button>
         `;
         document.getElementById("btn-login-nav").onclick = goAuth;
       }
