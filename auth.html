@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CalmPaw Coach — Sign in to your training plans</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: radial-gradient(circle at top, #fed7aa 0%, #fff7ed 40%, #fffbeb 100%);
+      color: #111827;
+    }
+    .card {
+      width: 100%;
+      max-width: 460px;
+      border-radius: 26px;
+      padding: 24px 22px 22px;
+      background: #ffffffdd;
+      backdrop-filter: blur(18px);
+      box-shadow:
+        0 22px 60px rgba(15, 23, 42, 0.2),
+        0 0 0 1px rgba(248, 250, 252, 0.8);
+    }
+    .brand {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #fb923c;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    h1 {
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 16px;
+    }
+    .tabs {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 3px;
+      background: #f9fafb;
+      box-shadow: 0 0 0 1px #e5e7eb;
+      margin-bottom: 16px;
+    }
+    .tab {
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      color: #6b7280;
+    }
+    .tab.active {
+      background: linear-gradient(135deg, #fb923c, #f97316);
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(248, 153, 90, 0.5);
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+    input {
+      width: 100%;
+      padding: 9px 11px;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      font-size: 14px;
+      background: #f9fafb;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+    input:focus {
+      border-color: #fb923c;
+      background: #ffffff;
+      box-shadow: 0 0 0 1px rgba(248, 153, 90, 0.35);
+    }
+    .field {
+      margin-bottom: 10px;
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 8px;
+    }
+    .row input {
+      flex: 1;
+    }
+    .btn-main {
+      width: 100%;
+      margin-top: 10px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: none;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      background: linear-gradient(135deg, #fb923c, #f97316);
+      color: #ffffff;
+      box-shadow: 0 14px 34px rgba(248, 153, 90, 0.5);
+      transition: transform 0.08s ease, box-shadow 0.08s ease, opacity 0.1s ease;
+    }
+    .btn-main:active {
+      transform: translateY(1px);
+      box-shadow: 0 10px 24px rgba(248, 153, 90, 0.5);
+    }
+    .btn-main[disabled] {
+      opacity: 0.6;
+      cursor: default;
+      box-shadow: none;
+    }
+    .btn-ghost {
+      border-radius: 999px;
+      border: 1px solid #fed7aa;
+      background: #fff7ed;
+      font-size: 12px;
+      padding: 6px 10px;
+      cursor: pointer;
+      color: #92400e;
+    }
+    .status {
+      font-size: 12px;
+      min-height: 18px;
+      margin-top: 8px;
+    }
+    .status.ok { color: #15803d; }
+    .status.err { color: #b91c1c; }
+    .hint {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 6px;
+    }
+    .view {
+      display: none;
+    }
+    .view.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="brand">CalmPaw Coach</div>
+    <h1>Sign in to your training plans</h1>
+    <p class="subtitle">Barking · Anxiety · Leash · Bundle — all in one private account.</p>
+
+    <div class="tabs">
+      <button class="tab active" data-view="login">Log in</button>
+      <button class="tab" data-view="register">Create account</button>
+      <button class="tab" data-view="reset">Reset password</button>
+    </div>
+
+    <!-- 登录 -->
+    <section id="view-login" class="view active">
+      <div class="field">
+        <label for="login-email">Email</label>
+        <input id="login-email" type="email" autocomplete="email" placeholder="you@example.com" />
+      </div>
+      <div class="field">
+        <label for="login-password">Password</label>
+        <input id="login-password" type="password" autocomplete="current-password" placeholder="••••••••" />
+      </div>
+      <button id="loginBtn" class="btn-main">Log in</button>
+      <div id="loginStatus" class="status"></div>
+    </section>
+
+    <!-- 注册 -->
+    <section id="view-register" class="view">
+      <div class="field">
+        <label for="reg-email">Email</label>
+        <input id="reg-email" type="email" autocomplete="email" placeholder="you@example.com" />
+      </div>
+      <div class="field">
+        <label for="reg-password">Create password</label>
+        <input id="reg-password" type="password" autocomplete="new-password" placeholder="At least 8 characters" />
+      </div>
+      <div class="row">
+        <input id="reg-code" type="text" maxlength="6" inputmode="numeric" placeholder="6-digit email code" />
+        <button id="sendRegCodeBtn" type="button" class="btn-ghost">Send code</button>
+      </div>
+      <p class="hint">We’ll email you a 6-digit code to confirm your address before creating your account.</p>
+      <button id="registerBtn" class="btn-main">Create account</button>
+      <div id="regStatus" class="status"></div>
+    </section>
+
+    <!-- 重置密码 -->
+    <section id="view-reset" class="view">
+      <div class="field">
+        <label for="reset-email">Email</label>
+        <input id="reset-email" type="email" autocomplete="email" placeholder="you@example.com" />
+      </div>
+      <div class="field">
+        <label for="reset-password">New password</label>
+        <input id="reset-password" type="password" autocomplete="new-password" placeholder="At least 8 characters" />
+      </div>
+      <div class="row">
+        <input id="reset-code" type="text" maxlength="6" inputmode="numeric" placeholder="6-digit reset code" />
+        <button id="sendResetCodeBtn" type="button" class="btn-ghost">Send reset code</button>
+      </div>
+      <p class="hint">We’ll email a code to verify you before updating your password.</p>
+      <button id="resetBtn" class="btn-main">Update password</button>
+      <div id="resetStatus" class="status"></div>
+    </section>
+  </main>
+
+  <script>
+    const API_BASE = "https://YOUR-CALMPAW-AUTH-WORKER_URL"; // TODO: 换成你的 Worker 地址
+
+    const tabs = document.querySelectorAll(".tab");
+    const views = {
+      login: document.getElementById("view-login"),
+      register: document.getElementById("view-register"),
+      reset: document.getElementById("view-reset"),
+    };
+
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        tabs.forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        const v = tab.dataset.view;
+        Object.keys(views).forEach(k => views[k].classList.toggle("active", k === v));
+      });
+    });
+
+    function setStatus(el, msg, type) {
+      el.textContent = msg || "";
+      el.className = "status " + (type || "");
+    }
+
+    // 登录
+    const loginEmail = document.getElementById("login-email");
+    const loginPassword = document.getElementById("login-password");
+    const loginBtn = document.getElementById("loginBtn");
+    const loginStatus = document.getElementById("loginStatus");
+
+    loginBtn.addEventListener("click", async () => {
+      const email = loginEmail.value.trim();
+      const password = loginPassword.value.trim();
+      if (!email || !password) {
+        setStatus(loginStatus, "Please enter email and password.", "err");
+        return;
+      }
+      loginBtn.disabled = true;
+      setStatus(loginStatus, "Signing in...", "");
+      try {
+        const res = await fetch(API_BASE + "/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          setStatus(loginStatus, data.error || "Login failed.", "err");
+        } else {
+          localStorage.setItem("calmpaw_token", data.token);
+          localStorage.setItem("calmpaw_email", data.email);
+          setStatus(loginStatus, "Login successful. Redirecting...", "ok");
+          const params = new URLSearchParams(window.location.search);
+          const redirect = params.get("redirect") || "/dashboard.html";
+          window.location.href = redirect;
+        }
+      } catch (err) {
+        console.error(err);
+        setStatus(loginStatus, "Network error, please try again.", "err");
+      } finally {
+        loginBtn.disabled = false;
+      }
+    });
+
+    // 注册
+    const regEmail = document.getElementById("reg-email");
+    const regPassword = document.getElementById("reg-password");
+    const regCode = document.getElementById("reg-code");
+    const sendRegCodeBtn = document.getElementById("sendRegCodeBtn");
+    const registerBtn = document.getElementById("registerBtn");
+    const regStatus = document.getElementById("regStatus");
+
+    sendRegCodeBtn.addEventListener("click", async () => {
+      const email = regEmail.value.trim();
+      if (!email) {
+        setStatus(regStatus, "Enter your email first.", "err");
+        return;
+      }
+      sendRegCodeBtn.disabled = true;
+      setStatus(regStatus, "Sending code...", "");
+      try {
+        const res = await fetch(API_BASE + "/auth/send-code", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, purpose: "register" }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          setStatus(regStatus, data.error || "Failed to send code.", "err");
+        } else {
+          setStatus(regStatus, "Code sent. Check your email (test in logs).", "ok");
+        }
+      } catch (err) {
+        console.error(err);
+        setStatus(regStatus, "Network error.", "err");
+      } finally {
+        sendRegCodeBtn.disabled = false;
+      }
+    });
+
+    registerBtn.addEventListener("click", async () => {
+      const email = regEmail.value.trim();
+      const password = regPassword.value.trim();
+      const code = regCode.value.trim();
+      if (!email || !password || !code) {
+        setStatus(regStatus, "Fill email, password and code.", "err");
+        return;
+      }
+      registerBtn.disabled = true;
+      setStatus(regStatus, "Creating account...", "");
+      try {
+        const res = await fetch(API_BASE + "/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password, code }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          setStatus(regStatus, data.error || "Registration failed.", "err");
+        } else {
+          localStorage.setItem("calmpaw_token", data.token);
+          localStorage.setItem("calmpaw_email", data.email);
+          setStatus(regStatus, "Account created. Redirecting...", "ok");
+          const params = new URLSearchParams(window.location.search);
+          const redirect = params.get("redirect") || "/dashboard.html";
+          window.location.href = redirect;
+        }
+      } catch (err) {
+        console.error(err);
+        setStatus(regStatus, "Network error.", "err");
+      } finally {
+        registerBtn.disabled = false;
+      }
+    });
+
+    // 重置密码
+    const resetEmail = document.getElementById("reset-email");
+    const resetPassword = document.getElementById("reset-password");
+    const resetCode = document.getElementById("reset-code");
+    const sendResetCodeBtn = document.getElementById("sendResetCodeBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const resetStatus = document.getElementById("resetStatus");
+
+    sendResetCodeBtn.addEventListener("click", async () => {
+      const email = resetEmail.value.trim();
+      if (!email) {
+        setStatus(resetStatus, "Enter your email first.", "err");
+        return;
+      }
+      sendResetCodeBtn.disabled = true;
+      setStatus(resetStatus, "Sending reset code...", "");
+      try {
+        const res = await fetch(API_BASE + "/auth/send-code", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, purpose: "reset" }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          setStatus(resetStatus, data.error || "Failed to send code.", "err");
+        } else {
+          setStatus(resetStatus, "Reset code sent. Check your email (test in logs).", "ok");
+        }
+      } catch (err) {
+        console.error(err);
+        setStatus(resetStatus, "Network error.", "err");
+      } finally {
+        sendResetCodeBtn.disabled = false;
+      }
+    });
+
+    resetBtn.addEventListener("click", async () => {
+      const email = resetEmail.value.trim();
+      const password = resetPassword.value.trim();
+      const code = resetCode.value.trim();
+      if (!email || !password || !code) {
+        setStatus(resetStatus, "Fill email, new password and code.", "err");
+        return;
+      }
+      resetBtn.disabled = true;
+      setStatus(resetStatus, "Updating password...", "");
+      try {
+        const res = await fetch(API_BASE + "/auth/reset-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password, code }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          setStatus(resetStatus, data.error || "Reset failed.", "err");
+        } else {
+          localStorage.setItem("calmpaw_token", data.token);
+          localStorage.setItem("calmpaw_email", data.email);
+          setStatus(resetStatus, "Password updated. Redirecting...", "ok");
+          const params = new URLSearchParams(window.location.search);
+          const redirect = params.get("redirect") || "/dashboard.html";
+          window.location.href = redirect;
+        }
+      } catch (err) {
+        console.error(err);
+        setStatus(resetStatus, "Network error.", "err");
+      } finally {
+        resetBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
