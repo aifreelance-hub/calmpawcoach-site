@@ -2,192 +2,323 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <title>CalmPaw Coach — Training Programs</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CalmPaw Coach — Gentle Dog Training Plans</title>
-
+  <link rel="icon" type="image/png" href="favicon.png" />
   <style>
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #FFF8F1;
-      color: #4B3621;
+    /* 和首页同一套视觉变量，方便统一风格 */
+    *{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --bg:#fffaf5;--bg-soft:#fff3e6;--accent:#ffb86b;--accent-soft:#ffe0b8;
+      --accent-strong:#ff914d;--text-main:#3d2a28;--text-soft:#8a6a63;
+      --border-soft:#f3d9c4;--shadow-soft:0 18px 45px rgba(205,150,120,0.25);
+      --radius-lg:26px;--radius-md:18px;--radius-pill:999px;
+    }
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"Segoe UI",sans-serif;
+      background:radial-gradient(circle at top,#ffe7cf 0%,#fffaf5 50%,#fff7ee 100%);
+      color:var(--text-main);min-height:100vh;
+    }
+    a{text-decoration:none;color:inherit;}
+    header{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter:blur(18px);
+      background:linear-gradient(to bottom,rgba(255,250,245,0.96),rgba(255,250,245,0.90),rgba(255,250,245,0.75));
+      border-bottom:1px solid rgba(243,217,196,0.7);
+    }
+    .nav-inner{
+      max-width:1080px;margin:0 auto;padding:12px 18px;
+      display:flex;align-items:center;justify-content:space-between;gap:14px;
+    }
+    .brand{display:flex;align-items:center;gap:10px;}
+    .brand-logo{
+      width:38px;height:38px;border-radius:50%;
+      background:radial-gradient(circle at 25% 15%,#fff7eb 0%,#ffb86b 40%,#ff914d 80%);
+      display:flex;align-items:center;justify-content:center;font-size:22px;
+      box-shadow:0 10px 26px rgba(255,155,90,0.35);
+    }
+    .brand-text-main{font-weight:700;letter-spacing:.02em;font-size:18px;}
+    .brand-text-sub{font-size:11px;color:var(--text-soft);}
+    .nav-links{
+      display:flex;align-items:center;gap:16px;font-size:14px;color:var(--text-soft);
+    }
+    .nav-links a{
+      padding:6px 10px;border-radius:999px;
+      transition:background .18s ease,color .18s ease,transform .12s ease;
+    }
+    .nav-links a:hover{
+      background:rgba(255,210,158,0.25);color:var(--text-main);transform:translateY(-1px);
+    }
+    .nav-cta{display:flex;align-items:center;gap:8px;}
+    .btn-outline{
+      padding:7px 16px;border-radius:var(--radius-pill);
+      border:1px solid var(--border-soft);background:#fffaf5;
+      font-size:13px;color:var(--text-soft);cursor:pointer;transition:all .18s ease;
+    }
+    .btn-outline:hover{
+      border-color:var(--accent);color:var(--text-main);
+      box-shadow:0 10px 28px rgba(204,145,107,0.25);transform:translateY(-1px);
+    }
+    .btn-primary{
+      padding:8px 18px;border-radius:var(--radius-pill);border:none;
+      font-size:13px;font-weight:600;cursor:pointer;
+      background:linear-gradient(135deg,#ffb86b,#ff914d);color:#45221b;
+      box-shadow:0 14px 30px rgba(214,131,74,0.45);
+      transition:all .18s ease;display:inline-flex;align-items:center;gap:6px;
+    }
+    .btn-primary:hover{
+      transform:translateY(-1.5px) scale(1.01);
+      box-shadow:0 18px 38px rgba(200,115,61,0.55);
+    }
+    @media(max-width:840px){
+      .nav-links{display:none;}
     }
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 22px 28px;
-      background: #FFE9D2;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    main{max-width:1080px;margin:0 auto;padding:26px 18px 40px;}
+    .page-title{font-size:22px;margin-bottom:6px;}
+    .page-sub{font-size:13px;color:var(--text-soft);margin-bottom:18px;}
+
+    .programs-grid{
+      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:16px;margin-bottom:26px;
+    }
+    @media(max-width:900px){
+      .programs-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+    }
+    @media(max-width:640px){
+      .programs-grid{grid-template-columns:minmax(0,1fr);}
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 26px;
-      font-weight: 700;
-      color: #4B3621;
+    .program-card{
+      border-radius:var(--radius-md);
+      background:rgba(255,246,238,0.96);
+      border:1px solid rgba(243,217,196,0.9);
+      padding:14px 14px 13px;
+      box-shadow:0 10px 26px rgba(209,157,126,0.2);
+      display:flex;flex-direction:column;justify-content:space-between;gap:8px;
+      transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;
+    }
+    .program-card:hover{
+      transform:translateY(-3px);border-color:#ffb86b;
+      box-shadow:0 16px 32px rgba(200,145,112,0.3);
+    }
+    .program-pill{
+      font-size:10px;padding:4px 9px;border-radius:999px;
+      background:rgba(255,222,186,0.85);color:#6b4532;
+      display:inline-flex;align-items:center;gap:5px;
+    }
+    .program-title{font-size:15px;font-weight:600;margin-top:4px;margin-bottom:4px;}
+    .program-desc{font-size:11px;color:var(--text-soft);line-height:1.5;}
+    .program-meta{
+      display:flex;justify-content:space-between;align-items:center;
+      margin-top:8px;font-size:11px;color:var(--text-soft);
+    }
+    .program-price{font-weight:700;color:#c1632c;font-size:13px;}
+    .program-link{font-size:11px;color:#b05825;display:inline-flex;align-items:center;gap:4px;margin-top:6px;}
+    .program-link .arrow{font-size:13px;transform:translateY(1px);}
+
+    .bundle-card{
+      border-radius:26px;
+      background:linear-gradient(135deg,#ffe9d2,#ffd4b4);
+      padding:18px 18px 16px;
+      box-shadow:var(--shadow-soft);
+      display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);
+      gap:18px;align-items:center;margin-bottom:28px;
+    }
+    @media(max-width:780px){
+      .bundle-card{grid-template-columns:minmax(0,1fr);}
+    }
+    .bundle-title{font-size:18px;margin-bottom:6px;}
+    .bundle-sub{font-size:12px;color:#7b4d3a;margin-bottom:10px;}
+    .bundle-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+    .bundle-tag{
+      font-size:10px;padding:4px 8px;border-radius:999px;
+      background:rgba(255,246,238,0.9);
+      border:1px dashed rgba(210,145,111,0.6);color:#75412a;
+    }
+    .bundle-price-row{display:flex;align-items:baseline;gap:6px;margin-bottom:8px;}
+    .bundle-old{font-size:11px;text-decoration:line-through;color:#a36b4b;}
+    .bundle-new{font-size:20px;font-weight:700;color:#a8471c;}
+    .bundle-note{font-size:11px;color:#7c4b32;}
+    .bundle-right-box{
+      border-radius:18px;
+      background:rgba(255,250,245,0.96);
+      border:1px solid rgba(243,217,196,0.95);
+      padding:12px 12px 10px;font-size:11px;color:#7a5a4f;
+    }
+    .bundle-check-row{
+      display:flex;align-items:flex-start;gap:6px;margin-bottom:4px;
+    }
+    .bundle-check{
+      width:14px;height:14px;border-radius:999px;
+      background:#fffbf6;border:1px solid #f3d9c4;
+      display:flex;align-items:center;justify-content:center;
+      font-size:10px;color:#cc6a2e;margin-top:1px;
     }
 
-    .hero {
-      text-align: center;
-      padding: 60px 20px;
-      background: linear-gradient(180deg, #FFE9D2 0%, #FFF8F1 100%);
+    footer{
+      border-top:1px solid rgba(243,217,196,0.8);
+      background:rgba(255,248,241,0.9);margin-top:10px;
     }
-
-    .hero h2 {
-      font-size: 34px;
-      margin-bottom: 12px;
-      color: #4B3621;
+    .footer-inner{
+      max-width:1080px;margin:0 auto;
+      padding:12px 18px 16px;display:flex;flex-wrap:wrap;
+      gap:8px;justify-content:space-between;font-size:11px;color:var(--text-soft);
     }
-
-    .hero p {
-      font-size: 18px;
-      color: #6B4F3E;
-      margin-bottom: 24px;
-    }
-
-    .hero-btn {
-      background: #FFB27C;
-      padding: 14px 28px;
-      border-radius: 12px;
-      font-size: 18px;
-      font-weight: 600;
-      color: white;
-      text-decoration: none;
-      display: inline-block;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-
-    .section-title {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 28px;
-      font-weight: 700;
-      color: #4B3621;
-    }
-
-    .products {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 26px;
-      padding: 30px;
-      max-width: 1100px;
-      margin: auto;
-    }
-
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 22px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.07);
-      text-align: center;
-    }
-
-    .card h3 {
-      margin-top: 0;
-      font-size: 22px;
-      color: #4B3621;
-    }
-
-    .price {
-      font-size: 20px;
-      font-weight: bold;
-      margin: 8px 0 18px;
-      color: #E76F51;
-    }
-
-    .buy-btn {
-      background: #FFB27C;
-      padding: 12px 20px;
-      border-radius: 10px;
-      font-size: 16px;
-      color: white;
-      text-decoration: none;
-      font-weight: 600;
-      display: inline-block;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.12);
-    }
-
-    .bundle {
-      background: #FFE3C4;
-      border: 2px solid #FFB27C;
-    }
-
-    footer {
-      text-align: center;
-      padding: 28px;
-      margin-top: 40px;
-      background: #FFE9D2;
-      color: #6B4F3E;
-    }
-
+    .footer-links{display:flex;gap:12px;flex-wrap:wrap;}
+    .footer-links a:hover{color:#b05825;}
   </style>
-
 </head>
 <body>
+  <header>
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-logo">🐾</div>
+        <div>
+          <div class="brand-text-main">CalmPaw Coach</div>
+          <div class="brand-text-sub">Gentle, realistic dog training</div>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="programs.html">Programs</a>
+        <a href="bundle.html">Complete Pack</a>
+        <a href="club.html">Monthly Club</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="nav-cta">
+        <a href="bundle.html" class="btn-primary">
+          Get Complete Pack <span>→</span>
+        </a>
+      </div>
+    </div>
+  </header>
 
-<header>
-  <h1>CalmPaw Coach</h1>
-</header>
+  <main>
+    <h1 class="page-title">Training programs for real-life dogs</h1>
+    <p class="page-sub">
+      Choose the behavior that stresses you the most — barking, separation or
+      chaotic walks — or start with the Complete Pack to follow a full 3-week reset.
+    </p>
 
-<section class="hero">
-  <h2>Gentle, science-based dog training plans</h2>
-  <p>Fix barking, pulling, anxiety and potty issues with 7–14 day step-by-step guides.</p>
-  <a class="hero-btn" href="#">Get the 7-Day Stop Barking Plan – $19</a>
-</section>
+    <!-- 单个课程 -->
+    <section class="programs-grid">
+      <a href="program-barking.html" class="program-card">
+        <div>
+          <div class="program-pill">7-day plan · Noise-friendly</div>
+          <div class="program-title">Stop Excessive Barking</div>
+          <p class="program-desc">
+            Reduce door, neighbor and hallway barking with short daily routines
+            that fit around your work schedule.
+          </p>
+        </div>
+        <div>
+          <div class="program-meta">
+            <span>Perfect for: apartment dogs</span>
+            <span class="program-price">$29</span>
+          </div>
+          <div class="program-link">View full program <span class="arrow">→</span></div>
+        </div>
+      </a>
 
-<h2 class="section-title">Our Training Plans</h2>
+      <a href="program-anxiety.html" class="program-card">
+        <div>
+          <div class="program-pill">14-day plan · Alone-time</div>
+          <div class="program-title">Separation Anxiety Reset</div>
+          <p class="program-desc">
+            Help your dog feel safe when you leave home — with tiny, practical
+            steps you can repeat before and after work.
+          </p>
+        </div>
+        <div>
+          <div class="program-meta">
+            <span>Perfect for: clingy / rescue dogs</span>
+            <span class="program-price">$29</span>
+          </div>
+          <div class="program-link">View full program <span class="arrow">→</span></div>
+        </div>
+      </a>
 
-<section class="products">
+      <a href="program-leash.html" class="program-card">
+        <div>
+          <div class="program-pill">10-day plan · Walks</div>
+          <div class="program-title">Leash Walking Mastery</div>
+          <p class="program-desc">
+            Turn chaos walks into calm, connected walks — without harsh tools
+            or unrealistic expectations.
+          </p>
+        </div>
+        <div>
+          <div class="program-meta">
+            <span>Perfect for: pulling & zig-zagging</span>
+            <span class="program-price">$29</span>
+          </div>
+          <div class="program-link">View full program <span class="arrow">→</span></div>
+        </div>
+      </a>
+    </section>
 
-  <div class="card">
-    <h3>Stop Barking in 7 Days</h3>
-    <p class="price">$19</p>
-    <p>Daily step-by-step guide to reduce barking fast.</p>
-    <a class="buy-btn" href="#">Get Plan</a>
-  </div>
+    <!-- Bundle -->
+    <section class="bundle-card">
+      <div>
+        <div class="bundle-title">CalmPaw Complete Pack</div>
+        <div class="bundle-sub">
+          All three programs — barking, separation anxiety and leash walking —
+          combined into a gentle 3-week plan for a calmer life together.
+        </div>
+        <div class="bundle-tags">
+          <div class="bundle-tag">3 programs in 1</div>
+          <div class="bundle-tag">Printable checklists</div>
+          <div class="bundle-tag">Apartment-friendly</div>
+          <div class="bundle-tag">Lifetime access</div>
+        </div>
+        <div class="bundle-price-row">
+          <span class="bundle-old">$87</span>
+          <span class="bundle-new">$49</span>
+        </div>
+        <div class="bundle-note">
+          One-time payment, instant access. Best for owners who want a full reset,
+          not just a quick fix.
+        </div>
+        <div style="margin-top:12px;">
+          <!-- 这里将来你替换成真实支付链接或 bundle.html 页面 -->
+          <a href="bundle.html" class="btn-primary">
+            Get the Complete Pack <span>→</span>
+          </a>
+        </div>
+      </div>
+      <div class="bundle-right-box">
+        <div class="bundle-check-row">
+          <div class="bundle-check">✓</div>
+          <div>Week 1 — Quiet evenings: reduce barking and teach calm at doors, windows and common sounds.</div>
+        </div>
+        <div class="bundle-check-row">
+          <div class="bundle-check">✓</div>
+          <div>Week 2 — Calm goodbyes: build alone-time habits so your dog can rest while you’re at work.</div>
+        </div>
+        <div class="bundle-check-row">
+          <div class="bundle-check">✓</div>
+          <div>Week 3 — Joyful walks: teach a soft heel, better focus and realistic behavior around distractions.</div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-  <div class="card">
-    <h3>Loose Leash Walk in 10 Days</h3>
-    <p class="price">$19</p>
-    <p>Fix pulling and enjoy calm, comfortable walks.</p>
-    <a class="buy-btn" href="#">Get Plan</a>
-  </div>
+  <footer>
+    <div class="footer-inner">
+      <div>© <span id="year"></span> CalmPaw Coach. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="programs.html">Programs</a>
+        <a href="bundle.html">Complete Pack</a>
+        <a href="club.html">Monthly Club</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </footer>
 
-  <div class="card">
-    <h3>Separation Anxiety Reset (14 Days)</h3>
-    <p class="price">$29</p>
-    <p>Build your dog's calm independence with gentle routines.</p>
-    <a class="buy-btn" href="#">Get Plan</a>
-  </div>
-
-  <div class="card">
-    <h3>Puppy First 30 Days Blueprint</h3>
-    <p class="price">$19</p>
-    <p>Everything your puppy needs for the perfect start.</p>
-    <a class="buy-btn" href="#">Get Plan</a>
-  </div>
-
-  <div class="card">
-    <h3>Indoor Potty Training Guide</h3>
-    <p class="price">$15</p>
-    <p>Simple indoor potty structure with rewards & correction.</p>
-    <a class="buy-btn" href="#">Get Plan</a>
-  </div>
-
-  <div class="card bundle">
-    <h3>Behavior Mega Bundle</h3>
-    <p class="price">$49</p>
-    <p>All 5 training plans + printable charts & calendars.</p>
-    <a class="buy-btn" href="#">Get Bundle</a>
-  </div>
-
-</section>
-
-<footer>
-  © 2025 CalmPaw Coach — Gentle dog training for modern families.
-</footer>
-
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
