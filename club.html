@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CalmPaw Reading Club — Monthly Club for Real-Life Dogs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Favicon：请确保根目录有 favicon.png -->
+  <link rel="icon" type="image/png" href="favicon.png" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #fff7f0;
+      --bg-soft: #ffeede;
+      --accent: #ffb86b;
+      --accent-strong: #ff914d;
+      --accent-soft: #ffe0b8;
+      --text-main: #3b2824;
+      --text-soft: #8a6a63;
+      --border-soft: #f3d9c4;
+      --radius-lg: 26px;
+      --radius-md: 18px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 26px 60px rgba(210, 145, 110, 0.38);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        system-ui, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 5% 0%, #ffe0c0 0%, transparent 55%),
+        radial-gradient(circle at 100% 0%, #ffd4d4 0%, transparent 55%),
+        radial-gradient(circle at 0% 100%, #ffe5c3 0%, transparent 55%),
+        linear-gradient(180deg, #fff7f0 0%, #fff2e7 40%, #fff8f2 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    @keyframes float-soft {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0px); }
+    }
+
+    @keyframes float-slow {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    @keyframes pulse-soft {
+      0% { transform: scale(1); box-shadow: 0 24px 70px rgba(214, 139, 86, 0.55); }
+      50% { transform: scale(1.02); box-shadow: 0 28px 80px rgba(214, 139, 86, 0.65); }
+      100% { transform: scale(1); box-shadow: 0 24px 70px rgba(214, 139, 86, 0.55); }
+    }
+
+    @keyframes glow-orbit {
+      0% { transform: translate(0, 0) scale(1); opacity: 0.65; }
+      50% { transform: translate(6px, -8px) scale(1.05); opacity: 0.9; }
+      100% { transform: translate(0, 0) scale(1); opacity: 0.65; }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -120px 0; }
+      100% { background-position: 120px 0; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Header */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(22px);
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 248, 240, 0.98),
+        rgba(255, 248, 240, 0.88),
+        rgba(255, 248, 240, 0.75)
+      );
+      border-bottom: 1px solid rgba(243, 217, 196, 0.8);
+    }
+
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-logo-wrap {
+      position: relative;
+    }
+
+    .brand-orbit {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 160deg,
+        rgba(255, 184, 107, 0.15),
+        rgba(255, 145, 77, 0.3),
+        rgba(255, 230, 190, 0.2),
+        rgba(255, 184, 107, 0.15)
+      );
+      filter: blur(4px);
+      opacity: 0.9;
+      animation: glow-orbit 4.4s ease-in-out infinite;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 18px;
+      background: radial-gradient(circle at 20% 15%, #fff9f3 0%, #ffb86b 40%, #ff914d 84%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 16px 40px rgba(214, 139, 86, 0.6);
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-text-main {
+      font-weight: 750;
+      letter-spacing: 0.03em;
+      font-size: 18px;
+      white-space: nowrap;
+    }
+
+    .brand-text-sub {
+      font-size: 11px;
+      color: var(--text-soft);
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 14px;
+      color: var(--text-soft);
+      flex: 1;
+      justify-content: center;
+      min-width: 0;
+    }
+
+    .nav-links a {
+      padding: 6px 11px;
+      border-radius: 999px;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.18s ease, transform 0.12s ease;
+    }
+
+    .nav-links a::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(circle at 0 0, rgba(255, 210, 158, 0.9), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.18s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-main);
+      transform: translateY(-1px);
+    }
+
+    .nav-links a:hover::before {
+      opacity: 1;
+    }
+
+    .nav-links a.active {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+
+    .btn-outline {
+      padding: 7px 16px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-soft);
+      background: rgba(255, 250, 244, 0.95);
+      font-size: 13px;
+      color: var(--text-soft);
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--text-main);
+      box-shadow: 0 14px 32px rgba(204, 145, 107, 0.28);
+      transform: translateY(-1px);
+      background: #fffaf5;
+    }
+
+    .btn-primary {
+      padding: 8px 19px;
+      border-radius: var(--radius-pill);
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #4a251a;
+      background-image:
+        linear-gradient(135deg, #ffb86b, #ff914d),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.4), transparent);
+      background-size: 100% 100%, 120px 100%;
+      background-position: 0 0, -120px 0;
+      background-repeat: no-repeat;
+      box-shadow: 0 18px 40px rgba(214, 139, 86, 0.65);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(
+        120deg,
+        rgba(255, 255, 255, 0.5),
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0.4)
+      );
+      background-size: 140px 100%;
+      background-repeat: no-repeat;
+      background-position: -140px 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1.5px) scale(1.01);
+      box-shadow: 0 24px 56px rgba(204, 129, 76, 0.75);
+    }
+
+    .btn-primary:hover::after {
+      opacity: 1;
+      animation: shimmer 0.85s linear;
+    }
+
+    .nav-login-emoji {
+      font-size: 14px;
+    }
+
+    .nav-auth {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-auth-email {
+      max-width: 160px;
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 250, 244, 0.95);
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      font-size: 12px;
+      color: #6b4532;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-auth-btn {
+      border: none;
+      background: transparent;
+      font-size: 11px;
+      color: #b05825;
+      padding: 4px 7px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .nav-auth-btn:hover {
+      background: rgba(255, 237, 213, 0.95);
+      color: #7a3410;
+    }
+
+    @media (max-width: 880px) {
+      .nav-links { display: none; }
+      .nav-inner {
+        align-items: flex-start;
+      }
+      .nav-cta {
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-inner {
+        padding: 8px 14px;
+        gap: 6px;
+        flex-wrap: wrap;
+        align-items: flex-start;
+      }
+      .brand {
+        width: 100%;
+      }
+      .brand-logo {
+        width: 34px;
+        height: 34px;
+        font-size: 20px;
+      }
+      .brand-text-main {
+        font-size: 16px;
+      }
+      .brand-text-sub {
+        font-size: 10px;
+      }
+      .nav-cta {
+        width: 100%;
+        justify-content: flex-end;
+        gap: 6px;
+      }
+      .btn-outline,
+      .btn-primary {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+      .nav-auth-email {
+        max-width: 130px;
+        font-size: 11px;
+      }
+    }
+
+    /* Layout */
+
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 22px 20px 36px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr);
+      gap: 30px;
+      margin-top: 18px;
+      margin-bottom: 30px;
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+      }
+      .hero-visual {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 640px) {
+      main {
+        padding: 18px 14px 28px;
+      }
+      .hero {
+        margin-top: 10px;
+        margin-bottom: 22px;
+      }
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 222, 186, 0.9);
+      color: #6b4532;
+      font-size: 11px;
+      margin-bottom: 10px;
+      box-shadow: 0 10px 26px rgba(210, 145, 110, 0.28);
+      animation: float-soft 4s ease-in-out infinite;
+    }
+
+    .chip-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #fff8f0 0%, #ff914d 55%, #d6632a 100%);
+    }
+
+    .hero-title {
+      font-size: clamp(24px, 4.2vw, 34px);
+      line-height: 1.18;
+      margin-bottom: 12px;
+      letter-spacing: 0.01em;
+    }
+
+    .hero-title span.highlight {
+      background: linear-gradient(120deg, #ff914d, #ffb86b);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 14px;
+      color: var(--text-soft);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .hero-sub-cn {
+      font-size: 12px;
+      color: #a7714f;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .hero-tag {
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      background: rgba(255, 249, 242, 0.95);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-tag-emoji { font-size: 13px; }
+
+    .hero-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .hero-note {
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .hero-note span {
+      font-weight: 600;
+      color: #c96c34;
+    }
+
+    @media (max-width: 640px) {
+      .hero-sub {
+        font-size: 13px;
+      }
+      .hero-sub-cn {
+        font-size: 11px;
+      }
+      .hero-tag {
+        font-size: 10px;
+        padding: 4px 8px;
+      }
+      .hero-note {
+        font-size: 10px;
+      }
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 260px;
+    }
+
+    .hero-glow {
+      position: absolute;
+      inset: -18px -22px -10px -18px;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(255, 232, 199, 0.95) 0%, transparent 55%),
+        radial-gradient(circle at 100% 30%, rgba(255, 196, 181, 0.95) 0%, transparent 58%);
+      filter: blur(1px);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .hero-card {
+      position: relative;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(145deg, #fff4e6, #ffe0c8);
+      padding: 18px 18px 16px;
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      animation: pulse-soft 5.4s ease-in-out infinite;
+      max-width: 420px;
+      margin-left: auto;
+    }
+
+    @media (max-width: 900px) {
+      .hero-card {
+        margin: 0 auto;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-card {
+        border-radius: 22px;
+        padding: 14px 14px 12px;
+        transform: scale(0.97);
+        animation: none;
+        box-shadow: 0 18px 40px rgba(210,145,110,0.45);
+      }
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.7), transparent 70%);
+      top: -80px;
+      right: -40px;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .hero-dog-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .hero-dog-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 24px;
+      background: radial-gradient(circle at 20% 15%, #fff9f3 0%, #ffb86b 42%, #ff914d 86%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      box-shadow: 0 20px 40px rgba(214, 139, 86, 0.7);
+      animation: float-slow 5.3s ease-in-out infinite;
+    }
+
+    .hero-dog-text-main {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .hero-dog-text-sub {
+      font-size: 11px;
+      color: #865b49;
+    }
+
+    @media (max-width: 640px) {
+      .hero-dog-avatar {
+        width: 54px;
+        height: 54px;
+        font-size: 30px;
+      }
+      .hero-dog-text-main {
+        font-size: 13px;
+      }
+      .hero-dog-text-sub {
+        font-size: 10px;
+      }
+    }
+
+    .hero-mini-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 249, 243, 0.95);
+      color: #7d4c37;
+      font-size: 11px;
+      margin-bottom: 8px;
+    }
+
+    .hero-mini-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #ff914d;
+    }
+
+    .hero-checklist {
+      list-style: none;
+      font-size: 12px;
+      color: var(--text-soft);
+      margin-bottom: 10px;
+    }
+
+    .hero-checklist li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 5px;
+    }
+
+    .hero-check {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid #f3d9c4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #d87a3b;
+    }
+
+    .hero-label {
+      font-size: 11px;
+      color: #a56a4d;
+      padding: 6px 11px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.9);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-label-icon { font-size: 13px; }
+
+    .hero-floating-sticker {
+      position: absolute;
+      right: 14px;
+      bottom: -6px;
+      width: 124px;
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: rgba(255, 250, 245, 0.96);
+      border: 1px solid rgba(243, 217, 196, 0.95);
+      font-size: 10px;
+      color: #7d4c37;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 12px 28px rgba(201, 134, 95, 0.5);
+      animation: float-soft 4.8s ease-in-out infinite;
+    }
+
+    .hero-floating-badge {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 15%, #fffdf7 0%, #ffd2a1 40%, #ff914d 88%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    /* Section header & cards */
+
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: 18px;
+    }
+
+    .section-sub {
+      font-size: 12px;
+      color: var(--text-soft);
+      max-width: 520px;
+    }
+
+    @media (max-width: 640px) {
+      .section-title {
+        font-size: 17px;
+      }
+      .section-sub {
+        font-size: 11px;
+      }
+    }
+
+    .club-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 26px;
+    }
+
+    @media (max-width: 980px) {
+      .club-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .club-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .club-card {
+      border-radius: var(--radius-md);
+      background: rgba(255, 246, 238, 0.98);
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      padding: 14px 14px 12px;
+      box-shadow: 0 16px 34px rgba(209, 157, 126, 0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .club-card-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #b48363;
+    }
+
+    .club-card-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .club-card-body {
+      font-size: 12px;
+      color: var(--text-soft);
+      line-height: 1.6;
+    }
+
+    .club-card-tag {
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 249, 243, 0.98);
+      border: 1px dashed rgba(210, 145, 111, 0.7);
+      color: #7b4e36;
+      margin-top: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 26px;
+    }
+
+    @media (max-width: 820px) {
+      .compare-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .compare-box {
+      border-radius: var(--radius-md);
+      padding: 14px 14px 12px;
+      box-shadow: 0 16px 34px rgba(209, 157, 126, 0.35);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .compare-box.light {
+      background: rgba(255, 248, 241, 0.98);
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      color: var(--text-main);
+    }
+
+    .compare-box.dark {
+      background: rgba(79, 51, 43, 0.98);
+      border: 1px solid rgba(68, 40, 33, 1);
+      color: #fef3e7;
+    }
+
+    .compare-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      margin-bottom: 4px;
+      opacity: 0.9;
+    }
+
+    .compare-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .compare-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .compare-list li {
+      display: flex;
+      gap: 7px;
+      margin-bottom: 5px;
+    }
+
+    .compare-dot {
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 26px;
+    }
+
+    @media (max-width: 900px) {
+      .steps-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .step-card {
+      border-radius: var(--radius-md);
+      padding: 14px 14px 12px;
+      background: rgba(255, 250, 244, 0.98);
+      border: 1px dashed rgba(243, 217, 196, 0.9);
+      box-shadow: 0 14px 30px rgba(210, 150, 116, 0.36);
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+
+    .step-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #b48363;
+      margin-bottom: 4px;
+    }
+
+    .step-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+
+    .faq-box {
+      border-radius: var(--radius-lg);
+      padding: 16px 16px 14px;
+      background: rgba(79, 51, 43, 0.98);
+      border: 1px solid rgba(68, 40, 33, 1);
+      color: #fef3e7;
+      box-shadow: 0 20px 40px rgba(67, 42, 36, 0.7);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .faq-item {
+      margin-bottom: 8px;
+    }
+
+    .faq-q {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .faq-a {
+      opacity: 0.92;
+    }
+
+    .join-banner {
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, #ffe9d2, #ffd4b4);
+      padding: 16px 18px 14px;
+      margin-bottom: 26px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .join-text-main {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .join-text-sub {
+      font-size: 12px;
+      color: #7b4d3a;
+      max-width: 520px;
+    }
+
+    @media (max-width: 640px) {
+      .join-banner {
+        padding: 12px 14px 10px;
+      }
+      .join-text-main {
+        font-size: 14px;
+      }
+    }
+
+    footer {
+      border-top: 1px solid rgba(243, 217, 196, 0.8);
+      background: rgba(255, 248, 241, 0.96);
+      margin-top: 10px;
+    }
+
+    .footer-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 12px 20px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a:hover { color: #b05825; }
+
+    @media (max-width: 640px) {
+      .footer-inner {
+        padding: 10px 14px 14px;
+        font-size: 10px;
+      }
+      .footer-links {
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-logo-wrap">
+          <div class="brand-orbit"></div>
+          <div class="brand-logo">🐾</div>
+        </div>
+        <div>
+          <div class="brand-text-main">CalmPaw Coach</div>
+          <div class="brand-text-sub">Gentle, realistic dog training</div>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="programs.html">Programs</a>
+        <a href="bundle.html">Complete Pack</a>
+        <a href="club.html" class="active">Monthly Club</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="nav-cta">
+        <!-- 登录状态区域：未登录默认显示 Log in -->
+        <div id="nav-auth-area">
+          <a class="btn-outline" href="auth.html?redirect=/club.html">
+            <span class="nav-login-emoji">🔑</span> Log in
+          </a>
+        </div>
+        <a class="btn-primary" href="bundle.html">
+          Get Complete Pack <span>→</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero：阅读俱乐部介绍 -->
+    <section class="hero">
+      <div class="hero-copy reveal">
+        <div class="chip">
+          <div class="chip-dot"></div>
+          CalmPaw Reading Club · monthly reader for tired humans
+        </div>
+        <h1 class="hero-title">
+          A quiet <span class="highlight">monthly reading club</span><br />
+          for real-life dogs & busy owners.
+        </h1>
+        <p class="hero-sub">
+          The CalmPaw Reading Club is a monthly PDF reader with behaviour stories,
+          gentle training theory and human-side notes — designed for evenings on
+          the sofa, not for “Day 1, Day 2, Day 3” homework.
+        </p>
+        <p class="hero-sub-cn">
+          这是一个 <strong>阅读型的月度俱乐部</strong>：每月收到文字阅读内容、小册子和案例故事，帮助你
+          <strong>理解狗 + 理解自己</strong>。<br />
+          不重复 7/10/14 天的训练计划，<strong>也不包含在 Complete Pack 里</strong>。
+        </p>
+        <div class="hero-tags">
+          <div class="hero-tag">
+            <span class="hero-tag-emoji">📚</span>
+            Monthly “Calm Home” reader
+          </div>
+          <div class="hero-tag">
+            <span class="hero-tag-emoji">🐕</span>
+            Case stories from real apartments
+          </div>
+          <div class="hero-tag">
+            <span class="hero-tag-emoji">🧠</span>
+            Human-side mindset pages
+          </div>
+          <div class="hero-tag">
+            <span class="hero-tag-emoji">🛋</span>
+            For quiet evenings, not checklists
+          </div>
+        </div>
+        <div class="hero-cta-row">
+          <a href="#join-club" class="btn-primary">
+            Join the Reading Club <span>→</span>
+          </a>
+          <a href="#inside" class="btn-outline">
+            See what you get each month
+          </a>
+        </div>
+        <div class="hero-note">
+          One monthly PDF pack. <span>No daily tasks, no app, no Zoom calls.</span>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal">
+        <div class="hero-glow"></div>
+        <div class="hero-card">
+          <div class="hero-dog-row">
+            <div class="hero-dog-avatar">📖</div>
+            <div>
+              <div class="hero-dog-text-main">
+                “I read a few pages before bed.”
+              </div>
+              <div class="hero-dog-text-sub">
+                Not another to-do list — just calm reading about real dogs and humans.
+              </div>
+            </div>
+          </div>
+          <div class="hero-mini-pill">
+            <div class="hero-mini-dot"></div>
+            For owners who prefer to understand first, and act in their own time.
+          </div>
+          <ul class="hero-checklist">
+            <li>
+              <div class="hero-check">✓</div>
+              <span>20–30 pages per month — stories, theory, ideas.</span>
+            </li>
+            <li>
+              <div class="hero-check">✓</div>
+              <span>No “Day 1 / Day 2” — different from the training plans.</span>
+            </li>
+            <li>
+              <div class="hero-check">✓</div>
+              <span>Works with or without the 7/10/14 day programs.</span>
+            </li>
+          </ul>
+          <div class="hero-label">
+            <span class="hero-label-icon">💡</span>
+            Education & reflection, not a step-by-step schedule.
+          </div>
+
+          <div class="hero-floating-sticker">
+            <div class="hero-floating-badge">$12</div>
+            <div>per month · cancel anytime · separate from Complete Pack</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 每月你会收到什么 -->
+    <section id="inside" class="reveal">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">What you receive each month</h2>
+          <p class="section-sub">
+            Every month has a main theme — doors & neighbors, alone-time, city
+            walks — plus real case stories and human-side notes. It’s a calm,
+            slow way to understand your dog better without any “perfect trainer”
+            pressure.
+          </p>
+        </div>
+      </div>
+
+      <div class="club-grid">
+        <article class="club-card">
+          <div class="club-card-label">CALM HOME READER</div>
+          <h3 class="club-card-title">Monthly “Calm Home” mini-magazine</h3>
+          <p class="club-card-body">
+            A 20–30 page PDF on one core topic: barking at doors, living with
+            neighbors, alone-time, city walks or visitors. You’ll learn why dogs
+            behave a certain way and which small changes truly matter.
+          </p>
+          <div class="club-card-tag">
+            <span>📱</span>
+            Read on your phone or print at home
+          </div>
+        </article>
+
+        <article class="club-card">
+          <div class="club-card-label">CASE STORIES</div>
+          <h3 class="club-card-title">Real-life case stories from apartments</h3>
+          <p class="club-card-body">
+            2–3 honest before/after stories per month: what owners tried, what
+            didn’t work, and which gentle changes finally helped. It’s like
+            quiet, useful dog-owner gossip — with solutions.
+          </p>
+          <div class="club-card-tag">
+            <span>🐾</span>
+            Stories, not day-by-day exercises
+          </div>
+        </article>
+
+        <article class="club-card">
+          <div class="club-card-label">HUMAN-SIDE NOTES</div>
+          <h3 class="club-card-title">Mindset pages for tired humans</h3>
+          <p class="club-card-body">
+            Short notes on guilt (“I ruined my dog”), embarrassment in front of
+            neighbors, decision fatigue after work, and how to define “good
+            enough” training in a busy life.
+          </p>
+          <div class="club-card-tag">
+            <span>🧠</span>
+            Built for humans who are doing their best
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 与训练计划 / Complete Pack 的区别 -->
+    <section class="reveal">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">How the Reading Club is different from the plans</h2>
+          <p class="section-sub">
+            The Programs and Complete Pack give you <strong>7/10/14 day action
+            plans</strong>. The Reading Club gives you <strong>understanding,
+            stories and ideas</strong>. They fit together — but the content is
+            not duplicated.
+          </p>
+        </div>
+      </div>
+
+      <div class="compare-grid">
+        <div class="compare-box light">
+          <div class="compare-label">EXISTING SERVICES · PROGRAMS & COMPLETE PACK</div>
+          <div class="compare-title">7 / 10 / 14 day plans</div>
+          <ul class="compare-list">
+            <li>
+              <span class="compare-dot">•</span>
+              <span>Day 1, Day 2, Day 3… with concrete exercises and checklists.</span>
+            </li>
+            <li>
+              <span class="compare-dot">•</span>
+              <span>Best when you are ready to act 10–20 minutes most days.</span>
+            </li>
+            <li>
+              <span class="compare-dot">•</span>
+              <span>Covers barking, leash pulling and separation anxiety in daily steps.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="compare-box dark">
+          <div class="compare-label">THIS PAGE · MONTHLY READING CLUB</div>
+          <div class="compare-title">Monthly reading & reflection</div>
+          <ul class="compare-list">
+            <li>
+              <span class="compare-dot">•</span>
+              <span>No daily schedule, no “Day X” structure. It’s reading material only.</span>
+            </li>
+            <li>
+              <span class="compare-dot">•</span>
+              <span>Covers the <strong>why</strong> and the human side: stories, theory, mindset.</span>
+            </li>
+            <li>
+              <span class="compare-dot">•</span>
+              <span>Works before, during or after a plan — but is <strong>not</strong> in the Complete Pack.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="reveal">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">How the Reading Club works</h2>
+          <p class="section-sub">
+            Simple rhythm: you join once, receive a new reading pack each month,
+            and you’re free to read and apply ideas at your own pace — no
+            deadlines, no streaks to break.
+          </p>
+        </div>
+      </div>
+
+      <div class="steps-grid">
+        <article class="step-card">
+          <div class="step-label">STEP 1</div>
+          <h3 class="step-title">Join the Reading Club</h3>
+          <p>
+            Choose monthly billing. Once your payment completes, you’ll get the
+            current month’s Calm Home Reader as a downloadable PDF.
+          </p>
+        </article>
+        <article class="step-card">
+          <div class="step-label">STEP 2</div>
+          <h3 class="step-title">Read in quiet moments</h3>
+          <p>
+            Open it on your phone, tablet or laptop, or print it if you like
+            paper. Read a few pages on the sofa, in bed, or on your commute.
+          </p>
+        </article>
+        <article class="step-card">
+          <div class="step-label">STEP 3</div>
+          <h3 class="step-title">Try one small idea</h3>
+          <p>
+            Each issue ends with “one gentle idea to try this week” — a small
+            shift you can add to your existing routine, with or without a plan.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="reveal">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Common questions about the Reading Club</h2>
+          <p class="section-sub">
+            The Reading Club is designed to sit <strong>next to</strong> your
+            training plans, not on top of them. Here’s how it connects.
+          </p>
+        </div>
+      </div>
+
+      <div class="faq-box">
+        <div class="faq-item">
+          <div class="faq-q">Is the Reading Club included in the Complete Pack?</div>
+          <div class="faq-a">
+            No. The Reading Club is a <strong>separate monthly service</strong>.
+            The Complete Pack includes the barking, leash and separation plans
+            with daily steps. The Reading Club sends new reading content each
+            month and is not bundled together.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Does the Reading Club repeat the 7/10/14 day plans?</div>
+          <div class="faq-a">
+            No. The Club does <strong>not</strong> copy the “Day 1 / Day 2 / Day
+            3” structure. It focuses on stories, theory and mindset so you can
+            understand your dog and yourself more deeply — without any checklists.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Can I join without buying any programs?</div>
+          <div class="faq-a">
+            Yes. You can join even if you haven’t bought the programs yet. The
+            reading is helpful on its own, and you can always add a plan later
+            when you’re ready to follow daily steps.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">What if I’m already doing a 7/10/14 day plan?</div>
+          <div class="faq-a">
+            Then the Reading Club becomes a calm companion: you do your daily
+            tasks from the plan, and when you have quiet time you read the
+            monthly stories and notes. No extra homework, just context and ideas.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Join banner -->
+    <section id="join-club" class="reveal">
+      <div class="join-banner">
+        <div>
+          <div class="join-text-main">Ready to join the CalmPaw Reading Club?</div>
+          <div class="join-text-sub">
+            Monthly PDF reader with stories, gentle theory and human-side notes — built
+            to sit beside your 7/10/14 day plans, not replace them.
+          </div>
+        </div>
+        <div>
+          <!-- 这里的链接将来可以换成 Paddle / Wise / 付款链接 -->
+          <a href="contact.html" class="btn-primary">
+            Ask about joining <span>→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© <span id="year"></span> CalmPaw Coach. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="programs.html">Programs</a>
+        <a href="bundle.html">Complete Pack</a>
+        <a href="club.html">Monthly Club</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 年份
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // 滚动渐显
+    const reveals = document.querySelectorAll(".reveal");
+    const onScroll = () => {
+      const trigger = window.innerHeight * 0.9;
+      reveals.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < trigger) el.classList.add("visible");
+      });
+    };
+    document.addEventListener("scroll", onScroll);
+    window.addEventListener("load", onScroll);
+
+    // ===== 登录状态同步 =====
+    const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
+
+    async function hydrateNavAuth() {
+      const area = document.getElementById("nav-auth-area");
+      if (!area) return;
+
+      const token = localStorage.getItem("calmpaw_token");
+      const email = localStorage.getItem("calmpaw_email");
+
+      if (!token) {
+        area.innerHTML = `
+          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/club.html')}">
+            <span class="nav-login-emoji">🔑</span> Log in
+          </a>`;
+        return;
+      }
+
+      try {
+        const res = await fetch(API_BASE + "/auth/me", {
+          headers: { "Authorization": "Bearer " + token }
+        });
+        const data = await res.json();
+
+        if (!res.ok || !data.ok) {
+          localStorage.removeItem("calmpaw_token");
+          localStorage.removeItem("calmpaw_email");
+          area.innerHTML = `
+            <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/club.html')}">
+              <span class="nav-login-emoji">🔑</span> Log in
+            </a>`;
+          return;
+        }
+
+        const showEmail = email || data.email || "Member";
+
+        area.innerHTML = `
+          <div class="nav-auth">
+            <span class="nav-auth-email" title="${showEmail}">${showEmail}</span>
+            <button class="nav-auth-btn" id="nav-switch-account">Switch</button>
+            <button class="nav-auth-btn" id="nav-logout">Log out</button>
+          </div>
+        `;
+
+        const switchBtn = document.getElementById("nav-switch-account");
+        if (switchBtn) {
+          switchBtn.addEventListener("click", () => {
+            localStorage.removeItem("calmpaw_token");
+            localStorage.removeItem("calmpaw_email");
+            const redirect = encodeURIComponent('/club.html');
+            window.location.href = `auth.html?redirect=${redirect}`;
+          });
+        }
+
+        const logoutBtn = document.getElementById("nav-logout");
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", () => {
+            localStorage.removeItem("calmpaw_token");
+            localStorage.removeItem("calmpaw_email");
+            window.location.href = "/index.html";
+          });
+        }
+      } catch (e) {
+        console.error("auth hydrate error", e);
+        area.innerHTML = `
+          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/club.html')}">
+            <span class="nav-login-emoji">🔑</span> Log in
+          </a>`;
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", hydrateNavAuth);
+  </script>
+</body>
+</html>
