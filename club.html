@@ -1015,7 +1015,7 @@
       <nav class="nav-links">
         <a href="programs.html">Programs</a>
         <a href="bundle.html">Complete Pack</a>
-        <a href="club.html">Monthly Club</a>
+        <a href="club.html" class="active">Monthly Club</a>
         <a href="about.html">About</a>
         <a href="contact.html">Contact</a>
       </nav>
@@ -1074,7 +1074,11 @@
           </div>
         </div>
         <div class="hero-cta-row">
-          <a href="#join-club" class="btn-primary">
+          <!-- 这里改成 Paddle 支付链接，带 success_url 回 club-activate.html -->
+          <a
+            href="https://pay.paddle.com/p/YOUR_PRODUCT_ID?success_url=https%3A%2F%2Fcalmpawcoach.com%2Fclub-activate.html"
+            class="btn-primary"
+          >
             Join the Reading Club <span>→</span>
           </a>
           <a href="#inside" class="btn-outline">
@@ -1082,7 +1086,8 @@
           </a>
         </div>
         <div class="hero-note">
-          One monthly PDF pack. <span>No daily tasks, no app, no Zoom calls.</span>
+          One monthly PDF pack. <span>No daily tasks, no app, no Zoom calls.</span><br />
+          After payment, you’ll be taken straight to the member page.
         </div>
       </div>
 
@@ -1263,8 +1268,8 @@
           <div class="step-label">STEP 1</div>
           <h3 class="step-title">Join the Reading Club</h3>
           <p>
-            Choose monthly billing. Once your payment completes, you’ll get the
-            current month’s Calm Home Reader as a downloadable PDF.
+            Click “Join” and complete your payment. Once your payment completes, you’ll
+            be redirected to the member page with this month’s Calm Home Reader.
           </p>
         </article>
         <article class="step-card">
@@ -1338,7 +1343,7 @@
       </div>
     </section>
 
-    <!-- Join banner：这里已经改成直接付款 -->
+    <!-- Join banner -->
     <section id="join-club" class="reveal">
       <div class="join-banner">
         <div>
@@ -1349,13 +1354,12 @@
           </div>
         </div>
         <div>
-          <!-- 支付链接：请把 YOUR_PRODUCT_ID 换成你在 Paddle 上创建的月度俱乐部产品 ID -->
-          <a href="https://pay.paddle.com/p/YOUR_PRODUCT_ID" class="btn-primary">
+          <a
+            href="https://pay.paddle.com/p/YOUR_PRODUCT_ID?success_url=https%3A%2F%2Fcalmpawcoach.com%2Fclub-activate.html"
+            class="btn-primary"
+          >
             Join now — $12/month <span>→</span>
           </a>
-          <div style="font-size:11px;margin-top:4px;color:#7b4d3a;opacity:.9;">
-            Payment handled securely by Paddle. You’ll receive this month’s PDF by email after payment.
-          </div>
         </div>
       </div>
     </section>
@@ -1378,6 +1382,8 @@
   </footer>
 
   <script>
+    const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
+
     // 年份
     document.getElementById("year").textContent = new Date().getFullYear();
 
@@ -1393,9 +1399,7 @@
     document.addEventListener("scroll", onScroll);
     window.addEventListener("load", onScroll);
 
-    // ===== 登录状态同步 =====
-    const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
-
+    // ===== 登录状态同步（保持你之前的 nav 状态）=====
     async function hydrateNavAuth() {
       const area = document.getElementById("nav-auth-area");
       if (!area) return;
@@ -1464,7 +1468,29 @@
       }
     }
 
-    document.addEventListener("DOMContentLoaded", hydrateNavAuth);
+    // ===== 订阅状态检查：已订阅的用户访问 /club 时，直接送去 member 页面 =====
+    async function checkClubStatus() {
+      const token = localStorage.getItem("calmpaw_token");
+      if (!token) return; // 未登录就不用查
+
+      try {
+        const res = await fetch(API_BASE + "/club/status", {
+          headers: { "Authorization": "Bearer " + token }
+        });
+        const data = await res.json();
+        if (res.ok && data.ok && data.subscribed) {
+          // 已订阅 → 直接跳到会员页面
+          window.location.href = "/club-subscribed.html";
+        }
+      } catch (e) {
+        console.error("club status check error", e);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      hydrateNavAuth();
+      checkClubStatus();
+    });
   </script>
 </body>
 </html>
