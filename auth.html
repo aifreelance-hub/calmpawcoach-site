@@ -5,287 +5,109 @@
   <title>CalmPaw Coach — Sign in to your training plans</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Favicon：请确保根目录有 favicon.png -->
   <link rel="icon" type="image/png" href="favicon.png" />
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
         "Segoe UI", sans-serif;
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       padding: 18px;
       background: radial-gradient(circle at top, #fed7aa 0%, #fff7ed 40%, #fffbeb 100%);
       color: #111827;
     }
     .card {
-      width: 100%;
-      max-width: 460px;
-      padding: 22px 24px 22px;
+      width: 100%; max-width: 460px;
+      padding: 22px 24px;
       border-radius: 26px;
       background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(18px);
-      box-shadow:
-        0 22px 60px rgba(15, 23, 42, 0.18),
+      box-shadow: 0 22px 60px rgba(15, 23, 42, 0.18),
         0 0 1px rgba(148, 163, 184, 0.7);
       border: 1px solid rgba(248, 250, 252, 0.9);
     }
 
-    /* 顶部返回行 */
-    .top-row {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 6px;
-    }
+    .top-row { display: flex; justify-content: flex-end; margin-bottom: 6px; }
     .back-link {
-      font-size: 11px;
-      color: #6b7280;
-      padding: 4px 9px;
-      border-radius: 999px;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      cursor: pointer;
+      font-size: 11px; color: #6b7280;
+      padding: 4px 9px; border-radius: 999px;
+      display: inline-flex; gap: 4px; cursor: pointer;
+      background: #f9fafb; border: 1px solid rgba(229, 231, 235, 0.9);
       text-decoration: none;
-      background: #f9fafb;
-      border: 1px solid rgba(229, 231, 235, 0.9);
-      transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease,
-        transform 0.08s ease;
-    }
-    .back-link span {
-      font-size: 13px;
-    }
-    .back-link:hover {
-      background: #fffbeb;
-      color: #92400e;
-      box-shadow: 0 6px 16px rgba(248, 113, 22, 0.15);
-      transform: translateY(-1px);
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
+    .brand { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
     .brand-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 999px;
-      background: conic-gradient(from 200deg, #fb923c, #f97316, #fed7aa, #f97316, #fb923c);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 17px;
-      box-shadow: 0 0 0 1px rgba(248, 250, 252, 0.7);
+      width: 32px; height: 32px; border-radius: 999px;
+      background: conic-gradient(from 200deg, #fb923c, #f97316, #fed7aa);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; color: #fff;
     }
-    .brand-text {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .brand-name {
-      font-size: 15px;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      font-weight: 600;
-      color: #7c2d12;
-    }
-    .brand-sub {
-      font-size: 12px;
-      color: #9a3412;
-    }
-    h1 {
-      font-size: 22px;
-      margin-top: 8px;
-      margin-bottom: 6px;
-      color: #111827;
-    }
-    .subtitle {
-      font-size: 13px;
-      color: #6b7280;
-      margin-bottom: 16px;
-    }
+    .brand-name { font-size: 15px; text-transform: uppercase; color: #7c2d12; }
+    .brand-sub { font-size: 12px; color: #9a3412; }
 
-    .tabs {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 14px;
-      padding: 3px;
-      border-radius: 999px;
-      background: #fef3c7;
-    }
-    .tab-btn {
-      flex: 1;
-      border: none;
-      background: transparent;
-      font-size: 13px;
-      padding: 8px 10px;
-      border-radius: 999px;
-      cursor: pointer;
-      color: #92400e;
-    }
-    .tab-btn.active {
-      background: #fff7ed;
-      box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.35);
-      font-weight: 600;
-      color: #7c2d12;
-    }
+    h1 { font-size: 22px; margin-top: 8px; margin-bottom: 6px; }
+    .subtitle { font-size: 13px; color: #6b7280; margin-bottom: 16px; }
 
-    .form {
-      display: none;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 6px;
-    }
-    .form.active {
-      display: flex;
-    }
+    .tabs { display: flex; gap: 6px; margin-bottom: 14px; padding: 3px; border-radius: 999px; background: #fef3c7; }
+    .tab-btn { flex: 1; border: none; background: transparent; padding: 8px 10px; font-size: 13px; border-radius: 999px; }
+    .tab-btn.active { background: #fff7ed; box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.35); font-weight: 600; }
 
-    label {
-      font-size: 12px;
-      color: #4b5563;
-      margin-bottom: 2px;
-      display: block;
-    }
-    .field {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 4px;
-    }
+    .form { display: none; flex-direction: column; gap: 10px; margin-top: 6px; }
+    .form.active { display: flex; }
+
+    label { font-size: 12px; color: #4b5563; margin-bottom: 2px; display: block; }
+
     input {
-      width: 100%;
-      border-radius: 999px;
-      border: 1px solid #e5e7eb;
-      padding: 9px 11px;
-      font-size: 14px;
-      outline: none;
-      background: #f9fafb;
-      transition: border 0.15s, box-shadow 0.15s, background 0.15s;
+      width: 100%; padding: 9px 11px;
+      border-radius: 999px; border: 1px solid #e5e7eb;
+      background: #f9fafb; font-size: 14px;
     }
-    input:focus {
-      border-color: #f97316;
-      box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.4);
-      background: #fff;
-    }
+    input:focus { border-color: #f97316; background: #fff; }
 
-    .field-inline {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-    .field-inline input {
-      flex: 1;
-    }
+    .field-inline { display: flex; gap: 8px; align-items: center; }
+    .field-inline input { flex: 1; }
 
     .btn {
-      border-radius: 999px;
-      border: none;
-      padding: 9px 14px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.12s;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      font-weight: 500;
-      white-space: nowrap;
+      padding: 9px 14px; border-radius: 999px; font-size: 14px;
+      border: none; cursor: pointer; display: flex; justify-content: center;
+      transition: transform 0.08s ease;
     }
     .btn-primary {
       background: linear-gradient(135deg, #f97316, #ea580c);
-      color: #fff;
-      box-shadow: 0 10px 25px rgba(248, 113, 22, 0.4);
-      width: 100%;
-      margin-top: 4px;
+      color: #fff; width: 100%; box-shadow: 0 10px 25px rgba(248, 113, 22, 0.4);
     }
-    .btn-primary:active {
-      transform: translateY(1px);
-      box-shadow: 0 4px 12px rgba(248, 113, 22, 0.4);
-    }
-    .btn-ghost {
-      padding: 6px 10px;
-      font-size: 12px;
-      background: transparent;
-      color: #92400e;
-    }
-    .btn-ghost:hover {
-      background: rgba(254, 243, 199, 0.9);
-    }
+    .btn-ghost { background: transparent; font-size: 12px; color: #92400e; }
 
-    .helper-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 4px;
-    }
-    .helper-row a {
-      font-size: 12px;
-      color: #b45309;
-      text-decoration: none;
-    }
-    .helper-row a:hover {
-      text-decoration: underline;
-    }
+    .hint { font-size: 11px; color: #6b7280; margin-top: 4px; }
 
-    .hint {
-      font-size: 11px;
-      color: #6b7280;
-      margin-top: 4px;
-      line-height: 1.4;
-    }
+    .status { margin-top: 8px; font-size: 12px; min-height: 16px; }
+    .status.ok { color: #166534; }
+    .status.err { color: #b91c1c; }
 
-    .status {
-      margin-top: 8px;
-      font-size: 12px;
-      min-height: 16px;
-    }
-    .status.ok {
-      color: #166534;
-    }
-    .status.err {
-      color: #b91c1c;
-    }
-
-    .footer {
-      margin-top: 12px;
-      font-size: 11px;
-      color: #9ca3af;
-      text-align: center;
-    }
-    .footer span {
-      color: #f97316;
-    }
+    .footer { margin-top: 12px; font-size: 11px; text-align: center; color: #9ca3af; }
+    .footer span { color: #f97316; }
   </style>
 </head>
 <body>
+
   <div class="card">
     <div class="top-row">
-      <a href="index.html" class="back-link">
-        <span>←</span> Back to CalmPaw home
-      </a>
+      <a href="index.html" class="back-link"><span>←</span> Back to CalmPaw home</a>
     </div>
 
     <div class="brand">
       <div class="brand-icon">🐾</div>
-      <div class="brand-text">
+      <div>
         <div class="brand-name">CalmPaw Coach</div>
         <div class="brand-sub">Gentle, realistic dog training</div>
       </div>
     </div>
 
     <h1>Sign in to your training plans</h1>
-    <p class="subtitle">
-      Use one account to access all your purchased CalmPaw Coach programs.
-    </p>
+    <p class="subtitle">Use one account to access all your purchased CalmPaw Coach programs.</p>
 
     <div class="tabs">
       <button class="tab-btn active" data-tab="login">Log in</button>
@@ -293,349 +115,257 @@
       <button class="tab-btn" data-tab="reset">Reset password</button>
     </div>
 
-    <!-- Login form -->
+    <!-- Login -->
     <div class="form active" id="form-login">
       <div class="field">
-        <label for="login-email">Email</label>
-        <input id="login-email" type="email" placeholder="you@example.com" autocomplete="email" />
+        <label>Email</label>
+        <input id="login-email" type="email" placeholder="you@example.com" />
       </div>
       <div class="field">
-        <label for="login-password">Password</label>
-        <input id="login-password" type="password" placeholder="At least 8 characters" autocomplete="current-password" />
+        <label>Password</label>
+        <input id="login-password" type="password" placeholder="At least 8 characters" />
       </div>
+      <button class="btn btn-primary" id="btn-login">Log in</button>
 
-      <button class="btn btn-primary" id="btn-login">
-        Log in
-      </button>
-
-      <div class="helper-row">
-        <span style="font-size: 11px; color: #6b7280;">
-          New here? <a href="#" id="link-to-register">Create a CalmPaw account</a>
-        </span>
+      <div class="field" style="font-size:12px;margin-top:6px;color:#6b7280;">
+        New here? <a href="#" id="link-to-register">Create account</a> ·
         <a href="#" id="link-to-reset">Forgot password?</a>
       </div>
     </div>
 
-    <!-- Register form -->
+    <!-- Register -->
     <div class="form" id="form-register">
       <div class="field">
-        <label for="reg-email">Email</label>
-        <input id="reg-email" type="email" placeholder="you@example.com" autocomplete="email" />
+        <label>Email</label>
+        <input id="reg-email" type="email" placeholder="you@example.com" />
       </div>
       <div class="field">
-        <label for="reg-password">Password</label>
-        <input id="reg-password" type="password" placeholder="At least 8 characters" autocomplete="new-password" />
+        <label>Password</label>
+        <input id="reg-password" type="password" placeholder="At least 8 characters" />
       </div>
+
       <div class="field">
         <label>Verification code</label>
         <div class="field-inline">
           <input id="reg-code" type="text" placeholder="6-digit code" />
-          <button class="btn btn-ghost" id="btn-send-reg-code" type="button">
-            Send code
-          </button>
+          <button class="btn btn-ghost" id="btn-send-reg-code">Send code</button>
         </div>
       </div>
-      <p class="hint">
-        While testing, the code is printed in the Worker logs.  
-        In production, your clients will receive it by email.
-      </p>
-      <button class="btn btn-primary" id="btn-register">
-        Create account & sign in
-      </button>
+
+      <button class="btn btn-primary" id="btn-register">Create account & sign in</button>
     </div>
 
-    <!-- Reset password form -->
+    <!-- Reset -->
     <div class="form" id="form-reset">
       <div class="field">
-        <label for="reset-email">Email</label>
-        <input id="reset-email" type="email" placeholder="you@example.com" autocomplete="email" />
+        <label>Email</label>
+        <input id="reset-email" type="email" placeholder="you@example.com" />
       </div>
       <div class="field">
-        <label for="reset-password">New password</label>
-        <input id="reset-password" type="password" placeholder="At least 8 characters" autocomplete="new-password" />
+        <label>New password</label>
+        <input id="reset-password" type="password" placeholder="At least 8 characters" />
       </div>
+
       <div class="field">
         <label>Reset code</label>
         <div class="field-inline">
           <input id="reset-code" type="text" placeholder="6-digit code" />
-          <button class="btn btn-ghost" id="btn-send-reset-code" type="button">
-            Send reset code
-          </button>
+          <button class="btn btn-ghost" id="btn-send-reset-code">Send reset code</button>
         </div>
       </div>
-      <p class="hint">
-        Use this when you forget your password. You’ll receive a code and then create a new one.
-      </p>
-      <button class="btn btn-primary" id="btn-reset">
-        Set new password & sign in
-      </button>
+
+      <button class="btn btn-primary" id="btn-reset">Set new password & sign in</button>
     </div>
 
     <div id="status" class="status"></div>
-
-    <div class="footer">
-      This account only controls <span>access</span> to your plans. Payments stay on Paddle / your bank.
-    </div>
+    <div class="footer">This account only controls <span>access</span> to your plans.</div>
   </div>
 
-  <script>
-    // ====== 这里是你 Worker 的 URL（后端接口）======
-    const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
+<script>
+const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
 
-    const tabs = document.querySelectorAll(".tab-btn");
-    const forms = {
-      login: document.getElementById("form-login"),
-      register: document.getElementById("form-register"),
-      reset: document.getElementById("form-reset"),
-    };
-    const statusEl = document.getElementById("status");
+// -------- Tabs --------
+const tabs = document.querySelectorAll(".tab-btn");
+const forms = {
+  login: document.getElementById("form-login"),
+  register: document.getElementById("form-register"),
+  reset: document.getElementById("form-reset"),
+};
 
-    const loginEmail = document.getElementById("login-email");
-    const loginPassword = document.getElementById("login-password");
-    const btnLogin = document.getElementById("btn-login");
+tabs.forEach(btn => btn.addEventListener("click", () => {
+  tabs.forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  Object.keys(forms).forEach(k => forms[k].classList.remove("active"));
+  forms[btn.dataset.tab].classList.add("active");
+}));
 
-    const regEmail = document.getElementById("reg-email");
-    const regPassword = document.getElementById("reg-password");
-    const regCode = document.getElementById("reg-code");
-    const btnSendRegCode = document.getElementById("btn-send-reg-code");
-    const btnRegister = document.getElementById("btn-register");
+document.getElementById("link-to-register").onclick = e => {
+  e.preventDefault();
+  tabs[1].click();
+};
+document.getElementById("link-to-reset").onclick = e => {
+  e.preventDefault();
+  tabs[2].click();
+};
 
-    const resetEmail = document.getElementById("reset-email");
-    const resetPassword = document.getElementById("reset-password");
-    const resetCode = document.getElementById("reset-code");
-    const btnSendResetCode = document.getElementById("btn-send-reset-code");
-    const btnReset = document.getElementById("btn-reset");
+// -------- Helpers --------
+const statusEl = document.getElementById("status");
 
-    const linkToRegister = document.getElementById("link-to-register");
-    const linkToReset = document.getElementById("link-to-reset");
+function showStatus(msg, type="ok") {
+  statusEl.textContent = msg;
+  statusEl.className = "status " + type;
+}
 
-    function showStatus(msg, type = "ok") {
-      statusEl.textContent = msg || "";
-      statusEl.classList.remove("ok", "err");
-      if (msg) statusEl.classList.add(type === "ok" ? "ok" : "err");
-    }
+function setLoading(btn, loading) {
+  if (!btn) return;
+  if (loading) {
+    btn.dataset.old = btn.textContent;
+    btn.textContent = "Working…";
+    btn.disabled = true;
+  } else {
+    btn.textContent = btn.dataset.old;
+    btn.disabled = false;
+  }
+}
 
-    function setLoading(button, loading) {
-      if (!button) return;
-      if (loading) {
-        button.disabled = true;
-        button.dataset._text = button.textContent;
-        button.textContent = "Working…";
-      } else {
-        button.disabled = false;
-        if (button.dataset._text) {
-          button.textContent = button.dataset._text;
-          delete button.dataset._text;
-        }
-      }
-    }
+// -------- Redirect after login --------
+function getRedirectPath() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("redirect") || "/index.html";  // ★ 默认跳首页
+}
 
-    // 切换 Tab
-    function activateTab(name) {
-      tabs.forEach((t) => t.classList.toggle("active", t.dataset.tab === name));
-      Object.keys(forms).forEach((key) => {
-        forms[key].classList.toggle("active", key === name);
-      });
-      showStatus("");
-    }
+function finishLogin(token, email) {
+  localStorage.setItem("calmpaw_token", token);
+  localStorage.setItem("calmpaw_email", email);
+  window.location.href = getRedirectPath();
+}
 
-    tabs.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        activateTab(btn.dataset.tab);
-      });
+// -------- Send Code (Register) --------
+document.getElementById("btn-send-reg-code").onclick = async () => {
+  const email = document.getElementById("reg-email").value.trim();
+  if (!email) return showStatus("Please enter email.", "err");
+
+  const btn = document.getElementById("btn-send-reg-code");
+  setLoading(btn, true);
+
+  try {
+    const res = await fetch(API_BASE + "/auth/send-code", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ email, purpose: "register" })
     });
+    const data = await res.json();
+    showStatus(data.ok ? "Code sent!" : data.error, data.ok ? "ok" : "err");
+  } catch {
+    showStatus("Network error.", "err");
+  }
+  setLoading(btn, false);
+};
 
-    linkToRegister.addEventListener("click", (e) => {
-      e.preventDefault();
-      activateTab("register");
-      regEmail.value = loginEmail.value || "";
+// -------- Register --------
+document.getElementById("btn-register").onclick = async () => {
+  const email = document.getElementById("reg-email").value.trim();
+  const password = document.getElementById("reg-password").value.trim();
+  const code = document.getElementById("reg-code").value.trim();
+
+  if (!email || !password || !code)
+    return showStatus("All fields required.", "err");
+
+  const btn = document.getElementById("btn-register");
+  setLoading(btn, true);
+
+  try {
+    const res = await fetch(API_BASE + "/auth/register", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ email, password, code })
     });
+    const data = await res.json();
+    if (data.ok) finishLogin(data.token, data.email);
+    else showStatus(data.error, "err");
+  } catch {
+    showStatus("Network error.", "err");
+  }
+  setLoading(btn, false);
+};
 
-    linkToReset.addEventListener("click", (e) => {
-      e.preventDefault();
-      activateTab("reset");
-      resetEmail.value = loginEmail.value || "";
+// -------- Login --------
+document.getElementById("btn-login").onclick = async () => {
+  const email = document.getElementById("login-email").value.trim();
+  const password = document.getElementById("login-password").value.trim();
+
+  if (!email || !password)
+    return showStatus("Fill email & password.", "err");
+
+  const btn = document.getElementById("btn-login");
+  setLoading(btn, true);
+
+  try {
+    const res = await fetch(API_BASE + "/auth/login", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ email, password })
     });
+    const data = await res.json();
+    if (data.ok) finishLogin(data.token, data.email);
+    else showStatus(data.error, "err");
+  } catch {
+    showStatus("Network error.", "err");
+  }
+  setLoading(btn, false);
+};
 
-    // 通用：拿 redirect 参数
-    function getRedirectPath() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get("redirect") || "/programs.html";
-    }
+// -------- Reset - send code --------
+document.getElementById("btn-send-reset-code").onclick = async () => {
+  const email = document.getElementById("reset-email").value.trim();
+  if (!email) return showStatus("Enter your email.", "err");
 
-    function finishLogin(token, email) {
-      localStorage.setItem("calmpaw_token", token);
-      localStorage.setItem("calmpaw_email", email);
-      const redirect = getRedirectPath();
-      window.location.href = redirect;
-    }
+  const btn = document.getElementById("btn-send-reset-code");
+  setLoading(btn, true);
 
-    // === 注册：发送验证码 ===
-    btnSendRegCode.addEventListener("click", async () => {
-      const email = regEmail.value.trim().toLowerCase();
-      if (!email) {
-        showStatus("Please enter your email first.", "err");
-        return;
-      }
-      setLoading(btnSendRegCode, true);
-      showStatus("");
-      try {
-        const res = await fetch(API_BASE + "/auth/send-code", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, purpose: "register" }),
-        });
-        const data = await res.json();
-        if (!res.ok || !data || data.error) {
-          showStatus(data.error || "Failed to send code.", "err");
-        } else {
-          showStatus("Code sent. Check logs / email.", "ok");
-        }
-      } catch (e) {
-        console.error(e);
-        showStatus("Network error when sending code.", "err");
-      } finally {
-        setLoading(btnSendRegCode, false);
-      }
+  try {
+    const res = await fetch(API_BASE + "/auth/send-code", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ email, purpose: "reset" })
     });
+    const data = await res.json();
+    showStatus(data.ok ? "Reset code sent!" : data.error, data.ok ? "ok" : "err");
+  } catch {
+    showStatus("Network error.", "err");
+  }
 
-    // === 注册：完成注册 ===
-    btnRegister.addEventListener("click", async () => {
-      const email = regEmail.value.trim().toLowerCase();
-      const password = regPassword.value;
-      const code = regCode.value.trim();
+  setLoading(btn, false);
+};
 
-      if (!email || !password || !code) {
-        showStatus("Email, password and code are all required.", "err");
-        return;
-      }
-      if (password.length < 8) {
-        showStatus("Password must be at least 8 characters.", "err");
-        return;
-      }
+// -------- Reset password --------
+document.getElementById("btn-reset").onclick = async () => {
+  const email = document.getElementById("reset-email").value.trim();
+  const password = document.getElementById("reset-password").value.trim();
+  const code = document.getElementById("reset-code").value.trim();
 
-      setLoading(btnRegister, true);
-      showStatus("");
-      try {
-        const res = await fetch(API_BASE + "/auth/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password, code }),
-        });
-        const data = await res.json();
-        if (!res.ok || data.error || !data.ok) {
-          showStatus(data.error || "Registration failed.", "err");
-        } else {
-          showStatus("Account created. Redirecting…", "ok");
-          finishLogin(data.token, data.email);
-        }
-      } catch (e) {
-        console.error(e);
-        showStatus("Network error during registration.", "err");
-      } finally {
-        setLoading(btnRegister, false);
-      }
+  if (!email || !password || !code)
+    return showStatus("All fields required.", "err");
+
+  const btn = document.getElementById("btn-reset");
+  setLoading(btn, true);
+
+  try {
+    const res = await fetch(API_BASE + "/auth/reset-password", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ email, password, code })
     });
+    const data = await res.json();
+    if (data.ok) finishLogin(data.token, data.email);
+    else showStatus(data.error, "err");
+  } catch {
+    showStatus("Network error.", "err");
+  }
 
-    // === 登录 ===
-    btnLogin.addEventListener("click", async () => {
-      const email = loginEmail.value.trim().toLowerCase();
-      const password = loginPassword.value;
+  setLoading(btn, false);
+};
+</script>
 
-      if (!email || !password) {
-        showStatus("Please enter email and password.", "err");
-        return;
-      }
-
-      setLoading(btnLogin, true);
-      showStatus("");
-      try {
-        const res = await fetch(API_BASE + "/auth/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        });
-        const data = await res.json();
-        if (!res.ok || data.error || !data.ok) {
-          showStatus(data.error || "Login failed.", "err");
-        } else {
-          showStatus("Login successful. Redirecting…", "ok");
-          finishLogin(data.token, data.email);
-        }
-      } catch (e) {
-        console.error(e);
-        showStatus("Network error during login.", "err");
-      } finally {
-        setLoading(btnLogin, false);
-      }
-    });
-
-    // === 重置密码：发送验证码 ===
-    btnSendResetCode.addEventListener("click", async () => {
-      const email = resetEmail.value.trim().toLowerCase();
-      if (!email) {
-        showStatus("Please enter your email first.", "err");
-        return;
-      }
-      setLoading(btnSendResetCode, true);
-      showStatus("");
-      try {
-        const res = await fetch(API_BASE + "/auth/send-code", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, purpose: "reset" }),
-        });
-        const data = await res.json();
-        if (!res.ok || data.error || !data.ok) {
-          showStatus(data.error || "Failed to send reset code.", "err");
-        } else {
-          showStatus("Reset code sent. Check logs / email.", "ok");
-        }
-      } catch (e) {
-        console.error(e);
-        showStatus("Network error when sending reset code.", "err");
-      } finally {
-        setLoading(btnSendResetCode, false);
-      }
-    });
-
-    // === 重置密码：提交新密码 ===
-    btnReset.addEventListener("click", async () => {
-      const email = resetEmail.value.trim().toLowerCase();
-      const password = resetPassword.value;
-      const code = resetCode.value.trim();
-
-      if (!email || !password || !code) {
-        showStatus("Email, new password and code are all required.", "err");
-        return;
-      }
-      if (password.length < 8) {
-        showStatus("New password must be at least 8 characters.", "err");
-        return;
-      }
-
-      setLoading(btnReset, true);
-      showStatus("");
-      try {
-        const res = await fetch(API_BASE + "/auth/reset-password", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password, code }),
-        });
-        const data = await res.json();
-        if (!res.ok || data.error || !data.ok) {
-          showStatus(data.error || "Reset password failed.", "err");
-        } else {
-          showStatus("Password updated. Redirecting…", "ok");
-          finishLogin(data.token, data.email);
-        }
-      } catch (e) {
-        console.error(e);
-        showStatus("Network error during password reset.", "err");
-      } finally {
-        setLoading(btnReset, false);
-      }
-    });
-  </script>
 </body>
 </html>
