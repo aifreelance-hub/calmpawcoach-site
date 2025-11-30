@@ -65,11 +65,16 @@
     .nav-login-area{
       display:flex;align-items:center;gap:6px;
       font-size:12px;color:var(--text-soft);
-      max-width:180px;
+      max-width:220px;
     }
     .nav-login-email{
-      max-width:120px;
+      max-width:140px;
       overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+      padding:5px 10px;
+      border-radius:var(--radius-pill);
+      background:#fff9f3;
+      border:1px solid rgba(243,217,196,0.9);
+      color:#6b4532;
     }
     .btn-mini{
       padding:4px 10px;
@@ -128,7 +133,7 @@
         font-size:12px;
       }
       .nav-login-email{
-        max-width:100px;
+        max-width:110px;
       }
     }
 
@@ -203,6 +208,16 @@
     }
     .footer-links{display:flex;gap:12px;flex-wrap:wrap;}
     .footer-links a:hover{color:#b05825;}
+
+    @media(max-width:640px){
+      .footer-inner{
+        padding:10px 14px 14px;
+        font-size:10px;
+      }
+      .footer-links{
+        gap:10px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -457,6 +472,11 @@
       <div class="footer-links">
         <a href="programs.html">Programs</a>
         <a href="bundle.html">Complete Pack</a>
+        <a href="club.html">Monthly Club</a>
+        <a href="refund.html">Refund policy</a>
+        <a href="terms.html">Terms of service</a>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="legal.html">Legal / Imprint</a>
         <a href="contact.html">Contact</a>
       </div>
     </div>
@@ -469,7 +489,6 @@
   <script>
   (function () {
     const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
-    const token = localStorage.getItem("calmpaw_token");
     const loginArea = document.getElementById("nav-login-area");
 
     function currentRedirect() {
@@ -491,13 +510,14 @@
     }
 
     // 顶部登录状态渲染
-    if (loginArea) {
+    function renderNavLogin() {
+      if (!loginArea) return;
+      const token = localStorage.getItem("calmpaw_token");
       const email = localStorage.getItem("calmpaw_email");
-      const tk = token;
 
-      if (tk && email) {
+      if (token && email) {
         loginArea.innerHTML = `
-          <span class="nav-login-email">${email}</span>
+          <span class="nav-login-email" title="${email}">${email}</span>
           <button class="btn-mini" id="btn-switch-account">Switch</button>
           <button class="btn-mini btn-mini-danger" id="btn-logout">Log out</button>
         `;
@@ -510,11 +530,15 @@
         loginArea.innerHTML = `
           <button class="btn-outline" id="btn-login-nav">Log in</button>
         `;
-        document.getElementById("btn-login-nav").onclick = goAuth;
+        const btn = document.getElementById("btn-login-nav");
+        if (btn) btn.onclick = goAuth;
       }
     }
 
+    renderNavLogin();
+
     // 访问权限检查：必须登录 + 拥有 leash 计划
+    const token = localStorage.getItem("calmpaw_token");
     if (!token) {
       goAuth();
       return;
