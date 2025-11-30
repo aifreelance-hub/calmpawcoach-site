@@ -22,6 +22,7 @@
       color:var(--text-main);min-height:100vh;-webkit-font-smoothing:antialiased;
     }
     a{text-decoration:none;color:inherit;}
+
     header{
       position:sticky;top:0;z-index:50;
       backdrop-filter:blur(18px);
@@ -31,8 +32,9 @@
     .nav-inner{
       max-width:1120px;margin:0 auto;padding:12px 20px;
       display:flex;align-items:center;justify-content:space-between;gap:14px;
+      flex-wrap:wrap;
     }
-    .brand{display:flex;align-items:center;gap:10px;}
+    .brand{display:flex;align-items:center;gap:10px;flex-shrink:0;}
     .brand-logo{
       width:40px;height:40px;border-radius:18px;
       background:radial-gradient(circle at 20% 15%,#fff9f3 0%,#ffb86b 40%,#ff914d 84%);
@@ -41,23 +43,96 @@
     }
     .brand-text-main{font-weight:750;letter-spacing:.03em;font-size:18px;}
     .brand-text-sub{font-size:11px;color:var(--text-soft);}
-    .nav-links{display:flex;align-items:center;gap:16px;font-size:14px;color:var(--text-soft);}
-    .nav-links a{padding:6px 11px;border-radius:999px;transition:background .18s ease,color .18s ease,transform .12s ease;}
-    .nav-links a:hover{background:rgba(255,222,186,0.7);color:var(--text-main);transform:translateY(-1px);}
-    @media(max-width:880px){.nav-links{display:none;}}
+    .nav-links{
+      display:flex;align-items:center;gap:16px;font-size:14px;color:var(--text-soft);
+      flex:1;justify-content:center;min-width:0;
+    }
+    .nav-links a{
+      padding:6px 11px;border-radius:999px;
+      transition:background .18s ease,color .18s ease,transform .12s ease;
+      white-space:nowrap;
+    }
+    .nav-links a:hover{
+      background:rgba(255,222,186,0.7);color:var(--text-main);transform:translateY(-1px);
+    }
+    @media(max-width:880px){
+      .nav-links{display:none;}
+    }
+
+    .nav-cta{
+      display:flex;align-items:center;gap:10px;
+      flex-shrink:0;
+    }
+    .nav-login-area{
+      display:flex;align-items:center;gap:6px;
+      font-size:12px;color:var(--text-soft);
+      max-width:180px;
+    }
+    .nav-login-email{
+      max-width:120px;
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    }
+    .btn-mini{
+      padding:4px 10px;
+      border-radius:999px;
+      border:1px solid var(--border-soft);
+      background:#fff8f2;
+      font-size:11px;
+      cursor:pointer;
+      color:var(--text-soft);
+      white-space:nowrap;
+    }
+    .btn-mini-danger{
+      border-color:rgba(248,113,113,0.7);
+      color:#b91c1c;
+      background:#fff5f5;
+    }
+    .btn-mini:hover{
+      border-color:var(--accent);
+      color:var(--text-main);
+    }
+
     .btn-primary{
       padding:8px 18px;border-radius:var(--radius-pill);border:none;
       font-size:13px;font-weight:600;cursor:pointer;
       background:linear-gradient(135deg,#ffb86b,#ff914d);color:#4a251a;
       box-shadow:0 16px 36px rgba(214,139,86,0.6);
       display:inline-flex;align-items:center;gap:6px;
+      white-space:nowrap;
     }
     .btn-primary:hover{transform:translateY(-1px) scale(1.01);}
     .btn-outline{
       padding:7px 14px;border-radius:var(--radius-pill);
       border:1px solid var(--border-soft);font-size:13px;
       background:#fff8f2;color:var(--text-soft);cursor:pointer;
+      white-space:nowrap;
     }
+
+    @media(max-width:640px){
+      .nav-inner{
+        padding:10px 14px;
+      }
+      .brand{
+        width:100%;
+      }
+      .nav-cta{
+        width:100%;
+        justify-content:flex-end;
+        gap:6px;
+      }
+      .btn-primary{
+        padding:7px 12px;
+        font-size:12px;
+      }
+      .btn-outline{
+        padding:6px 10px;
+        font-size:12px;
+      }
+      .nav-login-email{
+        max-width:100px;
+      }
+    }
+
     main{max-width:1120px;margin:0 auto;padding:26px 20px 40px;}
     .hero{
       display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);
@@ -87,6 +162,7 @@
     .hero-card h3{font-size:13px;margin-bottom:6px;}
     .hero-card ul{margin-left:14px;margin-bottom:4px;}
     .hero-card li{margin-bottom:4px;}
+
     .plans-grid{
       display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
       gap:16px;margin-bottom:26px;
@@ -103,6 +179,7 @@
     .plan-desc{font-size:12px;margin-bottom:4px;}
     .plan-link{font-size:11px;margin-top:6px;color:#b05825;display:inline-flex;align-items:center;gap:4px;}
     .plan-link span{font-size:13px;}
+
     .section{margin-bottom:24px;}
     .section h2{font-size:16px;margin-bottom:6px;}
     .section p{font-size:13px;color:var(--text-soft);margin-bottom:6px;line-height:1.6;}
@@ -114,6 +191,7 @@
       border:1px solid rgba(243,217,196,0.9);
       padding:12px;font-size:12px;color:#7b5847;
     }
+
     footer{
       border-top:1px solid rgba(243,217,196,0.8);
       background:rgba(255,248,241,0.96);margin-top:10px;
@@ -131,6 +209,7 @@
   <!-- Paddle -->
   <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
   <script>
+    // 替换为你的真实 Paddle Vendor ID
     Paddle.Setup({ vendor: YOUR_PADDLE_VENDOR_ID });
   </script>
 </head>
@@ -144,6 +223,7 @@
           <div class="brand-text-sub">Gentle, realistic dog training</div>
         </div>
       </a>
+
       <nav class="nav-links">
         <a href="programs.html">Programs</a>
         <a href="bundle.html">Complete Pack</a>
@@ -151,13 +231,15 @@
         <a href="about.html">About</a>
         <a href="contact.html">Contact</a>
       </nav>
-      <button class="btn-primary"
-        onclick="Paddle.Checkout.open({
-          product: PRODUCT_ID_BUNDLE,
-          success: 'https://calmpawcoach.com/bundle-access.html'
-        });">
-        Get Complete Pack – $49 →
-      </button>
+
+      <div class="nav-cta">
+        <div id="nav-login-area" class="nav-login-area">
+          <!-- 这里由 JS 注入：未登录 = Log in；已登录 = email + 切换账号 + 退出 -->
+        </div>
+        <button class="btn-primary" onclick="buyBundle()">
+          Get Complete Pack – $49 →
+        </button>
+      </div>
     </div>
   </header>
 
@@ -176,11 +258,7 @@
           <span>🚶‍♀️ Leash walking · 10-day plan</span>
         </div>
         <div class="hero-cta">
-          <button class="btn-primary"
-            onclick="Paddle.Checkout.open({
-              product: PRODUCT_ID_BUNDLE,
-              success: 'https://calmpawcoach.com/bundle-access.html'
-            });">
+          <button class="btn-primary" onclick="buyBundle()">
             Get all 3 plans – $49 →
           </button>
           <a href="programs.html" class="btn-outline">Or pick a single problem</a>
@@ -287,11 +365,7 @@
         exactly for you.
       </p>
       <div style="margin-top:10px;">
-        <button class="btn-primary"
-          onclick="Paddle.Checkout.open({
-            product: PRODUCT_ID_BUNDLE,
-            success: 'https://calmpawcoach.com/bundle-access.html'
-          });">
+        <button class="btn-primary" onclick="buyBundle()">
           Get the CalmPaw Complete Pack – $49 →
         </button>
       </div>
@@ -311,6 +385,67 @@
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+
+  <script>
+  (function () {
+    const loginArea = document.getElementById("nav-login-area");
+
+    function currentRedirect() {
+      return window.location.pathname + window.location.search;
+    }
+
+    function goAuth() {
+      window.location.href = "/auth.html?redirect=" + encodeURIComponent(currentRedirect());
+    }
+
+    function logoutOnly() {
+      localStorage.removeItem("calmpaw_token");
+      localStorage.removeItem("calmpaw_email");
+    }
+
+    function logoutAndStay() {
+      logoutOnly();
+      window.location.reload();
+    }
+
+    // 渲染导航登录区域
+    if (loginArea) {
+      const email = localStorage.getItem("calmpaw_email");
+      const token = localStorage.getItem("calmpaw_token");
+
+      if (token && email) {
+        loginArea.innerHTML = `
+          <span class="nav-login-email">${email}</span>
+          <button class="btn-mini" id="btn-switch-account">Switch</button>
+          <button class="btn-mini btn-mini-danger" id="btn-logout">Log out</button>
+        `;
+        document.getElementById("btn-switch-account").onclick = function () {
+          logoutOnly();
+          goAuth();
+        };
+        document.getElementById("btn-logout").onclick = logoutAndStay;
+      } else {
+        loginArea.innerHTML = `
+          <button class="btn-outline" id="btn-login-nav">Log in</button>
+        `;
+        document.getElementById("btn-login-nav").onclick = goAuth;
+      }
+    }
+
+    // 购买 Complete Pack：未登录先去登录，已登录直接弹出 Paddle 支付
+    window.buyBundle = function () {
+      const token = localStorage.getItem("calmpaw_token");
+      if (!token) {
+        goAuth();
+        return;
+      }
+      Paddle.Checkout.open({
+        product: PRODUCT_ID_BUNDLE, // 替换为你的真实 Product ID
+        success: "https://calmpawcoach.com/bundle-access.html"
+      });
+    };
+  })();
   </script>
 </body>
 </html>
