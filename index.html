@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <title>CalmPaw Coach — Gentle Training for Real-Life Dogs</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Favicon：请确保根目录有 favicon.png -->
   <link rel="icon" type="image/png" href="favicon.png" />
 
   <style>
@@ -46,7 +48,7 @@
       color: inherit;
     }
 
-    /* ========== 动画 ========== */
+    /* 动画 */
 
     @keyframes float-soft {
       0% { transform: translateY(0px); }
@@ -77,11 +79,6 @@
       100% { background-position: 120px 0; }
     }
 
-    @keyframes fade-up {
-      0% { opacity: 0; transform: translateY(18px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-
     .reveal {
       opacity: 0;
       transform: translateY(14px);
@@ -93,7 +90,7 @@
       transform: translateY(0);
     }
 
-    /* ========== Header ========== */
+    /* Header */
 
     header {
       position: sticky;
@@ -281,12 +278,10 @@
     }
 
     @media (max-width: 880px) {
-      .nav-links {
-        display: none;
-      }
+      .nav-links { display: none; }
     }
 
-    /* ========== Layout ========== */
+    /* Layout */
 
     main {
       max-width: 1120px;
@@ -371,9 +366,7 @@
       gap: 6px;
     }
 
-    .hero-tag-emoji {
-      font-size: 13px;
-    }
+    .hero-tag-emoji { font-size: 13px; }
 
     .hero-cta-row {
       display: flex;
@@ -519,9 +512,7 @@
       gap: 6px;
     }
 
-    .hero-label-icon {
-      font-size: 13px;
-    }
+    .hero-label-icon { font-size: 13px; }
 
     .hero-floating-sticker {
       position: absolute;
@@ -552,7 +543,7 @@
       font-size: 12px;
     }
 
-    /* ========== Programs Section ========== */
+    /* Section header & cards */
 
     .section-header {
       display: flex;
@@ -661,28 +652,6 @@
       font-size: 11px;
       color: var(--text-soft);
     }
-
-    .program-price {
-      font-weight: 700;
-      color: #c1632c;
-      font-size: 13px;
-    }
-
-    .program-link {
-      font-size: 11px;
-      color: #b05825;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      margin-top: 6px;
-    }
-
-    .program-link .arrow {
-      font-size: 13px;
-      transform: translateY(1px);
-    }
-
-    /* ========== Bundle Section ========== */
 
     .bundle-section {
       border-radius: var(--radius-lg);
@@ -798,8 +767,6 @@
       margin-top: 1px;
     }
 
-    /* ========== Testimonials ========== */
-
     .testimonials {
       margin-bottom: 26px;
     }
@@ -856,11 +823,7 @@
       gap: 6px;
     }
 
-    .test-dog {
-      font-size: 16px;
-    }
-
-    /* ========== Footer ========== */
+    .test-dog { font-size: 16px; }
 
     footer {
       border-top: 1px solid rgba(243, 217, 196, 0.8);
@@ -886,9 +849,7 @@
       flex-wrap: wrap;
     }
 
-    .footer-links a:hover {
-      color: #b05825;
-    }
+    .footer-links a:hover { color: #b05825; }
   </style>
 </head>
 <body>
@@ -1013,77 +974,65 @@
       </div>
     </section>
 
-    <!-- Programs preview -->
+    <!-- Programs preview as "problems" entry -->
     <section class="reveal">
       <div class="section-header">
         <div>
-          <h2 class="section-title">CalmPaw training programs</h2>
+          <h2 class="section-title">What feels hardest with your dog right now?</h2>
           <p class="section-sub">
-            Start with the behavior that stresses you the most — or take the Complete Pack
-            to follow a full 3-week reset.
+            Choose the problem that stresses you the most. Each path leads to a
+            simple, step-by-step plan you can follow around work, kids and life.
           </p>
         </div>
-        <a href="programs.html" class="btn-outline">View all programs →</a>
+        <a href="programs.html" class="btn-outline">See full program list →</a>
       </div>
 
       <div class="programs-grid">
+        <!-- Barking -->
         <a href="program-barking.html" class="program-card">
           <div>
-            <div class="program-pill">7-day plan · Noise-friendly</div>
-            <div class="program-title">Stop Excessive Barking</div>
+            <div class="program-pill">Noise & neighbors</div>
+            <div class="program-title">My dog won’t stop barking</div>
             <p class="program-desc">
-              Gentle routines to reduce barking at doors, neighbors, footsteps
-              and everyday noises — especially in apartments with thin walls.
+              Barking at doors, footsteps, neighbors, elevator sounds… you’re
+              worried about noise complaints and just want quiet evenings.
             </p>
           </div>
-          <div>
-            <div class="program-meta">
-              <span>Best for: door / neighbor barking</span>
-              <span class="program-price">$29</span>
-            </div>
-            <div class="program-link">
-              View full plan <span class="arrow">→</span>
-            </div>
+          <div class="program-meta">
+            <span>7-day gentle plan</span>
+            <span style="font-size:11px;color:#b05825;">See plan →</span>
           </div>
         </a>
 
+        <!-- Separation anxiety -->
         <a href="program-anxiety.html" class="program-card">
           <div>
-            <div class="program-pill">14-day plan · Alone time</div>
-            <div class="program-title">Separation Anxiety Reset</div>
+            <div class="program-pill">Alone-time worries</div>
+            <div class="program-title">My dog panics when I leave</div>
             <p class="program-desc">
-              Step-by-step alone-time training to help your dog stay calm when
-              you leave for work, errands or evenings out — without drama.
+              Whining, pacing, destruction, neighbors complaining when you go to
+              work or even just take out the trash.
             </p>
           </div>
-          <div>
-            <div class="program-meta">
-              <span>Best for: anxious / clingy dogs</span>
-              <span class="program-price">$29</span>
-            </div>
-            <div class="program-link">
-              View full plan <span class="arrow">→</span>
-            </div>
+          <div class="program-meta">
+            <span>14-day reset plan</span>
+            <span style="font-size:11px;color:#b05825;">See plan →</span>
           </div>
         </a>
 
+        <!-- Leash pulling -->
         <a href="program-leash.html" class="program-card">
           <div>
-            <div class="program-pill">10-day plan · Walks</div>
-            <div class="program-title">Leash Walking Mastery</div>
+            <div class="program-pill">Walks & pulling</div>
+            <div class="program-title">Walks feel like a battle</div>
             <p class="program-desc">
-              Turn chaos walks into calm, connected walks. Teach your dog to
-              check in with you and ignore most everyday distractions.
+              Pulling, zig-zagging, embarrassment when you pass people or dogs.
+              You want walks to feel calm and enjoyable again.
             </p>
           </div>
-          <div>
-            <div class="program-meta">
-              <span>Best for: pulling & zig-zagging</span>
-              <span class="program-price">$29</span>
-            </div>
-            <div class="program-link">
-              View full plan <span class="arrow">→</span>
-            </div>
+          <div class="program-meta">
+            <span>10-day walk plan</span>
+            <span style="font-size:11px;color:#b05825;">See plan →</span>
           </div>
         </a>
       </div>
@@ -1197,24 +1146,18 @@
   </footer>
 
   <script>
-    // 年份
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // 简单滚动显现动画
     const reveals = document.querySelectorAll(".reveal");
     const onScroll = () => {
       const trigger = window.innerHeight * 0.9;
       reveals.forEach((el) => {
         const rect = el.getBoundingClientRect();
-        if (rect.top < trigger) {
-          el.classList.add("visible");
-        }
+        if (rect.top < trigger) el.classList.add("visible");
       });
     };
     document.addEventListener("scroll", onScroll);
-    window.addEventListener("load", () => {
-      onScroll();
-    });
+    window.addEventListener("load", onScroll);
   </script>
 </body>
 </html>
