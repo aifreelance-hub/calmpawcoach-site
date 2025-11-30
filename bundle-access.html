@@ -203,6 +203,8 @@
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
+
+  <!-- 登录 + 购买校验：必须已登录且拥有 bundle 才能看到本页 -->
   <script>
   (function () {
     const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
@@ -213,17 +215,20 @@
       window.location.href = "/auth.html?redirect=" + encodeURIComponent(redirect);
     }
 
+    // 未登录：去登录页
     if (!token) {
       goAuth();
       return;
     }
 
+    // 已登录：检查是否拥有 bundle
     fetch(API_BASE + "/auth/check-plan?slug=bundle", {
       method: "GET",
       headers: { Authorization: "Bearer " + token },
     })
       .then(async (res) => {
         if (!res.ok) {
+          // token 失效等情况 → 清理后重新登录
           localStorage.removeItem("calmpaw_token");
           localStorage.removeItem("calmpaw_email");
           goAuth();
@@ -231,7 +236,7 @@
         }
         const data = await res.json();
         if (!data.ok || !data.access) {
-          // 登录但没买 bundle → 回到 bundle 总介绍页面
+          // 登录但没买 bundle → 回到 bundle 介绍页
           window.location.href = "/bundle.html";
         }
       })
@@ -239,6 +244,6 @@
         goAuth();
       });
   })();
-</script>
+  </script>
 </body>
 </html>
