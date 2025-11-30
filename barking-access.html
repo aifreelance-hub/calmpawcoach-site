@@ -499,5 +499,45 @@
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
+  <script>
+  (function () {
+    const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
+    const token = localStorage.getItem("calmpaw_token");
+
+    function goAuth() {
+      const redirect = window.location.pathname + window.location.search;
+      window.location.href = "/auth.html?redirect=" + encodeURIComponent(redirect);
+    }
+
+    // 未登录 → 去登录页
+    if (!token) {
+      goAuth();
+      return;
+    }
+
+    // 已登录 → 检查是否拥有 barking 计划
+    fetch(API_BASE + "/auth/check-plan?slug=barking", {
+      method: "GET",
+      headers: { Authorization: "Bearer " + token },
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          // token 失效或其他错误 → 清理后去登录
+          localStorage.removeItem("calmpaw_token");
+          localStorage.removeItem("calmpaw_email");
+          goAuth();
+          return;
+        }
+        const data = await res.json();
+        if (!data.ok || !data.access) {
+          // 登录但没买 barking → 回到该计划的介绍页
+          window.location.href = "/program-barking.html";
+        }
+      })
+      .catch(() => {
+        goAuth();
+      });
+  })();
+</script>
 </body>
 </html>
