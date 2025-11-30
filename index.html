@@ -208,29 +208,27 @@
       gap: 8px;
     }
 
-    /* 顶部登录按钮（新加） */
+    /* 顶部登录按钮 */
     .nav-login {
-      font-size: 13px;
-      padding: 6px 12px;
+      padding: 7px 14px;
       border-radius: var(--radius-pill);
-      background: transparent;
-      border: none;
-      color: var(--text-soft);
+      font-size: 13px;
+      background: rgba(255, 246, 238, 0.95);
+      border: 1px solid rgba(243, 217, 196, 0.9);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: background 0.18s ease, color 0.18s ease, transform 0.12s ease;
+      transition: all 0.18s ease;
+      color: #7d4c37;
     }
-
     .nav-login span {
       font-size: 14px;
     }
-
     .nav-login:hover {
-      background: rgba(255, 242, 228, 0.9);
-      color: var(--text-main);
+      background: #fff9f3;
       transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(210, 145, 110, 0.25);
     }
 
     .btn-outline {
@@ -898,8 +896,8 @@
         <a href="contact.html">Contact</a>
       </nav>
       <div class="nav-cta">
-        <!-- 新增登录按钮 -->
-        <a class="nav-login" href="login.html">
+        <!-- 登录按钮：跳转到 auth.html -->
+        <a class="nav-login" href="auth.html">
           <span>🔑</span> Log in
         </a>
         <a class="btn-outline" href="programs.html">View programs</a>
