@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Separation Anxiety Reset — CalmPaw 14-Day Plan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --bg:#fff7f0;--accent:#ffb86b;--accent-strong:#ff914d;
+      --text-main:#3b2824;--text-soft:#8a6a63;
+      --border-soft:#f3d9c4;--radius-lg:26px;--radius-md:18px;--radius-pill:999px;
+      --shadow-soft:0 24px 60px rgba(210,145,110,0.32);
+    }
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(circle at 5% 0%, #ffe0c0 0%, transparent 55%),
+        radial-gradient(circle at 100% 0%, #ffd4d4 0%, transparent 55%),
+        linear-gradient(180deg,#fff7f0 0%,#fff2e7 40%,#fff8f2 100%);
+      color:var(--text-main);min-height:100vh;-webkit-font-smoothing:antialiased;
+    }
+    a{text-decoration:none;color:inherit;}
+    header{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter:blur(18px);
+      background:linear-gradient(to bottom,rgba(255,248,240,0.98),rgba(255,248,240,0.85));
+      border-bottom:1px solid rgba(243,217,196,0.8);
+    }
+    .nav-inner{
+      max-width:1120px;margin:0 auto;padding:12px 20px;
+      display:flex;align-items:center;justify-content:space-between;gap:14px;
+    }
+    .brand{display:flex;align-items:center;gap:10px;}
+    .brand-logo{
+      width:40px;height:40px;border-radius:18px;
+      background:radial-gradient(circle at 20% 15%,#fff9f3 0%,#ffb86b 40%,#ff914d 84%);
+      display:flex;align-items:center;justify-content:center;
+      font-size:22px;box-shadow:0 16px 40px rgba(214,139,86,0.6);
+    }
+    .brand-text-main{font-weight:750;letter-spacing:.03em;font-size:18px;}
+    .brand-text-sub{font-size:11px;color:var(--text-soft);}
+    .nav-links{display:flex;align-items:center;gap:16px;font-size:14px;color:var(--text-soft);}
+    .nav-links a{padding:6px 11px;border-radius:999px;transition:background .18s ease,color .18s ease,transform .12s ease;}
+    .nav-links a:hover{background:rgba(255,222,186,0.7);color:var(--text-main);transform:translateY(-1px);}
+    @media(max-width:880px){.nav-links{display:none;}}
+    .btn-primary{
+      padding:8px 18px;border-radius:var(--radius-pill);border:none;
+      font-size:13px;font-weight:600;cursor:pointer;
+      background:linear-gradient(135deg,#ffb86b,#ff914d);color:#4a251a;
+      box-shadow:0 16px 36px rgba(214,139,86,0.6);
+      display:inline-flex;align-items:center;gap:6px;
+    }
+    .btn-primary:hover{transform:translateY(-1px) scale(1.01);}
+    .btn-outline{
+      padding:7px 14px;border-radius:var(--radius-pill);
+      border:1px solid var(--border-soft);font-size:13px;
+      background:#fff8f2;color:var(--text-soft);cursor:pointer;
+    }
+    main{max-width:1120px;margin:0 auto;padding:26px 20px 40px;}
+    .hero{
+      display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);
+      gap:22px;margin-bottom:26px;align-items:flex-start;
+    }
+    @media(max-width:840px){.hero{grid-template-columns:minmax(0,1fr);}}
+    .hero-tag{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:4px 10px;border-radius:999px;
+      background:rgba(255,222,186,0.9);font-size:11px;color:#6b4532;
+      margin-bottom:8px;
+    }
+    .hero-title{font-size:22px;margin-bottom:6px;}
+    .hero-sub{font-size:13px;color:var(--text-soft);margin-bottom:12px;max-width:520px;line-height:1.6;}
+    .hero-meta{font-size:11px;color:var(--text-soft);margin-bottom:12px;}
+    .hero-meta span{margin-right:10px;}
+    .hero-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:8px;}
+    .hero-note{font-size:11px;color:var(--text-soft);}
+    .hero-card{
+      border-radius:var(--radius-lg);
+      background:rgba(255,246,238,0.96);
+      border:1px solid rgba(243,217,196,0.9);
+      padding:14px 14px 12px;
+      box-shadow:var(--shadow-soft);
+      font-size:11px;color:#7b5847;
+    }
+    .hero-card h3{font-size:13px;margin-bottom:6px;}
+    .hero-card ul{margin-left:14px;margin-bottom:4px;}
+    .hero-card li{margin-bottom:4px;}
+    .section{margin-bottom:24px;}
+    .section h2{font-size:16px;margin-bottom:6px;}
+    .section p{font-size:13px;color:var(--text-soft);margin-bottom:6px;line-height:1.6;}
+    .bullets{font-size:13px;color:var(--text-soft);margin-left:16px;}
+    .bullets li{margin-bottom:4px;}
+    .days{
+      border-radius:18px;
+      background:#fffaf5;border:1px solid rgba(243,217,196,0.9);
+      padding:12px;font-size:12px;color:var(--text-soft);
+    }
+    .day-item{margin-bottom:8px;}
+    .day-title{font-weight:600;color:#a0522b;margin-bottom:2px;}
+    footer{
+      border-top:1px solid rgba(243,217,196,0.8);
+      background:rgba(255,248,241,0.96);margin-top:10px;
+    }
+    .footer-inner{
+      max-width:1120px;margin:0 auto;
+      padding:12px 20px 16px;
+      display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;
+      font-size:11px;color:var(--text-soft);
+    }
+    .footer-links{display:flex;gap:12px;flex-wrap:wrap;}
+    .footer-links a:hover{color:#b05825;}
+  </style>
+
+  <!-- Paddle -->
+  <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
+  <script>
+    // TODO: 换成你的 Vendor ID
+    Paddle.Setup({ vendor: YOUR_PADDLE_VENDOR_ID });
+  </script>
+</head>
+<body>
+  <header>
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-logo">🐾</div>
+        <div>
+          <div class="brand-text-main">CalmPaw Coach</div>
+          <div class="brand-text-sub">Gentle, realistic dog training</div>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="programs.html">Programs</a>
+        <a href="bundle.html">Complete Pack</a>
+        <a href="club.html">Monthly Club</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="hero-tag">14-day plan · Separation anxiety reset</div>
+        <h1 class="hero-title">Separation Anxiety Reset — 14-Day Plan</h1>
+        <p class="hero-sub">
+          A gentle, step-by-step plan to help your dog feel safer when you leave
+          home — without flooding, crying guilt or unrealistic rules.
+        </p>
+        <div class="hero-meta">
+          <span>🐶 Best for: anxious / rescue dogs, apartment life</span>
+          <span>⏱ Daily time: 10–20 minutes</span>
+        </div>
+        <div class="hero-cta">
+          <a href="#" class="btn-primary"
+            onclick="Paddle.Checkout.open({
+              product: PRODUCT_ID_ANXIETY,
+              success: 'https://calmpawcoach.com/anxiety-access.html'
+            }); return false;">
+            Buy this plan – $29 →
+          </a>
+          <a href="programs.html" class="btn-outline">← Back to all programs</a>
+        </div>
+        <div class="hero-note">
+          One-time purchase. Instant access to the full 14-day plan after payment.
+        </div>
+      </div>
+      <div class="hero-card">
+        <h3>In this 14-day plan, you will:</h3>
+        <ul>
+          <li>Learn how to leave the home without sudden “disappearances”.</li>
+          <li>Build tiny, safe absences your dog can actually tolerate.</li>
+          <li>Reduce pacing, whining and destructive panic over time.</li>
+        </ul>
+        <p style="margin-top:6px;">
+          You’ll get a realistic schedule that fits around work and family life,
+          even if you live in a building with thin walls and worried neighbors.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Who this plan is for</h2>
+      <p>This plan is made for real homes and real worries, especially if:</p>
+      <ul class="bullets">
+        <li>Your dog cries, howls or scratches when you leave.</li>
+        <li>You’re afraid of neighbor complaints or landlord issues.</li>
+        <li>You feel guilty every time you have to go to work or step out.</li>
+        <li>You need a calm, simple sequence you can follow day by day.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>What’s inside the 14-day plan</h2>
+      <div class="days">
+        <div class="day-item">
+          <div class="day-title">Days 1–2 — Safety baseline & calming rituals</div>
+          <div>Understand your dog’s current stress level and create predictable “leaving” and “returning” rituals.</div>
+        </div>
+        <div class="day-item">
+          <div class="day-title">Days 3–5 — Micro absences in the same room</div>
+          <div>Step away for seconds, not minutes, teaching your dog that you always return.</div>
+        </div>
+        <div class="day-item">
+          <div class="day-title">Days 6–8 — Short absences with the door</div>
+          <div>Gradually add the door opening/closing while keeping absences short and safe.</div>
+        </div>
+        <div class="day-item">
+          <div class="day-title">Days 9–11 — Building to real-life outings</div>
+          <div>Carefully increase time away to match your dog’s tolerance — not social media standards.</div>
+        </div>
+        <div class="day-item">
+          <div class="day-title">Days 12–14 — Maintaining progress & setbacks</div>
+          <div>Create a long-term routine and a plan for “bad days”, travel or schedule changes.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>What you’ll receive</h2>
+      <ul class="bullets">
+        <li>A day-by-day schedule for 14 days with clear goals.</li>
+        <li>Guidance on reading your dog’s body language and stress signals.</li>
+        <li>Rules for safe progress — when to move forward, pause or go back a step.</li>
+        <li>Specific tips for rescue dogs, young dogs and multi-dog homes.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>Ready to help your dog breathe easier?</h2>
+      <p>
+        Click below to purchase and unlock the full 14-day separation anxiety plan.
+        You can repeat or slow down the program as needed.
+      </p>
+      <div style="margin-top:10px;">
+        <a href="#" class="btn-primary"
+          onclick="Paddle.Checkout.open({
+            product: PRODUCT_ID_ANXIETY,
+            success: 'https://calmpawcoach.com/anxiety-access.html'
+          }); return false;">
+          Get the 14-day anxiety plan – $29 →
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© <span id="year"></span> CalmPaw Coach. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="programs.html">Programs</a>
+        <a href="bundle.html">Complete Pack</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
