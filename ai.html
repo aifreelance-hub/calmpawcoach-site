@@ -516,7 +516,7 @@
       <nav class="nav-links">
         <a href="programs.html">Programs</a>
         <a href="bundle.html">Complete Pack</a>
-        <a href="ai.html">Ask a Dog Trainer — AI Unlimited</a>
+        <a href="ai.html" class="active">Ask a Dog Trainer — AI Unlimited</a>
       </nav>
 
       <div class="nav-cta">
@@ -577,7 +577,6 @@
             Click below to start the monthly plan.
           </p>
           <div class="state-actions">
-            <!-- TODO: 把 href 换成你的 Paddle 订阅链接 -->
             <a id="ai-subscribe-link" class="btn-primary" href="#">
               Subscribe for $29/month →
             </a>
@@ -642,6 +641,10 @@
   <script>
     const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
 
+    // 🔴 把这里换成你在 Paddle 后台复制出来的 checkout 链接
+    // 建议在 Paddle 那边的链接里已经配置好 return_url=https://calmpawcoach.com/ai.html
+    const PADDLE_CHECKOUT_URL = "https://your-paddle-checkout-link.com";
+
     const navAuthArea = document.getElementById("nav-auth-area");
     const stateNotLogged = document.getElementById("state-not-logged");
     const stateNoSub = document.getElementById("state-no-sub");
@@ -663,8 +666,17 @@
       },
     ];
 
-    // TODO: 把这里的链接换成你的 Paddle 订阅链接
-    subscribeLink.href = "#";
+    // ✅ 给订阅按钮绑定 Paddle 跳转
+    if (subscribeLink) {
+      subscribeLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (!PADDLE_CHECKOUT_URL || PADDLE_CHECKOUT_URL === "https://your-paddle-checkout-link.com") {
+          alert("Paddle checkout link is not set yet.");
+          return;
+        }
+        window.location.href = PADDLE_CHECKOUT_URL;
+      });
+    }
 
     function formatDate(tsSec) {
       if (!tsSec) return "";
