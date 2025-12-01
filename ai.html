@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CalmPaw AI Trainer — $29/month quiet dog coaching</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:#fff7f0;--bg-soft:#ffeede;
+      --accent:#ffb86b;--accent-strong:#ff914d;
+      --accent-soft:#ffe0b8;
+      --text-main:#3b2824;--text-soft:#8a6a63;
+      --border-soft:#f3d9c4;
+      --radius-lg:26px;--radius-md:18px;--radius-pill:999px;
+      --shadow-soft:0 26px 60px rgba(210,145,110,0.38);
+    }
+    body {
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(circle at 5% 0%, #ffe0c0 0%, transparent 55%),
+        radial-gradient(circle at 100% 0%, #ffd4d4 0%, transparent 55%),
+        radial-gradient(circle at 0% 100%, #ffe5c3 0%, transparent 55%),
+        linear-gradient(180deg,#fff7f0 0%,#fff2e7 40%,#fff8f2 100%);
+      color:var(--text-main);
+      min-height:100vh;
+      -webkit-font-smoothing:antialiased;
+    }
+    a { text-decoration:none; color:inherit; }
+
+    header {
+      position:sticky; top:0; z-index:50;
+      backdrop-filter:blur(22px);
+      background:linear-gradient(to bottom,rgba(255,248,240,0.98),rgba(255,248,240,0.88),rgba(255,248,240,0.75));
+      border-bottom:1px solid rgba(243,217,196,0.8);
+    }
+    .nav-inner{
+      max-width:1120px;margin:0 auto;padding:10px 20px;
+      display:flex;align-items:center;justify-content:space-between;
+      gap:14px;flex-wrap:wrap;
+    }
+    .brand{display:flex;align-items:center;gap:10px;min-width:0;}
+    .brand-logo-wrap{position:relative;}
+    .brand-orbit{
+      position:absolute;inset:-4px;border-radius:50%;
+      background:conic-gradient(from 160deg,rgba(255,184,107,0.15),rgba(255,145,77,0.3),rgba(255,230,190,0.2),rgba(255,184,107,0.15));
+      filter:blur(4px);opacity:0.9;
+    }
+    .brand-logo{
+      width:40px;height:40px;border-radius:18px;
+      background:radial-gradient(circle at 20% 15%,#fff9f3 0%,#ffb86b 40%,#ff914d 84%);
+      display:flex;align-items:center;justify-content:center;
+      font-size:22px;box-shadow:0 16px 40px rgba(214,139,86,0.6);
+      position:relative;z-index:1;
+    }
+    .brand-text-main{font-weight:750;letter-spacing:0.03em;font-size:18px;white-space:nowrap;}
+    .brand-text-sub{font-size:11px;color:var(--text-soft);white-space:nowrap;}
+    .nav-links{
+      display:flex;align-items:center;gap:16px;
+      font-size:14px;color:var(--text-soft);flex:1;
+      justify-content:center;min-width:0;
+    }
+    .nav-links a{
+      padding:6px 11px;border-radius:999px;position:relative;overflow:hidden;
+      transition:color .18s ease,transform .12s ease;
+    }
+    .nav-links a::before{
+      content:"";position:absolute;inset:0;border-radius:inherit;
+      background:radial-gradient(circle at 0 0,rgba(255,210,158,0.9),transparent 60%);
+      opacity:0;transition:opacity .18s ease;
+    }
+    .nav-links a:hover{color:var(--text-main);transform:translateY(-1px);}
+    .nav-links a:hover::before{opacity:1;}
+    .nav-links a.active{color:var(--text-main);font-weight:600;}
+
+    .nav-cta{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:auto;}
+    .btn-outline{
+      padding:7px 16px;border-radius:var(--radius-pill);
+      border:1px solid var(--border-soft);
+      background:rgba(255,250,244,0.95);
+      font-size:13px;color:var(--text-soft);cursor:pointer;
+      transition:all .18s ease;display:inline-flex;align-items:center;gap:6px;
+      white-space:nowrap;
+    }
+    .btn-outline:hover{
+      border-color:var(--accent);color:var(--text-main);
+      box-shadow:0 14px 32px rgba(204,145,107,0.28);
+      transform:translateY(-1px);background:#fffaf5;
+    }
+    .btn-primary{
+      padding:8px 19px;border-radius:var(--radius-pill);border:none;
+      font-size:13px;font-weight:600;cursor:pointer;color:#4a251a;
+      background-image:linear-gradient(135deg,#ffb86b,#ff914d);
+      box-shadow:0 18px 40px rgba(214,139,86,0.65);
+      display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+    }
+
+    .nav-auth{display:flex;align-items:center;gap:6px;}
+    .nav-auth-email{
+      max-width:160px;padding:5px 10px;border-radius:var(--radius-pill);
+      background:rgba(255,250,244,0.95);
+      border:1px solid rgba(243,217,196,0.9);
+      font-size:12px;color:#6b4532;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    }
+    .nav-auth-btn{
+      border:none;background:transparent;font-size:11px;color:#b05825;
+      padding:4px 7px;border-radius:999px;cursor:pointer;
+      transition:background .15s ease,color .15s ease;white-space:nowrap;
+    }
+    .nav-auth-btn:hover{background:rgba(255,237,213,0.95);color:#7a3410;}
+
+    @media (max-width:880px){
+      .nav-links{display:none;}
+      .nav-inner{align-items:flex-start;}
+      .nav-cta{margin-left:0;}
+    }
+    @media (max-width:640px){
+      .nav-inner{padding:8px 14px;gap:6px;flex-wrap:wrap;align-items:flex-start;}
+      .brand{width:100%;}
+      .brand-logo{width:34px;height:34px;font-size:20px;}
+      .brand-text-main{font-size:16px;}
+      .brand-text-sub{font-size:10px;}
+      .nav-cta{width:100%;justify-content:flex-end;gap:6px;}
+      .btn-outline,.btn-primary{padding:6px 10px;font-size:12px;}
+      .nav-auth-email{max-width:130px;font-size:11px;}
+    }
+
+    main{
+      max-width:1120px;margin:0 auto;
+      padding:22px 20px 36px;
+      display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1.1fr);
+      gap:22px;
+    }
+    @media (max-width:900px){
+      main{grid-template-columns:minmax(0,1fr);padding:18px 14px 28px;}
+    }
+
+    .hero-copy h1{
+      font-size:clamp(24px,4.2vw,32px);
+      line-height:1.2;margin-bottom:10px;
+    }
+    .hero-copy p{font-size:14px;color:var(--text-soft);line-height:1.7;margin-bottom:10px;}
+    .hero-badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:4px 11px;border-radius:var(--radius-pill);
+      background:rgba(255,222,186,0.9);
+      font-size:11px;color:#6b4532;margin-bottom:8px;
+    }
+
+    .ai-panel{
+      border-radius:var(--radius-lg);
+      background:rgba(255,246,238,0.98);
+      border:1px solid rgba(243,217,196,0.9);
+      box-shadow:var(--shadow-soft);
+      padding:14px;
+      display:flex;flex-direction:column;gap:10px;
+      min-height:340px;
+    }
+    .ai-header{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:8px;font-size:12px;color:var(--text-soft);
+    }
+    .ai-status-pill{
+      padding:4px 10px;border-radius:var(--radius-pill);
+      background:rgba(255,249,243,0.98);border:1px solid rgba(243,217,196,0.9);
+      font-size:11px;display:inline-flex;align-items:center;gap:6px;
+    }
+    .ai-messages{
+      flex:1;min-height:160px;max-height:420px;
+      border-radius:16px;border:1px solid rgba(243,217,196,0.9);
+      padding:10px;background:#fff9f3;
+      overflow-y:auto;font-size:13px;
+    }
+    .msg-row{margin-bottom:8px;}
+    .msg-author{font-weight:600;font-size:11px;margin-bottom:2px;color:#7b4d3a;}
+    .msg-bubble{
+      display:inline-block;padding:8px 10px;border-radius:14px;
+      background:#fff;border:1px solid rgba(243,217,196,0.9);
+      max-width:100%;white-space:pre-wrap;word-wrap:break-word;
+    }
+    .msg-user .msg-bubble{background:#ffe8d4;}
+    .msg-ai .msg-bubble{background:#fff;}
+
+    .ai-input-row{
+      display:flex;gap:8px;align-items:flex-end;margin-top:4px;
+    }
+    .ai-input{
+      flex:1;min-height:42px;max-height:80px;
+      border-radius:14px;border:1px solid rgba(243,217,196,0.9);
+      padding:7px 9px;font-size:13px;resize:vertical;
+      background:#fffdf8;
+    }
+    .ai-input:focus{outline:none;border-color:#ffb86b;box-shadow:0 0 0 1px rgba(255,184,107,0.5);}
+    .ai-send-btn{
+      border:none;border-radius:var(--radius-pill);
+      padding:8px 14px;font-size:13px;font-weight:600;
+      background-image:linear-gradient(135deg,#ffb86b,#ff914d);
+      color:#4a251a;cursor:pointer;white-space:nowrap;
+      box-shadow:0 12px 30px rgba(214,139,86,0.6);
+    }
+    .ai-send-btn[disabled]{
+      opacity:0.5;cursor:not-allowed;box-shadow:none;
+    }
+
+    footer{
+      border-top:1px solid rgba(243,217,196,0.8);
+      background:rgba(255,248,241,0.96);margin-top:10px;
+    }
+    .footer-inner{
+      max-width:1120px;margin:0 auto;
+      padding:12px 20px 16px;
+      display:flex;flex-wrap:wrap;gap:8px;
+      justify-content:space-between;
+      font-size:11px;color:var(--text-soft);
+    }
+    .footer-links{display:flex;gap:12px;flex-wrap:wrap;}
+    .footer-links a:hover{color:#b05825;}
+    @media (max-width:640px){
+      .footer-inner{padding:10px 14px 14px;font-size:10px;}
+      .footer-links{gap:10px;}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-logo-wrap">
+          <div class="brand-orbit"></div>
+          <div class="brand-logo">🐾</div>
+        </div>
+        <div>
+          <div class="brand-text-main">CalmPaw Coach</div>
+          <div class="brand-text-sub">Gentle, realistic dog training</div>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="programs.html">Programs</a>
+        <a href="bundle.html">Complete Pack</a>
+        <a href="club.html">Monthly Club</a>
+        <a href="ai.html" class="active">AI Trainer</a>
+        <a href="about.html">About</a>
+      </nav>
+      <div class="nav-cta">
+        <div id="nav-auth-area">
+          <a class="btn-outline" href="auth.html?redirect=/ai.html">
+            <span>🔑</span> Log in
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero-copy">
+      <div class="hero-badge">
+        <span>🤖</span> CalmPaw AI Trainer — $29/month
+      </div>
+      <h1>Ask a calm, realistic AI trainer about your real dog.</h1>
+      <p>
+        This page is your private, always-awake AI coach for barking, neighbours,
+        alone-time and city walks. Buy once per month, then ask as many
+        questions as you like inside that month.
+      </p>
+      <p>
+        <strong>适合这样的主人：</strong>住公寓、邻居多、狗狗爱叫、白天要上班、精力有限。
+        你不用写长故事，直接说「我家狗在 XXX 情况下会叫」，AI 会用安静、现实的方式帮你拆解。
+      </p>
+      <p style="font-size:12px;color:#a7714f;">
+        🔒 Only available with an active $29/month AI Trainer subscription.
+        If your subscription expires, you will be gently redirected back to the
+        pricing page.
+      </p>
+    </section>
+
+    <section class="ai-panel">
+      <div class="ai-header">
+        <div>CalmPaw AI chat</div>
+        <div class="ai-status-pill" id="ai-status-pill">
+          Checking subscription...
+        </div>
+      </div>
+
+      <div class="ai-messages" id="ai-messages">
+        <div class="msg-row msg-ai">
+          <div class="msg-author">CalmPaw AI Trainer</div>
+          <div class="msg-bubble">
+Hi, I'm your CalmPaw AI trainer 🐶  
+Tell me in one or two sentences what your dog does that worries you most — for example:
+
+• "My dog barks every time the elevator door opens."  
+• "He can't stay alone for more than 10 minutes."  
+• "Neighbours complain about noise in the evening."
+
+You can mix English and 中文, I'll adapt.
+          </div>
+        </div>
+      </div>
+
+      <div class="ai-input-row">
+        <textarea id="ai-input" class="ai-input" placeholder="Describe what's happening with your dog..."></textarea>
+        <button id="ai-send" class="ai-send-btn" disabled>Send</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© <span id="year"></span> CalmPaw Coach. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="programs.html">Programs</a>
+        <a href="bundle.html">Complete Pack</a>
+        <a href="club.html">Monthly Club</a>
+        <a href="ai.html">AI Trainer</a>
+        <a href="refund.html">Refund policy</a>
+        <a href="terms.html">Terms of service</a>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="legal.html">Legal / Imprint</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
+
+    // ===== 导航登录状态（和你其它页面一样的逻辑） =====
+    async function hydrateNavAuth() {
+      const area = document.getElementById("nav-auth-area");
+      if (!area) return;
+
+      const token = localStorage.getItem("calmpaw_token");
+      const email = localStorage.getItem("calmpaw_email");
+
+      if (!token) {
+        area.innerHTML = `
+          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/ai.html')}">
+            <span>🔑</span> Log in
+          </a>`;
+        return;
+      }
+
+      try {
+        const res = await fetch(API_BASE + "/auth/me", {
+          headers: { "Authorization": "Bearer " + token }
+        });
+        const data = await res.json();
+
+        if (!res.ok || !data.ok) {
+          localStorage.removeItem("calmpaw_token");
+          localStorage.removeItem("calmpaw_email");
+          area.innerHTML = `
+            <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/ai.html')}">
+              <span>🔑</span> Log in
+            </a>`;
+          return;
+        }
+
+        const showEmail = email || data.email || "Member";
+
+        area.innerHTML = `
+          <div class="nav-auth">
+            <span class="nav-auth-email" title="${showEmail}">${showEmail}</span>
+            <button class="nav-auth-btn" id="nav-switch-account">Switch</button>
+            <button class="nav-auth-btn" id="nav-logout">Log out</button>
+          </div>
+        `;
+
+        const switchBtn = document.getElementById("nav-switch-account");
+        if (switchBtn) {
+          switchBtn.addEventListener("click", () => {
+            localStorage.removeItem("calmpaw_token");
+            localStorage.removeItem("calmpaw_email");
+            const redirect = encodeURIComponent('/ai.html');
+            window.location.href = `auth.html?redirect=${redirect}`;
+          });
+        }
+
+        const logoutBtn = document.getElementById("nav-logout");
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", () => {
+            localStorage.removeItem("calmpaw_token");
+            localStorage.removeItem("calmpaw_email");
+            window.location.href = "/index.html";
+          });
+        }
+      } catch (e) {
+        console.error("auth hydrate error", e);
+      }
+    }
+
+    // ===== 检查 AI 订阅状态 =====
+    async function checkAiStatus() {
+      const pill = document.getElementById("ai-status-pill");
+      const sendBtn = document.getElementById("ai-send");
+      const token = localStorage.getItem("calmpaw_token");
+
+      if (!token) {
+        pill.textContent = "Please log in to use AI Trainer.";
+        sendBtn.disabled = true;
+        return;
+      }
+
+      try {
+        const res = await fetch(API_BASE + "/ai/status", {
+          headers: { "Authorization": "Bearer " + token }
+        });
+        const data = await res.json();
+
+        if (!res.ok || !data.ok || !data.subscribed) {
+          pill.textContent = "No active AI Trainer subscription. Please subscribe on the pricing page.";
+          sendBtn.disabled = true;
+          // 这里你也可以选择几秒后跳转到 club/pricing 页面
+          // setTimeout(() => window.location.href = "club.html", 3000);
+        } else {
+          pill.textContent = "AI Trainer active · You can ask unlimited questions this month.";
+          sendBtn.disabled = false;
+        }
+      } catch (e) {
+        console.error("ai status error", e);
+        pill.textContent = "Error checking subscription. Please refresh.";
+        sendBtn.disabled = true;
+      }
+    }
+
+    // ===== 聊天逻辑 =====
+    const messagesEl = document.getElementById("ai-messages");
+    const inputEl = document.getElementById("ai-input");
+    const sendBtn = document.getElementById("ai-send");
+
+    function appendMessage(role, text) {
+      const row = document.createElement("div");
+      row.className = "msg-row " + (role === "user" ? "msg-user" : "msg-ai");
+      row.innerHTML = `
+        <div class="msg-author">${role === "user" ? "You" : "CalmPaw AI Trainer"}</div>
+        <div class="msg-bubble"></div>
+      `;
+      row.querySelector(".msg-bubble").textContent = text;
+      messagesEl.appendChild(row);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const text = inputEl.value.trim();
+      if (!text) return;
+      const token = localStorage.getItem("calmpaw_token");
+      if (!token) {
+        alert("Please log in first.");
+        window.location.href = "auth.html?redirect=/ai.html";
+        return;
+      }
+
+      appendMessage("user", text);
+      inputEl.value = "";
+      sendBtn.disabled = true;
+      sendBtn.textContent = "Thinking...";
+
+      try {
+        const res = await fetch(API_BASE + "/ai/ask", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+          },
+          body: JSON.stringify({
+            message: text,
+            history: [] // 以后你可以把历史对话也传给后端
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          console.error("ai ask error", data);
+          appendMessage("ai", "Sorry, something went wrong. Please try again in a moment.");
+        } else {
+          appendMessage("ai", data.reply);
+        }
+      } catch (e) {
+        console.error("ai ask error", e);
+        appendMessage("ai", "Network error. Please try again.");
+      } finally {
+        sendBtn.disabled = false;
+        sendBtn.textContent = "Send";
+      }
+    }
+
+    sendBtn.addEventListener("click", sendMessage);
+    inputEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      hydrateNavAuth();
+      checkAiStatus();
+    });
+  </script>
+</body>
+</html>
