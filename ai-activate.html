@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CalmPaw AI Trainer — Activating Subscription</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #fff7f0;
+      --bg-soft: #ffeede;
+      --accent: #ffb86b;
+      --accent-strong: #ff914d;
+      --accent-soft: #ffe0b8;
+      --text-main: #3b2824;
+      --text-soft: #8a6a63;
+      --border-soft: #f3d9c4;
+      --radius-lg: 26px;
+      --radius-md: 18px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 26px 60px rgba(210, 145, 110, 0.38);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        system-ui, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 5% 0%, #ffe0c0 0%, transparent 55%),
+        radial-gradient(circle at 100% 0%, #ffd4d4 0%, transparent 55%),
+        radial-gradient(circle at 0% 100%, #ffe5c3 0%, transparent 55%),
+        linear-gradient(180deg, #fff7f0 0%, #fff2e7 40%, #fff8f2 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    @keyframes float-soft {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0px); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -120px 0; }
+      100% { background-position: 120px 0; }
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(22px);
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 248, 240, 0.98),
+        rgba(255, 248, 240, 0.88),
+        rgba(255, 248, 240, 0.75)
+      );
+      border-bottom: 1px solid rgba(243, 217, 196, 0.8);
+    }
+
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-logo-wrap {
+      position: relative;
+    }
+
+    .brand-orbit {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 160deg,
+        rgba(255, 184, 107, 0.15),
+        rgba(255, 145, 77, 0.3),
+        rgba(255, 230, 190, 0.2),
+        rgba(255, 184, 107, 0.15)
+      );
+      filter: blur(4px);
+      opacity: 0.9;
+      animation: float-soft 4.4s ease-in-out infinite;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 18px;
+      background: radial-gradient(circle at 20% 15%, #fff9f3 0%, #ffb86b 40%, #ff914d 84%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 16px 40px rgba(214, 139, 86, 0.6);
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-text-main {
+      font-weight: 750;
+      letter-spacing: 0.03em;
+      font-size: 18px;
+      white-space: nowrap;
+    }
+
+    .brand-text-sub {
+      font-size: 11px;
+      color: var(--text-soft);
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 14px;
+      color: var(--text-soft);
+      flex: 1;
+      justify-content: center;
+      min-width: 0;
+    }
+
+    .nav-links a {
+      padding: 6px 11px;
+      border-radius: 999px;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.18s ease, transform 0.12s ease;
+    }
+
+    .nav-links a.active {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+
+    .btn-outline {
+      padding: 7px 16px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-soft);
+      background: rgba(255, 250, 244, 0.95);
+      font-size: 13px;
+      color: var(--text-soft);
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--text-main);
+      box-shadow: 0 14px 32px rgba(204, 145, 107, 0.28);
+      transform: translateY(-1px);
+      background: #fffaf5;
+    }
+
+    .btn-primary {
+      padding: 8px 19px;
+      border-radius: var(--radius-pill);
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #4a251a;
+      background-image:
+        linear-gradient(135deg, #ffb86b, #ff914d),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.4), transparent);
+      background-size: 100% 100%, 120px 100%;
+      background-position: 0 0, -120px 0;
+      background-repeat: no-repeat;
+      box-shadow: 0 18px 40px rgba(214, 139, 86, 0.65);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1.5px) scale(1.01);
+      box-shadow: 0 24px 56px rgba(204, 129, 76, 0.75);
+    }
+
+    .nav-login-emoji {
+      font-size: 14px;
+    }
+
+    .nav-auth {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-auth-email {
+      max-width: 160px;
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 250, 244, 0.95);
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      font-size: 12px;
+      color: #6b4532;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-auth-btn {
+      border: none;
+      background: transparent;
+      font-size: 11px;
+      color: #b05825;
+      padding: 4px 7px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .nav-auth-btn:hover {
+      background: rgba(255, 237, 213, 0.95);
+      color: #7a3410;
+    }
+
+    @media (max-width: 880px) {
+      .nav-links { display: none; }
+      .nav-inner {
+        align-items: flex-start;
+      }
+      .nav-cta {
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-inner {
+        padding: 8px 14px;
+        gap: 6px;
+        flex-wrap: wrap;
+        align-items: flex-start;
+      }
+      .brand {
+        width: 100%;
+      }
+      .brand-logo {
+        width: 34px;
+        height: 34px;
+        font-size: 20px;
+      }
+      .brand-text-main {
+        font-size: 16px;
+      }
+      .brand-text-sub {
+        font-size: 10px;
+      }
+      .nav-cta {
+        width: 100%;
+        justify-content: flex-end;
+        gap: 6px;
+      }
+      .btn-outline,
+      .btn-primary {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+      .nav-auth-email {
+        max-width: 130px;
+        font-size: 11px;
+      }
+    }
+
+    /* Main layout */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 16px 32px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 460px;
+      border-radius: var(--radius-lg);
+      background: radial-gradient(circle at top left, #fff8f2 0%, #ffe5cd 45%, #ffece0 100%);
+      box-shadow: var(--shadow-soft);
+      padding: 24px 22px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-glow {
+      position: absolute;
+      inset: -40px;
+      background:
+        radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.7), transparent 60%),
+        radial-gradient(circle at 100% 0, rgba(255, 194, 157, 0.7), transparent 60%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 250, 244, 0.96);
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      font-size: 11px;
+      color: #a2643c;
+      margin-bottom: 10px;
+    }
+
+    .card-pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #fff8f0 0%, #ff914d 60%, #d6632a 100%);
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 650;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-subtitle {
+      font-size: 13px;
+      color: var(--text-soft);
+      margin-bottom: 14px;
+      line-height: 1.6;
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .spinner {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 186, 107, 0.4);
+      border-top-color: #ff914d;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .status-text-main {
+      font-size: 14px;
+      font-weight: 550;
+      color: #7a3b1f;
+    }
+
+    .status-text-sub {
+      font-size: 12px;
+      color: #9b6a4e;
+      margin-bottom: 10px;
+    }
+
+    .status-error {
+      font-size: 12px;
+      color: #b91c1c;
+      background: #fee2e2;
+      border-radius: 12px;
+      padding: 8px 10px;
+      margin-top: 6px;
+    }
+
+    .meta-note {
+      font-size: 11px;
+      color: #a16a4b;
+      background: rgba(255, 248, 241, 0.96);
+      border-radius: 14px;
+      padding: 8px 10px;
+      border: 1px dashed rgba(210, 145, 110, 0.7);
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+
+    .meta-note strong {
+      color: #7a3b1f;
+    }
+
+    .card-footer {
+      margin-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: #a56a4d;
+      flex-wrap: wrap;
+    }
+
+    .btn-link {
+      border: none;
+      background: transparent;
+      color: #b05825;
+      font-size: 11px;
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    footer {
+      border-top: 1px solid rgba(243, 217, 196, 0.8);
+      background: rgba(255, 248, 241, 0.96);
+    }
+
+    .footer-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 10px 20px 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a:hover { color: #b05825; }
+
+    @media (max-width: 640px) {
+      main {
+        padding: 26px 14px 18px;
+      }
+      .card {
+        padding: 20px 16px 18px;
+        border-radius: 22px;
+      }
+      .card-title {
+        font-size: 18px;
+      }
+      .card-subtitle {
+        font-size: 12px;
+      }
+      .footer-inner {
+        padding: 10px 14px 12px;
+        font-size: 10px;
+      }
+      .footer-links {
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-logo-wrap">
+          <div class="brand-orbit"></div>
+          <div class="brand-logo">🐾</div>
+        </div>
+        <div>
+          <div class="brand-text-main">CalmPaw Coach</div>
+          <div class="brand-text-sub">Gentle, realistic dog training</div>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="programs.html">Programs</a>
+        <a href="bundle.html">Complete Pack</a>
+        <a href="club.html">Monthly Club</a>
+        <a href="ai.html" class="active">AI Trainer</a>
+        <a href="about.html">About</a>
+      </nav>
+      <div class="nav-cta">
+        <div id="nav-auth-area">
+          <!-- 默认：未登录 -->
+          <a class="btn-outline" href="auth.html?redirect=/ai-activate.html">
+            <span class="nav-login-emoji">🔑</span> Log in
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="card">
+      <div class="card-glow"></div>
+      <div class="card-inner">
+        <div class="card-pill">
+          <span class="card-pill-dot"></span>
+          CalmPaw AI Trainer · monthly access
+        </div>
+        <h1 class="card-title">
+          Activating your AI Trainer subscription
+        </h1>
+        <p class="card-subtitle">
+          Thank you for your payment. We’re now connecting your CalmPaw AI Trainer
+          to your account and unlocking monthly access.
+        </p>
+
+        <div class="status-row">
+          <div class="spinner" id="spinner"></div>
+          <div>
+            <div class="status-text-main" id="status-main">
+              Checking your account and activating access…
+            </div>
+            <div class="status-text-sub" id="status-sub">
+              This usually takes a few seconds. You’ll be redirected to the AI Trainer chat once it’s ready.
+            </div>
+          </div>
+        </div>
+
+        <div id="status-error" class="status-error" style="display:none;"></div>
+
+        <div class="meta-note">
+          <strong>Note:</strong> if you reached this page without completing payment, your subscription
+          may not be activated. In that case you can safely go back to the website and try again later.
+        </div>
+
+        <div class="card-footer">
+          <div>
+            You’ll be redirected to <strong>AI Trainer chat</strong> automatically after activation.
+          </div>
+          <div>
+            <button class="btn-link" id="btn-go-ai" type="button">Go to AI Trainer manually</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© <span id="year"></span> CalmPaw Coach. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="programs.html">Programs</a>
+        <a href="bundle.html">Complete Pack</a>
+        <a href="club.html">Monthly Club</a>
+        <a href="ai.html">AI Trainer</a>
+        <a href="refund.html">Refund policy</a>
+        <a href="terms.html">Terms of service</a>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="legal.html">Legal / Imprint</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
+
+    // 年份
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // 顶部登录状态
+    async function hydrateNavAuth() {
+      const area = document.getElementById("nav-auth-area");
+      if (!area) return;
+
+      const token = localStorage.getItem("calmpaw_token");
+      const email = localStorage.getItem("calmpaw_email");
+
+      if (!token) {
+        area.innerHTML = `
+          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/ai-activate.html')}">
+            <span class="nav-login-emoji">🔑</span> Log in
+          </a>`;
+        return;
+      }
+
+      try {
+        const res = await fetch(API_BASE + "/auth/me", {
+          headers: { "Authorization": "Bearer " + token }
+        });
+        const data = await res.json();
+
+        if (!res.ok || !data.ok) {
+          localStorage.removeItem("calmpaw_token");
+          localStorage.removeItem("calmpaw_email");
+          area.innerHTML = `
+            <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/ai-activate.html')}">
+              <span class="nav-login-emoji">🔑</span> Log in
+            </a>`;
+          return;
+        }
+
+        const showEmail = email || data.email || "Member";
+
+        area.innerHTML = `
+          <div class="nav-auth">
+            <span class="nav-auth-email" title="${showEmail}">${showEmail}</span>
+            <button class="nav-auth-btn" id="nav-switch-account">Switch</button>
+            <button class="nav-auth-btn" id="nav-logout">Log out</button>
+          </div>
+        `;
+
+        const switchBtn = document.getElementById("nav-switch-account");
+        if (switchBtn) {
+          switchBtn.addEventListener("click", () => {
+            localStorage.removeItem("calmpaw_token");
+            localStorage.removeItem("calmpaw_email");
+            const redirect = encodeURIComponent('/ai-activate.html');
+            window.location.href = `auth.html?redirect=${redirect}`;
+          });
+        }
+
+        const logoutBtn = document.getElementById("nav-logout");
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", () => {
+            localStorage.removeItem("calmpaw_token");
+            localStorage.removeItem("calmpaw_email");
+            window.location.href = "/index.html";
+          });
+        }
+      } catch (e) {
+        console.error("auth hydrate error", e);
+        area.innerHTML = `
+          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/ai-activate.html')}">
+            <span class="nav-login-emoji">🔑</span> Log in
+          </a>`;
+      }
+    }
+
+    // 激活 AI 订阅
+    async function activateAi() {
+      const token = localStorage.getItem("calmpaw_token");
+      const statusMain = document.getElementById("status-main");
+      const statusSub = document.getElementById("status-sub");
+      const errorBox = document.getElementById("status-error");
+      const spinner = document.getElementById("spinner");
+
+      if (!token) {
+        statusMain.textContent = "You’re not logged in.";
+        statusSub.textContent = "Please sign in first. Redirecting to login…";
+        spinner.style.display = "none";
+        setTimeout(() => {
+          const redirect = encodeURIComponent('/ai-activate.html');
+          window.location.href = `auth.html?redirect=${redirect}`;
+        }, 1500);
+        return;
+      }
+
+      try {
+        statusMain.textContent = "Activating your AI Trainer subscription…";
+        statusSub.textContent = "We’re linking this payment to your CalmPaw Coach account.";
+        errorBox.style.display = "none";
+
+        const res = await fetch(API_BASE + "/ai/activate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+          },
+          body: JSON.stringify({
+            product_slug: "ai_trainer_29"
+          })
+        });
+
+        const data = await res.json();
+        console.log("ai/activate result", data);
+
+        if (!res.ok || !data.ok) {
+          spinner.style.display = "none";
+          statusMain.textContent = "We couldn’t confirm your subscription.";
+          statusSub.textContent = "If you just paid, please contact support with your email and payment receipt.";
+          errorBox.textContent = data.error || "Activation failed. Please try again or contact support.";
+          errorBox.style.display = "block";
+          return;
+        }
+
+        spinner.style.display = "none";
+        statusMain.textContent = "Your AI Trainer subscription is active.";
+        statusSub.textContent = "You’ll be redirected to the AI Trainer chat in a moment.";
+
+        setTimeout(() => {
+          window.location.href = "ai.html";
+        }, 1800);
+      } catch (err) {
+        console.error("activateAi error", err);
+        spinner.style.display = "none";
+        statusMain.textContent = "Something went wrong while activating.";
+        statusSub.textContent = "Please refresh this page or contact support if the issue continues.";
+        errorBox.textContent = "Network or server error. Please try again.";
+        errorBox.style.display = "block";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      hydrateNavAuth();
+      activateAi();
+
+      const btnGoAi = document.getElementById("btn-go-ai");
+      if (btnGoAi) {
+        btnGoAi.addEventListener("click", () => {
+          window.location.href = "ai.html";
+        });
+      }
+    });
+  </script>
+</body>
+</html>
