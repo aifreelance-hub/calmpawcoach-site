@@ -7,169 +7,498 @@
   <link rel="icon" type="image/png" href="favicon.png" />
 
   <style>
-    *{margin:0;padding:0;box-sizing:border-box;}
-    :root{
-      --bg:#fff7f0;--accent:#ffb86b;--border:#f3d9c4;
-      --text:#3b2824;--text-soft:#8a6a63;
-      --radius-lg:26px;--radius-md:18px;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #fff7f0;
+      --accent: #ffb86b;
+      --accent-strong: #ff914d;
+      --text-main: #3b2824;
+      --text-soft: #8a6a63;
+      --border-soft: #f3d9c4;
+      --radius-lg: 26px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 26px 60px rgba(210, 145, 110, 0.38);
     }
-    body{
-      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"Segoe UI",sans-serif;
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        system-ui, "Segoe UI", sans-serif;
       background:
-        radial-gradient(circle at 5% 0%,#ffe0c0 0%,transparent 55%),
-        radial-gradient(circle at 100% 0%,#ffd4d4 0%,transparent 55%),
-        radial-gradient(circle at 0% 100%,#ffe5c3 0%,transparent 55%),
-        linear-gradient(180deg,#fff7f0 0%,#fff3e7 40%,#fff8f2 100%);
-      color:var(--text);
+        radial-gradient(circle at 5% 0%, #ffe0c0 0%, transparent 55%),
+        radial-gradient(circle at 100% 0%, #ffd4d4 0%, transparent 55%),
+        radial-gradient(circle at 0% 100%, #ffe5c3 0%, transparent 55%),
+        linear-gradient(180deg, #fff7f0 0%, #fff2e7 40%, #fff8f2 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
     }
 
-    a{text-decoration:none;color:inherit;}
+    a { text-decoration: none; color: inherit; }
 
-    /* header */
-    header{
-      position:sticky;top:0;z-index:50;
-      backdrop-filter:blur(22px);
-      background:rgba(255,248,240,0.92);
-      border-bottom:1px solid rgba(243,217,196,.8);
-    }
-    .nav-inner{
-      max-width:1120px;margin:0 auto;padding:10px 20px;
-      display:flex;align-items:center;justify-content:space-between;
-      gap:14px;
-    }
-    .brand{display:flex;align-items:center;gap:10px;}
-    .brand-logo-wrap{position:relative;}
-    .brand-orbit{
-      position:absolute;inset:-4px;border-radius:50%;
-      background:conic-gradient(from 160deg,
-        rgba(255,184,107,.15),
-        rgba(255,145,77,.3),
-        rgba(255,230,190,.2),
-        rgba(255,184,107,.15));
-      filter:blur(4px);opacity:.9;
-    }
-    .brand-logo{
-      width:40px;height:40px;border-radius:18px;
-      background:radial-gradient(circle at 20% 15%,#fff9f3 0%,#ffb86b 40%,#ff914d 84%);
-      display:flex;align-items:center;justify-content:center;
-      font-size:22px;
-      box-shadow:0 16px 40px rgba(214,139,86,.6);
-      position:relative;z-index:1;
-    }
-    .brand-text-main{font-weight:750;font-size:18px;}
-    .brand-text-sub{font-size:11px;color:var(--text-soft);}
-
-    .nav-links{
-      display:flex;gap:16px;color:var(--text-soft);
-      font-size:14px;flex:1;justify-content:center;
-    }
-    .nav-links a:hover{color:var(--text);}
-
-    .btn-outline{
-      padding:7px 16px;border-radius:999px;
-      background:rgba(255,250,244,.95);
-      border:1px solid var(--border);
-      font-size:13px;color:var(--text-soft);
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(22px);
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 248, 240, 0.98),
+        rgba(255, 248, 240, 0.88),
+        rgba(255, 248, 240, 0.75)
+      );
+      border-bottom: 1px solid rgba(243, 217, 196, 0.8);
     }
 
-    /* page content */
-    main{
-      max-width:840px;margin:0 auto;
-      padding:28px 20px 40px;
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
     }
-    .content-card{
-      background:rgba(255,248,241,.97);
-      border:1px solid rgba(243,217,196,.9);
-      padding:24px 22px;
-      border-radius:var(--radius-lg);
-      box-shadow:0 20px 46px rgba(210,145,110,.36);
-    }
-    h1{font-size:24px;margin-bottom:10px;}
-    h2{font-size:17px;margin-top:20px;margin-bottom:8px;}
-    p,li{font-size:13px;line-height:1.7;color:var(--text);}
-    ul{padding-left:18px;margin-bottom:12px;}
-    li{margin-bottom:6px;}
 
-    /* footer */
-    footer{
-      border-top:1px solid rgba(243,217,196,.8);
-      background:rgba(255,248,241,.96);
-      margin-top:40px;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
     }
-    .footer-inner{
-      max-width:1120px;margin:0 auto;
-      padding:14px 20px;
-      display:flex;justify-content:space-between;flex-wrap:wrap;
-      font-size:11px;color:var(--text-soft);
+
+    .brand-logo-wrap { position: relative; }
+
+    .brand-orbit {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 160deg,
+        rgba(255, 184, 107, 0.15),
+        rgba(255, 145, 77, 0.3),
+        rgba(255, 230, 190, 0.2),
+        rgba(255, 184, 107, 0.15)
+      );
+      filter: blur(4px);
+      opacity: 0.9;
     }
-    .footer-links{display:flex;gap:12px;flex-wrap:wrap;}
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 18px;
+      background: radial-gradient(circle at 20% 15%, #fff9f3 0%, #ffb86b 40%, #ff914d 84%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 16px 40px rgba(214, 139, 86, 0.6);
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-text-main {
+      font-weight: 750;
+      letter-spacing: 0.03em;
+      font-size: 18px;
+      white-space: nowrap;
+    }
+
+    .brand-text-sub {
+      font-size: 11px;
+      color: var(--text-soft);
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 14px;
+      color: var(--text-soft);
+      flex: 1;
+      justify-content: center;
+      min-width: 0;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      padding: 6px 11px;
+      border-radius: var(--radius-pill);
+      transition: color 0.18s ease, transform 0.12s ease;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-main);
+      transform: translateY(-1px);
+    }
+
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+
+    .btn-outline {
+      padding: 7px 16px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-soft);
+      background: rgba(255, 250, 244, 0.95);
+      font-size: 13px;
+      color: var(--text-soft);
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--text-main);
+      box-shadow: 0 14px 32px rgba(204, 145, 107, 0.28);
+      transform: translateY(-1px);
+      background: #fffaf5;
+    }
+
+    .nav-auth {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-auth-email {
+      max-width: 160px;
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 250, 244, 0.95);
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      font-size: 12px;
+      color: #6b4532;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-auth-btn {
+      border: none;
+      background: transparent;
+      font-size: 11px;
+      color: #b05825;
+      padding: 4px 7px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .nav-auth-btn:hover {
+      background: rgba(255, 237, 213, 0.95);
+      color: #7a3410;
+    }
+
+    @media (max-width: 880px) {
+      .nav-inner { align-items: flex-start; }
+      .nav-links {
+        width: 100%;
+        justify-content: flex-start;
+      }
+      .nav-cta { margin-left: 0; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-inner {
+        padding: 8px 14px;
+        gap: 6px;
+        flex-wrap: wrap;
+        align-items: flex-start;
+      }
+      .brand { width: 100%; }
+      .brand-logo {
+        width: 34px;
+        height: 34px;
+        font-size: 20px;
+      }
+      .brand-text-main { font-size: 16px; }
+      .brand-text-sub { font-size: 10px; }
+      .nav-links { font-size: 13px; gap: 10px; }
+      .nav-cta {
+        width: 100%;
+        justify-content: flex-end;
+        gap: 6px;
+      }
+      .btn-outline {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+      .nav-auth-email {
+        max-width: 130px;
+        font-size: 11px;
+      }
+    }
+
+    /* Layout */
+    main {
+      flex: 1;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 26px 20px 40px;
+    }
+
+    .refund-card {
+      max-width: 840px;
+      margin: 0 auto;
+      background: rgba(255, 248, 241, 0.98);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      box-shadow: var(--shadow-soft);
+      padding: 24px 26px 22px;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .refund-title {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .refund-card h3 {
+      margin-top: 16px;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .refund-card p {
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+
+    .refund-card strong {
+      color: var(--text-main);
+    }
+
+    @media (max-width: 640px) {
+      main {
+        padding: 20px 14px 28px;
+      }
+      .refund-card {
+        padding: 20px 16px 18px;
+        border-radius: 22px;
+      }
+      .refund-title {
+        font-size: 20px;
+      }
+      .refund-card h3 {
+        font-size: 13px;
+      }
+      .refund-card {
+        font-size: 12px;
+      }
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid rgba(243, 217, 196, 0.8);
+      background: rgba(255, 248, 241, 0.96);
+    }
+
+    .footer-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 12px 20px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a:hover { color: #b05825; }
+
+    @media (max-width: 640px) {
+      .footer-inner {
+        padding: 10px 14px 14px;
+        font-size: 10px;
+      }
+      .footer-links {
+        gap: 10px;
+      }
+    }
   </style>
 </head>
-
 <body>
-<header>
-  <div class="nav-inner">
-    <a href="index.html" class="brand">
-      <div class="brand-logo-wrap">
-        <div class="brand-orbit"></div>
-        <div class="brand-logo">🐾</div>
+  <header>
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-logo-wrap">
+          <div class="brand-orbit"></div>
+          <div class="brand-logo">🐾</div>
+        </div>
+        <div>
+          <div class="brand-text-main">CalmPaw Coach</div>
+          <div class="brand-text-sub">Gentle, realistic dog training</div>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="programs.html">Programs</a>
+        <a href="bundle.html">Complete Pack</a>
+        <a href="ai.html">AI Trainer</a>
+      </nav>
+
+      <div class="nav-cta">
+        <div id="nav-auth-area">
+          <!-- 默认：未登录 -->
+          <a class="btn-outline" href="auth.html?redirect=/refund.html">
+            🔑 Log in
+          </a>
+        </div>
       </div>
-      <div>
-        <div class="brand-text-main">CalmPaw Coach</div>
-        <div class="brand-text-sub">Gentle, realistic dog training</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="refund-card">
+      <h1 class="refund-title">Refund Policy</h1>
+      <p>
+        We want CalmPaw Coach to be genuinely helpful for you and your dog.
+        Because our products are <strong>digital training plans</strong> that can be downloaded
+        and accessed immediately after purchase, we use the policy below.
+      </p>
+
+      <h3>Digital products</h3>
+      <p>
+        All CalmPaw Coach programs and packs are delivered digitally.
+        You gain access to the training material right after successful payment.
+      </p>
+
+      <h3>Change of mind</h3>
+      <p>
+        We generally do not offer refunds once the material has been accessed or downloaded.
+        Please read the program descriptions carefully before purchasing.
+      </p>
+
+      <h3>Accidental duplicate purchases</h3>
+      <p>
+        If you accidentally bought the same program twice (or more) using the same email address,
+        please contact us within 14 days at
+        <strong>support@calmpawcoach.com</strong>. We will review and, if confirmed,
+        refund the duplicate charge.
+      </p>
+
+      <h3>Technical issues</h3>
+      <p>
+        If you did not receive your files or cannot access your plans,
+        email us and we will help you restore access. A refund will only be offered
+        if we are unable to provide access within a reasonable time.
+      </p>
+
+      <h3>How to contact us</h3>
+      <p>
+        Email: <strong>support@calmpawcoach.com</strong>
+      </p>
+
+      <h3>Legal rights</h3>
+      <p>
+        Nothing in this policy limits any rights you may have under applicable consumer law
+        in your country of residence.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© <span id="year"></span> CalmPaw Coach. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="refund.html">Refund Policy</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="legal.html">Legal Notice</a>
       </div>
-    </a>
-
-    <nav class="nav-links">
-      <a href="programs.html">Programs</a>
-      <a href="bundle.html">Complete Pack</a>
-      <a href="ai.html">AI Trainer</a>
-    </nav>
-
-    <div id="nav-auth-area">
-      <a class="btn-outline" href="auth.html?redirect=/refund.html">Log in</a>
     </div>
-  </div>
-</header>
+  </footer>
 
-<main>
-  <div class="content-card">
-    <h1>Refund Policy</h1>
-    <p>We want CalmPaw Coach to be genuinely helpful. Because our products are digital training plans, access is delivered immediately after purchase.</p>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
 
-    <h2>Digital products</h2>
-    <p>All CalmPaw Coach programs and packs are delivered digitally. You gain access immediately after successful payment.</p>
+    const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
 
-    <h2>Change of mind</h2>
-    <p>We generally do not offer refunds once the material has been accessed or downloaded.</p>
+    async function hydrateNavAuth() {
+      const area = document.getElementById("nav-auth-area");
+      if (!area) return;
 
-    <h2>Accidental duplicate purchases</h2>
-    <p>If you accidentally bought the same program twice, contact us within 14 days: <strong>support@calmpawcoach.com</strong>.</p>
+      const token = localStorage.getItem("calmpaw_token");
+      const email = localStorage.getItem("calmpaw_email");
 
-    <h2>Technical issues</h2>
-    <p>If you did not receive your files or cannot access your plans, email us and we will help you restore access.</p>
+      if (!token) {
+        area.innerHTML = `
+          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/refund.html')}">
+            🔑 Log in
+          </a>`;
+        return;
+      }
 
-    <h2>How to contact us</h2>
-    <p>Email: <strong>support@calmpawcoach.com</strong></p>
-  </div>
-</main>
+      try {
+        const res = await fetch(API_BASE + "/auth/me", {
+          headers: { Authorization: "Bearer " + token },
+        });
+        const data = await res.json();
 
-<footer>
-  <div class="footer-inner">
-    <div>© <span id="year"></span> CalmPaw Coach</div>
-    <div class="footer-links">
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-      <a href="refund.html">Refund Policy</a>
-      <a href="terms.html">Terms</a>
-      <a href="privacy.html">Privacy</a>
-      <a href="legal.html">Legal</a>
-    </div>
-  </div>
-</footer>
+        if (!res.ok || !data.ok) {
+          localStorage.removeItem("calmpaw_token");
+          localStorage.removeItem("calmpaw_email");
+          area.innerHTML = `
+            <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/refund.html')}">
+              🔑 Log in
+            </a>`;
+          return;
+        }
 
-<script>
-  document.getElementById("year").textContent = new Date().getFullYear();
-</script>
+        const showEmail = email || data.email || "Member";
+        area.innerHTML = `
+          <div class="nav-auth">
+            <span class="nav-auth-email" title="${showEmail}">${showEmail}</span>
+            <button class="nav-auth-btn" id="nav-switch-account">Switch</button>
+            <button class="nav-auth-btn" id="nav-logout">Log out</button>
+          </div>
+        `;
+
+        document.getElementById("nav-switch-account")?.addEventListener("click", () => {
+          localStorage.removeItem("calmpaw_token");
+          localStorage.removeItem("calmpaw_email");
+          window.location.href =
+            "auth.html?redirect=" + encodeURIComponent("/refund.html");
+        });
+
+        document.getElementById("nav-logout")?.addEventListener("click", () => {
+          localStorage.removeItem("calmpaw_token");
+          localStorage.removeItem("calmpaw_email");
+          window.location.href = "/index.html";
+        });
+      } catch (e) {
+        console.error("auth hydrate error", e);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", hydrateNavAuth);
+  </script>
 </body>
 </html>
