@@ -2,224 +2,616 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>CalmPaw AI Trainer — $29/month quiet dog coaching</title>
+  <title>CalmPaw AI Trainer — Quiet Dog Training Chat</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <link rel="icon" type="image/png" href="favicon.png" />
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --bg:#fff7f0;--bg-soft:#ffeede;
-      --accent:#ffb86b;--accent-strong:#ff914d;
-      --accent-soft:#ffe0b8;
-      --text-main:#3b2824;--text-soft:#8a6a63;
-      --border-soft:#f3d9c4;
-      --radius-lg:26px;--radius-md:18px;--radius-pill:999px;
-      --shadow-soft:0 26px 60px rgba(210,145,110,0.38);
+      --bg: #fff7f0;
+      --bg-soft: #ffeede;
+      --accent: #ffb86b;
+      --accent-strong: #ff914d;
+      --accent-soft: #ffe0b8;
+      --text-main: #3b2824;
+      --text-soft: #8a6a63;
+      --border-soft: #f3d9c4;
+      --radius-lg: 26px;
+      --radius-md: 18px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 26px 60px rgba(210, 145, 110, 0.38);
     }
+
     body {
-      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"Segoe UI",sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        system-ui, "Segoe UI", sans-serif;
       background:
         radial-gradient(circle at 5% 0%, #ffe0c0 0%, transparent 55%),
         radial-gradient(circle at 100% 0%, #ffd4d4 0%, transparent 55%),
         radial-gradient(circle at 0% 100%, #ffe5c3 0%, transparent 55%),
-        linear-gradient(180deg,#fff7f0 0%,#fff2e7 40%,#fff8f2 100%);
-      color:var(--text-main);
-      min-height:100vh;
-      -webkit-font-smoothing:antialiased;
+        linear-gradient(180deg, #fff7f0 0%, #fff2e7 40%, #fff8f2 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
     }
-    a { text-decoration:none; color:inherit; }
 
+    a { text-decoration: none; color: inherit; }
+
+    @keyframes float-soft {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0px); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -120px 0; }
+      100% { background-position: 120px 0; }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Header */
     header {
-      position:sticky; top:0; z-index:50;
-      backdrop-filter:blur(22px);
-      background:linear-gradient(to bottom,rgba(255,248,240,0.98),rgba(255,248,240,0.88),rgba(255,248,240,0.75));
-      border-bottom:1px solid rgba(243,217,196,0.8);
-    }
-    .nav-inner{
-      max-width:1120px;margin:0 auto;padding:10px 20px;
-      display:flex;align-items:center;justify-content:space-between;
-      gap:14px;flex-wrap:wrap;
-    }
-    .brand{display:flex;align-items:center;gap:10px;min-width:0;}
-    .brand-logo-wrap{position:relative;}
-    .brand-orbit{
-      position:absolute;inset:-4px;border-radius:50%;
-      background:conic-gradient(from 160deg,rgba(255,184,107,0.15),rgba(255,145,77,0.3),rgba(255,230,190,0.2),rgba(255,184,107,0.15));
-      filter:blur(4px);opacity:0.9;
-    }
-    .brand-logo{
-      width:40px;height:40px;border-radius:18px;
-      background:radial-gradient(circle at 20% 15%,#fff9f3 0%,#ffb86b 40%,#ff914d 84%);
-      display:flex;align-items:center;justify-content:center;
-      font-size:22px;box-shadow:0 16px 40px rgba(214,139,86,0.6);
-      position:relative;z-index:1;
-    }
-    .brand-text-main{font-weight:750;letter-spacing:0.03em;font-size:18px;white-space:nowrap;}
-    .brand-text-sub{font-size:11px;color:var(--text-soft);white-space:nowrap;}
-    .nav-links{
-      display:flex;align-items:center;gap:16px;
-      font-size:14px;color:var(--text-soft);flex:1;
-      justify-content:center;min-width:0;
-    }
-    .nav-links a{
-      padding:6px 11px;border-radius:999px;position:relative;overflow:hidden;
-      transition:color .18s ease,transform .12s ease;
-    }
-    .nav-links a::before{
-      content:"";position:absolute;inset:0;border-radius:inherit;
-      background:radial-gradient(circle at 0 0,rgba(255,210,158,0.9),transparent 60%);
-      opacity:0;transition:opacity .18s ease;
-    }
-    .nav-links a:hover{color:var(--text-main);transform:translateY(-1px);}
-    .nav-links a:hover::before{opacity:1;}
-    .nav-links a.active{color:var(--text-main);font-weight:600;}
-
-    .nav-cta{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:auto;}
-    .btn-outline{
-      padding:7px 16px;border-radius:var(--radius-pill);
-      border:1px solid var(--border-soft);
-      background:rgba(255,250,244,0.95);
-      font-size:13px;color:var(--text-soft);cursor:pointer;
-      transition:all .18s ease;display:inline-flex;align-items:center;gap:6px;
-      white-space:nowrap;
-    }
-    .btn-outline:hover{
-      border-color:var(--accent);color:var(--text-main);
-      box-shadow:0 14px 32px rgba(204,145,107,0.28);
-      transform:translateY(-1px);background:#fffaf5;
-    }
-    .btn-primary{
-      padding:8px 19px;border-radius:var(--radius-pill);border:none;
-      font-size:13px;font-weight:600;cursor:pointer;color:#4a251a;
-      background-image:linear-gradient(135deg,#ffb86b,#ff914d);
-      box-shadow:0 18px 40px rgba(214,139,86,0.65);
-      display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(22px);
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 248, 240, 0.98),
+        rgba(255, 248, 240, 0.88),
+        rgba(255, 248, 240, 0.75)
+      );
+      border-bottom: 1px solid rgba(243, 217, 196, 0.8);
     }
 
-    .nav-auth{display:flex;align-items:center;gap:6px;}
-    .nav-auth-email{
-      max-width:160px;padding:5px 10px;border-radius:var(--radius-pill);
-      background:rgba(255,250,244,0.95);
-      border:1px solid rgba(243,217,196,0.9);
-      font-size:12px;color:#6b4532;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-    }
-    .nav-auth-btn{
-      border:none;background:transparent;font-size:11px;color:#b05825;
-      padding:4px 7px;border-radius:999px;cursor:pointer;
-      transition:background .15s ease,color .15s ease;white-space:nowrap;
-    }
-    .nav-auth-btn:hover{background:rgba(255,237,213,0.95);color:#7a3410;}
-
-    @media (max-width:880px){
-      .nav-links{display:none;}
-      .nav-inner{align-items:flex-start;}
-      .nav-cta{margin-left:0;}
-    }
-    @media (max-width:640px){
-      .nav-inner{padding:8px 14px;gap:6px;flex-wrap:wrap;align-items:flex-start;}
-      .brand{width:100%;}
-      .brand-logo{width:34px;height:34px;font-size:20px;}
-      .brand-text-main{font-size:16px;}
-      .brand-text-sub{font-size:10px;}
-      .nav-cta{width:100%;justify-content:flex-end;gap:6px;}
-      .btn-outline,.btn-primary{padding:6px 10px;font-size:12px;}
-      .nav-auth-email{max-width:130px;font-size:11px;}
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
     }
 
-    main{
-      max-width:1120px;margin:0 auto;
-      padding:22px 20px 36px;
-      display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1.1fr);
-      gap:22px;
-    }
-    @media (max-width:900px){
-      main{grid-template-columns:minmax(0,1fr);padding:18px 14px 28px;}
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
     }
 
-    .hero-copy h1{
-      font-size:clamp(24px,4.2vw,32px);
-      line-height:1.2;margin-bottom:10px;
-    }
-    .hero-copy p{font-size:14px;color:var(--text-soft);line-height:1.7;margin-bottom:10px;}
-    .hero-badge{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:4px 11px;border-radius:var(--radius-pill);
-      background:rgba(255,222,186,0.9);
-      font-size:11px;color:#6b4532;margin-bottom:8px;
+    .brand-logo-wrap { position: relative; }
+
+    .brand-orbit {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 160deg,
+        rgba(255, 184, 107, 0.15),
+        rgba(255, 145, 77, 0.3),
+        rgba(255, 230, 190, 0.2),
+        rgba(255, 184, 107, 0.15)
+      );
+      filter: blur(4px);
+      opacity: 0.9;
+      animation: float-soft 4.4s ease-in-out infinite;
     }
 
-    .ai-panel{
-      border-radius:var(--radius-lg);
-      background:rgba(255,246,238,0.98);
-      border:1px solid rgba(243,217,196,0.9);
-      box-shadow:var(--shadow-soft);
-      padding:14px;
-      display:flex;flex-direction:column;gap:10px;
-      min-height:340px;
-    }
-    .ai-header{
-      display:flex;align-items:center;justify-content:space-between;
-      gap:8px;font-size:12px;color:var(--text-soft);
-    }
-    .ai-status-pill{
-      padding:4px 10px;border-radius:var(--radius-pill);
-      background:rgba(255,249,243,0.98);border:1px solid rgba(243,217,196,0.9);
-      font-size:11px;display:inline-flex;align-items:center;gap:6px;
-    }
-    .ai-messages{
-      flex:1;min-height:160px;max-height:420px;
-      border-radius:16px;border:1px solid rgba(243,217,196,0.9);
-      padding:10px;background:#fff9f3;
-      overflow-y:auto;font-size:13px;
-    }
-    .msg-row{margin-bottom:8px;}
-    .msg-author{font-weight:600;font-size:11px;margin-bottom:2px;color:#7b4d3a;}
-    .msg-bubble{
-      display:inline-block;padding:8px 10px;border-radius:14px;
-      background:#fff;border:1px solid rgba(243,217,196,0.9);
-      max-width:100%;white-space:pre-wrap;word-wrap:break-word;
-    }
-    .msg-user .msg-bubble{background:#ffe8d4;}
-    .msg-ai .msg-bubble{background:#fff;}
-
-    .ai-input-row{
-      display:flex;gap:8px;align-items:flex-end;margin-top:4px;
-    }
-    .ai-input{
-      flex:1;min-height:42px;max-height:80px;
-      border-radius:14px;border:1px solid rgba(243,217,196,0.9);
-      padding:7px 9px;font-size:13px;resize:vertical;
-      background:#fffdf8;
-    }
-    .ai-input:focus{outline:none;border-color:#ffb86b;box-shadow:0 0 0 1px rgba(255,184,107,0.5);}
-    .ai-send-btn{
-      border:none;border-radius:var(--radius-pill);
-      padding:8px 14px;font-size:13px;font-weight:600;
-      background-image:linear-gradient(135deg,#ffb86b,#ff914d);
-      color:#4a251a;cursor:pointer;white-space:nowrap;
-      box-shadow:0 12px 30px rgba(214,139,86,0.6);
-    }
-    .ai-send-btn[disabled]{
-      opacity:0.5;cursor:not-allowed;box-shadow:none;
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 18px;
+      background: radial-gradient(circle at 20% 15%, #fff9f3 0%, #ffb86b 40%, #ff914d 84%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 16px 40px rgba(214, 139, 86, 0.6);
+      position: relative;
+      z-index: 1;
     }
 
-    footer{
-      border-top:1px solid rgba(243,217,196,0.8);
-      background:rgba(255,248,241,0.96);margin-top:10px;
+    .brand-text-main {
+      font-weight: 750;
+      letter-spacing: 0.03em;
+      font-size: 18px;
+      white-space: nowrap;
     }
-    .footer-inner{
-      max-width:1120px;margin:0 auto;
-      padding:12px 20px 16px;
-      display:flex;flex-wrap:wrap;gap:8px;
-      justify-content:space-between;
-      font-size:11px;color:var(--text-soft);
+
+    .brand-text-sub {
+      font-size: 11px;
+      color: var(--text-soft);
+      white-space: nowrap;
     }
-    .footer-links{display:flex;gap:12px;flex-wrap:wrap;}
-    .footer-links a:hover{color:#b05825;}
-    @media (max-width:640px){
-      .footer-inner{padding:10px 14px 14px;font-size:10px;}
-      .footer-links{gap:10px;}
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 14px;
+      color: var(--text-soft);
+      flex: 1;
+      justify-content: center;
+      min-width: 0;
+    }
+
+    .nav-links a {
+      padding: 6px 11px;
+      border-radius: 999px;
+      position: relative;
+      overflow: hidden;
+      transition: color 0.18s ease, transform 0.12s ease;
+    }
+
+    .nav-links a.active {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+
+    .btn-outline {
+      padding: 7px 16px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-soft);
+      background: rgba(255, 250, 244, 0.95);
+      font-size: 13px;
+      color: var(--text-soft);
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--text-main);
+      box-shadow: 0 14px 32px rgba(204, 145, 107, 0.28);
+      transform: translateY(-1px);
+      background: #fffaf5;
+    }
+
+    .nav-login-emoji { font-size: 14px; }
+
+    .nav-auth {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-auth-email {
+      max-width: 160px;
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 250, 244, 0.95);
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      font-size: 12px;
+      color: #6b4532;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-auth-btn {
+      border: none;
+      background: transparent;
+      font-size: 11px;
+      color: #b05825;
+      padding: 4px 7px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .nav-auth-btn:hover {
+      background: rgba(255, 237, 213, 0.95);
+      color: #7a3410;
+    }
+
+    @media (max-width: 880px) {
+      .nav-links { display: none; }
+      .nav-inner { align-items: flex-start; }
+      .nav-cta { margin-left: 0; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-inner {
+        padding: 8px 14px;
+        gap: 6px;
+        flex-wrap: wrap;
+        align-items: flex-start;
+      }
+      .brand { width: 100%; }
+      .brand-logo {
+        width: 34px;
+        height: 34px;
+        font-size: 20px;
+      }
+      .brand-text-main { font-size: 16px; }
+      .brand-text-sub { font-size: 10px; }
+      .nav-cta {
+        width: 100%;
+        justify-content: flex-end;
+        gap: 6px;
+      }
+      .btn-outline {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+      .nav-auth-email {
+        max-width: 130px;
+        font-size: 11px;
+      }
+    }
+
+    /* Main layout */
+    main {
+      flex: 1;
+      padding: 18px 16px 24px;
+    }
+
+    .shell {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.15fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    @media (max-width: 880px) {
+      .shell {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .chat-card {
+      border-radius: var(--radius-lg);
+      background: radial-gradient(circle at top left, #fff8f2 0%, #ffe5cd 45%, #ffece0 100%);
+      box-shadow: var(--shadow-soft);
+      padding: 16px 16px 14px;
+      display: flex;
+      flex-direction: column;
+      min-height: 420px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chat-glow {
+      position: absolute;
+      inset: -40px;
+      background:
+        radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.7), transparent 60%),
+        radial-gradient(circle at 100% 0, rgba(255, 194, 157, 0.7), transparent 60%);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .chat-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .chat-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .chat-title {
+      font-size: 17px;
+      font-weight: 650;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chat-title-pill {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 250, 244, 0.96);
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      color: #a2643c;
+    }
+
+    .chat-subtitle {
+      font-size: 12px;
+      color: var(--text-soft);
+      margin-bottom: 10px;
+    }
+
+    .chat-status {
+      font-size: 11px;
+      color: #7a3b1f;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(255, 250, 244, 0.96);
+      border: 1px dashed rgba(210, 145, 110, 0.7);
+    }
+
+    .chip-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #fff8f0 0%, #22c55e 60%, #16a34a 100%);
+    }
+
+    .chat-window {
+      flex: 1;
+      border-radius: 18px;
+      background: rgba(255, 249, 243, 0.98);
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      padding: 10px 10px 8px;
+      overflow-y: auto;
+      max-height: 480px;
+    }
+
+    .msg-row {
+      display: flex;
+      margin-bottom: 8px;
+    }
+
+    .msg-row.user { justify-content: flex-end; }
+    .msg-row.ai { justify-content: flex-start; }
+
+    .msg-bubble {
+      max-width: 88%;
+      border-radius: 16px;
+      padding: 8px 10px;
+      font-size: 13px;
+      line-height: 1.5;
+      position: relative;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+    }
+
+    .msg-bubble.user {
+      background: linear-gradient(135deg, #ffb86b, #ff914d);
+      color: #4a251a;
+      border-bottom-right-radius: 4px;
+      box-shadow: 0 14px 30px rgba(214, 139, 86, 0.7);
+    }
+
+    .msg-bubble.ai {
+      background: #fff;
+      color: #4b2f25;
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 10px 24px rgba(209, 157, 126, 0.28);
+    }
+
+    .msg-meta {
+      font-size: 10px;
+      color: #a16a4b;
+      margin-bottom: 2px;
+    }
+
+    .chat-input-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .chat-input {
+      flex: 1;
+      border-radius: 16px;
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      padding: 8px 10px;
+      font-size: 13px;
+      resize: none;
+      min-height: 44px;
+      max-height: 110px;
+      background: rgba(255, 250, 244, 0.98);
+    }
+
+    .chat-input:focus {
+      outline: none;
+      border-color: #ffb86b;
+      box-shadow: 0 0 0 1px rgba(255, 180, 120, 0.6);
+      background: #fffdfa;
+    }
+
+    .btn-send {
+      border-radius: 999px;
+      border: none;
+      padding: 9px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #4a251a;
+      background-image:
+        linear-gradient(135deg, #ffb86b, #ff914d),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.4), transparent);
+      background-size: 100% 100%, 120px 100%;
+      background-position: 0 0, -120px 0;
+      background-repeat: no-repeat;
+      box-shadow: 0 16px 34px rgba(214, 139, 86, 0.65);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .btn-send:disabled {
+      opacity: 0.6;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .small-hint {
+      font-size: 11px;
+      color: #9b6a4e;
+      margin-top: 4px;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 186, 107, 0.4);
+      border-top-color: #ff914d;
+      animation: spin 0.8s linear infinite;
+    }
+
+    /* Right side: tips / states */
+    .side-card {
+      border-radius: var(--radius-lg);
+      background: rgba(255, 246, 238, 0.98);
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      box-shadow: 0 18px 38px rgba(209, 157, 126, 0.38);
+      padding: 16px 15px 14px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .side-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .side-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 249, 243, 0.96);
+      border: 1px dashed rgba(210, 145, 110, 0.7);
+      font-size: 11px;
+      color: #a2643c;
+      margin-bottom: 8px;
+    }
+
+    .side-list {
+      margin: 8px 0 0;
+      padding-left: 16px;
+    }
+
+    .side-list li {
+      margin-bottom: 4px;
+    }
+
+    .state-box {
+      border-radius: 16px;
+      border: 1px dashed rgba(210, 145, 110, 0.7);
+      background: rgba(255, 249, 243, 0.98);
+      padding: 10px 12px;
+      font-size: 12px;
+      color: #7a3b1f;
+      margin-bottom: 8px;
+    }
+
+    .state-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .btn-primary-small {
+      padding: 7px 13px;
+      border-radius: var(--radius-pill);
+      border: none;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #4a251a;
+      background-image:
+        linear-gradient(135deg, #ffb86b, #ff914d),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.4), transparent);
+      background-size: 100% 100%, 120px 100%;
+      background-position: 0 0, -120px 0;
+      background-repeat: no-repeat;
+      box-shadow: 0 14px 32px rgba(214, 139, 86, 0.65);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .btn-link-small {
+      border: none;
+      background: transparent;
+      color: #b05825;
+      font-size: 11px;
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 0;
+      margin-top: 4px;
+    }
+
+    footer {
+      border-top: 1px solid rgba(243, 217, 196, 0.8);
+      background: rgba(255, 248, 241, 0.96);
+    }
+
+    .footer-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 10px 20px 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a:hover { color: #b05825; }
+
+    @media (max-width: 640px) {
+      main {
+        padding: 14px 12px 18px;
+      }
+      .chat-card,
+      .side-card {
+        border-radius: 22px;
+      }
+      .chat-window {
+        max-height: 380px;
+      }
+      .footer-inner {
+        padding: 10px 14px 12px;
+        font-size: 10px;
+      }
+      .footer-links {
+        gap: 10px;
+      }
     }
   </style>
 </head>
@@ -246,7 +638,7 @@
       <div class="nav-cta">
         <div id="nav-auth-area">
           <a class="btn-outline" href="auth.html?redirect=/ai.html">
-            <span>🔑</span> Log in
+            <span class="nav-login-emoji">🔑</span> Log in
           </a>
         </div>
       </div>
@@ -254,56 +646,155 @@
   </header>
 
   <main>
-    <section class="hero-copy">
-      <div class="hero-badge">
-        <span>🤖</span> CalmPaw AI Trainer — $29/month
-      </div>
-      <h1>Ask a calm, realistic AI trainer about your real dog.</h1>
-      <p>
-        This page is your private, always-awake AI coach for barking, neighbours,
-        alone-time and city walks. Buy once per month, then ask as many
-        questions as you like inside that month.
-      </p>
-      <p>
-        <strong>适合这样的主人：</strong>住公寓、邻居多、狗狗爱叫、白天要上班、精力有限。
-        你不用写长故事，直接说「我家狗在 XXX 情况下会叫」，AI 会用安静、现实的方式帮你拆解。
-      </p>
-      <p style="font-size:12px;color:#a7714f;">
-        🔒 Only available with an active $29/month AI Trainer subscription.
-        If your subscription expires, you will be gently redirected back to the
-        pricing page.
-      </p>
-    </section>
+    <div class="shell">
+      <!-- 左侧：聊天卡片 / 状态切换 -->
+      <section class="chat-card">
+        <div class="chat-glow"></div>
+        <div class="chat-inner">
+          <div class="chat-header-row">
+            <div>
+              <div class="chat-title">
+                CalmPaw AI Trainer
+                <span class="chat-title-pill">$29/mo · unlimited questions</span>
+              </div>
+              <div class="chat-subtitle">
+                Ask calm, realistic questions about barking, neighbours, alone-time and leash walking.
+                Mixed English + 中文都可以。
+              </div>
+            </div>
+            <div id="chat-status-pill" class="chat-status">
+              <span class="chip-dot"></span>
+              Checking subscription…
+            </div>
+          </div>
 
-    <section class="ai-panel">
-      <div class="ai-header">
-        <div>CalmPaw AI chat</div>
-        <div class="ai-status-pill" id="ai-status-pill">
-          Checking subscription...
-        </div>
-      </div>
+          <!-- 状态：加载中 -->
+          <div id="state-loading" class="state-box">
+            <div class="state-title">Checking your access…</div>
+            <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
+              <div class="spinner"></div>
+              <div>We’re checking if your AI Trainer subscription is active.</div>
+            </div>
+          </div>
 
-      <div class="ai-messages" id="ai-messages">
-        <div class="msg-row msg-ai">
-          <div class="msg-author">CalmPaw AI Trainer</div>
-          <div class="msg-bubble">
-Hi, I'm your CalmPaw AI trainer 🐶  
-Tell me in one or two sentences what your dog does that worries you most — for example:
+          <!-- 状态：未登录 -->
+          <div id="state-no-login" class="state-box" style="display:none;">
+            <div class="state-title">You’re not logged in.</div>
+            <div>Sign in to connect your CalmPaw AI Trainer to your account.</div>
+            <button id="btn-login" class="btn-primary-small" type="button">
+              <span>Log in to continue</span> <span>→</span>
+            </button>
+          </div>
 
-• "My dog barks every time the elevator door opens."  
-• "He can't stay alone for more than 10 minutes."  
-• "Neighbours complain about noise in the evening."
+          <!-- 状态：没有订阅 -->
+          <div id="state-no-sub" class="state-box" style="display:none;">
+            <div class="state-title">No active AI Trainer subscription.</div>
+            <div>
+              You can still browse the site, but AI Trainer chat is only available with the
+              monthly subscription.
+            </div>
+            <!-- 这个按钮你可以改成实际的价格页面链接 -->
+            <button id="btn-go-pricing" class="btn-primary-small" type="button">
+              <span>See AI Trainer plan</span> <span>→</span>
+            </button>
+          </div>
 
-You can mix English and 中文, I'll adapt.
+          <!-- 状态：可以聊天 -->
+          <div id="state-chat" style="display:none; flex:1; display:flex; flex-direction:column;">
+            <div class="chat-window" id="chat-window">
+              <!-- 初始欢迎消息 -->
+              <div class="msg-row ai">
+                <div class="msg-bubble ai">
+                  <div class="msg-meta">AI Trainer</div>
+                  Hi, I’m your CalmPaw AI Trainer 🐾  
+                  Tell me what’s happening — barking at doors, neighbours complaining, dog can’t stay
+                  alone, leash pulling…  
+                  你也可以用中文描述，我会用简单易懂的方式回答。
+                </div>
+              </div>
+            </div>
+
+            <div class="chat-input-row">
+              <textarea
+                id="chat-input"
+                class="chat-input"
+                placeholder="Describe what’s happening right now. Example: “My dog barks every time someone walks past the door, and my neighbour is angry…”"
+              ></textarea>
+              <button id="btn-send" class="btn-send" type="button">
+                <span id="btn-send-text">Send</span>
+              </button>
+            </div>
+            <div class="small-hint">
+              Keep it specific: what does your dog do, when, and what have you tried?  
+              尽量具体一点：什么时候、做什么、你现在怎么处理。
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="ai-input-row">
-        <textarea id="ai-input" class="ai-input" placeholder="Describe what's happening with your dog..."></textarea>
-        <button id="ai-send" class="ai-send-btn" disabled>Send</button>
-      </div>
-    </section>
+      <!-- 右侧：提问提示 & 说明 -->
+      <aside class="side-card">
+        <div id="side-default">
+          <div class="side-chip">
+            <span>💡</span>
+            How to get the best help
+          </div>
+          <div class="side-title">How to ask your AI Trainer</div>
+          <p>
+            You don’t need “perfect” training language. Just describe:
+          </p>
+          <ul class="side-list">
+            <li>What your dog does (barks, pulls, cries, chews…)</li>
+            <li>When it happens (time of day, trigger, who is home)</li>
+            <li>What you already tried, and what you hope for</li>
+          </ul>
+          <p style="margin-top:8px;">
+            Example (English + 中文):
+          </p>
+          <p style="font-size:11px; color:#9b6a4e; margin-top:4px;">
+            “I live in an apartment. My dog barks every time someone stops at the door.
+            I tried saying ‘no’ and giving treats, but it doesn’t work.  
+            我住公寓，狗一有人在门口停一下就大叫。邻居有意见，我下班很累，不知道怎么一步一步做。”
+          </p>
+          <p style="margin-top:8px;">
+            The AI Trainer will give you calm, realistic options you can actually try in a small apartment.
+          </p>
+        </div>
+
+        <div id="side-no-login" style="display:none;">
+          <div class="side-chip">
+            <span>🔑</span>
+            Sign in required
+          </div>
+          <div class="side-title">Sign in to unlock your AI Trainer</div>
+          <p>
+            You need a CalmPaw Coach account to use the AI Trainer. Signing in keeps your conversations
+            connected to your email so you can continue later.
+          </p>
+          <button id="side-btn-login" class="btn-primary-small" type="button">
+            <span>Go to login</span> <span>→</span>
+          </button>
+        </div>
+
+        <div id="side-no-sub" style="display:none;">
+          <div class="side-chip">
+            <span>💳</span>
+            Subscription needed
+          </div>
+          <div class="side-title">AI Trainer is a monthly service</div>
+          <p>
+            The AI Trainer chat is part of the <strong>$29/month unlimited questions</strong> plan.
+            You can still buy one-time plans or the Complete Pack without it.
+          </p>
+          <button id="side-btn-pricing" class="btn-primary-small" type="button">
+            <span>View AI Trainer plan</span> <span>→</span>
+          </button>
+          <button id="side-btn-back" class="btn-link-small" type="button">
+            Go back to homepage
+          </button>
+        </div>
+      </aside>
+    </div>
   </main>
 
   <footer>
@@ -318,16 +809,17 @@ You can mix English and 中文, I'll adapt.
         <a href="terms.html">Terms of service</a>
         <a href="privacy.html">Privacy policy</a>
         <a href="legal.html">Legal / Imprint</a>
+        <a href="contact.html">Contact</a>
       </div>
     </div>
   </footer>
 
   <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-
     const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
 
-    // ===== 导航登录状态（和你其它页面一样的逻辑） =====
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // 顶部登录状态
     async function hydrateNavAuth() {
       const area = document.getElementById("nav-auth-area");
       if (!area) return;
@@ -338,7 +830,7 @@ You can mix English and 中文, I'll adapt.
       if (!token) {
         area.innerHTML = `
           <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/ai.html')}">
-            <span>🔑</span> Log in
+            <span class="nav-login-emoji">🔑</span> Log in
           </a>`;
         return;
       }
@@ -354,7 +846,7 @@ You can mix English and 中文, I'll adapt.
           localStorage.removeItem("calmpaw_email");
           area.innerHTML = `
             <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/ai.html')}">
-              <span>🔑</span> Log in
+              <span class="nav-login-emoji">🔑</span> Log in
             </a>`;
           return;
         }
@@ -389,74 +881,144 @@ You can mix English and 中文, I'll adapt.
         }
       } catch (e) {
         console.error("auth hydrate error", e);
+        area.innerHTML = `
+          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/ai.html')}">
+            <span class="nav-login-emoji">🔑</span> Log in
+          </a>`;
       }
     }
 
-    // ===== 检查 AI 订阅状态 =====
-    async function checkAiStatus() {
-      const pill = document.getElementById("ai-status-pill");
-      const sendBtn = document.getElementById("ai-send");
+    // 状态切换 helper
+    function showState(state) {
+      const loading = document.getElementById("state-loading");
+      const noLogin = document.getElementById("state-no-login");
+      const noSub = document.getElementById("state-no-sub");
+      const chat = document.getElementById("state-chat");
+
+      const sideDefault = document.getElementById("side-default");
+      const sideNoLogin = document.getElementById("side-no-login");
+      const sideNoSub = document.getElementById("side-no-sub");
+
+      loading.style.display = "none";
+      noLogin.style.display = "none";
+      noSub.style.display = "none";
+      chat.style.display = "none";
+
+      sideDefault.style.display = "none";
+      sideNoLogin.style.display = "none";
+      sideNoSub.style.display = "none";
+
+      if (state === "loading") {
+        loading.style.display = "block";
+        sideDefault.style.display = "block";
+      } else if (state === "no-login") {
+        noLogin.style.display = "block";
+        sideNoLogin.style.display = "block";
+      } else if (state === "no-sub") {
+        noSub.style.display = "block";
+        sideNoSub.style.display = "block";
+      } else if (state === "chat") {
+        chat.style.display = "flex";
+        sideDefault.style.display = "block";
+      }
+    }
+
+    async function checkSubscription() {
       const token = localStorage.getItem("calmpaw_token");
+      const statusPill = document.getElementById("chat-status-pill");
 
       if (!token) {
-        pill.textContent = "Please log in to use AI Trainer.";
-        sendBtn.disabled = true;
+        statusPill.innerHTML = `<span class="chip-dot" style="
+          background: radial-gradient(circle at 30% 20%, #fff8f0 0%, #f97316 60%, #ea580c 100%);
+        "></span> Not logged in`;
+        showState("no-login");
         return;
       }
 
       try {
+        showState("loading");
+        statusPill.innerHTML = `<span class="chip-dot"></span> Checking subscription…`;
+
         const res = await fetch(API_BASE + "/ai/status", {
-          headers: { "Authorization": "Bearer " + token }
+          headers: {
+            "Authorization": "Bearer " + token
+          }
         });
         const data = await res.json();
+        console.log("ai/status", data);
 
-        if (!res.ok || !data.ok || !data.subscribed) {
-          pill.textContent = "No active AI Trainer subscription. Please subscribe on the pricing page.";
-          sendBtn.disabled = true;
-          // 这里你也可以选择几秒后跳转到 club/pricing 页面
-          // setTimeout(() => window.location.href = "club.html", 3000);
-        } else {
-          pill.textContent = "AI Trainer active · You can ask unlimited questions this month.";
-          sendBtn.disabled = false;
+        if (!res.ok || !data.ok) {
+          statusPill.innerHTML = `<span class="chip-dot" style="
+            background: radial-gradient(circle at 30% 20%, #fff8f0 0%, #f97316 60%, #ea580c 100%);
+          "></span> Error checking access`;
+          showState("no-sub");
+          return;
         }
-      } catch (e) {
-        console.error("ai status error", e);
-        pill.textContent = "Error checking subscription. Please refresh.";
-        sendBtn.disabled = true;
+
+        if (data.subscribed && data.status === "active") {
+          statusPill.innerHTML = `<span class="chip-dot"></span> Subscription active`;
+          showState("chat");
+        } else {
+          statusPill.innerHTML = `<span class="chip-dot" style="
+            background: radial-gradient(circle at 30% 20%, #fff8f0 0%, #f97316 60%, #ea580c 100%);
+          "></span> No active subscription`;
+          showState("no-sub");
+        }
+      } catch (err) {
+        console.error("checkSubscription error", err);
+        statusPill.innerHTML = `<span class="chip-dot" style="
+          background: radial-gradient(circle at 30% 20%, #fff8f0 0%, #f97316 60%, #ea580c 100%);
+        "></span> Error checking access`;
+        showState("no-sub");
       }
     }
 
-    // ===== 聊天逻辑 =====
-    const messagesEl = document.getElementById("ai-messages");
-    const inputEl = document.getElementById("ai-input");
-    const sendBtn = document.getElementById("ai-send");
+    // 聊天逻辑
+    let history = [];
 
     function appendMessage(role, text) {
+      const win = document.getElementById("chat-window");
       const row = document.createElement("div");
-      row.className = "msg-row " + (role === "user" ? "msg-user" : "msg-ai");
-      row.innerHTML = `
-        <div class="msg-author">${role === "user" ? "You" : "CalmPaw AI Trainer"}</div>
-        <div class="msg-bubble"></div>
-      `;
-      row.querySelector(".msg-bubble").textContent = text;
-      messagesEl.appendChild(row);
-      messagesEl.scrollTop = messagesEl.scrollHeight;
+      row.className = "msg-row " + (role === "user" ? "user" : "ai");
+
+      const bubble = document.createElement("div");
+      bubble.className = "msg-bubble " + (role === "user" ? "user" : "ai");
+
+      const meta = document.createElement("div");
+      meta.className = "msg-meta";
+      meta.textContent = role === "user" ? "You" : "AI Trainer";
+
+      const body = document.createElement("div");
+      body.textContent = text;
+
+      bubble.appendChild(meta);
+      bubble.appendChild(body);
+      row.appendChild(bubble);
+      win.appendChild(row);
+      win.scrollTop = win.scrollHeight;
     }
 
     async function sendMessage() {
-      const text = inputEl.value.trim();
-      if (!text) return;
+      const input = document.getElementById("chat-input");
+      const btn = document.getElementById("btn-send");
+      const btnText = document.getElementById("btn-send-text");
       const token = localStorage.getItem("calmpaw_token");
+      const statusPill = document.getElementById("chat-status-pill");
+
+      const text = input.value.trim();
+      if (!text) return;
       if (!token) {
-        alert("Please log in first.");
-        window.location.href = "auth.html?redirect=/ai.html";
+        showState("no-login");
         return;
       }
 
       appendMessage("user", text);
-      inputEl.value = "";
-      sendBtn.disabled = true;
-      sendBtn.textContent = "Thinking...";
+      history.push({ role: "user", content: text });
+      input.value = "";
+      input.style.height = "44px";
+
+      btn.disabled = true;
+      btnText.textContent = "Thinking…";
 
       try {
         const res = await fetch(API_BASE + "/ai/ask", {
@@ -467,37 +1029,98 @@ You can mix English and 中文, I'll adapt.
           },
           body: JSON.stringify({
             message: text,
-            history: [] // 以后你可以把历史对话也传给后端
+            history
           })
         });
 
         const data = await res.json();
-        if (!res.ok || !data.ok) {
-          console.error("ai ask error", data);
-          appendMessage("ai", "Sorry, something went wrong. Please try again in a moment.");
-        } else {
-          appendMessage("ai", data.reply);
+        console.log("ai/ask", data);
+
+        if (res.status === 403 && data.error === "no_active_subscription") {
+          statusPill.innerHTML = `<span class="chip-dot" style="
+            background: radial-gradient(circle at 30% 20%, #fff8f0 0%, #f97316 60%, #ea580c 100%);
+          "></span> No active subscription`;
+          showState("no-sub");
+          return;
         }
-      } catch (e) {
-        console.error("ai ask error", e);
-        appendMessage("ai", "Network error. Please try again.");
+
+        if (!res.ok || !data.ok) {
+          appendMessage("ai", "I’m sorry, something went wrong. Please try again in a moment.");
+          return;
+        }
+
+        const reply = data.reply || "I’m sorry, I could not generate a reply.";
+        appendMessage("ai", reply);
+        history.push({ role: "assistant", content: reply });
+      } catch (err) {
+        console.error("sendMessage error", err);
+        appendMessage("ai", "Network error, please try again.");
       } finally {
-        sendBtn.disabled = false;
-        sendBtn.textContent = "Send";
+        btn.disabled = false;
+        btnText.textContent = "Send";
       }
     }
 
-    sendBtn.addEventListener("click", sendMessage);
-    inputEl.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-      }
-    });
-
     document.addEventListener("DOMContentLoaded", () => {
       hydrateNavAuth();
-      checkAiStatus();
+      checkSubscription();
+
+      // 登录按钮
+      const btnLogin = document.getElementById("btn-login");
+      const sideBtnLogin = document.getElementById("side-btn-login");
+      if (btnLogin) {
+        btnLogin.addEventListener("click", () => {
+          const redirect = encodeURIComponent('/ai.html');
+          window.location.href = `auth.html?redirect=${redirect}`;
+        });
+      }
+      if (sideBtnLogin) {
+        sideBtnLogin.addEventListener("click", () => {
+          const redirect = encodeURIComponent('/ai.html');
+          window.location.href = `auth.html?redirect=${redirect}`;
+        });
+      }
+
+      // 去价格页（你可以改成自己的 AI Plan 页面）
+      const btnPricing = document.getElementById("btn-go-pricing");
+      const sideBtnPricing = document.getElementById("side-btn-pricing");
+      const sideBtnBack = document.getElementById("side-btn-back");
+
+      if (btnPricing) {
+        btnPricing.addEventListener("click", () => {
+          window.location.href = "ai-plan.html"; // 没有这个文件可以先去 index.html 或 club.html
+        });
+      }
+      if (sideBtnPricing) {
+        sideBtnPricing.addEventListener("click", () => {
+          window.location.href = "ai-plan.html";
+        });
+      }
+      if (sideBtnBack) {
+        sideBtnBack.addEventListener("click", () => {
+          window.location.href = "index.html";
+        });
+      }
+
+      // 发送消息
+      const btnSend = document.getElementById("btn-send");
+      const input = document.getElementById("chat-input");
+      if (btnSend) {
+        btnSend.addEventListener("click", sendMessage);
+      }
+      if (input) {
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+          }
+        });
+
+        input.addEventListener("input", () => {
+          input.style.height = "auto";
+          input.style.height = Math.min(input.scrollHeight, 110) + "px";
+        });
+      }
     });
   </script>
 </body>
