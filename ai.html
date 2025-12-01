@@ -2,13 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>CalmPaw AI Trainer — Quiet Dog Training Chat</title>
+  <title>CalmPaw Coach — Infinite AI Trainer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <link rel="icon" type="image/png" href="favicon.png" />
 
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     :root {
       --bg: #fff7f0;
@@ -36,28 +39,15 @@
       color: var(--text-main);
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
-      display: flex;
-      flex-direction: column;
     }
 
-    a { text-decoration: none; color: inherit; }
-
-    @keyframes float-soft {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-6px); }
-      100% { transform: translateY(0px); }
-    }
-
-    @keyframes shimmer {
-      0% { background-position: -120px 0; }
-      100% { background-position: 120px 0; }
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
     /* Header */
+
     header {
       position: sticky;
       top: 0;
@@ -90,22 +80,8 @@
       min-width: 0;
     }
 
-    .brand-logo-wrap { position: relative; }
-
-    .brand-orbit {
-      position: absolute;
-      inset: -4px;
-      border-radius: 50%;
-      background: conic-gradient(
-        from 160deg,
-        rgba(255, 184, 107, 0.15),
-        rgba(255, 145, 77, 0.3),
-        rgba(255, 230, 190, 0.2),
-        rgba(255, 184, 107, 0.15)
-      );
-      filter: blur(4px);
-      opacity: 0.9;
-      animation: float-soft 4.4s ease-in-out infinite;
+    .brand-logo-wrap {
+      position: relative;
     }
 
     .brand-logo {
@@ -154,9 +130,15 @@
       transition: color 0.18s ease, transform 0.12s ease;
     }
 
+    .nav-links a:hover {
+      color: var(--text-main);
+      transform: translateY(-1px);
+    }
+
     .nav-links a.active {
       color: var(--text-main);
       font-weight: 600;
+      background: rgba(255, 237, 213, 0.9);
     }
 
     .nav-cta {
@@ -190,7 +172,21 @@
       background: #fffaf5;
     }
 
-    .nav-login-emoji { font-size: 14px; }
+    .btn-primary {
+      padding: 8px 18px;
+      border-radius: var(--radius-pill);
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #4a251a;
+      background-image: linear-gradient(135deg, #ffb86b, #ff914d);
+      box-shadow: 0 18px 40px rgba(214, 139, 86, 0.65);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
 
     .nav-auth {
       display: flex;
@@ -254,7 +250,8 @@
         justify-content: flex-end;
         gap: 6px;
       }
-      .btn-outline {
+      .btn-outline,
+      .btn-primary {
         padding: 6px 10px;
         font-size: 12px;
       }
@@ -264,354 +261,242 @@
       }
     }
 
-    /* Main layout */
-    main {
-      flex: 1;
-      padding: 18px 16px 24px;
-    }
+    /* Layout */
 
-    .shell {
+    main {
       max-width: 1120px;
       margin: 0 auto;
-      display: grid;
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1.15fr);
-      gap: 18px;
-      align-items: stretch;
+      padding: 22px 20px 40px;
     }
 
-    @media (max-width: 880px) {
-      .shell {
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 24px;
+      margin-top: 20px;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 900px) {
+      .page-grid {
         grid-template-columns: minmax(0, 1fr);
       }
     }
 
-    .chat-card {
-      border-radius: var(--radius-lg);
-      background: radial-gradient(circle at top left, #fff8f2 0%, #ffe5cd 45%, #ffece0 100%);
-      box-shadow: var(--shadow-soft);
-      padding: 16px 16px 14px;
-      display: flex;
-      flex-direction: column;
-      min-height: 420px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .chat-glow {
-      position: absolute;
-      inset: -40px;
-      background:
-        radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.7), transparent 60%),
-        radial-gradient(circle at 100% 0, rgba(255, 194, 157, 0.7), transparent 60%);
-      opacity: 0.9;
-      pointer-events: none;
-    }
-
-    .chat-inner {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-
-    .chat-header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-
-    .chat-title {
-      font-size: 17px;
-      font-weight: 650;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .chat-title-pill {
-      font-size: 11px;
-      padding: 3px 9px;
-      border-radius: var(--radius-pill);
-      background: rgba(255, 250, 244, 0.96);
-      border: 1px solid rgba(243, 217, 196, 0.9);
-      color: #a2643c;
-    }
-
-    .chat-subtitle {
-      font-size: 12px;
-      color: var(--text-soft);
-      margin-bottom: 10px;
-    }
-
-    .chat-status {
-      font-size: 11px;
-      color: #7a3b1f;
+    .chip {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 4px 9px;
-      border-radius: 999px;
-      background: rgba(255, 250, 244, 0.96);
-      border: 1px dashed rgba(210, 145, 110, 0.7);
+      gap: 7px;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 222, 186, 0.9);
+      color: #6b4532;
+      font-size: 11px;
+      margin-bottom: 10px;
+      box-shadow: 0 10px 26px rgba(210, 145, 110, 0.28);
     }
 
     .chip-dot {
       width: 8px;
       height: 8px;
       border-radius: 999px;
-      background: radial-gradient(circle at 30% 20%, #fff8f0 0%, #22c55e 60%, #16a34a 100%);
+      background: radial-gradient(circle at 30% 20%, #fff8f0 0%, #ff914d 55%, #d6632a 100%);
+    }
+
+    .hero-title {
+      font-size: clamp(24px, 4.2vw, 34px);
+      line-height: 1.18;
+      margin-bottom: 12px;
+      letter-spacing: 0.01em;
+    }
+
+    .hero-title span.highlight {
+      background: linear-gradient(120deg, #ff914d, #ffb86b);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 14px;
+      color: var(--text-soft);
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+
+    .hero-note {
+      font-size: 12px;
+      color: #a7714f;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    .hero-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .hero-pill {
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 249, 243, 0.96);
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      color: #7b4d3a;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .state-box {
+      border-radius: var(--radius-md);
+      padding: 14px 14px 12px;
+      background: rgba(255, 248, 241, 0.98);
+      border: 1px dashed rgba(243, 217, 196, 0.9);
+      font-size: 13px;
+      color: var(--text-soft);
+      margin-bottom: 14px;
+    }
+
+    .state-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+
+    .state-actions {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* Chat card */
+
+    .chat-card {
+      border-radius: var(--radius-lg);
+      background: rgba(255, 246, 238, 0.98);
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      box-shadow: var(--shadow-soft);
+      padding: 14px 14px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 260px;
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .chat-status-pill {
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(34, 197, 94, 0.08);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #15803d;
+      font-size: 11px;
     }
 
     .chat-window {
       flex: 1;
+      min-height: 140px;
+      max-height: 380px;
+      overflow-y: auto;
+      padding: 10px;
       border-radius: 18px;
       background: rgba(255, 249, 243, 0.98);
-      border: 1px solid rgba(243, 217, 196, 0.9);
-      padding: 10px 10px 8px;
-      overflow-y: auto;
-      max-height: 480px;
-    }
-
-    .msg-row {
-      display: flex;
-      margin-bottom: 8px;
-    }
-
-    .msg-row.user { justify-content: flex-end; }
-    .msg-row.ai { justify-content: flex-start; }
-
-    .msg-bubble {
-      max-width: 88%;
-      border-radius: 16px;
-      padding: 8px 10px;
+      border: 1px solid rgba(243, 217, 196, 0.8);
       font-size: 13px;
-      line-height: 1.5;
-      position: relative;
-      word-wrap: break-word;
-      white-space: pre-wrap;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
-    .msg-bubble.user {
+    .bubble {
+      max-width: 88%;
+      padding: 8px 10px;
+      border-radius: 16px;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+
+    .bubble.user {
+      align-self: flex-end;
       background: linear-gradient(135deg, #ffb86b, #ff914d);
-      color: #4a251a;
+      color: #3b2217;
       border-bottom-right-radius: 4px;
-      box-shadow: 0 14px 30px rgba(214, 139, 86, 0.7);
     }
 
-    .msg-bubble.ai {
-      background: #fff;
-      color: #4b2f25;
+    .bubble.ai {
+      align-self: flex-start;
+      background: #ffffff;
       border: 1px solid rgba(243, 217, 196, 0.9);
       border-bottom-left-radius: 4px;
-      box-shadow: 0 10px 24px rgba(209, 157, 126, 0.28);
-    }
-
-    .msg-meta {
-      font-size: 10px;
-      color: #a16a4b;
-      margin-bottom: 2px;
+      color: var(--text-main);
     }
 
     .chat-input-row {
       display: flex;
       align-items: flex-end;
       gap: 8px;
-      margin-top: 8px;
     }
 
     .chat-input {
       flex: 1;
-      border-radius: 16px;
+      border-radius: 14px;
       border: 1px solid rgba(243, 217, 196, 0.9);
+      background: #fffaf5;
       padding: 8px 10px;
+      resize: vertical;
+      min-height: 42px;
+      max-height: 120px;
       font-size: 13px;
-      resize: none;
-      min-height: 44px;
-      max-height: 110px;
-      background: rgba(255, 250, 244, 0.98);
+      font-family: inherit;
+      color: var(--text-main);
     }
 
     .chat-input:focus {
       outline: none;
-      border-color: #ffb86b;
-      box-shadow: 0 0 0 1px rgba(255, 180, 120, 0.6);
-      background: #fffdfa;
+      border-color: var(--accent-strong);
+      box-shadow: 0 0 0 1px rgba(255, 145, 77, 0.35);
     }
 
-    .btn-send {
-      border-radius: 999px;
+    .chat-send-btn {
+      padding: 8px 14px;
+      border-radius: var(--radius-pill);
       border: none;
-      padding: 9px 14px;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       color: #4a251a;
-      background-image:
-        linear-gradient(135deg, #ffb86b, #ff914d),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.4), transparent);
-      background-size: 100% 100%, 120px 100%;
-      background-position: 0 0, -120px 0;
-      background-repeat: no-repeat;
-      box-shadow: 0 16px 34px rgba(214, 139, 86, 0.65);
+      background-image: linear-gradient(135deg, #ffb86b, #ff914d);
+      box-shadow: 0 14px 30px rgba(214, 139, 86, 0.6);
       display: inline-flex;
       align-items: center;
       gap: 6px;
       white-space: nowrap;
     }
 
-    .btn-send:disabled {
+    .chat-send-btn:disabled {
       opacity: 0.6;
       cursor: default;
       box-shadow: none;
     }
 
-    .small-hint {
-      font-size: 11px;
-      color: #9b6a4e;
-      margin-top: 4px;
-    }
-
-    .spinner {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      border: 2px solid rgba(255, 186, 107, 0.4);
-      border-top-color: #ff914d;
-      animation: spin 0.8s linear infinite;
-    }
-
-    /* Right side: tips / states */
-    .side-card {
-      border-radius: var(--radius-lg);
-      background: rgba(255, 246, 238, 0.98);
-      border: 1px solid rgba(243, 217, 196, 0.9);
-      box-shadow: 0 18px 38px rgba(209, 157, 126, 0.38);
-      padding: 16px 15px 14px;
-      font-size: 12px;
-      line-height: 1.6;
-    }
-
-    .side-title {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .side-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 3px 10px;
-      border-radius: var(--radius-pill);
-      background: rgba(255, 249, 243, 0.96);
-      border: 1px dashed rgba(210, 145, 110, 0.7);
-      font-size: 11px;
-      color: #a2643c;
-      margin-bottom: 8px;
-    }
-
-    .side-list {
-      margin: 8px 0 0;
-      padding-left: 16px;
-    }
-
-    .side-list li {
-      margin-bottom: 4px;
-    }
-
-    .state-box {
-      border-radius: 16px;
-      border: 1px dashed rgba(210, 145, 110, 0.7);
-      background: rgba(255, 249, 243, 0.98);
-      padding: 10px 12px;
-      font-size: 12px;
-      color: #7a3b1f;
-      margin-bottom: 8px;
-    }
-
-    .state-title {
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .btn-primary-small {
-      padding: 7px 13px;
-      border-radius: var(--radius-pill);
-      border: none;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      color: #4a251a;
-      background-image:
-        linear-gradient(135deg, #ffb86b, #ff914d),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.4), transparent);
-      background-size: 100% 100%, 120px 100%;
-      background-position: 0 0, -120px 0;
-      background-repeat: no-repeat;
-      box-shadow: 0 14px 32px rgba(214, 139, 86, 0.65);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 6px;
-    }
-
-    .btn-link-small {
-      border: none;
-      background: transparent;
-      color: #b05825;
-      font-size: 11px;
-      text-decoration: underline;
-      cursor: pointer;
-      padding: 0;
-      margin-top: 4px;
-    }
-
-    footer {
-      border-top: 1px solid rgba(243, 217, 196, 0.8);
-      background: rgba(255, 248, 241, 0.96);
-    }
-
-    .footer-inner {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 10px 20px 14px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: space-between;
+    .system-note {
       font-size: 11px;
       color: var(--text-soft);
     }
 
-    .footer-links {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .footer-links a:hover { color: #b05825; }
-
-    @media (max-width: 640px) {
-      main {
-        padding: 14px 12px 18px;
-      }
-      .chat-card,
-      .side-card {
-        border-radius: 22px;
-      }
-      .chat-window {
-        max-height: 380px;
-      }
-      .footer-inner {
-        padding: 10px 14px 12px;
-        font-size: 10px;
-      }
-      .footer-links {
-        gap: 10px;
-      }
+    .hidden {
+      display: none !important;
     }
   </style>
 </head>
@@ -620,25 +505,26 @@
     <div class="nav-inner">
       <a href="index.html" class="brand">
         <div class="brand-logo-wrap">
-          <div class="brand-orbit"></div>
           <div class="brand-logo">🐾</div>
         </div>
         <div>
           <div class="brand-text-main">CalmPaw Coach</div>
-          <div class="brand-text-sub">Gentle, realistic dog training</div>
+          <div class="brand-text-sub">Infinite AI trainer for real-life dogs</div>
         </div>
       </a>
+
       <nav class="nav-links">
         <a href="programs.html">Programs</a>
         <a href="bundle.html">Complete Pack</a>
-        <a href="club.html">Monthly Club</a>
         <a href="ai.html" class="active">AI Trainer</a>
         <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
       </nav>
+
       <div class="nav-cta">
         <div id="nav-auth-area">
           <a class="btn-outline" href="auth.html?redirect=/ai.html">
-            <span class="nav-login-emoji">🔑</span> Log in
+            🔑 Log in
           </a>
         </div>
       </div>
@@ -646,214 +532,204 @@
   </header>
 
   <main>
-    <div class="shell">
-      <!-- 左侧：聊天卡片 / 状态切换 -->
-      <section class="chat-card">
-        <div class="chat-glow"></div>
-        <div class="chat-inner">
-          <div class="chat-header-row">
-            <div>
-              <div class="chat-title">
-                CalmPaw AI Trainer
-                <span class="chat-title-pill">$29/mo · unlimited questions</span>
-              </div>
-              <div class="chat-subtitle">
-                Ask calm, realistic questions about barking, neighbours, alone-time and leash walking.
-                Mixed English + 中文都可以。
-              </div>
-            </div>
-            <div id="chat-status-pill" class="chat-status">
-              <span class="chip-dot"></span>
-              Checking subscription…
-            </div>
-          </div>
-
-          <!-- 状态：加载中 -->
-          <div id="state-loading" class="state-box">
-            <div class="state-title">Checking your access…</div>
-            <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
-              <div class="spinner"></div>
-              <div>We’re checking if your AI Trainer subscription is active.</div>
-            </div>
-          </div>
-
-          <!-- 状态：未登录 -->
-          <div id="state-no-login" class="state-box" style="display:none;">
-            <div class="state-title">You’re not logged in.</div>
-            <div>Sign in to connect your CalmPaw AI Trainer to your account.</div>
-            <button id="btn-login" class="btn-primary-small" type="button">
-              <span>Log in to continue</span> <span>→</span>
-            </button>
-          </div>
-
-          <!-- 状态：没有订阅 -->
-          <div id="state-no-sub" class="state-box" style="display:none;">
-            <div class="state-title">No active AI Trainer subscription.</div>
-            <div>
-              You can still browse the site, but AI Trainer chat is only available with the
-              monthly subscription.
-            </div>
-            <!-- 这个按钮你可以改成实际的价格页面链接 -->
-            <button id="btn-go-pricing" class="btn-primary-small" type="button">
-              <span>See AI Trainer plan</span> <span>→</span>
-            </button>
-          </div>
-
-          <!-- 状态：可以聊天 -->
-          <div id="state-chat" style="display:none; flex:1; display:flex; flex-direction:column;">
-            <div class="chat-window" id="chat-window">
-              <!-- 初始欢迎消息 -->
-              <div class="msg-row ai">
-                <div class="msg-bubble ai">
-                  <div class="msg-meta">AI Trainer</div>
-                  Hi, I’m your CalmPaw AI Trainer 🐾  
-                  Tell me what’s happening — barking at doors, neighbours complaining, dog can’t stay
-                  alone, leash pulling…  
-                  你也可以用中文描述，我会用简单易懂的方式回答。
-                </div>
-              </div>
-            </div>
-
-            <div class="chat-input-row">
-              <textarea
-                id="chat-input"
-                class="chat-input"
-                placeholder="Describe what’s happening right now. Example: “My dog barks every time someone walks past the door, and my neighbour is angry…”"
-              ></textarea>
-              <button id="btn-send" class="btn-send" type="button">
-                <span id="btn-send-text">Send</span>
-              </button>
-            </div>
-            <div class="small-hint">
-              Keep it specific: what does your dog do, when, and what have you tried?  
-              尽量具体一点：什么时候、做什么、你现在怎么处理。
-            </div>
-          </div>
+    <section class="page-grid">
+      <div>
+        <div class="chip">
+          <div class="chip-dot"></div>
+          $29/month · infinite CalmPaw AI trainer
         </div>
-      </section>
+        <h1 class="hero-title">
+          Talk to a gentle <span class="highlight">AI trainer</span><br />
+          built for small apartments, noisy neighbors & tired humans.
+        </h1>
+        <p class="hero-sub">
+          Ask about barking at doors, visitors, alone time, leash walking,
+          guilt, neighbor complaints and more — in your own words, any time of
+          day. CalmPaw AI replies with realistic, quiet-friendly ideas.
+        </p>
+        <p class="hero-note">
+          This page checks your login + subscription automatically. No
+          passwords inside the chat — only dog behaviour and human-side
+          questions.
+        </p>
 
-      <!-- 右侧：提问提示 & 说明 -->
-      <aside class="side-card">
-        <div id="side-default">
-          <div class="side-chip">
-            <span>💡</span>
-            How to get the best help
-          </div>
-          <div class="side-title">How to ask your AI Trainer</div>
+        <div class="hero-pill-row">
+          <div class="hero-pill">🛋 For real homes, not training halls</div>
+          <div class="hero-pill">📩 Answer in minutes, not weeks</div>
+          <div class="hero-pill">🔒 Private — just you and your AI trainer</div>
+        </div>
+
+        <!-- 未登录状态 -->
+        <div id="state-not-logged" class="state-box hidden">
+          <div class="state-title">Log in to use the AI trainer</div>
           <p>
-            You don’t need “perfect” training language. Just describe:
+            Please log in with your email first. You’ll come straight back to
+            this page after signing in.
           </p>
-          <ul class="side-list">
-            <li>What your dog does (barks, pulls, cries, chews…)</li>
-            <li>When it happens (time of day, trigger, who is home)</li>
-            <li>What you already tried, and what you hope for</li>
-          </ul>
-          <p style="margin-top:8px;">
-            Example (English + 中文):
-          </p>
-          <p style="font-size:11px; color:#9b6a4e; margin-top:4px;">
-            “I live in an apartment. My dog barks every time someone stops at the door.
-            I tried saying ‘no’ and giving treats, but it doesn’t work.  
-            我住公寓，狗一有人在门口停一下就大叫。邻居有意见，我下班很累，不知道怎么一步一步做。”
-          </p>
-          <p style="margin-top:8px;">
-            The AI Trainer will give you calm, realistic options you can actually try in a small apartment.
-          </p>
-        </div>
-
-        <div id="side-no-login" style="display:none;">
-          <div class="side-chip">
-            <span>🔑</span>
-            Sign in required
+          <div class="state-actions">
+            <a class="btn-primary" href="auth.html?redirect=/ai.html">Log in / create account →</a>
           </div>
-          <div class="side-title">Sign in to unlock your AI Trainer</div>
-          <p>
-            You need a CalmPaw Coach account to use the AI Trainer. Signing in keeps your conversations
-            connected to your email so you can continue later.
-          </p>
-          <button id="side-btn-login" class="btn-primary-small" type="button">
-            <span>Go to login</span> <span>→</span>
-          </button>
         </div>
 
-        <div id="side-no-sub" style="display:none;">
-          <div class="side-chip">
-            <span>💳</span>
-            Subscription needed
+        <!-- 没有订阅 -->
+        <div id="state-no-sub" class="state-box hidden">
+          <div class="state-title">$29/month — infinite CalmPaw AI trainer</div>
+          <p>
+            You’re logged in, but don’t have an active AI Trainer subscription yet.
+            Click below to start the monthly plan.
+          </p>
+          <div class="state-actions">
+            <!-- TODO: 把 href 换成你的 Paddle 订阅链接 -->
+            <a id="ai-subscribe-link" class="btn-primary" href="#">
+              Subscribe for $29/month →
+            </a>
+            <span class="system-note">
+              After payment you’ll be sent back here and the chat will unlock automatically.
+            </span>
           </div>
-          <div class="side-title">AI Trainer is a monthly service</div>
-          <p>
-            The AI Trainer chat is part of the <strong>$29/month unlimited questions</strong> plan.
-            You can still buy one-time plans or the Complete Pack without it.
-          </p>
-          <button id="side-btn-pricing" class="btn-primary-small" type="button">
-            <span>View AI Trainer plan</span> <span>→</span>
-          </button>
-          <button id="side-btn-back" class="btn-link-small" type="button">
-            Go back to homepage
-          </button>
         </div>
-      </aside>
-    </div>
-  </main>
 
-  <footer>
-    <div class="footer-inner">
-      <div>© <span id="year"></span> CalmPaw Coach. All rights reserved.</div>
-      <div class="footer-links">
-        <a href="programs.html">Programs</a>
-        <a href="bundle.html">Complete Pack</a>
-        <a href="club.html">Monthly Club</a>
-        <a href="ai.html">AI Trainer</a>
-        <a href="refund.html">Refund policy</a>
-        <a href="terms.html">Terms of service</a>
-        <a href="privacy.html">Privacy policy</a>
-        <a href="legal.html">Legal / Imprint</a>
-        <a href="contact.html">Contact</a>
+        <!-- 已订阅小提示 -->
+        <div id="state-active-info" class="state-box hidden">
+          <div class="state-title">Your AI Trainer is active</div>
+          <p>
+            You have an active AI Trainer subscription. You can ask unlimited
+            questions about your dog’s behaviour and your daily life with them.
+          </p>
+          <p class="system-note" id="sub-dates"></p>
+        </div>
       </div>
-    </div>
-  </footer>
+
+      <!-- Chat 卡片 -->
+      <div class="chat-card" id="chat-card">
+        <div class="chat-header">
+          <div>
+            <strong>CalmPaw AI Trainer</strong>
+            <div style="font-size:11px; color:var(--text-soft);">
+              Ask about barking, neighbors, alone-time, leash walking and more.
+            </div>
+          </div>
+          <div class="chat-status-pill" id="chat-status-pill">
+            Checking access…
+          </div>
+        </div>
+
+        <div class="chat-window" id="chat-window">
+          <div class="bubble ai">
+            Hi, I’m your CalmPaw AI trainer. Tell me what’s happening at home —
+            the dog, the neighbors, your schedule — and I’ll help you find
+            realistic, gentle steps.
+          </div>
+        </div>
+
+        <form class="chat-input-row" id="chat-form">
+          <textarea
+            id="chat-input"
+            class="chat-input"
+            placeholder="Example: “My dog barks at every sound in the hallway after 10 pm, and the neighbors are angry. I work late and feel guilty. What small steps can I start with?”"
+          ></textarea>
+          <button type="submit" class="chat-send-btn" id="chat-send-btn">
+            Send
+          </button>
+        </form>
+
+        <div class="system-note">
+          CalmPaw AI cannot give legal or medical advice. It’s designed for
+          everyday behaviour and human-side questions in normal homes.
+        </div>
+      </div>
+    </section>
+  </main>
 
   <script>
     const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
 
-    document.getElementById("year").textContent = new Date().getFullYear();
+    const navAuthArea = document.getElementById("nav-auth-area");
+    const stateNotLogged = document.getElementById("state-not-logged");
+    const stateNoSub = document.getElementById("state-no-sub");
+    const stateActiveInfo = document.getElementById("state-active-info");
+    const chatCard = document.getElementById("chat-card");
+    const chatStatusPill = document.getElementById("chat-status-pill");
+    const subDates = document.getElementById("sub-dates");
+    const chatWindow = document.getElementById("chat-window");
+    const chatForm = document.getElementById("chat-form");
+    const chatInput = document.getElementById("chat-input");
+    const chatSendBtn = document.getElementById("chat-send-btn");
+    const subscribeLink = document.getElementById("ai-subscribe-link");
 
-    // 顶部登录状态
+    let history = [
+      {
+        role: "assistant",
+        content:
+          "Hi, I’m your CalmPaw AI trainer. Tell me what’s happening at home — the dog, the neighbors, your schedule — and I’ll help you find realistic, gentle steps.",
+      },
+    ];
+
+    // TODO: 把这里的链接换成你的 Paddle 订阅链接
+    subscribeLink.href = "#";
+
+    function formatDate(tsSec) {
+      if (!tsSec) return "";
+      const d = new Date(tsSec * 1000);
+      return d.toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+    }
+
+    function appendBubble(role, text) {
+      const div = document.createElement("div");
+      div.className = "bubble " + (role === "user" ? "user" : "ai");
+      div.textContent = text;
+      chatWindow.appendChild(div);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    function setChatEnabled(enabled) {
+      chatInput.disabled = !enabled;
+      chatSendBtn.disabled = !enabled;
+    }
+
     async function hydrateNavAuth() {
-      const area = document.getElementById("nav-auth-area");
-      if (!area) return;
-
       const token = localStorage.getItem("calmpaw_token");
       const email = localStorage.getItem("calmpaw_email");
 
       if (!token) {
-        area.innerHTML = `
-          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/ai.html')}">
-            <span class="nav-login-emoji">🔑</span> Log in
+        navAuthArea.innerHTML = `
+          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent(
+            "/ai.html"
+          )}">
+            🔑 Log in
           </a>`;
+        stateNotLogged.classList.remove("hidden");
+        chatStatusPill.textContent = "Please log in";
+        setChatEnabled(false);
         return;
       }
 
       try {
         const res = await fetch(API_BASE + "/auth/me", {
-          headers: { "Authorization": "Bearer " + token }
+          headers: { Authorization: "Bearer " + token },
         });
         const data = await res.json();
-
         if (!res.ok || !data.ok) {
           localStorage.removeItem("calmpaw_token");
           localStorage.removeItem("calmpaw_email");
-          area.innerHTML = `
-            <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/ai.html')}">
-              <span class="nav-login-emoji">🔑</span> Log in
+          navAuthArea.innerHTML = `
+            <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent(
+              "/ai.html"
+            )}">
+              🔑 Log in
             </a>`;
+          stateNotLogged.classList.remove("hidden");
+          chatStatusPill.textContent = "Please log in";
+          setChatEnabled(false);
           return;
         }
 
         const showEmail = email || data.email || "Member";
-
-        area.innerHTML = `
+        navAuthArea.innerHTML = `
           <div class="nav-auth">
             <span class="nav-auth-email" title="${showEmail}">${showEmail}</span>
             <button class="nav-auth-btn" id="nav-switch-account">Switch</button>
@@ -861,267 +737,148 @@
           </div>
         `;
 
-        const switchBtn = document.getElementById("nav-switch-account");
-        if (switchBtn) {
-          switchBtn.addEventListener("click", () => {
+        document
+          .getElementById("nav-switch-account")
+          .addEventListener("click", () => {
             localStorage.removeItem("calmpaw_token");
             localStorage.removeItem("calmpaw_email");
-            const redirect = encodeURIComponent('/ai.html');
-            window.location.href = `auth.html?redirect=${redirect}`;
+            window.location.href =
+              "auth.html?redirect=" + encodeURIComponent("/ai.html");
           });
-        }
 
-        const logoutBtn = document.getElementById("nav-logout");
-        if (logoutBtn) {
-          logoutBtn.addEventListener("click", () => {
+        document
+          .getElementById("nav-logout")
+          .addEventListener("click", () => {
             localStorage.removeItem("calmpaw_token");
             localStorage.removeItem("calmpaw_email");
             window.location.href = "/index.html";
           });
-        }
+
+        // 登录成功 → 检查订阅
+        stateNotLogged.classList.add("hidden");
+        await checkSubscription();
       } catch (e) {
-        console.error("auth hydrate error", e);
-        area.innerHTML = `
-          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/ai.html')}">
-            <span class="nav-login-emoji">🔑</span> Log in
-          </a>`;
-      }
-    }
-
-    // 状态切换 helper
-    function showState(state) {
-      const loading = document.getElementById("state-loading");
-      const noLogin = document.getElementById("state-no-login");
-      const noSub = document.getElementById("state-no-sub");
-      const chat = document.getElementById("state-chat");
-
-      const sideDefault = document.getElementById("side-default");
-      const sideNoLogin = document.getElementById("side-no-login");
-      const sideNoSub = document.getElementById("side-no-sub");
-
-      loading.style.display = "none";
-      noLogin.style.display = "none";
-      noSub.style.display = "none";
-      chat.style.display = "none";
-
-      sideDefault.style.display = "none";
-      sideNoLogin.style.display = "none";
-      sideNoSub.style.display = "none";
-
-      if (state === "loading") {
-        loading.style.display = "block";
-        sideDefault.style.display = "block";
-      } else if (state === "no-login") {
-        noLogin.style.display = "block";
-        sideNoLogin.style.display = "block";
-      } else if (state === "no-sub") {
-        noSub.style.display = "block";
-        sideNoSub.style.display = "block";
-      } else if (state === "chat") {
-        chat.style.display = "flex";
-        sideDefault.style.display = "block";
+        console.error(e);
+        chatStatusPill.textContent = "Error checking login";
+        setChatEnabled(false);
       }
     }
 
     async function checkSubscription() {
       const token = localStorage.getItem("calmpaw_token");
-      const statusPill = document.getElementById("chat-status-pill");
+      if (!token) return;
 
-      if (!token) {
-        statusPill.innerHTML = `<span class="chip-dot" style="
-          background: radial-gradient(circle at 30% 20%, #fff8f0 0%, #f97316 60%, #ea580c 100%);
-        "></span> Not logged in`;
-        showState("no-login");
-        return;
-      }
+      chatStatusPill.textContent = "Checking subscription…";
+      setChatEnabled(false);
 
       try {
-        showState("loading");
-        statusPill.innerHTML = `<span class="chip-dot"></span> Checking subscription…`;
-
         const res = await fetch(API_BASE + "/ai/status", {
-          headers: {
-            "Authorization": "Bearer " + token
-          }
+          headers: { Authorization: "Bearer " + token },
         });
         const data = await res.json();
-        console.log("ai/status", data);
 
         if (!res.ok || !data.ok) {
-          statusPill.innerHTML = `<span class="chip-dot" style="
-            background: radial-gradient(circle at 30% 20%, #fff8f0 0%, #f97316 60%, #ea580c 100%);
-          "></span> Error checking access`;
-          showState("no-sub");
+          stateNoSub.classList.remove("hidden");
+          stateActiveInfo.classList.add("hidden");
+          chatStatusPill.textContent = "No active subscription";
+          setChatEnabled(false);
           return;
         }
 
         if (data.subscribed && data.status === "active") {
-          statusPill.innerHTML = `<span class="chip-dot"></span> Subscription active`;
-          showState("chat");
+          stateNoSub.classList.add("hidden");
+          stateActiveInfo.classList.remove("hidden");
+          subDates.textContent =
+            "Active from " +
+            formatDate(data.started_at) +
+            " to " +
+            formatDate(data.active_until) +
+            ".";
+          chatStatusPill.textContent = "AI Trainer active";
+          setChatEnabled(true);
         } else {
-          statusPill.innerHTML = `<span class="chip-dot" style="
-            background: radial-gradient(circle at 30% 20%, #fff8f0 0%, #f97316 60%, #ea580c 100%);
-          "></span> No active subscription`;
-          showState("no-sub");
+          stateNoSub.classList.remove("hidden");
+          stateActiveInfo.classList.add("hidden");
+          chatStatusPill.textContent = "No active subscription";
+          setChatEnabled(false);
         }
-      } catch (err) {
-        console.error("checkSubscription error", err);
-        statusPill.innerHTML = `<span class="chip-dot" style="
-          background: radial-gradient(circle at 30% 20%, #fff8f0 0%, #f97316 60%, #ea580c 100%);
-        "></span> Error checking access`;
-        showState("no-sub");
+      } catch (e) {
+        console.error(e);
+        chatStatusPill.textContent = "Error checking subscription";
+        setChatEnabled(false);
       }
     }
 
-    // 聊天逻辑
-    let history = [];
-
-    function appendMessage(role, text) {
-      const win = document.getElementById("chat-window");
-      const row = document.createElement("div");
-      row.className = "msg-row " + (role === "user" ? "user" : "ai");
-
-      const bubble = document.createElement("div");
-      bubble.className = "msg-bubble " + (role === "user" ? "user" : "ai");
-
-      const meta = document.createElement("div");
-      meta.className = "msg-meta";
-      meta.textContent = role === "user" ? "You" : "AI Trainer";
-
-      const body = document.createElement("div");
-      body.textContent = text;
-
-      bubble.appendChild(meta);
-      bubble.appendChild(body);
-      row.appendChild(bubble);
-      win.appendChild(row);
-      win.scrollTop = win.scrollHeight;
-    }
-
-    async function sendMessage() {
-      const input = document.getElementById("chat-input");
-      const btn = document.getElementById("btn-send");
-      const btnText = document.getElementById("btn-send-text");
-      const token = localStorage.getItem("calmpaw_token");
-      const statusPill = document.getElementById("chat-status-pill");
-
-      const text = input.value.trim();
+    chatForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const text = chatInput.value.trim();
       if (!text) return;
+
+      const token = localStorage.getItem("calmpaw_token");
       if (!token) {
-        showState("no-login");
+        alert("Please log in first.");
         return;
       }
 
-      appendMessage("user", text);
+      appendBubble("user", text);
       history.push({ role: "user", content: text });
-      input.value = "";
-      input.style.height = "44px";
-
-      btn.disabled = true;
-      btnText.textContent = "Thinking…";
+      chatInput.value = "";
+      setChatEnabled(false);
+      chatStatusPill.textContent = "Thinking…";
 
       try {
         const res = await fetch(API_BASE + "/ai/ask", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
+            Authorization: "Bearer " + token,
           },
           body: JSON.stringify({
             message: text,
-            history
-          })
+            history: history.slice(-8), // 最近几条
+          }),
         });
+
+        if (res.status === 403) {
+          chatStatusPill.textContent = "No active subscription";
+          stateNoSub.classList.remove("hidden");
+          stateActiveInfo.classList.add("hidden");
+          setChatEnabled(false);
+          appendBubble(
+            "ai",
+            "Your AI Trainer subscription is not active right now. Please renew the plan to keep chatting."
+          );
+          return;
+        }
 
         const data = await res.json();
-        console.log("ai/ask", data);
-
-        if (res.status === 403 && data.error === "no_active_subscription") {
-          statusPill.innerHTML = `<span class="chip-dot" style="
-            background: radial-gradient(circle at 30% 20%, #fff8f0 0%, #f97316 60%, #ea580c 100%);
-          "></span> No active subscription`;
-          showState("no-sub");
-          return;
-        }
-
         if (!res.ok || !data.ok) {
-          appendMessage("ai", "I’m sorry, something went wrong. Please try again in a moment.");
+          chatStatusPill.textContent = "Error";
+          appendBubble(
+            "ai",
+            "Sorry, something went wrong on the server. Please try again in a moment."
+          );
+          setChatEnabled(true);
           return;
         }
 
-        const reply = data.reply || "I’m sorry, I could not generate a reply.";
-        appendMessage("ai", reply);
+        const reply = data.reply || "…";
+        appendBubble("ai", reply);
         history.push({ role: "assistant", content: reply });
-      } catch (err) {
-        console.error("sendMessage error", err);
-        appendMessage("ai", "Network error, please try again.");
-      } finally {
-        btn.disabled = false;
-        btnText.textContent = "Send";
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      hydrateNavAuth();
-      checkSubscription();
-
-      // 登录按钮
-      const btnLogin = document.getElementById("btn-login");
-      const sideBtnLogin = document.getElementById("side-btn-login");
-      if (btnLogin) {
-        btnLogin.addEventListener("click", () => {
-          const redirect = encodeURIComponent('/ai.html');
-          window.location.href = `auth.html?redirect=${redirect}`;
-        });
-      }
-      if (sideBtnLogin) {
-        sideBtnLogin.addEventListener("click", () => {
-          const redirect = encodeURIComponent('/ai.html');
-          window.location.href = `auth.html?redirect=${redirect}`;
-        });
-      }
-
-      // 去价格页（你可以改成自己的 AI Plan 页面）
-      const btnPricing = document.getElementById("btn-go-pricing");
-      const sideBtnPricing = document.getElementById("side-btn-pricing");
-      const sideBtnBack = document.getElementById("side-btn-back");
-
-      if (btnPricing) {
-        btnPricing.addEventListener("click", () => {
-          window.location.href = "ai-plan.html"; // 没有这个文件可以先去 index.html 或 club.html
-        });
-      }
-      if (sideBtnPricing) {
-        sideBtnPricing.addEventListener("click", () => {
-          window.location.href = "ai-plan.html";
-        });
-      }
-      if (sideBtnBack) {
-        sideBtnBack.addEventListener("click", () => {
-          window.location.href = "index.html";
-        });
-      }
-
-      // 发送消息
-      const btnSend = document.getElementById("btn-send");
-      const input = document.getElementById("chat-input");
-      if (btnSend) {
-        btnSend.addEventListener("click", sendMessage);
-      }
-      if (input) {
-        input.addEventListener("keydown", (e) => {
-          if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-          }
-        });
-
-        input.addEventListener("input", () => {
-          input.style.height = "auto";
-          input.style.height = Math.min(input.scrollHeight, 110) + "px";
-        });
+        chatStatusPill.textContent = "AI Trainer active";
+        setChatEnabled(true);
+      } catch (e) {
+        console.error(e);
+        chatStatusPill.textContent = "Error";
+        appendBubble(
+          "ai",
+          "I couldn’t reach the server just now. Please check your connection and try again."
+        );
+        setChatEnabled(true);
       }
     });
+
+    document.addEventListener("DOMContentLoaded", hydrateNavAuth);
   </script>
 </body>
 </html>
