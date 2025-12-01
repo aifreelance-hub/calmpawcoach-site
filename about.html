@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>About — CalmPaw Coach</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --bg:#fff7f0;--bg-soft:#ffeede;
+      --accent:#ffb86b;--accent-strong:#ff914d;--accent-soft:#ffe0b8;
+      --text-main:#3b2824;--text-soft:#8a6a63;
+      --border-soft:#f3d9c4;
+      --radius-lg:26px;--radius-md:18px;--radius-pill:999px;
+      --shadow-soft:0 26px 60px rgba(210,145,110,0.38);
+    }
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(circle at 5% 0%,#ffe0c0 0%,transparent 55%),
+        radial-gradient(circle at 100% 0%,#ffd4d4 0%,transparent 55%),
+        radial-gradient(circle at 0% 100%,#ffe5c3 0%,transparent 55%),
+        linear-gradient(180deg,#fff7f0 0%,#fff2e7 40%,#fff8f2 100%);
+      color:var(--text-main);
+      min-height:100vh;
+      -webkit-font-smoothing:antialiased;
+      display:flex;
+      flex-direction:column;
+    }
+    a{text-decoration:none;color:inherit;}
+
+    header{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter:blur(22px);
+      background:linear-gradient(
+        to bottom,
+        rgba(255,248,240,.98),
+        rgba(255,248,240,.88),
+        rgba(255,248,240,.75)
+      );
+      border-bottom:1px solid rgba(243,217,196,.8);
+    }
+    .nav-inner{
+      max-width:1120px;margin:0 auto;
+      padding:10px 20px;
+      display:flex;align-items:center;justify-content:space-between;
+      gap:14px;flex-wrap:wrap;
+    }
+    .brand{display:flex;align-items:center;gap:10px;min-width:0;}
+    .brand-logo-wrap{position:relative;}
+    .brand-logo{
+      width:40px;height:40px;border-radius:18px;
+      background:radial-gradient(circle at 20% 15%,#fff9f3 0%,#ffb86b 40%,#ff914d 84%);
+      display:flex;align-items:center;justify-content:center;
+      font-size:22px;
+      box-shadow:0 16px 40px rgba(214,139,86,.6);
+      position:relative;z-index:1;
+    }
+    .brand-text-main{font-weight:750;letter-spacing:.03em;font-size:18px;white-space:nowrap;}
+    .brand-text-sub{font-size:11px;color:var(--text-soft);white-space:nowrap;}
+
+    .nav-links{
+      display:flex;align-items:center;gap:16px;
+      font-size:14px;color:var(--text-soft);
+      flex:1;justify-content:center;min-width:0;
+    }
+    .nav-links a{
+      padding:6px 11px;border-radius:999px;
+      transition:color .18s ease,transform .12s ease;
+    }
+    .nav-links a:hover{color:var(--text-main);transform:translateY(-1px);}
+    .nav-links a.active{color:var(--text-main);font-weight:600;background:rgba(255,237,213,.9);}
+
+    .nav-cta{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:auto;}
+    .btn-outline{
+      padding:7px 16px;border-radius:var(--radius-pill);
+      border:1px solid var(--border-soft);
+      background:rgba(255,250,244,.95);
+      font-size:13px;color:var(--text-soft);
+      cursor:pointer;display:inline-flex;align-items:center;gap:6px;
+      transition:all .18s ease;white-space:nowrap;
+    }
+    .btn-outline:hover{
+      border-color:var(--accent);color:var(--text-main);
+      box-shadow:0 14px 32px rgba(204,145,107,.28);
+      transform:translateY(-1px);background:#fffaf5;
+    }
+    .nav-auth{display:flex;align-items:center;gap:6px;}
+    .nav-auth-email{
+      max-width:160px;padding:5px 10px;border-radius:var(--radius-pill);
+      background:rgba(255,250,244,.95);
+      border:1px solid rgba(243,217,196,.9);
+      font-size:12px;color:#6b4532;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    }
+    .nav-auth-btn{
+      border:none;background:transparent;font-size:11px;
+      color:#b05825;padding:4px 7px;border-radius:999px;
+      cursor:pointer;transition:background .15s,color .15s;white-space:nowrap;
+    }
+    .nav-auth-btn:hover{background:rgba(255,237,213,.95);color:#7a3410;}
+
+    @media(max-width:880px){.nav-links{display:none;}.nav-inner{align-items:flex-start;}.nav-cta{margin-left:0;}}
+    @media(max-width:640px){
+      .nav-inner{padding:8px 14px;gap:6px;flex-wrap:wrap;align-items:flex-start;}
+      .brand{width:100%;}
+      .brand-logo{width:34px;height:34px;font-size:20px;}
+      .brand-text-main{font-size:16px;}
+      .brand-text-sub{font-size:10px;}
+      .nav-cta{width:100%;justify-content:flex-end;gap:6px;}
+      .btn-outline{padding:6px 10px;font-size:12px;}
+      .nav-auth-email{max-width:130px;font-size:11px;}
+    }
+
+    main{
+      flex:1;
+      max-width:960px;
+      margin:0 auto;
+      padding:32px 20px 40px;
+    }
+    .page-tag{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:4px 12px;border-radius:var(--radius-pill);
+      background:rgba(255,250,244,.96);
+      border:1px solid rgba(243,217,196,.9);
+      font-size:11px;color:#a2643c;
+      margin-bottom:16px;
+    }
+    .page-title{font-size:26px;font-weight:700;margin-bottom:10px;}
+    .page-sub{font-size:14px;color:var(--text-soft);margin-bottom:22px;max-width:640px;line-height:1.7;}
+    .section{margin-bottom:26px;}
+    .section h2{font-size:18px;margin-bottom:8px;}
+    .section p{font-size:14px;color:var(--text-soft);line-height:1.7;margin-bottom:10px;}
+    .section ul{font-size:14px;color:var(--text-soft);line-height:1.7;padding-left:18px;margin-bottom:10px;}
+    .section ul li{margin-bottom:4px;}
+
+    footer{
+      border-top:1px solid rgba(243,217,196,.8);
+      background:rgba(255,248,241,.96);
+    }
+    .footer-inner{
+      max-width:1120px;margin:0 auto;
+      padding:10px 20px 14px;
+      display:flex;flex-wrap:wrap;gap:8px;
+      justify-content:space-between;font-size:11px;color:var(--text-soft);
+    }
+    .footer-links{display:flex;gap:12px;flex-wrap:wrap;}
+    .footer-links a:hover{color:#b05825;}
+    @media(max-width:640px){
+      main{padding:26px 16px 30px;}
+      .footer-inner{padding:10px 14px 12px;font-size:10px;}
+      .footer-links{gap:10px;}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-logo-wrap">
+          <div class="brand-logo">🐾</div>
+        </div>
+        <div>
+          <div class="brand-text-main">CalmPaw Coach</div>
+          <div class="brand-text-sub">Infinite AI trainer for real-life dogs</div>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="programs.html">Programs</a>
+        <a href="bundle.html">Complete Pack</a>
+        <a href="ai.html">Ask a Dog Trainer — AI Unlimited</a>
+      </nav>
+      <div class="nav-cta">
+        <div id="nav-auth-area">
+          <a class="btn-outline" href="auth.html?redirect=/about.html">🔑 Log in</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-tag">About CalmPaw Coach</div>
+    <h1 class="page-title">Quiet, realistic training help for real homes</h1>
+    <p class="page-sub">
+      CalmPaw Coach is an online training desk for people who live with barking,
+      nervous or over-excited dogs in normal apartments. We focus on gentle,
+      realistic ideas that fit around work, neighbours and tired humans.
+    </p>
+
+    <div class="section">
+      <h2>What CalmPaw Coach does</h2>
+      <p>CalmPaw Coach offers two kinds of support:</p>
+      <ul>
+        <li><strong>Structured training programs</strong> for barking, visitors, alone-time and daily routines.</li>
+        <li><strong>CalmPaw AI Trainer</strong> — a private AI conversation where you can describe your home, neighbours and schedule in your own words.</li>
+      </ul>
+      <p>
+        Everything is designed for small apartments, shared walls and busy city life.
+        You do not need special equipment, complicated collars or formal training halls.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>Our philosophy</h2>
+      <p>We keep a few simple rules in mind for every plan:</p>
+      <ul>
+        <li><strong>Gentle first.</strong> Dogs and humans both deserve calm, kind handling.</li>
+        <li><strong>Neighbours matter.</strong> You live with people as much as with your dog. Quiet is a goal, not a bonus.</li>
+        <li><strong>Small steps are real steps.</strong> We prefer simple daily wins over perfect “Instagram training”.</li>
+        <li><strong>Honest about limits.</strong> We are not vets or behaviourists and we say so clearly.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Who it’s for</h2>
+      <p>CalmPaw Coach is built for people who:</p>
+      <ul>
+        <li>Live in apartments or close to neighbours.</li>
+        <li>Work full-time or irregular hours and feel guilty about noise.</li>
+        <li>Have already tried generic tips that did not fit their real life.</li>
+        <li>Want practical guidance without sending long emails to a trainer.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>What CalmPaw Coach does <em>not</em> do</h2>
+      <p>
+        CalmPaw Coach does not replace an in-person vet, behaviourist or emergency service.
+        We do not diagnose medical conditions, bite-risk cases or legal issues.
+        For safety concerns, aggression, injury or health changes you must contact a qualified
+        professional in your area.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>Contact</h2>
+      <p>
+        If you have questions about CalmPaw Coach, your subscription or a purchase,
+        you can reach us at:
+      </p>
+      <p>
+        <strong>Email:</strong>
+        <a href="mailto:support@calmpawcoach.com">support@calmpawcoach.com</a>
+      </p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© <span id="year"></span> CalmPaw Coach. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="refund.html">Refund Policy</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="legal.html">Legal Notice</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    async function hydrateNavAuth() {
+      const area = document.getElementById("nav-auth-area");
+      const token = localStorage.getItem("calmpaw_token");
+      const email = localStorage.getItem("calmpaw_email");
+
+      if (!token) {
+        area.innerHTML = `<a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/about.html')}">🔑 Log in</a>`;
+        return;
+      }
+      try {
+        const res = await fetch(API_BASE + "/auth/me", {
+          headers: { Authorization: "Bearer " + token },
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          localStorage.removeItem("calmpaw_token");
+          localStorage.removeItem("calmpaw_email");
+          area.innerHTML = `<a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/about.html')}">🔑 Log in</a>`;
+          return;
+        }
+        const showEmail = email || data.email || "Member";
+        area.innerHTML = `
+          <div class="nav-auth">
+            <span class="nav-auth-email" title="${showEmail}">${showEmail}</span>
+            <button class="nav-auth-btn" id="nav-switch-account">Switch</button>
+            <button class="nav-auth-btn" id="nav-logout">Log out</button>
+          </div>`;
+        document.getElementById("nav-switch-account").onclick = () => {
+          localStorage.removeItem("calmpaw_token");
+          localStorage.removeItem("calmpaw_email");
+          window.location.href = "auth.html?redirect=" + encodeURIComponent("/about.html");
+        };
+        document.getElementById("nav-logout").onclick = () => {
+          localStorage.removeItem("calmpaw_token");
+          localStorage.removeItem("calmpaw_email");
+          window.location.href = "/index.html";
+        };
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    document.addEventListener("DOMContentLoaded", hydrateNavAuth);
+  </script>
+</body>
+</html>
