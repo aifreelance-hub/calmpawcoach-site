@@ -5,59 +5,161 @@
   <title>Legal Notice — CalmPaw Coach</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="favicon.png" />
-
   <style>
-    /* 同样复用前面的样式 */
     *{box-sizing:border-box;margin:0;padding:0;}
-    :root{--bg:#fff7f0;--bg-soft:#ffeede;--accent:#ffb86b;--accent-strong:#ff914d;--accent-soft:#ffe0b8;--text-main:#3b2824;--text-soft:#8a6a63;--border-soft:#f3d9c4;--radius-lg:26px;--radius-md:18px;--radius-pill:999px;--shadow-soft:0 26px 60px rgba(210,145,110,.38);}
-    body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"Segoe UI",sans-serif;background:radial-gradient(circle at 5% 0%,#ffe0c0 0%,transparent 55%),radial-gradient(circle at 100% 0%,#ffd4d4 0%,transparent 55%),radial-gradient(circle at 0% 100%,#ffe5c3 0%,transparent 55%),linear-gradient(180deg,#fff7f0 0%,#fff2e7 40%,#fff8f2 100%);color:var(--text-main);min-height:100vh;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;}
+    :root{
+      --bg:#fff7f0;--bg-soft:#ffeede;
+      --accent:#ffb86b;--accent-strong:#ff914d;
+      --text-main:#3b2824;--text-soft:#8a6a63;
+      --border-soft:#f3d9c4;--radius-lg:26px;--radius-pill:999px;
+    }
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(circle at 5% 0%,#ffe0c0 0%,transparent 55%),
+        radial-gradient(circle at 100% 0%,#ffd4d4 0%,transparent 55%),
+        radial-gradient(circle at 0% 100%,#ffe5c3 0%,transparent 55%),
+        linear-gradient(180deg,#fff7f0 0%,#fff2e7 40%,#fff8f2 100%);
+      color:var(--text-main);min-height:100vh;-webkit-font-smoothing:antialiased;
+    }
     a{text-decoration:none;color:inherit;}
 
-    header{position:sticky;top:0;z-index:50;backdrop-filter:blur(22px);background:linear-gradient(to bottom,rgba(255,248,240,.98),rgba(255,248,240,.88),rgba(255,248,240,.75));border-bottom:1px solid rgba(243,217,196,.8);}
-    .nav-inner{max-width:1120px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+    header{
+      position:sticky;top:0;z-index:50;backdrop-filter:blur(22px);
+      background:linear-gradient(to bottom,rgba(255,248,240,.98),rgba(255,248,240,.88),rgba(255,248,240,.75));
+      border-bottom:1px solid rgba(243,217,196,.8);
+    }
+    .nav-inner{
+      max-width:1120px;margin:0 auto;padding:10px 20px;
+      display:flex;align-items:center;justify-content:space-between;
+      gap:14px;flex-wrap:wrap;
+    }
     .brand{display:flex;align-items:center;gap:10px;min-width:0;}
     .brand-logo-wrap{position:relative;}
-    .brand-logo{width:40px;height:40px;border-radius:18px;background:radial-gradient(circle at 20% 15%,#fff9f3 0%,#ffb86b 40%,#ff914d 84%);display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 16px 40px rgba(214,139,86,.6);position:relative;z-index:1;}
+    .brand-orbit{
+      position:absolute;inset:-4px;border-radius:50%;
+      background:conic-gradient(from 160deg,
+        rgba(255,184,107,.15),
+        rgba(255,145,77,.3),
+        rgba(255,230,190,.2),
+        rgba(255,184,107,.15));
+      filter:blur(4px);opacity:.9;
+    }
+    .brand-logo{
+      width:40px;height:40px;border-radius:18px;
+      background:radial-gradient(circle at 20% 15%,#fff9f3 0%,#ffb86b 40%,#ff914d 84%);
+      display:flex;align-items:center;justify-content:center;
+      font-size:22px;box-shadow:0 16px 40px rgba(214,139,86,.6);
+      position:relative;z-index:1;
+    }
     .brand-text-main{font-weight:750;letter-spacing:.03em;font-size:18px;white-space:nowrap;}
     .brand-text-sub{font-size:11px;color:var(--text-soft);white-space:nowrap;}
-    .nav-links{display:flex;align-items:center;gap:16px;font-size:14px;color:var(--text-soft);flex:1;justify-content:center;min-width:0;}
-    .nav-links a{padding:6px 11px;border-radius:999px;transition:color .18s,transform .12s;}
+
+    .nav-links{
+      display:flex;align-items:center;gap:16px;
+      font-size:14px;color:var(--text-soft);
+      flex:1;justify-content:center;flex-wrap:wrap;min-width:0;
+    }
+    .nav-links a{
+      padding:6px 11px;border-radius:999px;white-space:nowrap;
+      transition:color .18s ease,transform .12s ease;
+    }
     .nav-links a:hover{color:var(--text-main);transform:translateY(-1px);}
-    .nav-cta{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:auto;}
-    .btn-outline{padding:7px 16px;border-radius:var(--radius-pill);border:1px solid var(--border-soft);background:rgba(255,250,244,.95);font-size:13px;color:var(--text-soft);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .18s;white-space:nowrap;}
-    .btn-outline:hover{border-color:var(--accent);color:var(--text-main);box-shadow:0 14px 32px rgba(204,145,107,.28);transform:translateY(-1px);background:#fffaf5;}
+
+    .nav-cta{display:flex;align-items:center;gap:8px;margin-left:auto;}
+    .btn-outline{
+      padding:7px 16px;border-radius:var(--radius-pill);
+      border:1px solid var(--border-soft);
+      background:rgba(255,250,244,.95);
+      font-size:13px;color:var(--text-soft);
+      cursor:pointer;display:inline-flex;align-items:center;gap:6px;
+    }
+    .btn-outline:hover{
+      border-color:var(--accent);color:var(--text-main);
+      box-shadow:0 14px 32px rgba(204,145,107,.28);background:#fffaf5;
+    }
     .nav-auth{display:flex;align-items:center;gap:6px;}
-    .nav-auth-email{max-width:160px;padding:5px 10px;border-radius:var(--radius-pill);background:rgba(255,250,244,.95);border:1px solid rgba(243,217,196,.9);font-size:12px;color:#6b4532;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .nav-auth-btn{border:none;background:transparent;font-size:11px;color:#b05825;padding:4px 7px;border-radius:999px;cursor:pointer;transition:background .15s,color .15s;white-space:nowrap;}
+    .nav-auth-email{
+      max-width:160px;padding:5px 10px;border-radius:var(--radius-pill);
+      background:rgba(255,250,244,.95);border:1px solid rgba(243,217,196,.9);
+      font-size:12px;color:#6b4532;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    }
+    .nav-auth-btn{
+      border:none;background:transparent;font-size:11px;color:#b05825;
+      padding:4px 7px;border-radius:999px;cursor:pointer;
+    }
     .nav-auth-btn:hover{background:rgba(255,237,213,.95);color:#7a3410;}
-    @media(max-width:880px){.nav-links{display:none;}.nav-inner{align-items:flex-start;}.nav-cta{margin-left:0;}}
-    @media(max-width:640px){.nav-inner{padding:8px 14px;gap:6px;flex-wrap:wrap;align-items:flex-start;}.brand{width:100%;}.brand-logo{width:34px;height:34px;font-size:20px;}.brand-text-main{font-size:16px;}.brand-text-sub{font-size:10px;}.nav-cta{width:100%;justify-content:flex-end;gap:6px;}.btn-outline{padding:6px 10px;font-size:12px;}.nav-auth-email{max-width:130px;font-size:11px;}}
+    .nav-login-emoji{font-size:14px;}
 
-    main{flex:1;max-width:760px;margin:0 auto;padding:32px 20px 40px;}
-    .page-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;background:rgba(255,250,244,.96);border:1px solid rgba(243,217,196,.9);font-size:11px;color:#a2643c;margin-bottom:16px;}
-    .page-title{font-size:26px;font-weight:700;margin-bottom:10px;}
-    .page-sub{font-size:14px;color:var(--text-soft);margin-bottom:22px;line-height:1.7;}
-    .section{margin-bottom:22px;}
-    .section h2{font-size:18px;margin-bottom:8px;}
-    .section p{font-size:14px;color:var(--text-soft);line-height:1.7;margin-bottom:8px;}
-    .section ul{font-size:14px;color:var(--text-soft);line-height:1.7;padding-left:18px;margin-bottom:8px;}
-    .section ul li{margin-bottom:4px;}
+    @media(max-width:880px){
+      .nav-inner{align-items:flex-start;flex-wrap:wrap;row-gap:8px;}
+      .brand{width:100%;}
+      .nav-links{width:100%;justify-content:flex-start;row-gap:6px;}
+      .nav-cta{margin-left:0;}
+    }
+    @media(max-width:640px){
+      .nav-inner{padding:8px 14px;}
+      .brand-logo{width:34px;height:34px;font-size:20px;}
+      .brand-text-main{font-size:16px;}
+      .brand-text-sub{font-size:10px;}
+      .btn-outline{padding:6px 10px;font-size:12px;}
+      .nav-auth-email{max-width:130px;font-size:11px;}
+    }
 
-    footer{border-top:1px solid rgba(243,217,196,.8);background:rgba(255,248,241,.96);}
-    .footer-inner{max-width:1120px;margin:0 auto;padding:10px 20px 14px;display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;font-size:11px;color:var(--text-soft);}
+    main{
+      max-width:840px;margin:0 auto;
+      padding:28px 20px 40px;
+    }
+    .content-card{
+      background:rgba(255,248,241,.97);
+      border-radius:var(--radius-lg);
+      border:1px solid rgba(243,217,196,.9);
+      padding:20px 18px 18px;
+      box-shadow:0 20px 46px rgba(210,145,110,.4);
+    }
+    .page-kicker{
+      font-size:11px;color:var(--text-soft);
+      text-transform:uppercase;letter-spacing:.12em;
+      margin-bottom:6px;
+    }
+    h1{font-size:24px;margin-bottom:10px;}
+    h2{font-size:17px;margin-top:18px;margin-bottom:6px;}
+    p,li{font-size:13px;line-height:1.7;color:var(--text-main);}
+    p{margin-bottom:10px;}
+    ul{padding-left:18px;margin-bottom:10px;}
+    li{margin-bottom:6px;}
+
+    footer{
+      border-top:1px solid rgba(243,217,196,.8);
+      background:rgba(255,248,241,.96);
+      margin-top:10px;
+    }
+    .footer-inner{
+      max-width:1120px;margin:0 auto;
+      padding:12px 20px 16px;
+      display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;
+      font-size:11px;color:var(--text-soft);
+    }
     .footer-links{display:flex;gap:12px;flex-wrap:wrap;}
     .footer-links a:hover{color:#b05825;}
-    @media(max-width:640px){main{padding:26px 16px 30px;}.footer-inner{padding:10px 14px 12px;font-size:10px;}.footer-links{gap:10px;}}
+    @media(max-width:640px){
+      main{padding:24px 14px 32px;}
+      .footer-inner{padding:10px 14px 14px;font-size:10px;}
+      .footer-links{gap:10px;}
+    }
   </style>
 </head>
 <body>
   <header>
     <div class="nav-inner">
       <a href="index.html" class="brand">
-        <div class="brand-logo-wrap"><div class="brand-logo">🐾</div></div>
+        <div class="brand-logo-wrap">
+          <div class="brand-orbit"></div>
+          <div class="brand-logo">🐾</div>
+        </div>
         <div>
           <div class="brand-text-main">CalmPaw Coach</div>
-          <div class="brand-text-sub">Infinite AI trainer for real-life dogs</div>
+          <div class="brand-text-sub">Gentle, realistic dog training</div>
         </div>
       </a>
       <nav class="nav-links">
@@ -67,91 +169,78 @@
       </nav>
       <div class="nav-cta">
         <div id="nav-auth-area">
-          <a class="btn-outline" href="auth.html?redirect=/legal.html">🔑 Log in</a>
+          <a class="btn-outline" href="auth.html?redirect=/legal.html">
+            <span class="nav-login-emoji">🔑</span> Log in
+          </a>
         </div>
       </div>
     </div>
   </header>
 
   <main>
-    <div class="page-tag">Legal Notice</div>
-    <h1 class="page-title">Imprint & legal information</h1>
-    <p class="page-sub">
-      This page provides basic legal and contact information about the operator
-      of CalmPaw Coach. Please adjust the details to match your own legal
-      requirements and local regulations.
-    </p>
-
-    <div class="section">
-      <h2>Service operator</h2>
-      <p><strong>Service name:</strong> CalmPaw Coach</p>
-      <p><strong>Contact email:</strong>
-        <a href="mailto:support@calmpawcoach.com">support@calmpawcoach.com</a>
+    <section class="content-card">
+      <div class="page-kicker">Legal Notice</div>
+      <h1>Legal Notice / Imprint</h1>
+      <p>
+        This website is operated by the owner of CalmPaw Coach (“we”, “us”).
+        The information below is provided for transparency and legal notice
+        purposes. CalmPaw Coach is an online business providing digital dog
+        training plans and related educational material.
       </p>
-      <p><strong>Website:</strong> <a href="https://calmpawcoach.com">https://calmpawcoach.com</a></p>
-      <!-- 可按需要补充地址、注册号、VAT 等 -->
-    </div>
 
-    <div class="section">
+      <h2>Operator</h2>
+      <p>
+        Business name: <strong>CalmPaw Coach</strong><br/>
+        Business type: Online digital training products for dog owners<br/>
+        Contact email: <strong>support@calmpawcoach.com</strong>
+      </p>
+
+      <p>
+        Because CalmPaw Coach is a small, privacy-conscious online business,
+        full postal address details are not published publicly. If required
+        for contractual or legal reasons (for example, invoicing information),
+        they can be provided upon request via email.
+      </p>
+
       <h2>Content responsibility</h2>
       <p>
-        The owner listed above is responsible for the content of this website,
-        except where content is clearly provided by third parties (for example:
-        payment providers, embedded widgets or external links).
+        We take care to provide accurate, up-to-date information. However, dog
+        behavior and individual circumstances vary widely. The content on this
+        website and in all products is provided for general education and does
+        not replace professional, in-person assessment.
       </p>
-      <p>
-        CalmPaw Coach aims to provide careful, realistic information about dog
-        behaviour in everyday homes. However, no guarantee can be given that all
-        information is complete, current or suitable for every situation.
-      </p>
-    </div>
 
-    <div class="section">
       <h2>External links</h2>
       <p>
-        Our website may contain links to external sites that we do not operate.
-        We have no control over the content or privacy practices of these sites
-        and cannot accept responsibility for them. Visiting external sites is
-        at your own discretion.
+        This website may contain links to external sites. We do not control or
+        endorse the content of those sites and are not responsible for any
+        information or services provided there. If you notice a problematic
+        link, please let us know and we will review it.
       </p>
-    </div>
 
-    <div class="section">
       <h2>Intellectual property</h2>
       <p>
-        Unless otherwise stated, all text, images, branding and design elements
-        on this website are protected by copyright and related intellectual
-        property rights. Any unauthorised copying, distribution or commercial
-        use is not permitted without written consent.
+        All text, graphics, layouts and other content on this website and in
+        CalmPaw Coach products are protected by copyright. You may not copy,
+        redistribute or use them for commercial purposes without our written
+        permission.
       </p>
-    </div>
 
-    <div class="section">
-      <h2>No medical or legal advice</h2>
-      <p>
-        All information on this site, including AI outputs and training programs,
-        is intended as general educational material only. It does not replace
-        professional veterinary, medical, legal or behaviourist advice.
-      </p>
-      <p>
-        You must consult qualified professionals in your own area for diagnosis,
-        treatment or legally binding recommendations.
-      </p>
-    </div>
-
-    <div class="section">
       <h2>Dispute resolution</h2>
       <p>
-        If you have concerns about CalmPaw Coach or a purchase, please contact
-        us first at
-        <a href="mailto:support@calmpawcoach.com">support@calmpawcoach.com</a>.
-        We will try to resolve issues informally wherever possible.
+        If you have a concern or dispute regarding a purchase or our content,
+        we ask that you contact us first at
+        <strong>support@calmpawcoach.com</strong> so we can try to resolve the
+        matter together.
       </p>
-    </div>
 
-    <p class="section" style="font-size:12px;color:var(--text-soft);">
-      Last updated: <span id="last-updated">2025-12-01</span>
-    </p>
+      <h2>Contact</h2>
+      <p>
+        For legal queries, requests for business details or questions about
+        this notice, please contact:<br/>
+        <strong>support@calmpawcoach.com</strong>
+      </p>
+    </section>
   </main>
 
   <footer>
@@ -169,46 +258,54 @@
   </footer>
 
   <script>
-    const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
     document.getElementById("year").textContent = new Date().getFullYear();
-
+    const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
     async function hydrateNavAuth(){
-      const area=document.getElementById("nav-auth-area");
-      const token=localStorage.getItem("calmpaw_token");
-      const email=localStorage.getItem("calmpaw_email");
+      const area = document.getElementById("nav-auth-area");
+      if(!area) return;
+      const token = localStorage.getItem("calmpaw_token");
+      const email = localStorage.getItem("calmpaw_email");
       if(!token){
-        area.innerHTML=`<a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/legal.html')}">🔑 Log in</a>`;
+        area.innerHTML = `
+          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/legal.html')}">
+            <span class="nav-login-emoji">🔑</span> Log in
+          </a>`;
         return;
       }
       try{
-        const res=await fetch(API_BASE+"/auth/me",{headers:{Authorization:"Bearer "+token}});
-        const data=await res.json();
-        if(!res.ok||!data.ok){
+        const res = await fetch(API_BASE + "/auth/me", {
+          headers:{Authorization:"Bearer "+token}
+        });
+        const data = await res.json();
+        if(!res.ok || !data.ok){
           localStorage.removeItem("calmpaw_token");
           localStorage.removeItem("calmpaw_email");
-          area.innerHTML=`<a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/legal.html')}">🔑 Log in</a>`;
+          area.innerHTML = `
+            <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/legal.html')}">
+              <span class="nav-login-emoji">🔑</span> Log in
+            </a>`;
           return;
         }
-        const showEmail=email||data.email||"Member";
-        area.innerHTML=`
+        const showEmail = email || data.email || "Member";
+        area.innerHTML = `
           <div class="nav-auth">
             <span class="nav-auth-email" title="${showEmail}">${showEmail}</span>
             <button class="nav-auth-btn" id="nav-switch-account">Switch</button>
             <button class="nav-auth-btn" id="nav-logout">Log out</button>
           </div>`;
-        document.getElementById("nav-switch-account").onclick=()=>{
+        document.getElementById("nav-switch-account").onclick = () => {
           localStorage.removeItem("calmpaw_token");
           localStorage.removeItem("calmpaw_email");
-          window.location.href="auth.html?redirect="+encodeURIComponent("/legal.html");
+          window.location.href = "auth.html?redirect=" + encodeURIComponent("/legal.html");
         };
-        document.getElementById("nav-logout").onclick=()=>{
+        document.getElementById("nav-logout").onclick = () => {
           localStorage.removeItem("calmpaw_token");
           localStorage.removeItem("calmpaw_email");
-          window.location.href="/index.html";
+          window.location.href = "/index.html";
         };
       }catch(e){console.error(e);}
     }
-    document.addEventListener("DOMContentLoaded",hydrateNavAuth);
+    document.addEventListener("DOMContentLoaded", hydrateNavAuth);
   </script>
 </body>
 </html>
