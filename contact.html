@@ -5,87 +5,413 @@
   <title>Contact — CalmPaw Coach</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="favicon.png" />
-  <!-- 样式基本同 about.html，略去注释以便复制 -->
+
   <style>
-    *{box-sizing:border-box;margin:0;padding:0;}
-    :root{
-      --bg:#fff7f0;--bg-soft:#ffeede;
-      --accent:#ffb86b;--accent-strong:#ff914d;--accent-soft:#ffe0b8;
-      --text-main:#3b2824;--text-soft:#8a6a63;
-      --border-soft:#f3d9c4;
-      --radius-lg:26px;--radius-pill:999px;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #fff7f0;
+      --accent: #ffb86b;
+      --accent-strong: #ff914d;
+      --text-main: #3b2824;
+      --text-soft: #8a6a63;
+      --border-soft: #f3d9c4;
+      --radius-lg: 26px;
+      --radius-md: 18px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 26px 60px rgba(210, 145, 110, 0.38);
     }
-    body{
-      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"Segoe UI",sans-serif;
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        system-ui, "Segoe UI", sans-serif;
       background:
-        radial-gradient(circle at 5% 0%,#ffe0c0 0%,transparent 55%),
-        radial-gradient(circle at 100% 0%,#ffd4d4 0%,transparent 55%),
-        radial-gradient(circle at 0% 100%,#ffe5c3 0%,transparent 55%),
-        linear-gradient(180deg,#fff7f0 0%,#fff2e7 40%,#fff8f2 100%);
-      color:var(--text-main);min-height:100vh;-webkit-font-smoothing:antialiased;
+        radial-gradient(circle at 5% 0%, #ffe0c0 0%, transparent 55%),
+        radial-gradient(circle at 100% 0%, #ffd4d4 0%, transparent 55%),
+        radial-gradient(circle at 0% 100%, #ffe5c3 0%, transparent 55%),
+        linear-gradient(180deg, #fff7f0 0%, #fff2e7 40%, #fff8f2 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
-    a{text-decoration:none;color:inherit;}
-    header{position:sticky;top:0;z-index:50;backdrop-filter:blur(22px);
-      background:linear-gradient(to bottom,rgba(255,248,240,.98),rgba(255,248,240,.88),rgba(255,248,240,.75));
-      border-bottom:1px solid rgba(243,217,196,.8);}
-    .nav-inner{max-width:1120px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;}
-    .brand{display:flex;align-items:center;gap:10px;min-width:0;}
-    .brand-logo-wrap{position:relative;}
-    .brand-orbit{position:absolute;inset:-4px;border-radius:50%;
-      background:conic-gradient(from 160deg,rgba(255,184,107,.15),rgba(255,145,77,.3),rgba(255,230,190,.2),rgba(255,184,107,.15));
-      filter:blur(4px);opacity:.9;}
-    .brand-logo{width:40px;height:40px;border-radius:18px;
-      background:radial-gradient(circle at 20% 15%,#fff9f3 0%,#ffb86b 40%,#ff914d 84%);
-      display:flex;align-items:center;justify-content:center;font-size:22px;
-      box-shadow:0 16px 40px rgba(214,139,86,.6);position:relative;z-index:1;}
-    .brand-text-main{font-weight:750;letter-spacing:.03em;font-size:18px;white-space:nowrap;}
-    .brand-text-sub{font-size:11px;color:var(--text-soft);white-space:nowrap;}
-    .nav-links{display:flex;align-items:center;gap:16px;font-size:14px;color:var(--text-soft);flex:1;justify-content:center;flex-wrap:wrap;}
-    .nav-links a{padding:6px 11px;border-radius:999px;white-space:nowrap;transition:color .18s ease,transform .12s ease;}
-    .nav-links a:hover{color:var(--text-main);transform:translateY(-1px);}
-    .nav-cta{display:flex;align-items:center;gap:8px;margin-left:auto;}
-    .btn-outline{padding:7px 16px;border-radius:var(--radius-pill);border:1px solid var(--border-soft);
-      background:rgba(255,250,244,.95);font-size:13px;color:var(--text-soft);display:inline-flex;align-items:center;gap:6px;cursor:pointer;}
-    .btn-outline:hover{border-color:var(--accent);color:var(--text-main);box-shadow:0 14px 32px rgba(204,145,107,.28);background:#fffaf5;}
-    .nav-auth{display:flex;align-items:center;gap:6px;}
-    .nav-auth-email{max-width:160px;padding:5px 10px;border-radius:var(--radius-pill);background:rgba(255,250,244,.95);
-      border:1px solid rgba(243,217,196,.9);font-size:12px;color:#6b4532;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .nav-auth-btn{border:none;background:transparent;font-size:11px;color:#b05825;padding:4px 7px;border-radius:999px;cursor:pointer;}
-    .nav-auth-btn:hover{background:rgba(255,237,213,.95);color:#7a3410;}
-    .nav-login-emoji{font-size:14px;}
-    @media(max-width:880px){.nav-inner{align-items:flex-start;flex-wrap:wrap;row-gap:8px;}
-      .brand{width:100%;}.nav-links{width:100%;justify-content:flex-start;row-gap:6px;}.nav-cta{margin-left:0;}}
-    @media(max-width:640px){.nav-inner{padding:8px 14px;}
-      .brand-logo{width:34px;height:34px;font-size:20px;}
-      .brand-text-main{font-size:16px;}.brand-text-sub{font-size:10px;}
-      .nav-auth-email{max-width:130px;font-size:11px;}
-      .btn-outline{padding:6px 10px;font-size:12px;}}
-    main{max-width:840px;margin:0 auto;padding:28px 20px 40px;}
-    .content-card{background:rgba(255,248,241,.97);border-radius:26px;border:1px solid rgba(243,217,196,.9);padding:20px 18px 18px;box-shadow:0 20px 46px rgba(210,145,110,.4);}
-    .page-kicker{font-size:11px;color:var(--text-soft);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px;}
-    h1{font-size:24px;margin-bottom:10px;}
-    p{font-size:13px;line-height:1.7;color:var(--text-main);margin-bottom:10px;}
-    .grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:18px;margin-top:10px;}
-    @media(max-width:720px){main{padding:24px 14px 32px;}.grid{grid-template-columns:minmax(0,1fr);}}
-    label{font-size:12px;color:var(--text-soft);display:block;margin-bottom:4px;}
-    input,textarea{
-      width:100%;border-radius:16px;border:1px solid rgba(243,217,196,.9);
-      padding:8px 10px;font-size:13px;font-family:inherit;background:#fffaf5;
+
+    a { text-decoration: none; color: inherit; }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(22px);
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 248, 240, 0.98),
+        rgba(255, 248, 240, 0.88),
+        rgba(255, 248, 240, 0.75)
+      );
+      border-bottom: 1px solid rgba(243, 217, 196, 0.8);
     }
-    textarea{min-height:120px;resize:vertical;}
-    input:focus,textarea:focus{outline:none;border-color:var(--accent-strong);box-shadow:0 0 0 1px rgba(255,145,77,.3);}
-    .btn-primary{
-      margin-top:10px;padding:8px 18px;border-radius:999px;border:none;font-size:13px;font-weight:600;
-      cursor:pointer;color:#4a251a;
-      background-image:linear-gradient(135deg,#ffb86b,#ff914d);
-      box-shadow:0 18px 40px rgba(214,139,86,.65);
+
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
     }
-    .btn-primary:hover{box-shadow:0 22px 52px rgba(204,129,76,.75);}
-    footer{border-top:1px solid rgba(243,217,196,.8);background:rgba(255,248,241,.96);margin-top:10px;}
-    .footer-inner{max-width:1120px;margin:0 auto;padding:12px 20px 16px;display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;font-size:11px;color:var(--text-soft);}
-    .footer-links{display:flex;gap:12px;flex-wrap:wrap;}
-    .footer-links a:hover{color:#b05825;}
-    @media(max-width:640px){.footer-inner{padding:10px 14px 14px;font-size:10px;}.footer-links{gap:10px;}}
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-logo-wrap { position: relative; }
+
+    .brand-orbit {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 160deg,
+        rgba(255, 184, 107, 0.15),
+        rgba(255, 145, 77, 0.3),
+        rgba(255, 230, 190, 0.2),
+        rgba(255, 184, 107, 0.15)
+      );
+      filter: blur(4px);
+      opacity: 0.9;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 18px;
+      background: radial-gradient(circle at 20% 15%, #fff9f3 0%, #ffb86b 40%, #ff914d 84%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 16px 40px rgba(214, 139, 86, 0.6);
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-text-main {
+      font-weight: 750;
+      letter-spacing: 0.03em;
+      font-size: 18px;
+      white-space: nowrap;
+    }
+
+    .brand-text-sub {
+      font-size: 11px;
+      color: var(--text-soft);
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 14px;
+      color: var(--text-soft);
+      flex: 1;
+      justify-content: center;
+      min-width: 0;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      padding: 6px 11px;
+      border-radius: var(--radius-pill);
+      transition: color 0.18s ease, transform 0.12s ease;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-main);
+      transform: translateY(-1px);
+    }
+
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+
+    .btn-outline {
+      padding: 7px 16px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-soft);
+      background: rgba(255, 250, 244, 0.95);
+      font-size: 13px;
+      color: var(--text-soft);
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--text-main);
+      box-shadow: 0 14px 32px rgba(204, 145, 107, 0.28);
+      transform: translateY(-1px);
+      background: #fffaf5;
+    }
+
+    .nav-auth {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-auth-email {
+      max-width: 160px;
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 250, 244, 0.95);
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      font-size: 12px;
+      color: #6b4532;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-auth-btn {
+      border: none;
+      background: transparent;
+      font-size: 11px;
+      color: #b05825;
+      padding: 4px 7px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .nav-auth-btn:hover {
+      background: rgba(255, 237, 213, 0.95);
+      color: #7a3410;
+    }
+
+    @media (max-width: 880px) {
+      .nav-inner { align-items: flex-start; }
+      .nav-links {
+        width: 100%;
+        justify-content: flex-start;
+      }
+      .nav-cta { margin-left: 0; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-inner {
+        padding: 8px 14px;
+        gap: 6px;
+        flex-wrap: wrap;
+        align-items: flex-start;
+      }
+      .brand { width: 100%; }
+      .brand-logo {
+        width: 34px;
+        height: 34px;
+        font-size: 20px;
+      }
+      .brand-text-main { font-size: 16px; }
+      .brand-text-sub { font-size: 10px; }
+      .nav-links { font-size: 13px; gap: 10px; }
+      .nav-cta {
+        width: 100%;
+        justify-content: flex-end;
+        gap: 6px;
+      }
+      .btn-outline {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+      .nav-auth-email {
+        max-width: 130px;
+        font-size: 11px;
+      }
+    }
+
+    /* Layout */
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 26px 20px 40px;
+    }
+
+    .contact-card {
+      max-width: 800px;
+      margin: 0 auto;
+      background: rgba(255, 248, 241, 0.98);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      box-shadow: var(--shadow-soft);
+      padding: 24px 24px 20px;
+    }
+
+    .contact-tag {
+      font-size: 11px;
+      color: var(--text-soft);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .contact-title {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .contact-sub {
+      font-size: 13px;
+      color: var(--text-soft);
+      margin-bottom: 18px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    @media (max-width: 760px) {
+      .contact-card {
+        padding: 20px 16px 18px;
+        border-radius: 22px;
+      }
+      .contact-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      color: var(--text-main);
+      margin-bottom: 5px;
+    }
+
+    .field {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      background: #fffaf5;
+      padding: 8px 12px;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .field::placeholder {
+      color: #c7a695;
+    }
+
+    textarea.field {
+      border-radius: 16px;
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    .field:focus {
+      outline: none;
+      border-color: var(--accent-strong);
+      box-shadow: 0 0 0 1px rgba(255, 145, 77, 0.3);
+    }
+
+    .btn-primary {
+      padding: 9px 20px;
+      border-radius: var(--radius-pill);
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #4a251a;
+      background-image:
+        linear-gradient(135deg, #ffb86b, #ff914d),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.4), transparent);
+      background-size: 100% 100%, 120px 100%;
+      background-position: 0 0, -120px 0;
+      background-repeat: no-repeat;
+      box-shadow: 0 18px 40px rgba(214, 139, 86, 0.65);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .btn-primary span {
+      font-size: 14px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 24px 56px rgba(204, 129, 76, 0.75);
+    }
+
+    .contact-side-title {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .contact-side-text {
+      font-size: 12px;
+      color: var(--text-soft);
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid rgba(243, 217, 196, 0.8);
+      background: rgba(255, 248, 241, 0.96);
+    }
+
+    .footer-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 12px 20px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a:hover {
+      color: #b05825;
+    }
+
+    @media (max-width: 640px) {
+      main {
+        padding: 20px 14px 28px;
+      }
+      .footer-inner {
+        padding: 10px 14px 14px;
+        font-size: 10px;
+      }
+      .footer-links {
+        gap: 10px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -101,15 +427,17 @@
           <div class="brand-text-sub">Gentle, realistic dog training</div>
         </div>
       </a>
+
       <nav class="nav-links">
         <a href="programs.html">Programs</a>
         <a href="bundle.html">Complete Pack</a>
         <a href="ai.html">Ask a Dog Trainer — AI Unlimited</a>
       </nav>
+
       <div class="nav-cta">
         <div id="nav-auth-area">
           <a class="btn-outline" href="auth.html?redirect=/contact.html">
-            <span class="nav-login-emoji">🔑</span> Log in
+            🔑 Log in
           </a>
         </div>
       </div>
@@ -117,42 +445,51 @@
   </header>
 
   <main>
-    <section class="content-card">
-      <div class="page-kicker">Contact</div>
-      <h1>Get in touch</h1>
-      <p>
-        If you have questions about a program, your purchase, or how CalmPaw
-        Coach might fit your situation, you can always reach out. We aim to
-        reply within 2–3 business days.
+    <section class="contact-card">
+      <div class="contact-tag">CONTACT</div>
+      <h1 class="contact-title">Get in touch</h1>
+      <p class="contact-sub">
+        If you have questions about a program, your purchase, or how CalmPaw Coach might fit your situation,
+        you can always reach out. We aim to reply within 2–3 business days.
       </p>
 
-      <div class="grid">
+      <div class="contact-grid">
+        <!-- Left column: “form look”, but button just opens email client -->
         <div>
-          <form>
-            <label for="name">Name</label>
-            <input id="name" type="text" placeholder="Your name" />
+          <label for="name">Name</label>
+          <input id="name" class="field" placeholder="Your name" />
 
-            <label for="email" style="margin-top:10px;">Email</label>
-            <input id="email" type="email" placeholder="you@example.com" />
+          <label for="email">Email</label>
+          <input id="email" class="field" placeholder="you@example.com" />
 
-            <label for="message" style="margin-top:10px;">Message</label>
-            <textarea id="message" placeholder="Tell us a little about your dog and your question."></textarea>
+          <label for="msg">Message</label>
+          <textarea
+            id="msg"
+            class="field"
+            placeholder="Tell us a little about your dog and your question."></textarea>
 
-            <button type="button" class="btn-primary" disabled>
-              Submit (coming soon)
-            </button>
-          </form>
+          <!-- 核心按钮：打开客户邮箱 -->
+          <a
+            class="btn-primary"
+            href="mailto:support@calmpawcoach.com?subject=Question%20about%20CalmPaw%20Coach&body=Hi%20CalmPaw%20Coach%2C%0A%0AMy%20name%20is%3A%20%5Byour%20name%5D%0AEmail%3A%20%5Byour%20email%5D%0A%0AMy%20dog%20/%20question%3A%0A%5Bplease%20add%20details%20here%5D%0A">
+            Email us (opens your mail app) <span>✉️</span>
+          </a>
         </div>
+
+        <!-- Right column: info text -->
         <div>
-          <p><strong>Email</strong><br/>support@calmpawcoach.com</p>
-          <p>
-            Please include the email you used at checkout and, if relevant,
-            your order number. This helps us find your purchase quickly.
+          <div class="contact-side-title">Email</div>
+          <p class="contact-side-text">
+            <strong>support@calmpawcoach.com</strong><br /><br />
+            Please include the email you used at checkout and, if relevant, your order
+            number. This helps us find your purchase quickly.
           </p>
-          <p>
-            CalmPaw Coach is an online product. We do not offer emergency or
-            in-person services. If your dog or anyone else is in immediate
-            danger, please contact a local veterinarian or emergency service.
+
+          <div class="contact-side-title">Important</div>
+          <p class="contact-side-text">
+            CalmPaw Coach is an online product. We do not offer emergency or in-person services.
+            If your dog or anyone else is in immediate danger, please contact a local veterinarian
+            or emergency service.
           </p>
         </div>
       </div>
@@ -175,51 +512,67 @@
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
+
     const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
-    async function hydrateNavAuth(){
-      const area=document.getElementById("nav-auth-area");
-      if(!area) return;
-      const token=localStorage.getItem("calmpaw_token");
-      const email=localStorage.getItem("calmpaw_email");
-      if(!token){
-        area.innerHTML=`
+
+    async function hydrateNavAuth() {
+      const area = document.getElementById("nav-auth-area");
+      if (!area) return;
+
+      const token = localStorage.getItem("calmpaw_token");
+      const email = localStorage.getItem("calmpaw_email");
+
+      if (!token) {
+        area.innerHTML = `
           <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/contact.html')}">
-            <span class="nav-login-emoji">🔑</span> Log in
+            🔑 Log in
           </a>`;
         return;
       }
-      try{
-        const res=await fetch(API_BASE+"/auth/me",{headers:{Authorization:"Bearer "+token}});
-        const data=await res.json();
-        if(!res.ok||!data.ok){
+
+      try {
+        const res = await fetch(API_BASE + "/auth/me", {
+          headers: { Authorization: "Bearer " + token },
+        });
+        const data = await res.json();
+
+        if (!res.ok || !data.ok) {
           localStorage.removeItem("calmpaw_token");
           localStorage.removeItem("calmpaw_email");
-          area.innerHTML=`
+          area.innerHTML = `
             <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/contact.html')}">
-              <span class="nav-login-emoji">🔑</span> Log in
+              🔑 Log in
             </a>`;
           return;
         }
-        const showEmail=email||data.email||"Member";
-        area.innerHTML=`
+
+        const showEmail = email || data.email || "Member";
+        area.innerHTML = `
           <div class="nav-auth">
             <span class="nav-auth-email" title="${showEmail}">${showEmail}</span>
             <button class="nav-auth-btn" id="nav-switch-account">Switch</button>
             <button class="nav-auth-btn" id="nav-logout">Log out</button>
-          </div>`;
-        document.getElementById("nav-switch-account").onclick=()=>{
+          </div>
+        `;
+
+        document.getElementById("nav-switch-account")?.addEventListener("click", () => {
           localStorage.removeItem("calmpaw_token");
           localStorage.removeItem("calmpaw_email");
-          window.location.href="auth.html?redirect="+encodeURIComponent("/contact.html");
-        };
-        document.getElementById("nav-logout").onclick=()=>{
+          window.location.href =
+            "auth.html?redirect=" + encodeURIComponent("/contact.html");
+        });
+
+        document.getElementById("nav-logout")?.addEventListener("click", () => {
           localStorage.removeItem("calmpaw_token");
           localStorage.removeItem("calmpaw_email");
-          window.location.href="/index.html";
-        };
-      }catch(e){console.error(e);}
+          window.location.href = "/index.html";
+        });
+      } catch (e) {
+        console.error(e);
+      }
     }
-    document.addEventListener("DOMContentLoaded",hydrateNavAuth);
+
+    document.addEventListener("DOMContentLoaded", hydrateNavAuth);
   </script>
 </body>
 </html>
