@@ -4,340 +4,543 @@
   <meta charset="UTF-8" />
   <title>CalmPaw 管理员后台</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- 统计图表用的 Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #fff7f0;
+      --bg-soft: #ffeede;
+      --accent: #ffb86b;
+      --accent-strong: #ff914d;
+      --accent-soft: #ffe0b8;
+      --text-main: #3b2824;
+      --text-soft: #8a6a63;
+      --border-soft: #f3d9c4;
+      --radius-lg: 26px;
+      --radius-md: 18px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 26px 80px rgba(191, 128, 89, 0.28);
+    }
+
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
       min-height: 100vh;
+      background: radial-gradient(circle at top, #ffe0c7 0%, #fff7f0 40%, #fff 100%);
       display: flex;
-      align-items: center;
       justify-content: center;
-      padding: 40px 12px;
-      background: radial-gradient(circle at top, #ffe4c4 0%, #fff7f0 45%, #ffe4c4 100%);
+      padding: 32px 16px;
+      color: var(--text-main);
     }
+
     .shell {
-      max-width: 1080px;
       width: 100%;
-      background: #fffaf5;
+      max-width: 1120px;
+      background: rgba(255, 247, 240, 0.96);
       border-radius: 32px;
-      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.08);
-      padding: 28px 28px 32px;
-      border: 1px solid rgba(248, 180, 116, 0.35);
+      box-shadow: var(--shadow-soft);
+      padding: 28px 26px 30px;
+      position: relative;
+      overflow: hidden;
     }
+
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: -120px;
+      background:
+        radial-gradient(circle at top left, rgba(255, 198, 145, .25), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(255, 177, 109, .25), transparent 55%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
     .header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 22px;
     }
-    .header-left {
+
+    .brand {
       display: flex;
       align-items: center;
       gap: 12px;
     }
-    .logo-circle {
-      width: 36px;
-      height: 36px;
-      border-radius: 999px;
-      background: conic-gradient(from 210deg, #ffb86b, #ff914d, #ffe5c2);
+
+    .logo-dot {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: conic-gradient(from 210deg, #ffb86b, #ff914d, #ffe5c9, #ffb86b);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 22px;
+      box-shadow: 0 10px 30px rgba(191, 128, 89, 0.4);
     }
-    .title-main {
+
+    .brand-main {
       font-size: 18px;
       font-weight: 700;
-      color: #3b2824;
     }
-    .title-sub {
+
+    .brand-sub {
       font-size: 12px;
-      color: #8a6a63;
+      color: var(--text-soft);
     }
-    .header-tag {
-      padding: 4px 10px;
+
+    .login-status-pill {
+      font-size: 12px;
+      padding: 6px 12px;
       border-radius: 999px;
-      background: #fff1e0;
-      font-size: 11px;
-      color: #b45309;
+      background: rgba(22, 163, 74, 0.05);
+      border: 1px solid rgba(22, 163, 74, 0.35);
+      color: #15803d;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .login-status-pill.off {
+      background: rgba(148, 163, 184, 0.08);
+      border-color: rgba(148, 163, 184, 0.5);
+      color: #4b5563;
+    }
+
+    .login-status-pill span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #16a34a;
+    }
+
+    .login-status-pill.off span.dot {
+      background: #9ca3af;
     }
 
     .grid {
       display: grid;
-      grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
-      gap: 18px;
+      grid-template-columns: 320px 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 860px) {
+      .shell { padding: 20px 16px 22px; }
+      .grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .card {
-      border-radius: 24px;
       background: #fff;
-      padding: 18px 18px 20px;
-      border: 1px solid rgba(248, 180, 116, 0.36);
-      box-shadow: 0 16px 40px rgba(248, 180, 116, 0.08);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(250, 204, 171, 0.9);
+      padding: 18px 18px 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 14px 40px rgba(191, 128, 89, 0.12);
     }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
     .card-title {
       font-size: 15px;
-      font-weight: 600;
-      color: #3b2824;
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      font-weight: 700;
     }
-    .card-desc {
+
+    .card-sub {
       font-size: 12px;
-      color: #8a6a63;
-      margin-bottom: 14px;
-      line-height: 1.5;
+      color: var(--text-soft);
+      margin-bottom: 10px;
     }
 
     label {
       display: block;
       font-size: 12px;
-      color: #6b4c45;
       margin-bottom: 4px;
+      color: var(--text-soft);
     }
-    input {
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"],
+    select {
       width: 100%;
-      border-radius: 999px;
-      border: 1px solid #f3d9c4;
-      padding: 9px 12px;
+      padding: 9px 11px;
+      border-radius: 14px;
+      border: 1px solid var(--border-soft);
+      background: #fff7f0;
       font-size: 13px;
       outline: none;
-      background: #fffaf5;
-      transition: border 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
     }
-    input:focus {
-      border-color: #ff914d;
-      box-shadow: 0 0 0 1px rgba(255, 145, 77, 0.3);
-      background: #fff;
+
+    input:focus,
+    select:focus {
+      border-color: #f97316;
+      box-shadow: 0 0 0 1px rgba(248, 113, 22, 0.25);
+      background: #fffdf8;
     }
-    button {
+
+    .btn {
       border: none;
       border-radius: 999px;
-      padding: 9px 14px;
+      padding: 9px 18px;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       background: linear-gradient(135deg, #ffb86b, #ff914d);
-      color: #3b2824;
-      box-shadow: 0 12px 28px rgba(255, 145, 77, 0.35);
-      transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
-    }
-    button:active {
-      transform: translateY(1px);
-      box-shadow: 0 6px 16px rgba(255, 145, 77, 0.45);
-      filter: brightness(0.97);
-    }
-    button:disabled {
-      opacity: 0.5;
-      cursor: default;
-      transform: none;
-      box-shadow: none;
+      color: #422006;
+      box-shadow: 0 14px 35px rgba(248, 113, 22, 0.35);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
     }
 
-    .muted {
-      font-size: 11px;
-      color: #a78b7c;
+    .btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+      box-shadow: 0 18px 40px rgba(248, 113, 22, 0.45);
     }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 2px 8px;
-      border-radius: 999px;
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: default;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .btn-secondary {
+      background: #fff7f0;
+      color: var(--text-main);
+      box-shadow: none;
+      border: 1px solid rgba(248, 113, 22, 0.25);
+    }
+
+    .badge-tip {
       font-size: 11px;
-      background: #fef3c7;
-      color: #92400e;
-      gap: 3px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px dashed rgba(248, 113, 22, 0.45);
+      background: rgba(255, 247, 237, 0.9);
+      color: #9a3412;
     }
 
     .msg {
       margin-top: 8px;
-      padding: 8px 10px;
-      border-radius: 12px;
       font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 12px;
       display: none;
     }
-    .msg.info {
-      background: #fef9c3;
-      color: #854d0e;
-      border: 1px solid #facc15;
-    }
+
     .msg.error {
       background: #fef2f2;
       color: #b91c1c;
       border: 1px solid #fecaca;
     }
+
     .msg.success {
       background: #ecfdf3;
-      color: #166534;
+      color: #15803d;
       border: 1px solid #bbf7d0;
     }
 
-    .field-row {
-      margin-bottom: 12px;
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: rgba(248, 113, 22, 0.08);
+      color: #9a3412;
     }
 
-    .plans-box {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-    }
-    .plan-tag {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid #f3d9c4;
-      font-size: 12px;
-      background: #fffaf5;
-      cursor: pointer;
-    }
-    .plan-tag span {
-      font-size: 11px;
-      color: #8a6a63;
-    }
-    .plan-tag input {
-      width: 14px;
-      height: 14px;
+    .pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #f97316;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       font-size: 12px;
+      margin-top: 6px;
     }
+
     th, td {
-      padding: 6px 8px;
-      border-bottom: 1px solid #f3d9c4;
+      padding: 6px 6px;
       text-align: left;
-      white-space: nowrap;
-    }
-    th {
-      font-weight: 600;
-      color: #6b4c45;
-      background: #fff3e0;
-    }
-    tbody tr:nth-child(even) td {
-      background: #fffaf5;
-    }
-    .ellipsis {
-      max-width: 180px;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      border-bottom: 1px solid rgba(248, 189, 132, 0.35);
       white-space: nowrap;
     }
 
-    @media (max-width: 880px) {
-      .shell { padding: 20px 16px 24px; }
-      .grid { grid-template-columns: minmax(0, 1fr); }
+    th {
+      font-weight: 600;
+      color: var(--text-soft);
+      font-size: 11px;
     }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .muted {
+      color: #9ca3af;
+      font-size: 11px;
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: rgba(59, 130, 246, 0.08);
+      color: #1d4ed8;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .chip-check {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(248, 113, 22, 0.4);
+      background: rgba(255, 247, 237, 0.9);
+      cursor: pointer;
+    }
+
+    .chip-check input {
+      margin: 0;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 680px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .stat-cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 900px) {
+      .stat-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 720px) {
+      .stat-cards {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 540px) {
+      .stat-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .stat-card {
+      border-radius: 18px;
+      padding: 9px 11px;
+      background: #fff7f0;
+      border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-soft);
+      margin-bottom: 2px;
+    }
+
+    .stat-value {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .stat-sub {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-top: 1px;
+    }
+
+    .small-input-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .small-input-row input {
+      flex: 1;
+    }
+
+    .small-input-row select {
+      width: 90px;
+    }
+
+    .scroll-y {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .scroll-y-logs {
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .mt-6 { margin-top: 6px; }
+    .mt-10 { margin-top: 10px; }
+
   </style>
 </head>
 <body>
   <div class="shell">
-    <div class="header">
-      <div class="header-left">
-        <div class="logo-circle">🐾</div>
+    <header class="header">
+      <div class="brand">
+        <div class="logo-dot">🐾</div>
         <div>
-          <div class="title-main">CalmPaw 管理员</div>
-          <div class="title-sub">给客户开训练计划 / 补单 / 查看订单记录</div>
+          <div class="brand-main">CalmPaw 管理员</div>
+          <div class="brand-sub">给客户开训练计划 / 补单 / 看统计</div>
         </div>
       </div>
-      <div class="header-tag" id="adminStatus">未登录</div>
-    </div>
+      <div id="loginStatusPill" class="login-status-pill off">
+        <span class="dot"></span>
+        <span id="loginStatusText">未登录</span>
+      </div>
+    </header>
 
     <div class="grid">
-      <!-- 左侧：登录 + 搜索 -->
+      <!-- 左侧：登录 + 搜索客户 -->
       <div>
-        <div class="card" style="margin-bottom: 14px;">
-          <div class="card-title">
-            1. 管理员登录
-            <span class="badge">
+        <!-- 1. 管理员登录 -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">1. 管理员登录</div>
+            <button id="firstLoginBtn" class="btn-secondary" style="font-size:11px;padding:4px 9px;">
               首次登录账号
-            </span>
+            </button>
           </div>
-          <div class="card-desc">
-            第一次使用请先用默认账号登录：<br>
-            <code style="font-size:11px;color:#b45309;">admin@calmpaw.local / CalmPawAdmin123!</code><br>
+          <div class="card-sub">
+            第一次使用请先用默认账号登录：<br />
+            <span class="badge-tip">
+              admin@calmpaw.local / CalmPawAdmin123!
+            </span><br />
             登录成功后可以在数据库里改成你自己的邮箱和密码。
           </div>
 
-          <div class="field-row">
-            <label>管理员邮箱</label>
-            <input id="adminEmail" type="email" value="admin@calmpaw.local" />
-          </div>
-          <div class="field-row">
-            <label>密码</label>
-            <input id="adminPassword" type="password" />
-          </div>
-          <button id="loginBtn">登入后台</button>
+          <label for="adminEmail">管理员邮箱</label>
+          <input id="adminEmail" type="email" placeholder="admin@calmpaw.local" />
 
-          <div id="loginMsg" class="msg info"></div>
+          <label for="adminPassword" style="margin-top:8px;">密码</label>
+          <input id="adminPassword" type="password" placeholder="管理员密码" />
+
+          <button id="loginBtn" class="btn" style="margin-top:10px;width:100%;">登入后台</button>
+
+          <div id="loginMsg" class="msg"></div>
         </div>
 
+        <!-- 2. 搜索客户邮箱 -->
         <div class="card">
-          <div class="card-title">2. 搜索客户邮箱</div>
-          <div class="card-desc">
+          <div class="card-header">
+            <div class="card-title">2. 搜索客户邮箱</div>
+          </div>
+          <div class="card-sub">
             先登录后台，再在这里输入客户邮箱，查看并修改他们的训练计划 / 手动补单。
           </div>
-          <div class="field-row">
-            <label>客户邮箱</label>
-            <input id="searchEmail" type="email" placeholder="customer@example.com" />
-          </div>
-          <button id="searchBtn">搜索客户</button>
-          <div id="searchMsg" class="msg info"></div>
+
+          <label for="customerEmail">客户邮箱</label>
+          <input id="customerEmail" type="email" placeholder="customer@example.com" />
+
+          <button id="searchUserBtn" class="btn" style="margin-top:10px;width:100%;">搜索客户</button>
+
+          <div id="searchUserMsg" class="msg"></div>
         </div>
       </div>
 
-      <!-- 右侧：客户信息 + 订单 -->
-      <div style="display:flex; flex-direction:column; gap:14px;">
-        <div class="card" style="flex:1;">
-          <div class="card-title">3. 客户信息 & 训练计划</div>
-          <div class="card-desc" id="userSummary">
-            还没有选择客户。在左侧输入客户邮箱并点击「搜索客户」。
+      <!-- 右侧：客户详情 / 订单 / 统计 / 管理员等 -->
+      <div>
+        <!-- 3. 客户信息 & 训练计划 -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">3. 客户信息 & 训练计划</div>
+            <div id="currentUserChip" class="pill" style="display:none;">
+              <span class="pill-dot"></span>
+              <span id="currentUserEmail"></span>
+            </div>
+          </div>
+          <div class="card-sub">
+            先在左侧搜索客户邮箱，这里会显示客户的训练计划。你可以手动开通 / 关闭。
           </div>
 
-          <div id="userDetailArea" style="display:none; margin-top:8px;">
-            <div class="field-row">
-              <div class="muted" id="userExtra"></div>
+          <div id="noUserHint" class="muted">
+            还没有选择客户。请在左侧输入邮箱并点击「搜索客户」。
+          </div>
+
+          <div id="userDetailArea" style="display:none;">
+            <div class="chips">
+              <label class="chip-check">
+                <input type="checkbox" id="planBarking" />
+                <span>开通：吠叫训练计划（$19）</span>
+              </label>
+              <label class="chip-check">
+                <input type="checkbox" id="planLeash" />
+                <span>开通：牵引训练计划（$29）</span>
+              </label>
+              <label class="chip-check">
+                <input type="checkbox" id="planPuppy" />
+                <span>开通：幼犬基础（$19）</span>
+              </label>
+              <label class="chip-check">
+                <input type="checkbox" id="planBundle" />
+                <span>全部训练套装（客户前端 $49）</span>
+              </label>
             </div>
-            <div class="field-row">
-              <label>训练计划开通 / 关闭</label>
-              <div class="plans-box">
-                <label class="plan-tag">
-                  <span>防吠训练 (barking)</span>
-                  <input type="checkbox" id="plan_barking" />
-                </label>
-                <label class="plan-tag">
-                  <span>牵引训练 (leash)</span>
-                  <input type="checkbox" id="plan_leash" />
-                </label>
-                <label class="plan-tag">
-                  <span>幼犬礼仪 (puppy)</span>
-                  <input type="checkbox" id="plan_puppy" />
-                </label>
-                <label class="plan-tag">
-                  <span>全套 Bundle</span>
-                  <input type="checkbox" id="plan_bundle" />
-                </label>
-              </div>
-            </div>
-            <button id="savePlansBtn">保存计划</button>
-            <div id="plansMsg" class="msg info"></div>
+
+            <button id="savePlansBtn" class="btn" style="margin-top:10px;">保存训练计划</button>
+            <div id="savePlansMsg" class="msg"></div>
           </div>
         </div>
 
+        <!-- 4. 最近订单 -->
         <div class="card">
-          <div class="card-title">
-            4. 最近订单（可选）
-            <button id="refreshOrdersBtn" style="font-size:11px;padding:6px 10px;">刷新订单列表</button>
+          <div class="card-header">
+            <div class="card-title">4. 最近订单（可选）</div>
+            <button id="refreshOrdersBtn" class="btn-secondary" style="font-size:11px;padding:4px 9px;">
+              刷新订单列表
+            </button>
           </div>
-          <div class="card-desc">
-            这里会展示 `orders` 表最近 20 条记录，方便你快速查看某个邮箱都买了什么产品、金额是多少。
+          <div class="card-sub">
+            这里会从 <code>orders</code> 表读最近 50 条记录，主要方便你快速查某个邮箱都买了什么产品、金额是多少。
           </div>
-          <div style="max-height:220px; overflow:auto;">
+
+          <div class="scroll-y">
             <table>
               <thead>
                 <tr>
@@ -349,286 +552,564 @@
                   <th>来源</th>
                 </tr>
               </thead>
-              <tbody id="ordersBody">
+              <tbody id="ordersTbody">
                 <tr><td colspan="6" class="muted">暂无数据</td></tr>
               </tbody>
             </table>
           </div>
         </div>
-      </div>
-    </div>
+
+        <!-- 5. 客户列表 & 基本统计 -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">5. 客户列表 & 收入统计</div>
+            <button id="refreshStatsBtn" class="btn-secondary" style="font-size:11px;padding:4px 9px;">
+              刷新统计
+            </button>
+          </div>
+          <div class="card-sub">
+            上半部分是收入和订单统计；下半部分显示最近注册的客户列表（从 <code>calmpaw_users</code> 表读取）。
+          </div>
+
+          <!-- 统计卡片 -->
+          <div class="stat-cards">
+            <div class="stat-card">
+              <div class="stat-label">总用户数</div>
+              <div id="statUsersTotal" class="stat-value">-</div>
+              <div class="stat-sub">calmpaw_users</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">总订单数</div>
+              <div id="statOrdersTotal" class="stat-value">-</div>
+              <div class="stat-sub">orders</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">总收入（USD）</div>
+              <div id="statRevenueTotal" class="stat-value">-</div>
+              <div class="stat-sub">累计金额</div>
+            </div>
+          </div>
+
+          <div class="two-col mt-10">
+            <div>
+              <div class="muted">最近 7 天收入（USD）</div>
+              <div id="statRevenue7d" style="font-size:14px;font-weight:600;">-</div>
+              <canvas id="revenueChart" style="margin-top:6px;max-height:150px;"></canvas>
+            </div>
+            <div>
+              <div class="muted">最近注册客户（最多 20 个）</div>
+              <div class="scroll-y" style="max-height:160px;">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>邮箱</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recentUsersTbody">
+                    <tr><td colspan="2" class="muted">点击「刷新统计」后加载</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. 管理员 & 操作日志 -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">6. 管理员 & 操作日志</div>
+            <button id="refreshLogsBtn" class="btn-secondary" style="font-size:11px;padding:4px 9px;">
+              刷新日志
+            </button>
+          </div>
+          <div class="card-sub">
+            只有 role=super 的管理员才可以创建新的后台账号。日志会记录后台的关键操作，方便排查问题。
+          </div>
+
+          <div class="two-col">
+            <!-- 管理员列表 / 创建 -->
+            <div>
+              <div class="muted">管理员列表</div>
+              <div class="scroll-y" style="max-height:120px;">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>邮箱</th>
+                      <th>角色</th>
+                    </tr>
+                  </thead>
+                  <tbody id="adminsTbody">
+                    <tr><td colspan="3" class="muted">点击「刷新日志」后加载</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="muted" style="margin-top:6px;">创建新管理员（仅 super）</div>
+              <div class="small-input-row">
+                <input id="newAdminEmail" type="email" placeholder="new-admin@example.com" />
+                <select id="newAdminRole">
+                  <option value="admin">admin</option>
+                  <option value="viewer">viewer</option>
+                </select>
+              </div>
+              <input id="newAdminPassword" type="password" placeholder="新管理员密码" style="margin-top:6px;" />
+              <button id="createAdminBtn" class="btn" style="margin-top:6px;width:100%;">创建管理员</button>
+              <div id="createAdminMsg" class="msg"></div>
+            </div>
+
+            <!-- 日志 -->
+            <div>
+              <div class="muted">后台操作日志（最近 50 条）</div>
+              <div class="scroll-y-logs">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>时间</th>
+                      <th>操作人</th>
+                      <th>动作</th>
+                      <th>目标邮箱</th>
+                    </tr>
+                  </thead>
+                  <tbody id="logsTbody">
+                    <tr><td colspan="4" class="muted">点击「刷新日志」后加载</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div> <!-- /右侧 -->
+    </div> <!-- /grid -->
   </div>
 
-<script>
-  // =========================
-  //  API 地址（重要）
-  // =========================
-  // 线上使用你的 Worker：
-  const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
+  <script>
+    // ===== 根据你当前 Worker 地址修改这里 =====
+    // 如果你原来 admin.html 里已经有一个 API_BASE，并且能正常登录，
+    // 就把那一行地址复制到这里替换掉即可。
+    const API_BASE = 'https://calmpaw-auth.sophieinbg.workers.dev';
 
-  // 本地开发（如果有）可以改成 127.0.0.1:8787
-  // const API_BASE = window.location.hostname === "localhost"
-  //   ? "http://127.0.0.1:8787"
-  //   : "https://calmpaw-auth.sophieinbg.workers.dev";
+    let adminToken = null;
+    let revenueChart = null;
+    let currentUserEmail = null;
 
-  // =========================
-  //  DOM
-  // =========================
-  const adminStatus = document.getElementById("adminStatus");
-  const loginBtn = document.getElementById("loginBtn");
-  const loginMsg = document.getElementById("loginMsg");
-  const adminEmailInput = document.getElementById("adminEmail");
-  const adminPasswordInput = document.getElementById("adminPassword");
-
-  const searchEmailInput = document.getElementById("searchEmail");
-  const searchBtn = document.getElementById("searchBtn");
-  const searchMsg = document.getElementById("searchMsg");
-
-  const userSummary = document.getElementById("userSummary");
-  const userDetailArea = document.getElementById("userDetailArea");
-  const userExtra = document.getElementById("userExtra");
-  const plansMsg = document.getElementById("plansMsg");
-  const savePlansBtn = document.getElementById("savePlansBtn");
-
-  const plan_barking = document.getElementById("plan_barking");
-  const plan_leash = document.getElementById("plan_leash");
-  const plan_puppy = document.getElementById("plan_puppy");
-  const plan_bundle = document.getElementById("plan_bundle");
-
-  const refreshOrdersBtn = document.getElementById("refreshOrdersBtn");
-  const ordersBody = document.getElementById("ordersBody");
-
-  let currentUserEmail = null;
-
-  function getAdminToken() {
-    return localStorage.getItem("calmpaw_admin_token") || "";
-  }
-
-  function setAdminToken(token) {
-    if (token) {
-      localStorage.setItem("calmpaw_admin_token", token);
-    } else {
-      localStorage.removeItem("calmpaw_admin_token");
-    }
-  }
-
-  function setMsg(el, type, text) {
-    if (!text) {
-      el.style.display = "none";
-      return;
-    }
-    el.className = "msg " + type;
-    el.textContent = text;
-    el.style.display = "block";
-  }
-
-  function updateAdminStatus() {
-    const token = getAdminToken();
-    if (token) {
-      adminStatus.textContent = "已登录";
-      adminStatus.style.background = "#dcfce7";
-      adminStatus.style.color = "#166534";
-    } else {
-      adminStatus.textContent = "未登录";
-      adminStatus.style.background = "#fff1e0";
-      adminStatus.style.color = "#b45309";
-    }
-  }
-
-  updateAdminStatus();
-
-  // 通用带 token 的 fetch
-  async function adminFetch(path, options = {}) {
-    const token = getAdminToken();
-    const headers = Object.assign(
-      {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      options.headers || {}
-    );
-    if (token) {
-      headers["Authorization"] = "Bearer " + token;
-    }
-    const res = await fetch(API_BASE + path, Object.assign({}, options, { headers }));
-    const text = await res.text();
-
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch (e) {
-      console.error("后台返回的不是 JSON:", text);
-      throw new Error("后台返回的不是 JSON: " + text.slice(0, 120));
+    function setAdminToken(token) {
+      adminToken = token;
+      if (token) {
+        localStorage.setItem('calmpaw_admin_token', token);
+        updateLoginStatus(true);
+      } else {
+        localStorage.removeItem('calmpaw_admin_token');
+        updateLoginStatus(false);
+      }
     }
 
-    if (!res.ok) {
-      const errMsg = data.error || ("HTTP " + res.status);
-      throw new Error(errMsg);
-    }
-    return data;
-  }
-
-  // =========================
-  //  登录
-  // =========================
-  loginBtn.addEventListener("click", async () => {
-    const email = adminEmailInput.value.trim();
-    const password = adminPasswordInput.value;
-    if (!email || !password) {
-      setMsg(loginMsg, "error", "邮箱和密码不能为空。");
-      return;
+    function getAdminToken() {
+      if (adminToken) return adminToken;
+      const stored = localStorage.getItem('calmpaw_admin_token');
+      if (stored) {
+        adminToken = stored;
+        updateLoginStatus(true);
+      }
+      return adminToken;
     }
 
-    loginBtn.disabled = true;
-    setMsg(loginMsg, "info", "正在登录后台…");
+    function updateLoginStatus(loggedIn) {
+      const pill = document.getElementById('loginStatusPill');
+      const text = document.getElementById('loginStatusText');
+      if (!pill || !text) return;
+      if (loggedIn) {
+        pill.classList.remove('off');
+        text.textContent = '已登录';
+      } else {
+        pill.classList.add('off');
+        text.textContent = '未登录';
+      }
+    }
 
-    try {
-      const res = await fetch(API_BASE + "/admin/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify({ email, password })
+    async function authFetch(path, options = {}) {
+      const token = getAdminToken();
+      if (!token) throw new Error('NO_ADMIN_TOKEN');
+      const headers = Object.assign(
+        {
+          'Authorization': 'Bearer ' + token
+        },
+        options.headers || {}
+      );
+      const resp = await fetch(API_BASE + path, {
+        ...options,
+        headers
       });
-      const text = await res.text();
-      let data;
+      return resp;
+    }
+
+    function showMsg(el, type, text) {
+      if (!el) return;
+      el.style.display = 'block';
+      el.classList.remove('error', 'success');
+      el.classList.add(type === 'error' ? 'error' : 'success');
+      el.textContent = text;
+    }
+
+    function hideMsg(el) {
+      if (!el) return;
+      el.style.display = 'none';
+    }
+
+    // ===== 1. 管理员登录 =====
+    async function loginAdmin() {
+      const emailInput = document.getElementById('adminEmail');
+      const pwdInput = document.getElementById('adminPassword');
+      const msg = document.getElementById('loginMsg');
+      const btn = document.getElementById('loginBtn');
+
+      hideMsg(msg);
+      btn.disabled = true;
+      btn.textContent = '登录中...';
+
       try {
-        data = JSON.parse(text);
-      } catch (e) {
-        console.error("login parse error:", text);
-        throw new Error("后台返回的不是 JSON: " + text.slice(0, 120));
-      }
+        const res = await fetch(API_BASE + '/admin/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: emailInput.value.trim(),
+            password: pwdInput.value
+          })
+        });
 
-      if (!res.ok) {
-        throw new Error(data.error || "登录失败");
-      }
-      if (!data.token) {
-        throw new Error("未收到 token");
-      }
+        const text = await res.text();
+        let data;
+        try { data = JSON.parse(text); } catch (e) {
+          console.error('login parse error', text);
+          throw new Error('后台返回的不是 JSON: ' + text.slice(0, 120));
+        }
 
-      setAdminToken(data.token);
-      updateAdminStatus();
-      setMsg(loginMsg, "success", "登录成功。可以在下面搜索客户了。");
-    } catch (err) {
-      console.error(err);
-      setAdminToken("");
-      updateAdminStatus();
-      setMsg(loginMsg, "error", "登录失败：" + err.message);
-    } finally {
-      loginBtn.disabled = false;
+        if (!res.ok || !data.token) {
+          showMsg(msg, 'error', data.error || '登录失败');
+          btn.disabled = false;
+          btn.textContent = '登入后台';
+          return;
+        }
+
+        setAdminToken(data.token);
+        showMsg(msg, 'success', '登录成功，可以在下面搜索客户了。');
+      } catch (err) {
+        console.error(err);
+        showMsg(msg, 'error', '登录失败: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '登入后台';
+      }
     }
-  });
 
-  // =========================
-  //  搜索客户
-  // =========================
-  searchBtn.addEventListener("click", async () => {
-    const email = searchEmailInput.value.trim().toLowerCase();
-    if (!email) {
-      setMsg(searchMsg, "error", "请输入客户邮箱。");
-      return;
-    }
-    setMsg(searchMsg, "info", "正在搜索客户…");
-    userDetailArea.style.display = "none";
-    currentUserEmail = null;
+    // ===== 2. 搜索客户 + 显示计划 =====
+    async function searchUser() {
+      const email = document.getElementById('customerEmail').value.trim().toLowerCase();
+      const msg = document.getElementById('searchUserMsg');
+      hideMsg(msg);
 
-    try {
-      const data = await adminFetch("/admin/api/search-user?email=" + encodeURIComponent(email), {
-        method: "GET"
-      });
-
-      if (!data.user) {
-        userSummary.textContent = "没有找到该邮箱的客户。";
-        setMsg(searchMsg, "info", "你可以通过「创建用户」功能在后续版本里补单（现在先手动在前端注册）。");
+      if (!email || !email.includes('@')) {
+        showMsg(msg, 'error', '请输入有效的客户邮箱。');
         return;
       }
 
-      currentUserEmail = data.user.email;
-      userSummary.textContent = "当前客户：" + data.user.email + "（id: " + data.user.id + "）";
-      userExtra.textContent = "可以勾选下面的训练计划为他开通 / 关闭访问权限。";
+      const noUserHint = document.getElementById('noUserHint');
+      const detailArea = document.getElementById('userDetailArea');
+      const currentChip = document.getElementById('currentUserChip');
+      const currentEmailSpan = document.getElementById('currentUserEmail');
 
-      const plans = data.plans || {};
-      plan_barking.checked = !!plans.plan_barking;
-      plan_leash.checked = !!plans.plan_leash;
-      plan_puppy.checked = !!plans.plan_puppy;
-      plan_bundle.checked = !!plans.plan_bundle;
+      try {
+        const res = await authFetch(`/admin/api/search-user?email=${encodeURIComponent(email)}`, {
+          method: 'GET'
+        });
+        const data = await res.json();
 
-      userDetailArea.style.display = "block";
-      setMsg(searchMsg, "success", "已加载客户信息。");
-      setMsg(plansMsg, "info", "调整勾选后点击「保存计划」。");
-    } catch (err) {
-      console.error(err);
-      setMsg(searchMsg, "error", "搜索失败：" + err.message);
+        if (!data.user) {
+          currentUserEmail = null;
+          currentChip.style.display = 'none';
+          detailArea.style.display = 'none';
+          noUserHint.style.display = 'block';
+          showMsg(msg, 'error', '没有找到这个邮箱对应的用户。');
+          return;
+        }
+
+        currentUserEmail = data.user.email;
+        currentEmailSpan.textContent = data.user.email;
+        currentChip.style.display = 'inline-flex';
+        noUserHint.style.display = 'none';
+        detailArea.style.display = 'block';
+
+        const p = data.plans || {};
+        document.getElementById('planBarking').checked = !!p.plan_barking;
+        document.getElementById('planLeash').checked = !!p.plan_leash;
+        document.getElementById('planPuppy').checked = !!p.plan_puppy;
+        document.getElementById('planBundle').checked = !!p.plan_bundle;
+
+        showMsg(msg, 'success', '已加载客户信息，可以调整训练计划。');
+      } catch (err) {
+        console.error(err);
+        showMsg(msg, 'error', '请求失败: ' + err.message);
+      }
     }
-  });
 
-  // =========================
-  //  保存计划
-  // =========================
-  savePlansBtn.addEventListener("click", async () => {
-    if (!currentUserEmail) {
-      setMsg(plansMsg, "error", "请先搜索客户。");
-      return;
-    }
-    setMsg(plansMsg, "info", "正在保存…");
-    savePlansBtn.disabled = true;
-
-    try {
-      await adminFetch("/admin/api/update-user", {
-        method: "POST",
-        body: JSON.stringify({
-          email: currentUserEmail,
-          plan_barking: plan_barking.checked,
-          plan_leash: plan_leash.checked,
-          plan_puppy: plan_puppy.checked,
-          plan_bundle: plan_bundle.checked
-        })
-      });
-      setMsg(plansMsg, "success", "已更新训练计划。");
-    } catch (err) {
-      console.error(err);
-      setMsg(plansMsg, "error", "保存失败：" + err.message);
-    } finally {
-      savePlansBtn.disabled = false;
-    }
-  });
-
-  // =========================
-  //  订单列表
-  // =========================
-  async function loadOrders() {
-    ordersBody.innerHTML = '<tr><td colspan="6" class="muted">加载中…</td></tr>';
-    try {
-      const data = await adminFetch("/admin/api/orders?limit=20", { method: "GET" });
-      const orders = data.orders || [];
-      if (!orders.length) {
-        ordersBody.innerHTML = '<tr><td colspan="6" class="muted">暂无数据</td></tr>';
+    async function savePlans() {
+      if (!currentUserEmail) {
+        const msg = document.getElementById('savePlansMsg');
+        showMsg(msg, 'error', '请先在左侧搜索并选择一个客户。');
         return;
       }
-      ordersBody.innerHTML = "";
-      orders.forEach((o, idx) => {
-        const tr = document.createElement("tr");
-        const amount = o.amount_cents != null ? (o.amount_cents / 100).toFixed(2) : "-";
-        tr.innerHTML = `
-          <td>${idx + 1}</td>
-          <td>${o.created_at || "-"}</td>
-          <td class="ellipsis" title="${o.email || ""}">${o.email || ""}</td>
-          <td>${o.product_code || "-"}</td>
-          <td>${amount} ${o.currency || ""}</td>
-          <td>${o.source || "-"}</td>
-        `;
-        ordersBody.appendChild(tr);
-      });
-    } catch (err) {
-      console.error(err);
-      ordersBody.innerHTML = '<tr><td colspan="6" class="muted">加载失败：' + err.message + '</td></tr>';
+
+      const msg = document.getElementById('savePlansMsg');
+      hideMsg(msg);
+
+      const plan_barking = document.getElementById('planBarking').checked;
+      const plan_leash = document.getElementById('planLeash').checked;
+      const plan_puppy = document.getElementById('planPuppy').checked;
+      const plan_bundle = document.getElementById('planBundle').checked;
+
+      try {
+        const res = await authFetch('/admin/api/update-user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: currentUserEmail,
+            plan_barking,
+            plan_leash,
+            plan_puppy,
+            plan_bundle
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          showMsg(msg, 'error', data.error || '保存失败');
+          return;
+        }
+        showMsg(msg, 'success', '训练计划已保存。');
+      } catch (err) {
+        console.error(err);
+        showMsg(msg, 'error', '保存失败: ' + err.message);
+      }
     }
-  }
 
-  refreshOrdersBtn.addEventListener("click", loadOrders);
+    // ===== 3. 订单列表 =====
+    async function loadOrders() {
+      const tbody = document.getElementById('ordersTbody');
+      if (!tbody) return;
 
-  // 如果已经登录，自动加载订单
-  if (getAdminToken()) {
-    loadOrders();
-  }
-</script>
+      tbody.innerHTML = '<tr><td colspan="6" class="muted">加载中...</td></tr>';
+
+      try {
+        const res = await authFetch('/admin/api/orders?limit=50', { method: 'GET' });
+        const data = await res.json();
+        const orders = data.orders || [];
+
+        if (!orders.length) {
+          tbody.innerHTML = '<tr><td colspan="6" class="muted">暂无数据</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = orders.map((o, idx) => {
+          const amount = o.amount_cents != null ? (o.amount_cents / 100).toFixed(2) : '-';
+          return `<tr>
+            <td>${idx + 1}</td>
+            <td>${o.created_at || ''}</td>
+            <td>${o.email || ''}</td>
+            <td>${o.product_code || ''}</td>
+            <td>${amount}</td>
+            <td>${o.source || ''}</td>
+          </tr>`;
+        }).join('');
+      } catch (err) {
+        console.error(err);
+        tbody.innerHTML = `<tr><td colspan="6" class="muted">加载失败: ${err.message}</td></tr>`;
+      }
+    }
+
+    // ===== 4. 统计 + 最近用户 =====
+    async function loadStatsAndUsers() {
+      const usersEl = document.getElementById('statUsersTotal');
+      const ordersEl = document.getElementById('statOrdersTotal');
+      const revTotalEl = document.getElementById('statRevenueTotal');
+      const rev7dEl = document.getElementById('statRevenue7d');
+      const usersTbody = document.getElementById('recentUsersTbody');
+
+      if (usersTbody) {
+        usersTbody.innerHTML = '<tr><td colspan="2" class="muted">加载中...</td></tr>';
+      }
+
+      try {
+        const res = await authFetch('/admin/api/stats', { method: 'GET' });
+        const data = await res.json();
+
+        const usersTotal = data.users_total ?? 0;
+        const ordersTotal = data.orders_total ?? 0;
+        const revenueTotal = (data.revenue_total_cents ?? 0) / 100;
+        const revenue7d = (data.revenue_7d_cents ?? 0) / 100;
+
+        if (usersEl) usersEl.textContent = String(usersTotal);
+        if (ordersEl) ordersEl.textContent = String(ordersTotal);
+        if (revTotalEl) revTotalEl.textContent = revenueTotal.toFixed(2);
+        if (rev7dEl) rev7dEl.textContent = revenue7d.toFixed(2);
+
+        // 最近用户
+        const recentUsers = data.recent_users || [];
+        if (!recentUsers.length) {
+          usersTbody.innerHTML = '<tr><td colspan="2" class="muted">暂无用户</td></tr>';
+        } else {
+          usersTbody.innerHTML = recentUsers.map(u => `
+            <tr>
+              <td>${u.id}</td>
+              <td>${u.email}</td>
+            </tr>
+          `).join('');
+        }
+
+        // 产品收入图表
+        const byProduct = data.by_product || [];
+        const labels = byProduct.map(p => p.product_code || '未知');
+        const values = byProduct.map(p => (p.sum_cents || 0) / 100);
+
+        const ctx = document.getElementById('revenueChart').getContext('2d');
+        if (revenueChart) revenueChart.destroy();
+        revenueChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels,
+            datasets: [{
+              label: '按产品累计收入（USD）',
+              data: values
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { ticks: { font: { size: 10 } } },
+              y: { beginAtZero: true, ticks: { font: { size: 10 } } }
+            }
+          }
+        });
+
+      } catch (err) {
+        console.error(err);
+        if (usersTbody) {
+          usersTbody.innerHTML = `<tr><td colspan="2" class="muted">加载失败: ${err.message}</td></tr>`;
+        }
+      }
+    }
+
+    // ===== 5. 管理员 & 日志 =====
+    async function loadAdminsAndLogs() {
+      const adminsTbody = document.getElementById('adminsTbody');
+      const logsTbody = document.getElementById('logsTbody');
+
+      if (adminsTbody) {
+        adminsTbody.innerHTML = '<tr><td colspan="3" class="muted">加载中...</td></tr>';
+      }
+      if (logsTbody) {
+        logsTbody.innerHTML = '<tr><td colspan="4" class="muted">加载中...</td></tr>';
+      }
+
+      try {
+        // 管理员列表
+        const resAdmins = await authFetch('/admin/api/admins', { method: 'GET' });
+        const dataAdmins = await resAdmins.json();
+        const admins = dataAdmins.admins || [];
+        if (!admins.length) {
+          adminsTbody.innerHTML = '<tr><td colspan="3" class="muted">暂无管理员记录</td></tr>';
+        } else {
+          adminsTbody.innerHTML = admins.map(a => `
+            <tr>
+              <td>${a.id}</td>
+              <td>${a.email}</td>
+              <td>${a.role}</td>
+            </tr>
+          `).join('');
+        }
+
+        // 日志
+        const resLogs = await authFetch('/admin/api/logs?limit=50', { method: 'GET' });
+        const dataLogs = await resLogs.json();
+        const logs = dataLogs.logs || [];
+        if (!logs.length) {
+          logsTbody.innerHTML = '<tr><td colspan="4" class="muted">暂无日志</td></tr>';
+        } else {
+          logsTbody.innerHTML = logs.map(l => `
+            <tr>
+              <td>${l.created_at || ''}</td>
+              <td>${l.admin_email || ''}</td>
+              <td>${l.action || ''}</td>
+              <td>${l.target_email || ''}</td>
+            </tr>
+          `).join('');
+        }
+
+      } catch (err) {
+        console.error(err);
+        adminsTbody.innerHTML = `<tr><td colspan="3" class="muted">加载失败: ${err.message}</td></tr>`;
+        logsTbody.innerHTML = `<tr><td colspan="4" class="muted">加载失败: ${err.message}</td></tr>`;
+      }
+    }
+
+    async function createAdmin() {
+      const email = document.getElementById('newAdminEmail').value.trim().toLowerCase();
+      const pwd = document.getElementById('newAdminPassword').value;
+      const role = document.getElementById('newAdminRole').value;
+      const msg = document.getElementById('createAdminMsg');
+      hideMsg(msg);
+
+      if (!email || !email.includes('@') || pwd.length < 8) {
+        showMsg(msg, 'error', '请输入有效邮箱，密码至少 8 位。');
+        return;
+      }
+
+      try {
+        const res = await authFetch('/admin/api/create-admin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password: pwd, role })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          showMsg(msg, 'error', data.error || '创建失败（确认你当前账号是 super）');
+          return;
+        }
+        showMsg(msg, 'success', '创建成功，刷新一下管理员列表。');
+        document.getElementById('newAdminEmail').value = '';
+        document.getElementById('newAdminPassword').value = '';
+        loadAdminsAndLogs();
+      } catch (err) {
+        console.error(err);
+        showMsg(msg, 'error', '创建失败: ' + err.message);
+      }
+    }
+
+    // ===== 初始化 & 事件绑定 =====
+    document.addEventListener('DOMContentLoaded', () => {
+      // 还原 token 状态
+      getAdminToken();
+
+      document.getElementById('loginBtn').addEventListener('click', loginAdmin);
+      document.getElementById('firstLoginBtn').addEventListener('click', () => {
+        document.getElementById('adminEmail').value = 'admin@calmpaw.local';
+        document.getElementById('adminPassword').value = 'CalmPawAdmin123!';
+      });
+
+      document.getElementById('searchUserBtn').addEventListener('click', searchUser);
+      document.getElementById('savePlansBtn').addEventListener('click', savePlans);
+      document.getElementById('refreshOrdersBtn').addEventListener('click', loadOrders);
+      document.getElementById('refreshStatsBtn').addEventListener('click', () => {
+        loadStatsAndUsers();
+        loadOrders();
+      });
+      document.getElementById('refreshLogsBtn').addEventListener('click', () => {
+        loadAdminsAndLogs();
+      });
+      document.getElementById('createAdminBtn').addEventListener('click', createAdmin);
+    });
+  </script>
 </body>
 </html>
