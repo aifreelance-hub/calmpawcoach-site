@@ -187,7 +187,7 @@
     .footer-links a:hover{color:#b05825;}
   </style>
 
-  <!-- Paddle（先用 0 占位，避免 JS 报错；以后换成你的真实 Vendor ID 数字） -->
+  <!-- Paddle（先用 0 占位，之后换成你的真实 Vendor ID 数字） -->
   <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
   <script>
     Paddle.Setup({ vendor: 0 });
@@ -228,11 +228,9 @@
           <span>⏱ Daily time: 10–20 minutes</span>
         </div>
         <div class="hero-cta">
+          <!-- 用函数控制逻辑：未登录先去登录，已登录直接付款 -->
           <a href="#" class="btn-primary" id="cta-main-leash"
-            onclick="Paddle.Checkout.open({
-              product: PRODUCT_ID_LEASH,
-              success: 'https://calmpawcoach.com/leash-access.html'
-            }); return false;">
+             onclick="return startLeashPurchase();">
             Buy this plan – $19 →
           </a>
           <a href="programs.html" class="btn-outline">← Back to all programs</a>
@@ -307,10 +305,7 @@
       </p>
       <div style="margin-top:10px;">
         <a href="#" class="btn-primary" id="cta-bottom-leash"
-          onclick="Paddle.Checkout.open({
-            product: PRODUCT_ID_LEASH,
-            success: 'https://calmpawcoach.com/leash-access.html'
-          }); return false;">
+           onclick="return startLeashPurchase();">
           Get the 10-day leash plan – $19 →
         </a>
       </div>
@@ -378,10 +373,31 @@
   })();
   </script>
 
-  <!-- ★★ 关键逻辑：如果已经拥有 leash 计划或 bundle，则按钮变成“Open your plan” ★★ -->
+  <!-- 购买逻辑：未登录先去登录，登录后再弹 Paddle -->
+  <script>
+  function startLeashPurchase() {
+    const token = localStorage.getItem("calmpaw_token");
+
+    // 没登录 → 去 auth.html 登录，带回跳
+    if (!token) {
+      const back = window.location.pathname + window.location.search;
+      window.location.href = "/auth.html?redirect=" + encodeURIComponent(back);
+      return false;
+    }
+
+    // 已登录 → 直接打开 Paddle 收银台
+    Paddle.Checkout.open({
+      product: PRODUCT_ID_LEASH,
+      success: "https://calmpawcoach.com/leash-access.html"
+    });
+    return false;
+  }
+  </script>
+
+  <!-- ★★ 已经拥有 leash 或 bundle 的用户：按钮变成“Open your plan” ★★ -->
   <script>
   (function () {
-    const PLAN_KEY = "leash";               // 后端里的键名
+    const PLAN_KEY = "leash";
     const ACCESS_URL = "/leash-access.html";
 
     const mainBtn = document.getElementById("cta-main-leash");
@@ -389,7 +405,7 @@
     const token = localStorage.getItem("calmpaw_token");
 
     if (!mainBtn || !bottomBtn) return;
-    if (!token) return; // 未登录就保持购买按钮
+    if (!token) return; // 未登录保持购买逻辑（startLeashPurchase 会处理）
 
     fetch("/auth/check-plan", {
       method: "GET",
