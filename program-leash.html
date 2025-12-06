@@ -187,11 +187,10 @@
     .footer-links a:hover{color:#b05825;}
   </style>
 
-  <!-- Paddle -->
+  <!-- Paddle（先用 0 占位，避免 JS 报错；以后换成你的真实 Vendor ID 数字） -->
   <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
   <script>
-    // 替换成你自己的 Vendor ID
-    Paddle.Setup({ vendor: YOUR_PADDLE_VENDOR_ID });
+    Paddle.Setup({ vendor: 0 });
   </script>
 </head>
 <body>
