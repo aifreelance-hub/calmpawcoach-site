@@ -191,8 +191,8 @@
   <!-- Paddle -->
   <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
   <script>
-    // 用你自己的 vendor ID 替换 000000
-    Paddle.Setup({ vendor: 000000 });
+    // TODO：上线时把 0 换成你真实的 Vendor ID 数字
+    Paddle.Setup({ vendor: 0 });
   </script>
 </head>
 <body>
@@ -231,12 +231,9 @@
           <span>⏱ Daily time: 10–20 minutes</span>
         </div>
         <div class="hero-cta">
-          <!-- 主 CTA 按钮：默认是购买，拥有权限时会被 JS 改成“Open your plan” -->
+          <!-- 没登录时：触发 startAnxietyPurchase，先去登录 -->
           <a href="#" class="btn-primary" id="cta-main-anxiety"
-            onclick="Paddle.Checkout.open({
-              product: PRODUCT_ID_ANXIETY,
-              success: 'https://calmpawcoach.com/anxiety-access.html'
-            }); return false;">
+             onclick="return startAnxietyPurchase();">
             Buy this plan – $29 →
           </a>
           <a href="programs.html" class="btn-outline">← Back to all programs</a>
@@ -313,12 +310,9 @@
         You can repeat or slow down the program as needed.
       </p>
       <div style="margin-top:10px;">
-        <!-- 第二个 CTA，同样支持“已购买直接打开” -->
+        <!-- 底部 CTA，同样复用购买逻辑 -->
         <a href="#" class="btn-primary" id="cta-bottom-anxiety"
-          onclick="Paddle.Checkout.open({
-            product: PRODUCT_ID_ANXIETY,
-            success: 'https://calmpawcoach.com/anxiety-access.html'
-          }); return false;">
+           onclick="return startAnxietyPurchase();">
           Get the 14-day anxiety plan – $29 →
         </a>
       </div>
@@ -386,6 +380,27 @@
   })();
   </script>
 
+  <!-- 购买逻辑：未登录先去登录，登录后再付款 -->
+  <script>
+  function startAnxietyPurchase() {
+    const token = localStorage.getItem("calmpaw_token");
+
+    // 1. 没登录 → 先去 auth.html 登录，带上返回地址
+    if (!token) {
+      const back = window.location.pathname + window.location.search;
+      window.location.href = "/auth.html?redirect=" + encodeURIComponent(back);
+      return false;
+    }
+
+    // 2. 已登录 → 直接打开 Paddle 支付
+    Paddle.Checkout.open({
+      product: PRODUCT_ID_ANXIETY,
+      success: "https://calmpawcoach.com/anxiety-access.html"
+    });
+    return false;
+  }
+  </script>
+
   <!-- ★★ 关键逻辑：如果已经拥有 anxiety 计划，则按钮变成“Open your plan” ★★ -->
   <script>
   (function () {
@@ -397,7 +412,7 @@
     const token = localStorage.getItem("calmpaw_token");
 
     if (!mainBtn || !bottomBtn) return;
-    if (!token) return; // 未登录就保持购买按钮
+    if (!token) return; // 未登录就保持“购买”逻辑（startAnxietyPurchase 里会强制登录）
 
     fetch("/auth/check-plan", {
       method: "GET",
@@ -419,7 +434,7 @@
              (data.plans && data.plans[PLAN_KEY]) ||
              (Array.isArray(data.slugs) && data.slugs.includes(PLAN_KEY)));
 
-        // 没权限就继续显示购买
+        // 没权限就继续显示“购买”
         if (!hasBundle && !hasAnxiety) return;
 
         // 已经有权限：按钮改成“打开计划”
