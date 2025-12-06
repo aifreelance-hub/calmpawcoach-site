@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CalmPaw Coach — Admin Console</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #fff7f0;
+      --bg-soft: #ffeede;
+      --accent: #ffb86b;
+      --accent-strong: #ff914d;
+      --accent-soft: #ffe0b8;
+      --text-main: #3b2824;
+      --text-soft: #8a6a63;
+      --border-soft: #f3d9c4;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 20px 50px rgba(210,145,105,0.22);
+    }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #ffe0c2 0%, #fff7f0 42%, #fff 100%);
+      min-height: 100vh;
+      color: var(--text-main);
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 18px;
+    }
+    .shell {
+      width: 100%;
+      max-width: 1200px;
+      background: rgba(255, 247, 240, 0.96);
+      border-radius: 28px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      overflow: hidden;
+      border: 1px solid rgba(243, 217, 196, 0.9);
+    }
+    .sidebar {
+      width: 230px;
+      background: linear-gradient(180deg, #ffb86b, #ff914d);
+      padding: 20px 18px;
+      color: #3b2824;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .logo-block {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .logo-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #fff7f0, #ff914d);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 20px;
+      color: #3b2824;
+    }
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .logo-title {
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .logo-sub {
+      font-size: 11px;
+      opacity: 0.9;
+    }
+    .nav-section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.8;
+      margin: 10px 2px 4px;
+    }
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .nav-item {
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.16s ease-out;
+    }
+    .nav-item span.icon {
+      font-size: 15px;
+    }
+    .nav-item.active {
+      background: rgba(255, 247, 240, 0.98);
+      border-color: rgba(243, 217, 196, 0.9);
+      box-shadow: 0 8px 20px rgba(199, 112, 52, 0.32);
+    }
+    .nav-item:hover {
+      background: rgba(255, 247, 240, 0.5);
+    }
+    .sidebar-footer {
+      margin-top: auto;
+      font-size: 11px;
+      opacity: 0.9;
+    }
+    .sidebar-footer .admin-email {
+      font-weight: 600;
+    }
+    .sidebar-footer button {
+      margin-top: 6px;
+      padding: 6px 10px;
+      font-size: 11px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: rgba(59, 40, 36, 0.1);
+    }
+
+    .main {
+      flex: 1;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .top-title {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .top-subtitle {
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--bg-soft);
+      border: 1px solid var(--border-soft);
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .content-section {
+      flex: 1;
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .content-section.active {
+      display: flex;
+    }
+
+    .cards-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+    }
+    .card {
+      background: #fffdf9;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-soft);
+      padding: 14px 16px;
+      box-shadow: 0 10px 30px rgba(210,145,105,0.14);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--text-soft);
+    }
+    .card-title {
+      font-weight: 600;
+      font-size: 13px;
+    }
+    .card-value {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 11px;
+    }
+    .tag {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--bg-soft);
+      border: 1px solid var(--border-soft);
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+    .field-label {
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+    .field-input, .field-select, .field-textarea {
+      font-size: 13px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      padding: 8px 10px;
+      outline: none;
+      background: #fffdf9;
+    }
+    .field-textarea {
+      border-radius: 16px;
+      min-height: 70px;
+      resize: vertical;
+    }
+    .checkbox-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 12px;
+      font-size: 13px;
+    }
+    .checkbox-row label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+    .btn {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 16px;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-strong);
+      color: #3b2824;
+      box-shadow: 0 8px 20px rgba(199,112,52,0.35);
+    }
+    .btn.secondary {
+      background: #fffdf9;
+      border: 1px solid var(--border-soft);
+      box-shadow: none;
+    }
+
+    .two-cols {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    th, td {
+      padding: 6px 8px;
+      border-bottom: 1px solid rgba(243, 217, 196, 0.9);
+      text-align: left;
+    }
+    th {
+      font-weight: 600;
+      color: var(--text-soft);
+      background: rgba(255, 238, 222, 0.6);
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      display: inline-block;
+      margin-right: 4px;
+    }
+    .status-ok { background: #16a34a; }
+    .status-warn { background: #eab308; }
+    .status-bad { background: #dc2626; }
+
+    /* 登录界面覆盖 */
+    .login-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, #ffe0c2 0%, #fff7f0 42%, #fff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 360px;
+      background: #fffdf9;
+      border-radius: 26px;
+      padding: 20px 20px 18px;
+      box-shadow: 0 20px 50px rgba(210,145,105,0.35);
+      border: 1px solid rgba(243, 217, 196, 0.9);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .login-title {
+      font-weight: 700;
+      font-size: 18px;
+    }
+    .login-sub {
+      font-size: 12px;
+      color: var(--text-soft);
+    }
+    .login-hint {
+      font-size: 11px;
+      color: var(--text-soft);
+      background: var(--bg-soft);
+      border-radius: 12px;
+      padding: 8px 10px;
+      border: 1px solid var(--border-soft);
+    }
+    .error-text {
+      font-size: 12px;
+      color: #b91c1c;
+    }
+
+    @media (max-width: 860px) {
+      .shell {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        overflow-x: auto;
+      }
+      .nav-section-title { display: none; }
+      .sidebar-footer { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .two-cols {
+        grid-template-columns: 1fr;
+      }
+      .top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-card">
+      <div>
+        <div class="login-title">CalmPaw Admin</div>
+        <div class="login-sub">Sign in to manage users & plans.</div>
+      </div>
+      <div class="login-hint">
+        <strong>First time login?</strong><br>
+        Default account:<br>
+        <code>admin@calmpaw.local / CalmPawAdmin123!</code><br>
+        (Change after first login)
+      </div>
+      <div class="field-group">
+        <div class="field-label">Admin email</div>
+        <input id="loginEmail" class="field-input" placeholder="admin@calmpaw..." />
+      </div>
+      <div class="field-group">
+        <div class="field-label">Password</div>
+        <input id="loginPassword" type="password" class="field-input" placeholder="••••••••" />
+      </div>
+      <div class="error-text" id="loginError" style="display:none;"></div>
+      <button class="btn" id="loginBtn">Sign in</button>
+    </div>
+  </div>
+
+  <div class="shell" id="appShell" style="display:none;">
+    <div class="sidebar">
+      <div class="logo-block">
+        <div class="logo-circle">C</div>
+        <div class="logo-text">
+          <div class="logo-title">CalmPaw Admin</div>
+          <div class="logo-sub">Gentle control, clear insights.</div>
+        </div>
+      </div>
+
+      <div class="nav-section-title">Overview</div>
+      <div class="nav-list">
+        <div class="nav-item active" data-section="dashboard">
+          <span class="icon">📊</span><span>Dashboard</span>
+        </div>
+      </div>
+
+      <div class="nav-section-title">Users & Plans</div>
+      <div class="nav-list">
+        <div class="nav-item" data-section="users">
+          <span class="icon">🐶</span><span>User search / edit</span>
+        </div>
+        <div class="nav-item" data-section="createUser">
+          <span class="icon">✨</span><span>Create / grant user</span>
+        </div>
+      </div>
+
+      <div class="nav-section-title">Activity</div>
+      <div class="nav-list">
+        <div class="nav-item" data-section="orders">
+          <span class="icon">💳</span><span>Orders</span>
+        </div>
+        <div class="nav-item" data-section="logs">
+          <span class="icon">📜</span><span>Admin logs</span>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div>Signed in as</div>
+        <div class="admin-email" id="sidebarAdminEmail">-</div>
+        <button id="logoutBtn">Sign out</button>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="top-bar">
+        <div>
+          <div class="top-title" id="topTitle">Dashboard</div>
+          <div class="top-subtitle" id="topSubtitle">High-level overview of users & plans.</div>
+        </div>
+        <div class="pill">
+          <span>CalmPaw Coach · Admin</span>
+        </div>
+      </div>
+
+      <!-- Dashboard -->
+      <div class="content-section active" id="section-dashboard">
+        <div class="cards-row" id="dashboardCards">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Recent users</div>
+            </div>
+            <div class="card-value" id="dashRecentUsersCount">-</div>
+            <div class="card-tags" id="dashRecentUsersInfo"></div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Manual notes</div>
+            </div>
+            <div style="font-size:12px;color:var(--text-soft);">
+              • Use <strong>User search</strong> to grant Barking / Leash / Puppy / Bundle<br>
+              • Log in with your own admin account after changing default admin.<br>
+              • Orders & logs show the last 50 records.
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Latest registrations</div>
+          </div>
+          <div style="max-height:260px;overflow:auto;">
+            <table id="recentUsersTable">
+              <thead>
+                <tr>
+                  <th>Email</th>
+                  <th>Created</th>
+                  <th>Last login</th>
+                  <th>Logins</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Users -->
+      <div class="content-section" id="section-users">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">User search & plans</div>
+          </div>
+          <div class="field-group">
+            <div class="field-label">Search by email</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <input id="searchEmailInput" class="field-input" placeholder="user@example.com" style="flex:1;min-width:160px;">
+              <button class="btn secondary" id="searchUserBtn">Search</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="two-cols">
+          <div class="card" id="userInfoCard" style="display:none;">
+            <div class="card-header">
+              <div class="card-title">User profile</div>
+            </div>
+            <div id="userInfoContent" style="font-size:13px;"></div>
+          </div>
+          <div class="card" id="userPlansCard" style="display:none;">
+            <div class="card-header">
+              <div class="card-title">Plans & access</div>
+            </div>
+            <div class="field-group">
+              <div class="field-label">Plans</div>
+              <div class="checkbox-row">
+                <label><input type="checkbox" id="chkBarking"> Barking plan</label>
+                <label><input type="checkbox" id="chkLeash"> Leash plan</label>
+                <label><input type="checkbox" id="chkPuppy"> Puppy / Manners</label>
+                <label><input type="checkbox" id="chkBundle"> Bundle (all 3)</label>
+              </div>
+            </div>
+            <div class="field-group">
+              <div class="field-label">AI Unlimited until (YYYY-MM-DD or empty)</div>
+              <input id="aiUntilInput" class="field-input" placeholder="2026-01-01">
+            </div>
+            <div class="field-group">
+              <div class="field-label">Account status</div>
+              <div class="checkbox-row">
+                <label><input type="checkbox" id="chkBlocked"> Block login</label>
+              </div>
+            </div>
+            <button class="btn" id="savePlansBtn">Save changes</button>
+            <div class="field-label" id="savePlansStatus" style="margin-top:6px;"></div>
+          </div>
+        </div>
+
+        <div class="card" id="userOrdersCard" style="display:none;">
+          <div class="card-header">
+            <div class="card-title">Recent orders for this user</div>
+          </div>
+          <div style="max-height:220px;overflow:auto;">
+            <table id="userOrdersTable">
+              <thead>
+                <tr>
+                  <th>When</th>
+                  <th>Product</th>
+                  <th>Amount</th>
+                  <th>Source</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Create user -->
+      <div class="content-section" id="section-createUser">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Create user & grant plans</div>
+          </div>
+          <div class="two-cols">
+            <div>
+              <div class="field-group">
+                <div class="field-label">User email</div>
+                <input id="createEmail" class="field-input" placeholder="user@example.com">
+              </div>
+              <div class="field-group">
+                <div class="field-label">Initial password</div>
+                <input id="createPassword" class="field-input" placeholder="set a password for user">
+              </div>
+              <div class="field-group">
+                <div class="field-label">Plans to grant</div>
+                <div class="checkbox-row">
+                  <label><input type="checkbox" id="createBarking"> Barking</label>
+                  <label><input type="checkbox" id="createLeash"> Leash</label>
+                  <label><input type="checkbox" id="createPuppy"> Puppy</label>
+                  <label><input type="checkbox" id="createBundle"> Bundle</label>
+                </div>
+              </div>
+              <div class="field-group">
+                <div class="field-label">AI Unlimited until (optional)</div>
+                <input id="createAiUntil" class="field-input" placeholder="">
+              </div>
+            </div>
+            <div>
+              <div class="field-group">
+                <div class="field-label">Optional: record a manual order</div>
+                <div class="field-group">
+                  <div class="field-label">Amount (USD cents)</div>
+                  <input id="createOrderAmount" class="field-input" placeholder="e.g. 4900 for $49">
+                </div>
+                <div class="field-group">
+                  <div class="field-label">Product code</div>
+                  <input id="createOrderProduct" class="field-input" placeholder="BUNDLE / BARKING / AI_MONTHLY">
+                </div>
+                <div class="field-group">
+                  <div class="field-label">Source</div>
+                  <input id="createOrderSource" class="field-input" placeholder="PAYPAL / PAYHIP / MANUAL">
+                </div>
+                <div class="field-group">
+                  <div class="field-label">Notes</div>
+                  <textarea id="createOrderNotes" class="field-textarea" placeholder="extra info (optional)"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="btn" id="createUserBtn">Create / update user</button>
+          <div class="field-label" id="createUserStatus" style="margin-top:6px;"></div>
+        </div>
+      </div>
+
+      <!-- Orders -->
+      <div class="content-section" id="section-orders">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Recent orders</div>
+          </div>
+          <div style="max-height:320px;overflow:auto;">
+            <table id="ordersTable">
+              <thead>
+                <tr>
+                  <th>When</th>
+                  <th>Email</th>
+                  <th>Product</th>
+                  <th>Amount</th>
+                  <th>Source</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logs -->
+      <div class="content-section" id="section-logs">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Admin activity logs</div>
+          </div>
+          <div style="max-height:320px;overflow:auto;">
+            <table id="logsTable">
+              <thead>
+                <tr>
+                  <th>When</th>
+                  <th>Admin</th>
+                  <th>Action</th>
+                  <th>Target</th>
+                  <th>Details</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "/admin/api";
+    let ADMIN_TOKEN = null;
+    let CURRENT_ADMIN = null;
+    let CURRENT_USER_EMAIL = null;
+
+    function setSection(sectionId) {
+      document.querySelectorAll(".content-section").forEach(sec => {
+        sec.classList.toggle("active", sec.id === "section-" + sectionId);
+      });
+      document.querySelectorAll(".nav-item").forEach(item => {
+        item.classList.toggle("active", item.dataset.section === sectionId);
+      });
+      const topTitle = {
+        dashboard: "Dashboard",
+        users: "Users & plans",
+        createUser: "Create / grant user",
+        orders: "Orders",
+        logs: "Admin logs"
+      }[sectionId] || "CalmPaw Admin";
+      const topSubtitle = {
+        dashboard: "High-level overview of users & plans.",
+        users: "Search users, edit plans & AI access.",
+        createUser: "Manually create a user and grant plans.",
+        orders: "Recent orders from all channels.",
+        logs: "Audit trail of admin actions."
+      }[sectionId] || "";
+      document.getElementById("topTitle").textContent = topTitle;
+      document.getElementById("topSubtitle").textContent = topSubtitle;
+
+      // 自动刷新一些数据
+      if (sectionId === "dashboard") {
+        loadRecentUsers();
+      } else if (sectionId === "orders") {
+        loadOrders();
+      } else if (sectionId === "logs") {
+        loadLogs();
+      }
+    }
+
+    async function apiGet(path) {
+      const res = await fetch(API_BASE + path, {
+        headers: {
+          "Authorization": "Bearer " + ADMIN_TOKEN
+        }
+      });
+      if (!res.ok) {
+        throw new Error("API error " + res.status);
+      }
+      return res.json();
+    }
+
+    async function apiPost(path, body) {
+      const res = await fetch(API_BASE + path, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + ADMIN_TOKEN
+        },
+        body: JSON.stringify(body || {})
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || ("API error " + res.status));
+      }
+      return data;
+    }
+
+    // 登录
+    async function handleLogin() {
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+      const errEl = document.getElementById("loginError");
+      errEl.style.display = "none";
+      errEl.textContent = "";
+
+      try {
+        const res = await fetch(API_BASE + "/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || "Login failed");
+        }
+        ADMIN_TOKEN = data.token;
+        CURRENT_ADMIN = data.admin;
+        localStorage.setItem("calmpaw_admin_token", ADMIN_TOKEN);
+        document.getElementById("sidebarAdminEmail").textContent = CURRENT_ADMIN.email;
+        document.getElementById("loginOverlay").style.display = "none";
+        document.getElementById("appShell").style.display = "flex";
+        setSection("dashboard");
+        loadRecentUsers();
+        loadOrders();
+        loadLogs();
+      } catch (e) {
+        errEl.textContent = e.message;
+        errEl.style.display = "block";
+      }
+    }
+
+    function logout() {
+      ADMIN_TOKEN = null;
+      CURRENT_ADMIN = null;
+      localStorage.removeItem("calmpaw_admin_token");
+      document.getElementById("appShell").style.display = "none";
+      document.getElementById("loginOverlay").style.display = "flex";
+    }
+
+    // Dashboard: 最近用户
+    async function loadRecentUsers() {
+      try {
+        const data = await apiGet("/recent-users?limit=20");
+        const list = data.users || [];
+        document.getElementById("dashRecentUsersCount").textContent = list.length.toString();
+        const infoEl = document.getElementById("dashRecentUsersInfo");
+        infoEl.innerHTML = "";
+        if (list.length) {
+          const first = list[0];
+          const span = document.createElement("span");
+          span.className = "tag";
+          span.textContent = "Newest: " + first.email;
+          infoEl.appendChild(span);
+        }
+        const tbody = document.querySelector("#recentUsersTable tbody");
+        tbody.innerHTML = "";
+        for (const u of list) {
+          const tr = document.createElement("tr");
+          const status = u.is_blocked ? "Blocked" : "OK";
+          const statusCls = u.is_blocked ? "status-bad" : "status-ok";
+          tr.innerHTML = `
+            <td>${u.email}</td>
+            <td>${u.created_at || ""}</td>
+            <td>${u.last_login_at || ""}</td>
+            <td>${u.login_count || 0}</td>
+            <td><span class="status-dot ${statusCls}"></span>${status}</td>
+          `;
+          tbody.appendChild(tr);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // Orders
+    async function loadOrders() {
+      try {
+        const data = await apiGet("/orders?limit=50");
+        const list = data.orders || [];
+        const tbody = document.querySelector("#ordersTable tbody");
+        tbody.innerHTML = "";
+        for (const o of list) {
+          const tr = document.createElement("tr");
+          const amount = (o.amount_cents / 100).toFixed(2) + " " + (o.currency || "USD");
+          tr.innerHTML = `
+            <td>${o.created_at || ""}</td>
+            <td>${o.email}</td>
+            <td>${o.product_code}</td>
+            <td>${amount}</td>
+            <td>${o.source}</td>
+            <td>${o.notes || ""}</td>
+          `;
+          tbody.appendChild(tr);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // Logs
+    async function loadLogs() {
+      try {
+        const data = await apiGet("/logs?limit=50");
+        const list = data.logs || [];
+        const tbody = document.querySelector("#logsTable tbody");
+        tbody.innerHTML = "";
+        for (const log of list) {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${log.created_at || ""}</td>
+            <td>${log.admin_email || ""}</td>
+            <td>${log.action}</td>
+            <td>${log.target_email || ""}</td>
+            <td>${log.details || ""}</td>
+          `;
+          tbody.appendChild(tr);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // 搜索用户
+    async function searchUser() {
+      const email = document.getElementById("searchEmailInput").value.trim();
+      if (!email) return;
+      try {
+        const data = await apiGet("/search-user?email=" + encodeURIComponent(email));
+        const user = data.user;
+        const plans = data.plans || {};
+        const orders = data.orders || [];
+        const infoCard = document.getElementById("userInfoCard");
+        const plansCard = document.getElementById("userPlansCard");
+        const ordersCard = document.getElementById("userOrdersCard");
+        const infoEl = document.getElementById("userInfoContent");
+
+        if (!user) {
+          infoCard.style.display = "block";
+          plansCard.style.display = "none";
+          ordersCard.style.display = "none";
+          infoEl.innerHTML = `<div style="font-size:13px;">No user found with email <strong>${email}</strong>.</div>`;
+          CURRENT_USER_EMAIL = null;
+          return;
+        }
+
+        CURRENT_USER_EMAIL = user.email;
+        infoCard.style.display = "block";
+        plansCard.style.display = "block";
+        ordersCard.style.display = "block";
+
+        infoEl.innerHTML = `
+          <div style="margin-bottom:6px;"><strong>${user.email}</strong></div>
+          <div style="font-size:12px;color:var(--text-soft);">
+            Created: ${user.created_at || "-"}<br>
+            Last login: ${user.last_login_at || "-"}<br>
+            Login count: ${user.login_count || 0}<br>
+            Status: ${user.is_blocked ? "Blocked" : "OK"}
+          </div>
+        `;
+
+        document.getElementById("chkBarking").checked = !!plans.plan_barking;
+        document.getElementById("chkLeash").checked = !!plans.plan_leash;
+        document.getElementById("chkPuppy").checked = !!plans.plan_puppy;
+        document.getElementById("chkBundle").checked = !!plans.plan_bundle;
+        document.getElementById("aiUntilInput").value = plans.ai_until || "";
+        document.getElementById("chkBlocked").checked = !!user.is_blocked;
+
+        // 用户订单
+        const tbody = document.querySelector("#userOrdersTable tbody");
+        tbody.innerHTML = "";
+        for (const o of orders) {
+          const tr = document.createElement("tr");
+          const amount = (o.amount_cents / 100).toFixed(2) + " " + (o.currency || "USD");
+          tr.innerHTML = `
+            <td>${o.created_at || ""}</td>
+            <td>${o.product_code}</td>
+            <td>${amount}</td>
+            <td>${o.source}</td>
+            <td>${o.notes || ""}</td>
+          `;
+          tbody.appendChild(tr);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    async function savePlans() {
+      if (!CURRENT_USER_EMAIL) return;
+      const statusEl = document.getElementById("savePlansStatus");
+      statusEl.textContent = "";
+      try {
+        const body = {
+          email: CURRENT_USER_EMAIL,
+          plan_barking: document.getElementById("chkBarking").checked,
+          plan_leash: document.getElementById("chkLeash").checked,
+          plan_puppy: document.getElementById("chkPuppy").checked,
+          plan_bundle: document.getElementById("chkBundle").checked,
+          ai_until: document.getElementById("aiUntilInput").value.trim() || null,
+          is_blocked: document.getElementById("chkBlocked").checked ? 1 : 0
+        };
+        await apiPost("/update-user", body);
+        statusEl.textContent = "Saved.";
+      } catch (e) {
+        statusEl.textContent = "Error: " + e.message;
+      }
+    }
+
+    async function createUser() {
+      const email = document.getElementById("createEmail").value.trim();
+      const password = document.getElementById("createPassword").value;
+      const statusEl = document.getElementById("createUserStatus");
+      statusEl.textContent = "";
+      if (!email || !password) {
+        statusEl.textContent = "Email and password required.";
+        return;
+      }
+
+      const plans = {
+        plan_barking: document.getElementById("createBarking").checked,
+        plan_leash: document.getElementById("createLeash").checked,
+        plan_puppy: document.getElementById("createPuppy").checked,
+        plan_bundle: document.getElementById("createBundle").checked,
+        ai_until: document.getElementById("createAiUntil").value.trim() || null
+      };
+
+      const amountStr = document.getElementById("createOrderAmount").value.trim();
+      const product = document.getElementById("createOrderProduct").value.trim();
+      const source = document.getElementById("createOrderSource").value.trim();
+      const notes = document.getElementById("createOrderNotes").value.trim();
+
+      if (amountStr && !product) {
+        statusEl.textContent = "If you record amount, please also set product code.";
+        return;
+      }
+
+      if (product && !amountStr) {
+        statusEl.textContent = "If you set product code, please also set amount cents.";
+        return;
+      }
+
+      if (amountStr && isNaN(parseInt(amountStr, 10))) {
+        statusEl.textContent = "Amount must be integer cents (e.g. 4900).";
+        return;
+      }
+
+      const payload = {
+        email,
+        password,
+        plans: {
+          ...plans,
+          amount_cents: amountStr ? parseInt(amountStr, 10) : null,
+          currency: "USD",
+          product_code: product || null,
+          source: source || null
+        },
+        note: notes || null
+      };
+
+      try {
+        await apiPost("/create-user", payload);
+        statusEl.textContent = "User created / updated.";
+      } catch (e) {
+        statusEl.textContent = "Error: " + e.message;
+      }
+    }
+
+    // 事件绑定
+    document.getElementById("loginBtn").addEventListener("click", handleLogin);
+    document.getElementById("loginPassword").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") handleLogin();
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", logout);
+
+    document.querySelectorAll(".nav-item").forEach(item => {
+      item.addEventListener("click", () => {
+        const sec = item.dataset.section;
+        setSection(sec);
+      });
+    });
+
+    document.getElementById("searchUserBtn").addEventListener("click", searchUser);
+    document.getElementById("savePlansBtn").addEventListener("click", savePlans);
+    document.getElementById("createUserBtn").addEventListener("click", createUser);
+
+    // 自动使用本地 token 尝试恢复登录
+    (async function init() {
+      const token = localStorage.getItem("calmpaw_admin_token");
+      if (!token) return;
+      ADMIN_TOKEN = token;
+      try {
+        const data = await apiGet("/me");
+        CURRENT_ADMIN = data.admin;
+        document.getElementById("sidebarAdminEmail").textContent = CURRENT_ADMIN.email;
+        document.getElementById("loginOverlay").style.display = "none";
+        document.getElementById("appShell").style.display = "flex";
+        setSection("dashboard");
+        loadRecentUsers();
+        loadOrders();
+        loadLogs();
+      } catch (e) {
+        console.warn("Auto-login failed", e);
+        logout();
+      }
+    })();
+  </script>
+</body>
+</html>
