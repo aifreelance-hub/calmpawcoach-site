@@ -190,6 +190,7 @@
   <!-- Paddle -->
   <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
   <script>
+    // 替换成你自己的 Vendor ID
     Paddle.Setup({ vendor: YOUR_PADDLE_VENDOR_ID });
   </script>
 </head>
@@ -209,9 +210,7 @@
         <a href="ai.html">Ask a Dog Trainer — AI Unlimited</a>
       </nav>
       <div class="nav-cta">
-        <div id="nav-login-area" class="nav-login-area">
-          <!-- JS 渲染登录状态 -->
-        </div>
+        <div id="nav-login-area" class="nav-login-area"></div>
       </div>
     </div>
   </header>
@@ -230,7 +229,7 @@
           <span>⏱ Daily time: 10–20 minutes</span>
         </div>
         <div class="hero-cta">
-          <a href="#" class="btn-primary"
+          <a href="#" class="btn-primary" id="cta-main-leash"
             onclick="Paddle.Checkout.open({
               product: PRODUCT_ID_LEASH,
               success: 'https://calmpawcoach.com/leash-access.html'
@@ -308,7 +307,7 @@
         You can repeat it any time your dog needs a refresher.
       </p>
       <div style="margin-top:10px;">
-        <a href="#" class="btn-primary"
+        <a href="#" class="btn-primary" id="cta-bottom-leash"
           onclick="Paddle.Checkout.open({
             product: PRODUCT_ID_LEASH,
             success: 'https://calmpawcoach.com/leash-access.html'
@@ -319,7 +318,6 @@
     </section>
   </main>
 
-  <!-- ★ Footer 已改为 5 项链接，和其它页面统一 ★ -->
   <footer>
     <div class="footer-inner">
       <div>© <span id="year"></span> CalmPaw Coach. All rights reserved.</div>
@@ -334,6 +332,7 @@
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 
+  <!-- 顶部导航登录区域 -->
   <script>
   (function () {
     const loginArea = document.getElementById("nav-login-area");
@@ -377,6 +376,57 @@
         document.getElementById("btn-login-nav").onclick = goAuth;
       }
     }
+  })();
+  </script>
+
+  <!-- ★★ 关键逻辑：如果已经拥有 leash 计划或 bundle，则按钮变成“Open your plan” ★★ -->
+  <script>
+  (function () {
+    const PLAN_KEY = "leash";               // 后端里的键名
+    const ACCESS_URL = "/leash-access.html";
+
+    const mainBtn = document.getElementById("cta-main-leash");
+    const bottomBtn = document.getElementById("cta-bottom-leash");
+    const token = localStorage.getItem("calmpaw_token");
+
+    if (!mainBtn || !bottomBtn) return;
+    if (!token) return; // 未登录就保持购买按钮
+
+    fetch("/auth/check-plan", {
+      method: "GET",
+      headers: {
+        "Authorization": "Bearer " + token
+      }
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (!data) return;
+
+        const hasBundle =
+          !!(data.bundle ||
+             (data.plans && data.plans.bundle));
+
+        const hasLeash =
+          !!(data[PLAN_KEY] ||
+             (data.plans && data.plans[PLAN_KEY]) ||
+             (Array.isArray(data.slugs) && data.slugs.includes(PLAN_KEY)));
+
+        if (!hasBundle && !hasLeash) return;
+
+        function goAccess(e) {
+          if (e) e.preventDefault();
+          window.location.href = ACCESS_URL;
+        }
+
+        mainBtn.textContent = "Open your 10-day plan →";
+        mainBtn.onclick = goAccess;
+
+        bottomBtn.textContent = "Go to your leash plan →";
+        bottomBtn.onclick = goAccess;
+      })
+      .catch(err => {
+        console.error("check-plan error", err);
+      });
   })();
   </script>
 </body>
