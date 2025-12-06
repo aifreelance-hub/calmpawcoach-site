@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <title>CalmPaw 管理后台</title>
+  <title>CalmPaw 管理员后台</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -101,8 +101,7 @@
     }
     input[type="email"],
     input[type="password"],
-    input[type="text"],
-    input[type="number"] {
+    input[type="text"] {
       width: 100%;
       border-radius: 999px;
       border: 1px solid #f3d9c4;
@@ -161,14 +160,6 @@
       background:#f3d9c4;
       color:#6b4b44;
     }
-    .tag {
-      font-size:11px;
-      padding:3px 7px;
-      border-radius:999px;
-      border:1px solid #f3d9c4;
-      color:#8a6a63;
-      background:#fffaf5;
-    }
     .checkbox-row {
       display:flex;
       flex-wrap:wrap;
@@ -197,12 +188,6 @@
       border-bottom:1px dashed #f3d9c4;
     }
     .list-item:last-child { border-bottom:none; }
-    code {
-      font-size:11px;
-      background:#f3d9c4;
-      padding:1px 5px;
-      border-radius:999px;
-    }
     .top-right {
       display:flex;
       align-items:center;
@@ -222,21 +207,21 @@
           <div class="logo-text-sub">给客户开训练计划 / 补单 / 查看订单</div>
         </div>
       </div>
-      <div class="top-right" id="topRight">
+      <div class="top-right">
         <span class="pill" id="adminStatus">未登录</span>
         <button class="btn secondary" id="logoutBtn" style="display:none;">退出</button>
       </div>
     </div>
 
     <div class="grid">
-      <!-- 左：登录 & 搜索 -->
+      <!-- 左侧：登录 + 搜索 -->
       <div class="card">
         <h2>登录后台</h2>
         <p class="small">首次登录请用默认账号，登录成功后再在数据库里改成你自己的邮箱和密码。</p>
         <div class="hint-box">
-第一次登录？  
-默认账号：  
-<code>admin@calmpaw.local / CalmPawAdmin123!</code>
+第一次登录？
+默认账号：
+admin@calmpaw.local / CalmPawAdmin123!
 （建议改完密码后再删除默认管理员）
         </div>
 
@@ -263,7 +248,7 @@
         <div id="searchMsg" class="error" style="display:none;"></div>
       </div>
 
-      <!-- 右：用户详情 & 订单 -->
+      <!-- 右侧：客户信息 + 订单 -->
       <div class="card">
         <h2>客户详情 & 计划</h2>
         <div id="userPanel">
@@ -282,10 +267,9 @@
   </div>
 
   <script>
-    // ======== 这里换成你的 Worker 基础地址 ========
+    // ===== 这里换成你的 Worker 基础地址 =====
+    // 如果你 Worker 路由不是 /w/auth，就改成真实地址
     const API_BASE = 'https://calmpawcoach.com/w/auth';
-    // 如果你 Worker 不是这个路径，就改成真实的那个，比如：
-    // const API_BASE = 'https://calmpawcoach.com/w/auth';
 
     const loginBtn = document.getElementById('loginBtn');
     const logoutBtn = document.getElementById('logoutBtn');
@@ -301,6 +285,7 @@
     function getToken() {
       return localStorage.getItem('calmpaw_admin_token') || '';
     }
+
     function setToken(t) {
       if (!t) {
         localStorage.removeItem('calmpaw_admin_token');
@@ -325,9 +310,12 @@
 
     async function loginAdmin() {
       loginMsg.style.display = 'none';
+      loginMsg.className = 'error';
       loginMsg.textContent = '';
+
       const email = document.getElementById('adminEmail').value.trim();
       const password = document.getElementById('adminPassword').value;
+
       if (!email || !password) {
         loginMsg.textContent = '请输入邮箱和密码';
         loginMsg.style.display = 'block';
@@ -338,10 +326,10 @@
       loginBtn.textContent = '登录中...';
 
       try {
-        const API_BASE = 'https://calmpawcoach.com/w/auth';
+        const res = await fetch(API_BASE + '/admin/api/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
+          body: JSON.stringify({ email, password })
         });
 
         const text = await res.text();
@@ -394,8 +382,7 @@
         throw new Error('响应不是 JSON：' + text.slice(0, 120));
       }
       if (!res.ok) {
-        const msg = data.error || '请求失败';
-        throw new Error(msg);
+        throw new Error(data.error || '请求失败');
       }
       return data;
     }
@@ -403,13 +390,16 @@
     async function searchUser() {
       searchMsg.style.display = 'none';
       userMsg.style.display = 'none';
+
       const emailInput = document.getElementById('searchEmail');
       const email = (emailInput.value || '').trim().toLowerCase();
+
       if (!email) {
         searchMsg.textContent = '请输入要搜索的客户邮箱';
         searchMsg.style.display = 'block';
         return;
       }
+
       searchBtn.disabled = true;
       searchBtn.textContent = '搜索中...';
 
@@ -419,7 +409,7 @@
           userPanel.innerHTML = '<p class="small">没有找到这个邮箱的用户。</p>';
           return;
         }
-        renderUserPanel(data.user, data.plans, data.orders || []);
+        renderUserPanel(data.user, data.plans || {}, data.orders || []);
       } catch (err) {
         console.error(err);
         searchMsg.textContent = err.message;
@@ -454,17 +444,15 @@
           <label>最近订单（按邮箱）</label>
           <div class="list">
             ${
-              orders.length === 0
+              !orders || orders.length === 0
                 ? '<div class="muted">暂无订单记录。</div>'
-                : orders
-                    .map(o => {
-                      const amt = o.amount_cents ? (o.amount_cents / 100).toFixed(2) : '-';
-                      return `<div class="list-item">
-                        <div>${o.product_code || '-'} · ${amt} ${o.currency || ''}</div>
-                        <div class="muted">${o.created_at || ''} · 来源：${o.source || '-'}</div>
-                      </div>`;
-                    })
-                    .join('')
+                : orders.map(o => {
+                    const amt = o.amount_cents ? (o.amount_cents / 100).toFixed(2) : '-';
+                    return `<div class="list-item">
+                      <div>${o.product_code || '-'} · ${amt} ${o.currency || ''}</div>
+                      <div class="muted">${o.created_at || ''} · 来源：${o.source || '-'}</div>
+                    </div>`;
+                  }).join('')
             }
           </div>
         </div>
@@ -485,7 +473,7 @@
         plan_barking: document.getElementById('plan_barking').checked,
         plan_leash: document.getElementById('plan_leash').checked,
         plan_puppy: document.getElementById('plan_puppy').checked,
-        plan_bundle: document.getElementById('plan_bundle').checked,
+        plan_bundle: document.getElementById('plan_bundle').checked
       };
 
       const btn = document.getElementById('savePlansBtn');
@@ -495,7 +483,7 @@
       try {
         await authFetch('/admin/api/update-user', {
           method: 'POST',
-          body: JSON.stringify(payload),
+          body: JSON.stringify(payload)
         });
         userMsg.className = 'success';
         userMsg.textContent = '已保存计划权限。';
@@ -520,15 +508,13 @@
           ordersList.innerHTML = '<div class="muted">暂无订单记录。</div>';
           return;
         }
-        ordersList.innerHTML = orders
-          .map(o => {
-            const amt = o.amount_cents ? (o.amount_cents / 100).toFixed(2) : '-';
-            return `<div class="list-item">
-              <div>${o.email || '-'} · ${o.product_code || '-'} · ${amt} ${o.currency || ''}</div>
-              <div class="muted">${o.created_at || ''} · 来源：${o.source || '-'}</div>
-            </div>`;
-          })
-          .join('');
+        ordersList.innerHTML = orders.map(o => {
+          const amt = o.amount_cents ? (o.amount_cents / 100).toFixed(2) : '-';
+          return `<div class="list-item">
+            <div>${o.email || '-'} · ${o.product_code || '-'} · ${amt} ${o.currency || ''}</div>
+            <div class="muted">${o.created_at || ''} · 来源：${o.source || '-'}</div>
+          </div>`;
+        }).join('');
       } catch (err) {
         console.error(err);
         ordersList.innerHTML = '<div class="muted">加载失败：' + err.message + '</div>';
