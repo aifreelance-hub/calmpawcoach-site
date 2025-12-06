@@ -191,8 +191,8 @@
   <!-- Paddle（记得换成你自己的 Vendor / Product ID） -->
   <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
   <script>
-    // TODO: 替换成你的真实 Vendor ID
-    Paddle.Setup({ vendor: 000000 });
+    // TODO: 替换成你的真实 Vendor ID 数字
+    Paddle.Setup({ vendor: 0 });
   </script>
 </head>
 <body>
@@ -230,11 +230,9 @@
           <span>⏱ Daily time: 10–15 minutes</span>
         </div>
         <div class="hero-cta">
+          <!-- 统一用函数控制购买流程 -->
           <a href="#" class="btn-primary" id="cta-main-barking"
-            onclick="Paddle.Checkout.open({
-              product: PRODUCT_ID_BARKING,
-              success: 'https://calmpawcoach.com/barking-access.html'
-            }); return false;">
+             onclick="return startBarkingPurchase();">
             Buy this plan – $19 →
           </a>
           <a href="programs.html" class="btn-outline">← Back to all programs</a>
@@ -320,10 +318,7 @@
       <p>Click below to purchase and unlock the full 7-day plan immediately.</p>
       <div style="margin-top:10px;">
         <a href="#" class="btn-primary" id="cta-bottom-barking"
-          onclick="Paddle.Checkout.open({
-            product: PRODUCT_ID_BARKING,
-            success: 'https://calmpawcoach.com/barking-access.html'
-          }); return false;">
+           onclick="return startBarkingPurchase();">
           Get the 7-day barking plan – $19 →
         </a>
       </div>
@@ -394,7 +389,28 @@
   })();
   </script>
 
-  <!-- ★★ 关键逻辑：如果已经拥有 barking 计划，则按钮变成“Open your plan” ★★ -->
+  <!-- 购买逻辑：未登录先去登录，登录后再付款 -->
+  <script>
+  function startBarkingPurchase() {
+    const token = localStorage.getItem("calmpaw_token");
+
+    // 1. 没登录 → 先去 auth.html 登录，带上返回地址
+    if (!token) {
+      const back = window.location.pathname + window.location.search;
+      window.location.href = "/auth.html?redirect=" + encodeURIComponent(back);
+      return false;
+    }
+
+    // 2. 已登录 → 直接打开 Paddle 支付
+    Paddle.Checkout.open({
+      product: PRODUCT_ID_BARKING,
+      success: "https://calmpawcoach.com/barking-access.html"
+    });
+    return false;
+  }
+  </script>
+
+  <!-- ★★ 关键逻辑：如果已经拥有 barking 计划或 bundle，则按钮变成“Open your plan” ★★ -->
   <script>
   (function () {
     const PLAN_KEY = "barking";               // 后端里的键名
@@ -405,7 +421,7 @@
     const token = localStorage.getItem("calmpaw_token");
 
     if (!mainBtn || !bottomBtn) return;
-    if (!token) return; // 未登录就保持购买按钮
+    if (!token) return; // 未登录就保持“购买”逻辑（startBarkingPurchase 会强制登录）
 
     fetch("/auth/check-plan", {
       method: "GET",
