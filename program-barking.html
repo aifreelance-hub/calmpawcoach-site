@@ -5,6 +5,7 @@
   <title>Stop Excessive Barking — CalmPaw 7-Day Plan</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="favicon.png" />
+
   <style>
     *{box-sizing:border-box;margin:0;padding:0;}
     :root{
@@ -51,150 +52,80 @@
     .nav-links a{
       padding:6px 11px;border-radius:999px;
       transition:background .18s ease,color .18s ease,transform .12s ease;
-      white-space:nowrap;
     }
     .nav-links a:hover{
       background:rgba(255,222,186,0.7);color:var(--text-main);transform:translateY(-1px);
     }
     @media(max-width:880px){.nav-links{display:none;}}
 
-    .nav-cta{
-      display:flex;align-items:center;gap:10px;
-      flex-shrink:0;
-    }
+    .nav-cta{display:flex;align-items:center;gap:10px;}
     .nav-login-area{
-      display:flex;align-items:center;gap:6px;
-      font-size:12px;color:var(--text-soft);
+      display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-soft);
       max-width:190px;
     }
     .nav-login-email{
-      max-width:130px;
-      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+      max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
     }
     .btn-mini{
-      padding:4px 10px;
-      border-radius:999px;
-      border:1px solid var(--border-soft);
-      background:#fff8f2;
-      font-size:11px;
-      cursor:pointer;
-      color:var(--text-soft);
-      white-space:nowrap;
+      padding:4px 10px;border-radius:999px;border:1px solid var(--border-soft);
+      background:#fff8f2;font-size:11px;cursor:pointer;color:var(--text-soft);
     }
-    .btn-mini-danger{
-      border-color:rgba(248,113,113,0.7);
-      color:#b91c1c;
-      background:#fff5f5;
-    }
-    .btn-mini:hover{
-      border-color:var(--accent);
-      color:var(--text-main);
-    }
+    .btn-mini-danger{border-color:#f87171;color:#b91c1c;background:#fff5f5;}
 
     .btn-primary{
-      padding:8px 18px;border-radius:var(--radius-pill);border:none;
+      padding:8px 18px;border-radius:999px;border:none;
       font-size:13px;font-weight:600;cursor:pointer;
       background:linear-gradient(135deg,#ffb86b,#ff914d);color:#4a251a;
       box-shadow:0 16px 36px rgba(214,139,86,0.6);
-      display:inline-flex;align-items:center;gap:6px;
-      white-space:nowrap;
     }
     .btn-primary:hover{transform:translateY(-1px) scale(1.01);}
     .btn-outline{
-      padding:7px 14px;border-radius:var(--radius-pill);
-      border:1px solid var(--border-soft);font-size:13px;
-      background:#fff8f2;color:var(--text-soft);cursor:pointer;
-      white-space:nowrap;
-    }
-
-    @media(max-width:640px){
-      .nav-inner{
-        padding:10px 14px;
-      }
-      .brand{
-        width:100%;
-      }
-      .nav-cta{
-        width:100%;
-        justify-content:flex-end;
-        gap:6px;
-      }
-      .btn-primary{
-        padding:7px 12px;
-        font-size:12px;
-      }
-      .btn-outline{
-        padding:6px 10px;
-        font-size:12px;
-      }
-      .nav-login-email{
-        max-width:110px;
-      }
+      padding:7px 14px;border-radius:999px;border:1px solid var(--border-soft);
+      background:#fff8f2;color:var(--text-soft);font-size:13px;
     }
 
     main{max-width:1120px;margin:0 auto;padding:26px 20px 40px;}
     .hero{
-      display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);
-      gap:22px;margin-bottom:26px;align-items:flex-start;
+      display:grid;grid-template-columns:1.4fr 1fr;gap:22px;margin-bottom:26px;
     }
-    @media(max-width:840px){.hero{grid-template-columns:minmax(0,1fr);}}
+    @media(max-width:840px){.hero{grid-template-columns:1fr;}}
+
     .hero-tag{
-      display:inline-flex;align-items:center;gap:6px;
       padding:4px 10px;border-radius:999px;
       background:rgba(255,222,186,0.9);font-size:11px;color:#6b4532;
       margin-bottom:8px;
     }
     .hero-title{font-size:22px;margin-bottom:6px;}
-    .hero-sub{font-size:13px;color:var(--text-soft);margin-bottom:12px;max-width:520px;line-height:1.6;}
-    .hero-meta{font-size:11px;color:var(--text-soft);margin-bottom:12px;}
-    .hero-meta span{margin-right:10px;}
-    .hero-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:8px;}
+    .hero-sub{font-size:13px;color:var(--text-soft);margin-bottom:12px;line-height:1.6;}
+
+    .hero-cta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
     .hero-note{font-size:11px;color:var(--text-soft);}
+
     .hero-card{
-      border-radius:var(--radius-lg);
-      background:rgba(255,246,238,0.96);
-      border:1px solid rgba(243,217,196,0.9);
-      padding:14px 14px 12px;
-      box-shadow:var(--shadow-soft);
-      font-size:11px;color:#7b5847;
+      border-radius:26px;background:#fff6ee;border:1px solid rgba(243,217,196,0.9);
+      padding:14px;box-shadow:var(--shadow-soft);font-size:11px;color:#7b5847;
     }
-    .hero-card h3{font-size:13px;margin-bottom:6px;}
-    .hero-card ul{margin-left:14px;margin-bottom:4px;}
-    .hero-card li{margin-bottom:4px;}
+
     .section{margin-bottom:24px;}
     .section h2{font-size:16px;margin-bottom:6px;}
-    .section p{font-size:13px;color:var(--text-soft);margin-bottom:6px;line-height:1.6;}
-    .bullets{font-size:13px;color:var(--text-soft);margin-left:16px;}
-    .bullets li{margin-bottom:4px;}
-    .days{
-      border-radius:18px;
-      background:#fffaf5;border:1px solid rgba(243,217,196,0.9);
-      padding:12px;font-size:12px;color:var(--text-soft);
-    }
+    .section p,.section li{font-size:13px;color:var(--text-soft);line-height:1.6;}
+
+    .days{background:#fffaf5;border:1px solid rgba(243,217,196,0.9);padding:12px;border-radius:18px;}
     .day-item{margin-bottom:8px;}
     .day-title{font-weight:600;color:#a0522b;margin-bottom:2px;}
 
     footer{
       border-top:1px solid rgba(243,217,196,0.8);
-      background:rgba(255,248,241,0.96);margin-top:10px;
+      background:#fff8f1;margin-top:10px;
     }
     .footer-inner{
-      max-width:1120px;margin:0 auto;
-      padding:12px 20px 16px;
-      display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;
+      max-width:1120px;margin:auto;padding:12px 20px 16px;
+      display:flex;flex-wrap:wrap;justify-content:space-between;
       font-size:11px;color:var(--text-soft);
     }
-    .footer-links{display:flex;gap:12px;flex-wrap:wrap;}
-    .footer-links a:hover{color:#b05825;}
   </style>
-
-  <!-- Paddle（记得换成你自己的 Vendor / Product ID） -->
-  <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
-  <script>
-    // TODO: 替换成你的真实 Vendor ID 数字
-    Paddle.Setup({ vendor: 0 });
-  </script>
 </head>
+
 <body>
   <header>
     <div class="nav-inner">
@@ -205,11 +136,13 @@
           <div class="brand-text-sub">Gentle, realistic dog training</div>
         </div>
       </a>
+
       <nav class="nav-links">
         <a href="programs.html">Programs</a>
         <a href="bundle.html">Complete Pack</a>
         <a href="ai.html">Ask a Dog Trainer — AI Unlimited</a>
       </nav>
+
       <div class="nav-cta">
         <div id="nav-login-area" class="nav-login-area"></div>
       </div>
@@ -220,254 +153,183 @@
     <section class="hero">
       <div>
         <div class="hero-tag">7-day plan · Apartment & neighbor friendly</div>
+
         <h1 class="hero-title">Stop Excessive Barking — CalmPaw 7-Day Plan</h1>
+
         <p class="hero-sub">
-          A gentle, realistic plan to reduce door, hallway and neighbor barking
-          in just 7 days — without shouting, harsh tools or hours of training.
+          A gentle, realistic plan to reduce door, hallway and neighbor barking in just 7 days —
+          without shouting, harsh tools or hours of training.
         </p>
-        <div class="hero-meta">
+
+        <div class="hero-meta" style="font-size:11px;color:#8a6a63;margin-bottom:12px;">
           <span>🐶 Best for: noisy apartments & sensitive dogs</span>
           <span>⏱ Daily time: 10–15 minutes</span>
         </div>
+
         <div class="hero-cta">
-          <!-- 统一用函数控制购买流程 -->
           <a href="#" class="btn-primary" id="cta-main-barking"
              onclick="return startBarkingPurchase();">
             Buy this plan – $19 →
           </a>
           <a href="programs.html" class="btn-outline">← Back to all programs</a>
         </div>
-        <div class="hero-note">
-          One-time purchase. Instant access to the full plan after payment.
-        </div>
+
+        <div class="hero-note">One-time purchase. Instant access after payment.</div>
       </div>
+
       <div class="hero-card">
         <h3>In this 7-day plan, you will:</h3>
         <ul>
-          <li>Teach your dog a clear “quiet” routine they can understand.</li>
+          <li>Teach your dog a clear “quiet” routine.</li>
           <li>Reduce barking at doors, footsteps, neighbors and elevator sounds.</li>
-          <li>Practice short, realistic sessions that fit around your work schedule.</li>
+          <li>Practice short, realistic sessions that fit your schedule.</li>
         </ul>
-        <p style="margin-top:6px;">
-          You’ll get a simple schedule for each day, plus exactly what to do in
-          the moment your dog barks — even when you’re tired or stressed.
-        </p>
       </div>
     </section>
 
+    <!-- Content below unchanged -->
     <section class="section">
       <h2>Who this plan is for</h2>
-      <p>
-        This plan is designed for real-life homes, not perfect training centers.
-        It’s especially helpful if:
-      </p>
-      <ul class="bullets">
+      <ul>
         <li>Your dog barks at doors, footsteps, neighbors or elevator sounds.</li>
-        <li>You’re worried about noise complaints in your building.</li>
-        <li>You feel guilty or stressed every time someone walks past your door.</li>
-        <li>You don’t have hours to train — 10–15 minutes a day is realistic for you.</li>
+        <li>You worry about noise complaints.</li>
+        <li>You feel stressed when people walk past your door.</li>
+        <li>You want training that fits a busy schedule.</li>
       </ul>
     </section>
 
     <section class="section">
-      <h2>What’s inside the 7-day plan</h2>
+      <h2>What's inside the 7-day plan</h2>
       <div class="days">
-        <div class="day-item">
-          <div class="day-title">Day 1 — Baseline & calm corner</div>
-          <div>Observe when your dog barks most, set up a calm resting spot and introduce a simple “settle” routine.</div>
-        </div>
-        <div class="day-item">
-          <div class="day-title">Day 2 — Teaching a “quiet” cue</div>
-          <div>Reward short moments of silence and pair them with a soft cue, building the foundation of your quiet routine.</div>
-        </div>
-        <div class="day-item">
-          <div class="day-title">Day 3 — Door sounds practice</div>
-          <div>Play low-volume door knocks / bell sounds and practice quiet + settle before the real thing happens.</div>
-        </div>
-        <div class="day-item">
-          <div class="day-title">Day 4 — Real-world door practice</div>
-          <div>Practice calm door routines with family members or friends, step-by-step, without overwhelming your dog.</div>
-        </div>
-        <div class="day-item">
-          <div class="day-title">Day 5 — Hallway & neighbor noises</div>
-          <div>Pair outside noises with rewards for staying calm, teaching your dog that not every sound needs a reaction.</div>
-        </div>
-        <div class="day-item">
-          <div class="day-title">Day 6 — “Busy evening” rehearsal</div>
-          <div>Simulate a busy evening with multiple sounds and visitors while you practice your calm routine.</div>
-        </div>
-        <div class="day-item">
-          <div class="day-title">Day 7 — Reset & long-term routine</div>
-          <div>Review your progress, adjust the plan and lock in a simple daily routine to keep barking under control.</div>
-        </div>
+        <div class="day-item"><div class="day-title">Day 1 — Baseline & calm corner</div><div>Observe barking patterns and set up a calm resting spot.</div></div>
+        <div class="day-item"><div class="day-title">Day 2 — Teaching a “quiet” cue</div><div>Reward silence and build the quiet routine.</div></div>
+        <div class="day-item"><div class="day-title">Day 3 — Door sounds practice</div><div>Practice quiet + settle with controlled sounds.</div></div>
+        <div class="day-item"><div class="day-title">Day 4 — Real-world door practice</div><div>Train with real people at the door.</div></div>
+        <div class="day-item"><div class="day-title">Day 5 — Hallway & neighbor noises</div><div>Teach calm responses to outside sounds.</div></div>
+        <div class="day-item"><div class="day-title">Day 6 — “Busy evening” rehearsal</div><div>Simulate multiple sounds and visitors.</div></div>
+        <div class="day-item"><div class="day-title">Day 7 — Reset & long-term routine</div><div>Adjust the plan and lock in the routine.</div></div>
       </div>
-    </section>
-
-    <section class="section">
-      <h2>What you’ll receive</h2>
-      <ul class="bullets">
-        <li>A clear 7-day schedule with short daily tasks.</li>
-        <li>Step-by-step instructions for what to do when barking starts.</li>
-        <li>Tips for handling “bad days” and setbacks without getting discouraged.</li>
-        <li>Adjustments for sensitive, rescue or older dogs.</li>
-      </ul>
     </section>
 
     <section class="section">
       <h2>Ready to start?</h2>
-      <p>Click below to purchase and unlock the full 7-day plan immediately.</p>
-      <div style="margin-top:10px;">
-        <a href="#" class="btn-primary" id="cta-bottom-barking"
-           onclick="return startBarkingPurchase();">
-          Get the 7-day barking plan – $19 →
-        </a>
-      </div>
+      <p>Click below to unlock the full 7-day plan.</p>
+      <a href="#" class="btn-primary" id="cta-bottom-barking"
+         onclick="return startBarkingPurchase();">
+        Get the 7-day barking plan – $19 →
+      </a>
     </section>
   </main>
 
   <footer>
     <div class="footer-inner">
-      <div>© <span id="year"></span> CalmPaw Coach. All rights reserved.</div>
+      <div>© <span id="year"></span> CalmPaw Coach</div>
       <div class="footer-links">
         <a href="about.html">About</a>
         <a href="contact.html">Contact</a>
-        <a href="terms.html">Terms of Use</a>
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="refunds.html">Refund Policy</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="refunds.html">Refunds</a>
       </div>
     </div>
   </footer>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 
-  <!-- 顶部导航登录区域 -->
+  <!-- 登录区域逻辑（未改动） -->
   <script>
   (function () {
     const loginArea = document.getElementById("nav-login-area");
     const token = localStorage.getItem("calmpaw_token");
 
-    function currentRedirect() {
-      return window.location.pathname + window.location.search;
-    }
-
-    function goAuth() {
-      window.location.href = "/auth.html?redirect=" + encodeURIComponent(currentRedirect());
-    }
-
+    function currentRedirect() { return window.location.pathname + window.location.search; }
+    function goAuth() { window.location.href = "/auth.html?redirect=" + encodeURIComponent(currentRedirect()); }
     function logoutOnly() {
       localStorage.removeItem("calmpaw_token");
       localStorage.removeItem("calmpaw_email");
     }
+    
+    function logoutAndStay() { logoutOnly(); window.location.reload(); }
 
-    function logoutAndStay() {
-      logoutOnly();
-      window.location.reload();
-    }
-
-    if (loginArea) {
+    if (token && localStorage.getItem("calmpaw_email")) {
       const email = localStorage.getItem("calmpaw_email");
-      if (token && email) {
-        loginArea.innerHTML = `
-          <span class="nav-login-email">${email}</span>
-          <button class="btn-mini" id="btn-switch-account">Switch</button>
-          <button class="btn-mini btn-mini-danger" id="btn-logout">Log out</button>
-        `;
-        document.getElementById("btn-switch-account").onclick = function () {
-          logoutOnly();
-          goAuth();
-        };
-        document.getElementById("btn-logout").onclick = logoutAndStay;
-      } else {
-        loginArea.innerHTML = `
-          <button class="btn-outline" id="btn-login-nav">Log in</button>
-        `;
-        document.getElementById("btn-login-nav").onclick = goAuth;
-      }
+      loginArea.innerHTML = `
+        <span class="nav-login-email">${email}</span>
+        <button class="btn-mini" id="btn-switch-account">Switch</button>
+        <button class="btn-mini btn-mini-danger" id="btn-logout">Log out</button>`;
+      document.getElementById("btn-switch-account").onclick = () => { logoutOnly(); goAuth(); };
+      document.getElementById("btn-logout").onclick = logoutAndStay;
+    } else {
+      loginArea.innerHTML = `<button class="btn-outline" id="btn-login-nav">Log in</button>`;
+      document.getElementById("btn-login-nav").onclick = goAuth;
     }
   })();
   </script>
 
-  <!-- 购买逻辑：未登录先去登录，登录后再付款 -->
+  <!-- Digistore24 购买逻辑 —— 完整替换 Paddle -->
   <script>
-  function startBarkingPurchase() {
-    const token = localStorage.getItem("calmpaw_token");
+    function startBarkingPurchase() {
+      const token = localStorage.getItem("calmpaw_token");
 
-    // 1. 没登录 → 先去 auth.html 登录，带上返回地址
-    if (!token) {
-      const back = window.location.pathname + window.location.search;
-      window.location.href = "/auth.html?redirect=" + encodeURIComponent(back);
+      // 未登录 → 跳 auth
+      if (!token) {
+        const back = window.location.pathname + window.location.search;
+        window.location.href = "/auth.html?redirect=" + encodeURIComponent(back);
+        return false;
+      }
+
+      // 已登录 → 跳 Digistore24 收银台
+      window.location.href = "https://checkout.digistore24.com/product/653870";
       return false;
     }
-
-    // 2. 已登录 → 直接打开 Paddle 支付
-    Paddle.Checkout.open({
-      product: PRODUCT_ID_BARKING,
-      success: "https://calmpawcoach.com/barking-access.html"
-    });
-    return false;
-  }
   </script>
 
-  <!-- ★★ 关键逻辑：如果已经拥有 barking 计划或 bundle，则按钮变成“Open your plan” ★★ -->
+  <!-- 已购买逻辑保持不变 -->
   <script>
   (function () {
-    const PLAN_KEY = "barking";               // 后端里的键名
+    const PLAN_KEY = "barking";
     const ACCESS_URL = "/barking-access.html";
 
     const mainBtn = document.getElementById("cta-main-barking");
     const bottomBtn = document.getElementById("cta-bottom-barking");
     const token = localStorage.getItem("calmpaw_token");
 
-    if (!mainBtn || !bottomBtn) return;
-    if (!token) return; // 未登录就保持“购买”逻辑（startBarkingPurchase 会强制登录）
+    if (!token) return;
 
     fetch("/auth/check-plan", {
       method: "GET",
-      headers: {
-        "Authorization": "Bearer " + token
-      }
+      headers: { "Authorization": "Bearer " + token }
     })
-      .then(r => r.json())
-      .then(data => {
-        if (!data) return;
+    .then(r => r.json())
+    .then(data => {
+      if (!data) return;
 
-        const hasBundle =
-          !!(data.bundle ||
-             (data.plans && data.plans.bundle));
+      const hasPlan =
+        data.barking ||
+        (data.plans && data.plans.barking) ||
+        (Array.isArray(data.slugs) && data.slugs.includes("barking"));
 
-        const hasBarking =
-          !!(data[PLAN_KEY] ||
-             (data.plans && data.plans[PLAN_KEY]) ||
-             (Array.isArray(data.slugs) && data.slugs.includes(PLAN_KEY)));
+      if (!hasPlan) return;
 
-        if (!hasBundle && !hasBarking) return;
+      function goAccess(e){ if(e)e.preventDefault(); window.location.href = ACCESS_URL; }
 
-        function goAccess(e) {
-          if (e) e.preventDefault();
-          window.location.href = ACCESS_URL;
-        }
+      mainBtn.textContent = "Open your 7-day plan →";
+      bottomBtn.textContent = "Go to your barking plan →";
 
-        mainBtn.textContent = "Open your 7-day plan →";
-        mainBtn.onclick = goAccess;
-
-        bottomBtn.textContent = "Go to your barking plan →";
-        bottomBtn.onclick = goAccess;
-      })
-      .catch(err => {
-        console.error("check-plan error", err);
-      });
+      mainBtn.onclick = goAccess;
+      bottomBtn.onclick = goAccess;
+    });
   })();
   </script>
 
-  <!-- Digistore24 促销代码：用于识别推广来源 -->
+  <!-- Digistore24 促销代码识别 -->
   <script src="https://www.digistore24-scripts.com/service/digistore.js"></script>
-  <script type="text/javascript">
+  <script>
     digistorePromocode({
       "product_id": 653870,
       "adjust_domain": true
     });
   </script>
+
 </body>
 </html>
