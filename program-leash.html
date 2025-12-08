@@ -187,7 +187,7 @@
     .footer-links a:hover{color:#b05825;}
   </style>
 
-  <!-- Paddle（先用 0 占位，之后换成你的真实 Vendor ID 数字） -->
+  <!-- Paddle（原样保留，不动） -->
   <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
   <script>
     Paddle.Setup({ vendor: 0 });
@@ -228,7 +228,7 @@
           <span>⏱ Daily time: 10–20 minutes</span>
         </div>
         <div class="hero-cta">
-          <!-- 用函数控制逻辑：未登录先去登录，已登录直接付款 -->
+          <!-- 按钮保留原结构，只是内部逻辑改为 Digistore -->
           <a href="#" class="btn-primary" id="cta-main-leash"
              onclick="return startLeashPurchase();">
             Buy this plan – $19 →
@@ -373,7 +373,7 @@
   })();
   </script>
 
-  <!-- 购买逻辑：未登录先去登录，登录后再弹 Paddle -->
+  <!-- 购买逻辑：未登录先去登录，登录后跳 Digistore 链接 -->
   <script>
   function startLeashPurchase() {
     const token = localStorage.getItem("calmpaw_token");
@@ -385,11 +385,8 @@
       return false;
     }
 
-    // 已登录 → 直接打开 Paddle 收银台
-    Paddle.Checkout.open({
-      product: PRODUCT_ID_LEASH,
-      success: "https://calmpawcoach.com/leash-access.html"
-    });
+    // 已登录 → 直接打开 Digistore 收银台（牵绳计划）
+    window.open("https://www.checkout-ds24.com/product/653887", "_blank");
     return false;
   }
   </script>
