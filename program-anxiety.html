@@ -380,7 +380,7 @@
   })();
   </script>
 
-  <!-- 购买逻辑：未登录先去登录，登录后再付款 -->
+  <!-- 购买逻辑：未登录先去登录，登录后跳 Digistore 链接 -->
   <script>
   function startAnxietyPurchase() {
     const token = localStorage.getItem("calmpaw_token");
@@ -392,16 +392,13 @@
       return false;
     }
 
-    // 2. 已登录 → 直接打开 Paddle 支付
-    Paddle.Checkout.open({
-      product: PRODUCT_ID_ANXIETY,
-      success: "https://calmpawcoach.com/anxiety-access.html"
-    });
+    // 2. 已登录 → 直接打开 Digistore 收银台（分离焦虑计划）
+    window.open("https://www.checkout-ds24.com/product/653885", "_blank");
     return false;
   }
   </script>
 
-  <!-- ★★ 关键逻辑：如果已经拥有 anxiety 计划，则按钮变成“Open your plan” ★★ -->
+  <!-- ★★ 已经拥有 anxiety 计划，则按钮变成“Open your plan” ★★ -->
   <script>
   (function () {
     const PLAN_KEY = "anxiety";               // 后端里的键名
