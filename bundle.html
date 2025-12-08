@@ -801,7 +801,7 @@
     const bottomBtn = document.getElementById("bundle-cta-bottom");
     if (!topBtn && !heroBtn && !bottomBtn) return;
 
-    fetch(API_BASE + "/auth/check-plan", {
+    fetch("/auth/check-plan?slug=bundle", {
       method: "GET",
       headers: {
         "Authorization": "Bearer " + token
