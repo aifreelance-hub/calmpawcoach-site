@@ -395,6 +395,21 @@
       color: #a56a4d;
       flex-wrap: wrap;
     }
+    /* 新增：取消订阅说明 */
+    .cancel-note {
+      margin-top: 8px;
+      font-size: 11px;
+      color: #a16a4b;
+      line-height: 1.5;
+    }
+    .cancel-note a {
+      color: #b05825;
+      text-decoration: underline;
+    }
+    .cancel-note a:hover {
+      color: #7a3410;
+    }
+
     footer {
       border-top: 1px solid rgba(243, 217, 196, 0.8);
       background: rgba(255, 248, 241, 0.96);
@@ -503,6 +518,16 @@
           <div>
             <button class="btn-link" id="btn-go-ai" type="button">Go to AI Trainer manually</button>
           </div>
+        </div>
+
+        <!-- 新增：取消订阅入口 -->
+        <div class="cancel-note">
+          Want to cancel your monthly AI Trainer subscription?
+          You can manage or cancel it anytime via Digistore24:
+          <a href="https://www.digistore24.com/my" target="_blank" rel="noopener">
+            Manage / cancel subscription
+          </a>.
+          Log in with the same email you used during checkout.
         </div>
       </div>
     </section>
