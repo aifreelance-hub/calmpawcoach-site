@@ -52,17 +52,11 @@
       flex-direction: column;
     }
     a { text-decoration: none; color: inherit; }
-
     @keyframes float-soft {
       0% { transform: translateY(0px); }
       50% { transform: translateY(-6px); }
       100% { transform: translateY(0px); }
     }
-    @keyframes shimmer {
-      0% { background-position: -120px 0; }
-      100% { background-position: 120px 0; }
-    }
-
     header {
       position: sticky;
       top: 0;
@@ -181,6 +175,15 @@
       transform: translateY(-1px);
       background: #fffaf5;
     }
+    .btn-link {
+      border: none;
+      background: transparent;
+      color: #b05825;
+      font-size: 11px;
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 0;
+    }
     .btn-primary {
       padding: 8px 19px;
       border-radius: var(--radius-pill);
@@ -276,7 +279,6 @@
         font-size: 11px;
       }
     }
-
     main {
       flex: 1;
       display: flex;
@@ -303,7 +305,10 @@
       opacity: 0.9;
       pointer-events: none;
     }
-    .card-inner { position: relative; z-index: 1; }
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
     .card-pill {
       display: inline-flex;
       align-items: center;
@@ -390,16 +395,6 @@
       color: #a56a4d;
       flex-wrap: wrap;
     }
-    .btn-link {
-      border: none;
-      background: transparent;
-      color: #b05825;
-      font-size: 11px;
-      text-decoration: underline;
-      cursor: pointer;
-      padding: 0;
-    }
-
     footer {
       border-top: 1px solid rgba(243, 217, 196, 0.8);
       background: rgba(255, 248, 241, 0.96);
@@ -477,7 +472,7 @@
         <h1 class="card-title">
           Activating your AI Trainer subscription
         </h1>
-        <p class="card-subtitle">
+        <p class="card-subtitle" id="subtitle">
           Thank you for your payment. We’re now connecting your CalmPaw AI Trainer
           to your account and unlocking monthly access.
         </p>
@@ -496,7 +491,7 @@
 
         <div id="status-error" class="status-error" style="display:none;"></div>
 
-        <div class="meta-note">
+        <div class="meta-note" id="meta-note">
           <strong>Note:</strong> if you reached this page without completing payment, your subscription
           may not be activated. In that case you can safely go back to the website and try again later.
         </div>
@@ -530,8 +525,21 @@
   <script>
     const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
 
-    // 年份
     document.getElementById("year").textContent = new Date().getFullYear();
+
+    // 解析 Digistore24 回传的参数
+    function getDsParams() {
+      const sp = new URLSearchParams(window.location.search);
+      const orderId = sp.get("order_id") || sp.get("transaction") || "";
+      const buyerEmail = sp.get("email") || "";
+      const priceStr = sp.get("price") || sp.get("amount") || "";
+      let amountCents = null;
+      if (priceStr) {
+        const n = parseFloat(priceStr);
+        if (!Number.isNaN(n)) amountCents = Math.round(n * 100);
+      }
+      return { orderId, buyerEmail, amountCents };
+    }
 
     // 顶部登录状态
     async function hydrateNavAuth() {
@@ -602,20 +610,38 @@
       }
     }
 
-    // 激活 AI 订阅（支持 Digistore24 回调参数）
     async function activateAi() {
       const token = localStorage.getItem("calmpaw_token");
       const statusMain = document.getElementById("status-main");
       const statusSub = document.getElementById("status-sub");
       const errorBox = document.getElementById("status-error");
       const spinner = document.getElementById("spinner");
+      const metaNote = document.getElementById("meta-note");
+
+      const { orderId, buyerEmail, amountCents } = getDsParams();
+
+      // 本地防重：同一个 order_id 只激活一次
+      if (orderId) {
+        const localKey = "calmpaw_ds24_activated_" + orderId;
+        if (localStorage.getItem(localKey)) {
+          spinner.style.display = "none";
+          statusMain.textContent = "Your subscription is already connected.";
+          statusSub.textContent = "We found this order on this device. Redirecting you to the AI Trainer chat…";
+          errorBox.style.display = "none";
+          setTimeout(() => {
+            window.location.href = "/ai";
+          }, 1500);
+          return;
+        }
+      }
 
       if (!token) {
         statusMain.textContent = "You’re not logged in.";
-        statusSub.textContent = "Please sign in first. Redirecting to login…";
+        statusSub.textContent = "Please sign in first so we can connect this payment to your account.";
         spinner.style.display = "none";
+        errorBox.style.display = "none";
         setTimeout(() => {
-          const redirect = encodeURIComponent('/ai-activate');
+          const redirect = encodeURIComponent('/ai-activate' + window.location.search);
           window.location.href = `auth.html?redirect=${redirect}`;
         }, 1500);
         return;
@@ -626,12 +652,14 @@
         statusSub.textContent = "We’re linking this payment to your CalmPaw Coach account.";
         errorBox.style.display = "none";
 
-        // 收集 Digistore24 在回调链接上带的所有参数，一并发给后端
-        const searchParams = new URLSearchParams(window.location.search);
-        const providerMeta = {};
-        searchParams.forEach((value, key) => {
-          providerMeta[key] = value;
-        });
+        const body = {
+          product_slug: "ai_trainer_29",
+          provider: orderId ? "digistore24" : "manual",
+          provider_order_id: orderId || null,
+          buyer_email: buyerEmail || null,
+          amount_cents: amountCents,
+          currency: "USD"
+        };
 
         const res = await fetch(API_BASE + "/ai/activate", {
           method: "POST",
@@ -639,11 +667,7 @@
             "Content-Type": "application/json",
             "Authorization": "Bearer " + token
           },
-          body: JSON.stringify({
-            product_slug: "ai_trainer_29",       // 后端用来识别这是哪一个订阅
-            provider: "digistore24",             // 标记来源
-            provider_meta: providerMeta          // 订单号等附加信息（可选）
-          })
+          body: JSON.stringify(body)
         });
 
         const data = await res.json();
@@ -652,22 +676,29 @@
         if (!res.ok || !data.ok) {
           spinner.style.display = "none";
           statusMain.textContent = "We couldn’t confirm your subscription.";
-          statusSub.textContent =
-            "If you just paid via Digistore24, please contact support with your email and payment receipt.";
-          let msg = data && data.error ? String(data.error) : "";
-          if (msg === "server_error") {
-            msg = "Server error while checking the payment. Please try again in a few minutes or contact support.";
-          } else if (!msg) {
-            msg = "Activation failed. Please try again or contact support.";
-          }
-          errorBox.textContent = msg;
+          statusSub.textContent = "If you just paid, please contact support with your email and payment receipt.";
+          errorBox.textContent = data.error || "Activation failed. Please try again or contact support.";
           errorBox.style.display = "block";
           return;
+        }
+
+        if (orderId) {
+          const localKey = "calmpaw_ds24_activated_" + orderId;
+          try { localStorage.setItem(localKey, "1"); } catch (e) {}
         }
 
         spinner.style.display = "none";
         statusMain.textContent = "Your AI Trainer subscription is active.";
         statusSub.textContent = "You’ll be redirected to the AI Trainer chat in a moment.";
+        errorBox.style.display = "none";
+
+        if (data.active_until) {
+          const until = new Date(data.active_until * 1000);
+          metaNote.innerHTML =
+            "<strong>Tip:</strong> your current month is active until " +
+            until.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" }) +
+            ". You can come back to this page after future payments as well.";
+        }
 
         setTimeout(() => {
           window.location.href = "/ai";
@@ -683,6 +714,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("year").textContent = new Date().getFullYear();
       hydrateNavAuth();
       activateAi();
 
