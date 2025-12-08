@@ -151,7 +151,7 @@
     .hero-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:8px;}
     .hero-note{font-size:11px;color:var(--text-soft);}
 
-    /* 新增：交付与扣款说明 */
+    /* 交付与扣款说明 */
     .delivery-note{
       font-size:11px;
       color:#a16a4b;
@@ -245,8 +245,13 @@
           <span>⏱ Daily time: 10–15 minutes</span>
         </div>
         <div class="hero-cta">
-          <a href="#" class="btn-primary" id="cta-main-barking"
-             onclick="return startBarkingPurchase();">
+          <!-- 购买按钮：默认是 Digistore 链接，已购买后脚本会改成“Open” -->
+          <a
+            id="cta-main-barking"
+            class="btn-primary"
+            href="https://www.checkout-ds24.com/product/653870"
+            target="_blank"
+          >
             Buy this plan – $19 →
           </a>
           <a href="programs.html" class="btn-outline">← Back to all programs</a>
@@ -326,8 +331,13 @@
         You can repeat it whenever life changes or a new neighbor moves in.
       </p>
       <div style="margin-top:10px;">
-        <a href="#" class="btn-primary" id="cta-bottom-barking"
-           onclick="return startBarkingPurchase();">
+        <!-- 底部购买按钮：同样逻辑 -->
+        <a
+          id="cta-bottom-barking"
+          class="btn-primary"
+          href="https://www.checkout-ds24.com/product/653870"
+          target="_blank"
+        >
           Get the 7-day barking plan – $19 →
         </a>
       </div>
@@ -351,109 +361,126 @@
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 
-  <!-- 顶部导航登录区域（和其他页面保持一致） -->
+  <!-- 顶部导航登录区域（和你之前用的一样逻辑） -->
   <script>
-  (function () {
-    const loginArea = document.getElementById("nav-login-area");
-    const token = localStorage.getItem("calmpaw_token");
+    (function () {
+      const loginArea = document.getElementById("nav-login-area");
+      const token = localStorage.getItem("calmpaw_token");
 
-    function currentRedirect() {
-      return window.location.pathname + window.location.search;
-    }
-
-    function goAuth() {
-      window.location.href = "/auth.html?redirect=" + encodeURIComponent(currentRedirect());
-    }
-
-    function logoutOnly() {
-      localStorage.removeItem("calmpaw_token");
-      localStorage.removeItem("calmpaw_email");
-    }
-
-    function logoutAndStay() {
-      logoutOnly();
-      window.location.reload();
-    }
-
-    if (loginArea) {
-      const email = localStorage.getItem("calmpaw_email");
-      if (token && email) {
-        loginArea.innerHTML = `
-          <span class="nav-login-email">${email}</span>
-          <button class="btn-mini" id="btn-switch-account">Switch</button>
-          <button class="btn-mini btn-mini-danger" id="btn-logout">Log out</button>
-        `;
-        document.getElementById("btn-switch-account").onclick = function () {
-          logoutOnly();
-          goAuth();
-        };
-        document.getElementById("btn-logout").onclick = logoutAndStay;
-      } else {
-        loginArea.innerHTML = `
-          <button class="btn-outline" id="btn-login-nav">Log in</button>
-        `;
-        document.getElementById("btn-login-nav").onclick = goAuth;
+      function currentRedirect() {
+        return window.location.pathname + window.location.search;
       }
-    }
-  })();
-  </script>
 
-  <!-- 购买逻辑：未登录先去登录，登录后跳 Digistore 653870 -->
-  <script>
-  function startBarkingPurchase() {
-    const token = localStorage.getItem("calmpaw_token");
-
-    // 没登录 → 先去 auth.html 登录，带上返回地址
-    if (!token) {
-      const back = window.location.pathname + window.location.search;
-      window.location.href = "/auth.html?redirect=" + encodeURIComponent(back);
-      return false;
-    }
-
-    // 已登录 → 直接打开 Digistore 收银台（Barking 计划）
-    window.open("https://www.checkout-ds24.com/product/653870", "_blank");
-    return false;
-  }
-  </script>
-
-  <!-- 已经拥有 barking 或 bundle 的用户：按钮变成“Open your plan” -->
-  <script>
-  (function () {
-    const PLAN_KEY = "barking";
-    const ACCESS_URL = "/barking-access.html";
-
-    const mainBtn = document.getElementById("cta-main-barking");
-    const bottomBtn = document.getElementById("cta-bottom-barking");
-    const token = localStorage.getItem("calmpaw_token");
-
-    if (!mainBtn || !bottomBtn) return;
-    if (!token) return; // 未登录就保持购买逻辑
-
-    fetch("https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=" + PLAN_KEY, {
-      method: "GET",
-      headers: {
-        "Authorization": "Bearer " + token
+      function goAuth() {
+        window.location.href = "/auth.html?redirect=" + encodeURIComponent(currentRedirect());
       }
-    })
-      .then(r => r.json())
-      .then(data => {
-        if (!data || !data.ok || !data.access) return;
 
-        function goAccess(e) {
-          if (e) e.preventDefault();
-          window.location.href = ACCESS_URL;
+      function logoutOnly() {
+        localStorage.removeItem("calmpaw_token");
+        localStorage.removeItem("calmpaw_email");
+      }
+
+      function logoutAndStay() {
+        logoutOnly();
+        window.location.reload();
+      }
+
+      if (loginArea) {
+        const email = localStorage.getItem("calmpaw_email");
+        if (token && email) {
+          loginArea.innerHTML = `
+            <span class="nav-login-email">${email}</span>
+            <button class="btn-mini" id="btn-switch-account">Switch</button>
+            <button class="btn-mini btn-mini-danger" id="btn-logout">Log out</button>
+          `;
+          document.getElementById("btn-switch-account").onclick = function () {
+            logoutOnly();
+            goAuth();
+          };
+          document.getElementById("btn-logout").onclick = logoutAndStay;
+        } else {
+          loginArea.innerHTML = `
+            <button class="btn-outline" id="btn-login-nav">Log in</button>
+          `;
+          document.getElementById("btn-login-nav").onclick = goAuth;
         }
+      }
+    })();
+  </script>
 
-        mainBtn.textContent = "Open your 7-day plan →";
-        mainBtn.onclick = goAccess;
+  <!-- 购买逻辑：未登录先去登录，登录后用“同一窗口”打开 Digistore 653870 -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653870";
 
-        bottomBtn.textContent = "Go to your barking plan →";
-        bottomBtn.onclick = goAccess;
-      })
-      .catch(err => {
-        console.error("check-plan barking error", err);
-      });
-  })();
+      function wireBarkingButton(id) {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+
+        btn.addEventListener("click", function (e) {
+          const href = btn.getAttribute("href") || "";
+
+          // 如果已经变成 barking-access.html（已购买状态），让它走默认跳转打开计划
+          if (href.indexOf("barking-access.html") !== -1) {
+            return;
+          }
+
+          const token = localStorage.getItem("calmpaw_token");
+          const redirect = window.location.pathname + window.location.search;
+
+          // 没登录：先去登录
+          if (!token) {
+            e.preventDefault();
+            window.location.href = "/auth.html?redirect=" + encodeURIComponent(redirect);
+            return;
+          }
+
+          // 已登录且未购买：用同一窗口跳到 Digistore24 收银台
+          e.preventDefault();
+          window.location.href = CHECKOUT_URL;
+        });
+      }
+
+      wireBarkingButton("cta-main-barking");
+      wireBarkingButton("cta-bottom-barking");
+    });
+  </script>
+
+  <!-- 已经拥有 barking 或 bundle 的用户：按钮变成“Open your plan”（不自动跳转整页） -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const ACCESS_URL = "/barking-access.html";
+      const mainBtn = document.getElementById("cta-main-barking");
+      const bottomBtn = document.getElementById("cta-bottom-barking");
+      const token = localStorage.getItem("calmpaw_token");
+      if (!mainBtn || !bottomBtn) return;
+      if (!token) return;
+
+      // 同时检查 barking 和 bundle 两个 slug，只要有一个有 access 就认为可以看 barking
+      const base = "https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=";
+      Promise.all([
+        fetch(base + "barking", { headers: { "Authorization": "Bearer " + token } }).then(r => r.json()).catch(() => null),
+        fetch(base + "bundle",  { headers: { "Authorization": "Bearer " + token } }).then(r => r.json()).catch(() => null)
+      ])
+        .then(results => {
+          const hasAccess = results.some(data => data && data.ok && data.access);
+          if (!hasAccess) return;
+
+          function makeOpen(btn, text) {
+            if (!btn) return;
+            btn.removeAttribute("target");
+            btn.href = ACCESS_URL;
+            btn.textContent = text;
+          }
+
+          makeOpen(mainBtn, "Open your 7-day plan →");
+          makeOpen(bottomBtn, "Go to your barking plan →");
+          // 注意：这里只改按钮，不会自动 window.location.href
+        })
+        .catch(err => {
+          console.error("check-plan barking/bundle error", err);
+        });
+    });
   </script>
 </body>
 </html>
