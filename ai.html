@@ -650,9 +650,8 @@
   <script>
     const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
 
-    // 🔴 把这里换成你在 Paddle 后台复制出来的 checkout 链接
-    // 建议在 Paddle 那边的链接里已经配置好 return_url=https://calmpawcoach.com/ai.html
-    const PADDLE_CHECKOUT_URL = "https://your-paddle-checkout-link.com";
+    // Digistore24 结账链接（AI Trainer 月订阅）
+    const DIGISTORE_AI_CHECKOUT_URL = "https://www.checkout-ds24.com/product/653899";
 
     const navAuthArea = document.getElementById("nav-auth-area");
     const stateNotLogged = document.getElementById("state-not-logged");
@@ -675,15 +674,16 @@
       },
     ];
 
-    // ✅ 给订阅按钮绑定 Paddle 跳转
+    // 订阅按钮：跳转 Digistore24 结账
     if (subscribeLink) {
       subscribeLink.addEventListener("click", (e) => {
         e.preventDefault();
-        if (!PADDLE_CHECKOUT_URL || PADDLE_CHECKOUT_URL === "https://your-paddle-checkout-link.com") {
-          alert("Paddle checkout link is not set yet.");
+        if (!DIGISTORE_AI_CHECKOUT_URL) {
+          alert("Checkout link is not set yet.");
           return;
         }
-        window.location.href = PADDLE_CHECKOUT_URL;
+        // 在当前窗口跳转到 Digistore24，下单后按照你在 DS24 里配置的 Thank-you URL 回到 ai-activate
+        window.location.href = DIGISTORE_AI_CHECKOUT_URL;
       });
     }
 
