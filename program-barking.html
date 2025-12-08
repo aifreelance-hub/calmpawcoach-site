@@ -446,68 +446,74 @@
     });
   </script>
 
-  <!-- 已经拥有 barking / 任意 barking 相关 slug / bundle 的用户：按钮变成“Open your plan” -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const ACCESS_URL = "/barking-access.html";
-      const mainBtn = document.getElementById("cta-main-barking");
-      const bottomBtn = document.getElementById("cta-bottom-barking");
-      const token = localStorage.getItem("calmpaw_token");
-      if (!mainBtn || !bottomBtn) return;
-      if (!token) return;
+  <!-- 已经拥有 barking 的用户：按钮变成“Open”，并支持从 Digistore 回来自动跳转 -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const ACCESS_URL = "/barking-access.html";
+    const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
 
-      const BASE = "https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=";
+    const mainBtn = document.getElementById("cta-main-barking");
+    const bottomBtn = document.getElementById("cta-bottom-barking");
+    const token = localStorage.getItem("calmpaw_token");
 
-      // 尝试多种可能的 barking slug，再加上 bundle
-      const BARKING_SLUGS = [
-        "barking",
-        "barking-plan",
-        "barking_7day",
-        "barking7",
-        "barking-7-day"
-      ];
-      const ALL_SLUGS = BARKING_SLUGS.concat(["bundle"]);
+    if (!mainBtn || !bottomBtn || !token) return;
 
-      Promise.all(
-        ALL_SLUGS.map(slug =>
-          fetch(BASE + encodeURIComponent(slug), {
-            headers: { "Authorization": "Bearer " + token }
-          })
-            .then(r => r.json())
-            .then(data => ({ slug, data }))
-            .catch(() => ({ slug, data: null }))
-        )
-      )
-        .then(results => {
-          // 控制台打印一下，方便你自己看是哪一个 slug 生效
-          console.log("check-plan barking multi-slug results:", results);
+    // 判断是不是刚从 Digistore24 收银台跳回来
+    const fromCheckout =
+      document.referrer && document.referrer.indexOf("checkout-ds24.com") !== -1;
 
-          // 只要 barking 系列或 bundle 中有任何一个 access=true，就认为可以访问这个计划
-          const hasAccess = results.some(
-            item =>
-              item.data &&
-              item.data.ok &&
-              item.data.access &&
-              (BARKING_SLUGS.includes(item.slug) || item.slug === "bundle")
-          );
+    // 把两个按钮都变成“Open your 7-day plan”
+    function turnButtonsToOpen() {
+      [mainBtn, bottomBtn].forEach((btn) => {
+        if (!btn) return;
+        btn.removeAttribute("target");
+        btn.href = ACCESS_URL;
+      });
+      mainBtn.textContent = "Open your 7-day plan →";
+      bottomBtn.textContent = "Go to your barking plan →";
+    }
 
-          if (!hasAccess) return;
+    // 调用 check-plan，allowRedirect=true 时发现已开通就自动跳转
+    function checkAndMaybeRedirect(allowRedirect) {
+      fetch(API_BASE + "/auth/check-plan?slug=barking", {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+        .then((r) => r.json())
+        .then((data) => {
+          if (!data || !data.ok || !data.access) return;
 
-          function makeOpen(btn, text) {
-            if (!btn) return;
-            btn.removeAttribute("target");
-            btn.href = ACCESS_URL;
-            btn.textContent = text;
+          // 已经有权限
+          turnButtonsToOpen();
+
+          if (allowRedirect) {
+            // 直接进入 barking-access 页面，不用手动点按钮
+            window.location.replace(ACCESS_URL);
           }
-
-          makeOpen(mainBtn, "Open your 7-day plan →");
-          makeOpen(bottomBtn, "Go to your barking plan →");
-          // 这里只改按钮，不自动整页跳转，让用户自己点“Open”
         })
-        .catch(err => {
-          console.error("check-plan barking/bundle error", err);
+        .catch((err) => {
+          console.error("check-plan barking error", err);
         });
-    });
-  </script>
+    }
+
+    // 普通打开这个页面：只把按钮变成“Open…”，不自动跳转
+    checkAndMaybeRedirect(false);
+
+    // 如果是刚从 Digistore24 付款回来，就轮询几次等 webhook 生效，然后自动跳转
+    if (fromCheckout) {
+      let tries = 0;
+      const timer = setInterval(() => {
+        tries++;
+        if (tries > 6) { // 最多再等大约 18 秒
+          clearInterval(timer);
+          return;
+        }
+        checkAndMaybeRedirect(true);
+      }, 3000);
+    }
+  });
+</script>
 </body>
 </html>
