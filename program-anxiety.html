@@ -85,6 +85,7 @@
       max-width:130px;
       overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
     }
+
     .btn-mini{
       padding:4px 10px;
       border-radius:999px;
@@ -119,6 +120,10 @@
       border:1px solid var(--border-soft);font-size:13px;
       background:#fff8f2;color:var(--text-soft);cursor:pointer;
       white-space:nowrap;
+    }
+    .btn-outline:hover{
+      border-color:var(--accent);
+      color:var(--text-main);
     }
 
     @keyframes orbit{
@@ -172,6 +177,20 @@
     .hero-meta span{margin-right:10px;}
     .hero-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:8px;}
     .hero-note{font-size:11px;color:var(--text-soft);}
+
+    /* 交付与扣款说明 */
+    .delivery-note{
+      font-size:11px;
+      color:#a16a4b;
+      line-height:1.6;
+      margin-top:8px;
+      margin-bottom:4px;
+      max-width:540px;
+    }
+    .delivery-note strong{
+      color:#7a3b1f;
+    }
+
     .hero-card{
       border-radius:var(--radius-lg);
       background:rgba(255,246,238,0.96);
@@ -250,8 +269,13 @@
           <span>⏱ Daily time: 10–20 minutes</span>
         </div>
         <div class="hero-cta">
-          <a href="#" class="btn-primary" id="cta-main-anxiety"
-             onclick="return startAnxietyPurchase();">
+          <!-- 默认：Digistore 链接，后面脚本会改成 “Open your plan” -->
+          <a
+            id="cta-main-anxiety"
+            class="btn-primary"
+            href="https://www.checkout-ds24.com/product/653885"
+            target="_blank"
+          >
             Buy this plan – $29 →
           </a>
           <a href="programs.html" class="btn-outline">← Back to all programs</a>
@@ -259,6 +283,13 @@
         <div class="hero-note">
           One-time purchase. Instant access to the full 14-day plan after payment.
         </div>
+        <p class="delivery-note">
+          <strong>Delivery & billing:</strong>
+          This is a digital 14-day dog training plan. You get instant online access to the complete
+          program after payment; nothing physical will be shipped. Your purchase is covered by a
+          60-day money-back guarantee.
+          <strong>The withdrawal from your account will be done by Digistore24.</strong>
+        </p>
       </div>
 
       <div class="hero-card">
@@ -325,8 +356,13 @@
         You can repeat it whenever life changes or your dog needs a refresher.
       </p>
       <div style="margin-top:10px;">
-        <a href="#" class="btn-primary" id="cta-bottom-anxiety"
-           onclick="return startAnxietyPurchase();">
+        <!-- 底部按钮同样逻辑 -->
+        <a
+          id="cta-bottom-anxiety"
+          class="btn-primary"
+          href="https://www.checkout-ds24.com/product/653885"
+          target="_blank"
+        >
           Get the 14-day separation plan – $29 →
         </a>
       </div>
@@ -390,7 +426,7 @@
         document.getElementById("btn-logout").onclick = logoutAndStay;
       } else {
         loginArea.innerHTML = `
-          <button class="btn-mini" id="btn-login-nav">Log in</button>
+          <button class="btn-outline" id="btn-login-nav">Log in</button>
         `;
         document.getElementById("btn-login-nav").onclick = goAuth;
       }
@@ -398,62 +434,106 @@
   })();
   </script>
 
-  <!-- 购买逻辑：未登录先去登录，登录后跳 Digistore24 653885 -->
+  <!-- 购买逻辑：未登录先去登录，登录后用“同一窗口”打开 Digistore24 653885 -->
   <script>
-  function startAnxietyPurchase() {
-    const token = localStorage.getItem("calmpaw_token");
+    document.addEventListener("DOMContentLoaded", function () {
+      const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653885";
 
-    // 没登录 → 先去 auth.html 登录，带回到本页
-    if (!token) {
-      const back = window.location.pathname + window.location.search;
-      window.location.href = "/auth.html?redirect=" + encodeURIComponent(back);
-      return false;
-    }
+      function wireAnxietyButton(id) {
+        const btn = document.getElementById(id);
+        if (!btn) return;
 
-    // 已登录 → 打开 Digistore 收银台（Separation 计划）
-    window.open("https://www.checkout-ds24.com/product/653885", "_blank");
-    return false;
-  }
+        btn.addEventListener("click", function (e) {
+          const href = btn.getAttribute("href") || "";
+
+          // 如果已经变成 anxiety-access.html（已购买状态），让它按默认跳转打开计划
+          if (href.indexOf("anxiety-access.html") !== -1) {
+            return;
+          }
+
+          const token = localStorage.getItem("calmpaw_token");
+          const redirect = window.location.pathname + window.location.search;
+
+          // 没登录：先去登录
+          if (!token) {
+            e.preventDefault();
+            window.location.href = "/auth.html?redirect=" + encodeURIComponent(redirect);
+            return;
+          }
+
+          // 已登录但还没购买：用同一窗口跳到 Digistore24 收银台
+          e.preventDefault();
+          window.location.href = CHECKOUT_URL;
+        });
+      }
+
+      wireAnxietyButton("cta-main-anxiety");
+      wireAnxietyButton("cta-bottom-anxiety");
+    });
   </script>
 
-  <!-- 已经拥有 anxiety 或 bundle 的用户：按钮变成“Open your plan” -->
+  <!-- 已有 anxiety（多种 slug）或 bundle 的用户：按钮变成“Open your plan”，但不自动整页跳转 -->
   <script>
-  (function () {
-    const PLAN_KEY = "anxiety";
-    const ACCESS_URL = "/anxiety-access.html";
+    document.addEventListener("DOMContentLoaded", function () {
+      const ACCESS_URL = "/anxiety-access.html";
+      const mainBtn = document.getElementById("cta-main-anxiety");
+      const bottomBtn = document.getElementById("cta-bottom-anxiety");
+      const token = localStorage.getItem("calmpaw_token");
+      if (!mainBtn || !bottomBtn) return;
+      if (!token) return;
 
-    const mainBtn = document.getElementById("cta-main-anxiety");
-    const bottomBtn = document.getElementById("cta-bottom-anxiety");
-    const token = localStorage.getItem("calmpaw_token");
+      const BASE = "https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=";
 
-    if (!mainBtn || !bottomBtn) return;
-    if (!token) return; // 未登录就保持购买逻辑
+      // 把可能的 slug 全试一遍，再加 bundle
+      const ANXIETY_SLUGS = [
+        "anxiety",
+        "anxiety-plan",
+        "anxiety_14day",
+        "anxiety14",
+        "anxiety-14-day",
+        "separation",
+        "separation-anxiety"
+      ];
+      const ALL_SLUGS = ANXIETY_SLUGS.concat(["bundle"]);
 
-    fetch("https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=" + PLAN_KEY, {
-      method: "GET",
-      headers: {
-        "Authorization": "Bearer " + token
-      }
-    })
-      .then(r => r.json())
-      .then(data => {
-        if (!data || !data.ok || !data.access) return;
+      Promise.all(
+        ALL_SLUGS.map(slug =>
+          fetch(BASE + encodeURIComponent(slug), {
+            headers: { "Authorization": "Bearer " + token }
+          })
+            .then(r => r.json())
+            .then(data => ({ slug, data }))
+            .catch(() => ({ slug, data: null }))
+        )
+      )
+        .then(results => {
+          console.log("check-plan anxiety multi-slug results:", results);
 
-        function goAccess(e) {
-          if (e) e.preventDefault();
-          window.location.href = ACCESS_URL;
-        }
+          const hasAccess = results.some(
+            item =>
+              item.data &&
+              item.data.ok &&
+              item.data.access &&
+              (ANXIETY_SLUGS.includes(item.slug) || item.slug === "bundle")
+          );
 
-        mainBtn.textContent = "Open your 14-day plan →";
-        mainBtn.onclick = goAccess;
+          if (!hasAccess) return;
 
-        bottomBtn.textContent = "Go to your separation plan →";
-        bottomBtn.onclick = goAccess;
-      })
-      .catch(err => {
-        console.error("check-plan anxiety error", err);
-      });
-  })();
+          function makeOpen(btn, text) {
+            if (!btn) return;
+            btn.removeAttribute("target");
+            btn.href = ACCESS_URL;
+            btn.textContent = text;
+          }
+
+          makeOpen(mainBtn, "Open your 14-day plan →");
+          makeOpen(bottomBtn, "Go to your separation plan →");
+          // 这里只改按钮，不会自动 window.location.href
+        })
+        .catch(err => {
+          console.error("check-plan anxiety/bundle error", err);
+        });
+    });
   </script>
 </body>
 </html>
