@@ -401,6 +401,7 @@
       font-size: 11px;
       color: #a16a4b;
       line-height: 1.5;
+      text-align: center;
     }
     .cancel-note a {
       color: #b05825;
@@ -506,14 +507,16 @@
 
         <div id="status-error" class="status-error" style="display:none;"></div>
 
+        <!-- 这里整合原来的提示 + 交付方式 + Digistore24 必须的扣款说明 -->
         <div class="meta-note" id="meta-note">
           <strong>Note:</strong> if you reached this page without completing payment, your subscription
           may not be activated. In that case you can safely go back to the website and try again later.
-        </div>
-
-                <div class="meta-note" id="meta-note">
-          <strong>Note:</strong> if you reached this page without completing payment, your subscription
-          may not be activated. In that case you can safely go back to the website and try again later.
+          <br><br>
+          <strong>Access & email:</strong> after a successful payment your CalmPaw AI Trainer subscription
+          is activated on this page, and you also receive a confirmation email with your payment details.
+          If you don’t see it, please check your spam or promotions folder.
+          <br><br>
+          <strong>Billing notice:</strong> The withdrawal from your account will be done by Digistore24.
         </div>
 
         <div class="card-footer">
@@ -526,13 +529,15 @@
         </div>
 
         <!-- Cancel subscription -->
-        <div class="cancel-note" style="margin-top: 10px; text-align: center;">
+        <div class="cancel-note">
           <span>Want to cancel your monthly AI Trainer subscription?</span><br>
           <a href="https://www.digistore24.com/my" target="_blank" rel="noopener">
             Manage / cancel subscription on Digistore24
           </a>
         </div>
-</div>
+      </div>
+    </section>
+  </main>
 
   <footer>
     <div class="footer-inner">
@@ -723,7 +728,8 @@
           metaNote.innerHTML =
             "<strong>Tip:</strong> your current month is active until " +
             until.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" }) +
-            ". You can come back to this page after future payments as well.";
+            ". You can come back to this page after future payments as well.<br><br>" +
+            "<strong>Billing notice:</strong> The withdrawal from your account will be done by Digistore24.";
         }
 
         setTimeout(() => {
