@@ -228,7 +228,6 @@
           <span>⏱ Daily time: 10–20 minutes</span>
         </div>
         <div class="hero-cta">
-          <!-- 按钮保留原结构，只是内部逻辑改为 Digistore -->
           <a href="#" class="btn-primary" id="cta-main-leash"
              onclick="return startLeashPurchase();">
             Buy this plan – $19 →
@@ -391,7 +390,7 @@
   }
   </script>
 
-  <!-- ★★ 已经拥有 leash（或 bundle）用户：按钮变成“Open your plan” ★★ -->
+  <!-- ★★ 已经拥有 leash 或 bundle 的用户：按钮变成“Open your plan” ★★ -->
   <script>
   (function () {
     const PLAN_KEY = "leash";
@@ -402,10 +401,10 @@
     const token = localStorage.getItem("calmpaw_token");
 
     if (!mainBtn || !bottomBtn) return;
-    if (!token) return; // 未登录保持购买逻辑（startLeashPurchase 会处理）
+    if (!token) return; // 未登录保持购买逻辑
 
-    // 重要：带上 slug=leash，让后端单独判断这个计划或 bundle
-    fetch("/auth/check-plan?slug=" + PLAN_KEY, {
+    // 关键：请求 Worker 的 JSON 接口 + slug
+    fetch("https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=" + PLAN_KEY, {
       method: "GET",
       headers: {
         "Authorization": "Bearer " + token
@@ -413,7 +412,6 @@
     })
       .then(r => r.json())
       .then(data => {
-        // 预期：如果有权限，后端返回 { ok:true, access:true, slug:"leash" }
         if (!data || !data.ok || !data.access) return;
 
         function goAccess(e) {
