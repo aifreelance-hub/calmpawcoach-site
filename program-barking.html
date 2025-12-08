@@ -187,7 +187,6 @@
     .footer-links{display:flex;gap:12px;flex-wrap:wrap;}
     .footer-links a:hover{color:#b05825;}
   </style>
-
 </head>
 <body>
   <header>
@@ -224,6 +223,7 @@
           <span>⏱ Daily time: 10–15 minutes</span>
         </div>
         <div class="hero-cta">
+          <!-- Digistore24 收款 -->
           <a href="#" class="btn-primary" id="cta-main-barking"
              onclick="return startBarkingPurchase();">
             Buy this plan – $19 →
@@ -382,7 +382,7 @@
   })();
   </script>
 
-  <!-- 购买逻辑（已改为 Digistore24） -->
+  <!-- 购买逻辑：未登录 → 登录；已登录 → Digistore24 收银台 -->
   <script>
   function startBarkingPurchase() {
     const token = localStorage.getItem("calmpaw_token");
@@ -393,13 +393,13 @@
       return false;
     }
 
-    /* 登录后跳转 Digistore24 收银台 */
-    window.location.href = "https://www.digistore24.com/product/653870";
+    // 登录后跳转 Digistore24 支付
+    window.location.href = "https://www.checkout-ds24.com/product/653870/";
     return false;
   }
   </script>
 
-  <!-- 已购用户按钮替换逻辑 -->
+  <!-- 已购买则显示“Open your plan” -->
   <script>
   (function () {
     const PLAN_KEY = "barking";
@@ -414,18 +414,13 @@
 
     fetch("/auth/check-plan", {
       method: "GET",
-      headers: {
-        "Authorization": "Bearer " + token
-      }
+      headers: { "Authorization": "Bearer " + token }
     })
       .then(r => r.json())
       .then(data => {
         if (!data) return;
 
-        const hasBundle =
-          !!(data.bundle ||
-             (data.plans && data.plans.bundle));
-
+        const hasBundle = !!(data.bundle || (data.plans && data.plans.bundle));
         const hasBarking =
           !!(data[PLAN_KEY] ||
              (data.plans && data.plans[PLAN_KEY]) ||
@@ -444,13 +439,11 @@
         bottomBtn.textContent = "Go to your barking plan →";
         bottomBtn.onclick = goAccess;
       })
-      .catch(err => {
-        console.error("check-plan error", err);
-      });
+      .catch(err => console.error("check-plan error", err));
   })();
   </script>
 
-  <!-- Digistore24 促销代码 -->
+  <!-- Digistore24 促销追踪 -->
   <script src="https://www.digistore24-scripts.com/service/digistore.js"></script>
   <script>
     digistorePromocode({
