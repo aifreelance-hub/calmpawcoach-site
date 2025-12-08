@@ -188,9 +188,10 @@
     .footer-links a:hover{color:#b05825;}
   </style>
 
-  <!-- Paddle（目前没实际用到，保留不影响） -->
+  <!-- Paddle -->
   <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
   <script>
+    /* TODO: 上线时把 0 换成你真实 Vendor ID */
     Paddle.Setup({ vendor: 0 });
   </script>
 </head>
@@ -384,20 +385,20 @@
   function startAnxietyPurchase() {
     const token = localStorage.getItem("calmpaw_token");
 
-    // 1. 没登录 → 先去 auth.html 登录，带上返回地址
+    // 1. 没登录 → 先去 auth.html 登录
     if (!token) {
       const back = window.location.pathname + window.location.search;
       window.location.href = "/auth.html?redirect=" + encodeURIComponent(back);
       return false;
     }
 
-    // 2. 已登录 → 直接打开 Digistore 收银台（分离焦虑计划）
+    // 2. 已登录 → 打开 Digistore 收银台（分离焦虑计划）
     window.open("https://www.checkout-ds24.com/product/653885", "_blank");
     return false;
   }
   </script>
 
-  <!-- ★★ 已经拥有 anxiety 计划，则按钮变成“Open your plan” ★★ -->
+  <!-- ★★ 已经拥有 anxiety 或 bundle：按钮变成“Open your plan” ★★ -->
   <script>
   (function () {
     const PLAN_KEY = "anxiety";
@@ -408,9 +409,10 @@
     const token = localStorage.getItem("calmpaw_token");
 
     if (!mainBtn || !bottomBtn) return;
-    if (!token) return; // 未登录就保持“购买”逻辑（startAnxietyPurchase 里会强制登录）
+    if (!token) return; // 未登录保持“购买”按钮
 
-    fetch("/auth/check-plan?slug=" + PLAN_KEY, {
+    // 关键：请求 Worker 的 JSON 接口 + slug
+    fetch("https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=" + PLAN_KEY, {
       method: "GET",
       headers: {
         "Authorization": "Bearer " + token
@@ -418,7 +420,7 @@
     })
       .then(r => r.json())
       .then(data => {
-        // 预期结构：{ ok: true, access: true, slug: "anxiety" }
+        // 只在 ok 且 access=true 时改按钮
         if (!data || !data.ok || !data.access) return;
 
         function goAccess(e) {
