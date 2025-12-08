@@ -855,7 +855,7 @@
     });
   </script>
 
-  <!-- 新增：没登录点购买先去登录；登录后才打开 Digistore24 -->
+  <!-- 新增：没登录点购买先去登录；登录后用同一窗口打开 Digistore24（保持回跳） -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653891";
@@ -867,7 +867,7 @@
         btn.addEventListener("click", function (e) {
           const href = btn.getAttribute("href") || "";
 
-          // 如果已经变成了 bundle-access.html，就让它走默认跳转（打开课程页）
+          // 已经变成 bundle-access.html（已购买状态），直接走默认跳转
           if (href.indexOf("bundle-access.html") !== -1) {
             return;
           }
@@ -875,16 +875,16 @@
           const token = localStorage.getItem("calmpaw_token");
           const redirect = window.location.pathname + window.location.search;
 
-          // 没登录：跳转到登录页
+          // 没登录：先去登录
           if (!token) {
             e.preventDefault();
             window.location.href = "auth.html?redirect=" + encodeURIComponent(redirect);
             return;
           }
 
-          // 已登录但未购买：打开 Digistore24 付款页
+          // 已登录：用同一窗口跳到 Digistore24，让它负责支付后回跳
           e.preventDefault();
-          window.open(CHECKOUT_URL, "_blank");
+          window.location.href = CHECKOUT_URL;
         });
       }
 
