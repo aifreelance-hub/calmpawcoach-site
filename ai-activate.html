@@ -52,6 +52,7 @@
       flex-direction: column;
     }
     a { text-decoration: none; color: inherit; }
+
     @keyframes float-soft {
       0% { transform: translateY(0px); }
       50% { transform: translateY(-6px); }
@@ -61,6 +62,7 @@
       0% { background-position: -120px 0; }
       100% { background-position: 120px 0; }
     }
+
     header {
       position: sticky;
       top: 0;
@@ -274,6 +276,7 @@
         font-size: 11px;
       }
     }
+
     main {
       flex: 1;
       display: flex;
@@ -300,10 +303,7 @@
       opacity: 0.9;
       pointer-events: none;
     }
-    .card-inner {
-      position: relative;
-      z-index: 1;
-    }
+    .card-inner { position: relative; z-index: 1; }
     .card-pill {
       display: inline-flex;
       align-items: center;
@@ -399,6 +399,7 @@
       cursor: pointer;
       padding: 0;
     }
+
     footer {
       border-top: 1px solid rgba(243, 217, 196, 0.8);
       background: rgba(255, 248, 241, 0.96);
@@ -529,8 +530,10 @@
   <script>
     const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
 
+    // 年份
     document.getElementById("year").textContent = new Date().getFullYear();
 
+    // 顶部登录状态
     async function hydrateNavAuth() {
       const area = document.getElementById("nav-auth-area");
       if (!area) return;
@@ -599,6 +602,7 @@
       }
     }
 
+    // 激活 AI 订阅（支持 Digistore24 回调参数）
     async function activateAi() {
       const token = localStorage.getItem("calmpaw_token");
       const statusMain = document.getElementById("status-main");
@@ -622,6 +626,13 @@
         statusSub.textContent = "We’re linking this payment to your CalmPaw Coach account.";
         errorBox.style.display = "none";
 
+        // 收集 Digistore24 在回调链接上带的所有参数，一并发给后端
+        const searchParams = new URLSearchParams(window.location.search);
+        const providerMeta = {};
+        searchParams.forEach((value, key) => {
+          providerMeta[key] = value;
+        });
+
         const res = await fetch(API_BASE + "/ai/activate", {
           method: "POST",
           headers: {
@@ -629,7 +640,9 @@
             "Authorization": "Bearer " + token
           },
           body: JSON.stringify({
-            product_slug: "ai_trainer_29"
+            product_slug: "ai_trainer_29",       // 后端用来识别这是哪一个订阅
+            provider: "digistore24",             // 标记来源
+            provider_meta: providerMeta          // 订单号等附加信息（可选）
           })
         });
 
@@ -639,8 +652,15 @@
         if (!res.ok || !data.ok) {
           spinner.style.display = "none";
           statusMain.textContent = "We couldn’t confirm your subscription.";
-          statusSub.textContent = "If you just paid, please contact support with your email and payment receipt.";
-          errorBox.textContent = data.error || "Activation failed. Please try again or contact support.";
+          statusSub.textContent =
+            "If you just paid via Digistore24, please contact support with your email and payment receipt.";
+          let msg = data && data.error ? String(data.error) : "";
+          if (msg === "server_error") {
+            msg = "Server error while checking the payment. Please try again in a few minutes or contact support.";
+          } else if (!msg) {
+            msg = "Activation failed. Please try again or contact support.";
+          }
+          errorBox.textContent = msg;
           errorBox.style.display = "block";
           return;
         }
