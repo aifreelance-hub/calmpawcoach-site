@@ -23,7 +23,6 @@
       margin: 0;
       padding: 0;
     }
-
     :root {
       --bg: #fff7f0;
       --bg-soft: #ffeede;
@@ -38,7 +37,6 @@
       --radius-pill: 999px;
       --shadow-soft: 0 26px 60px rgba(210, 145, 110, 0.38);
     }
-
     body {
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
         system-ui, "Segoe UI", sans-serif;
@@ -53,24 +51,16 @@
       display: flex;
       flex-direction: column;
     }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
+    a { text-decoration: none; color: inherit; }
     @keyframes float-soft {
       0% { transform: translateY(0px); }
       50% { transform: translateY(-6px); }
       100% { transform: translateY(0px); }
     }
-
     @keyframes shimmer {
       0% { background-position: -120px 0; }
       100% { background-position: 120px 0; }
     }
-
-    /* Header */
     header {
       position: sticky;
       top: 0;
@@ -84,7 +74,6 @@
       );
       border-bottom: 1px solid rgba(243, 217, 196, 0.8);
     }
-
     .nav-inner {
       max-width: 1120px;
       margin: 0 auto;
@@ -95,18 +84,13 @@
       gap: 14px;
       flex-wrap: wrap;
     }
-
     .brand {
       display: flex;
       align-items: center;
       gap: 10px;
       min-width: 0;
     }
-
-    .brand-logo-wrap {
-      position: relative;
-    }
-
+    .brand-logo-wrap { position: relative; }
     .brand-orbit {
       position: absolute;
       inset: -4px;
@@ -122,7 +106,6 @@
       opacity: 0.9;
       animation: float-soft 4.4s ease-in-out infinite;
     }
-
     .brand-logo {
       width: 40px;
       height: 40px;
@@ -136,20 +119,17 @@
       position: relative;
       z-index: 1;
     }
-
     .brand-text-main {
       font-weight: 750;
       letter-spacing: 0.03em;
       font-size: 18px;
       white-space: nowrap;
     }
-
     .brand-text-sub {
       font-size: 11px;
       color: var(--text-soft);
       white-space: nowrap;
     }
-
     .nav-links {
       display: flex;
       align-items: center;
@@ -160,7 +140,6 @@
       justify-content: center;
       min-width: 0;
     }
-
     .nav-links a {
       padding: 6px 11px;
       border-radius: 999px;
@@ -168,12 +147,10 @@
       overflow: hidden;
       transition: color 0.18s ease, transform 0.12s ease;
     }
-
     .nav-links a.active {
       color: var(--text-main);
       font-weight: 600;
     }
-
     .nav-cta {
       display: flex;
       align-items: center;
@@ -181,7 +158,6 @@
       flex-shrink: 0;
       margin-left: auto;
     }
-
     .btn-outline {
       padding: 7px 16px;
       border-radius: var(--radius-pill);
@@ -196,7 +172,6 @@
       gap: 6px;
       white-space: nowrap;
     }
-
     .btn-outline:hover {
       border-color: var(--accent);
       color: var(--text-main);
@@ -204,7 +179,6 @@
       transform: translateY(-1px);
       background: #fffaf5;
     }
-
     .btn-primary {
       padding: 8px 19px;
       border-radius: var(--radius-pill);
@@ -228,22 +202,16 @@
       transition: transform 0.18s ease, box-shadow 0.18s ease;
       white-space: nowrap;
     }
-
     .btn-primary:hover {
       transform: translateY(-1.5px) scale(1.01);
       box-shadow: 0 24px 56px rgba(204, 129, 76, 0.75);
     }
-
-    .nav-login-emoji {
-      font-size: 14px;
-    }
-
+    .nav-login-emoji { font-size: 14px; }
     .nav-auth {
       display: flex;
       align-items: center;
       gap: 6px;
     }
-
     .nav-auth-email {
       max-width: 160px;
       padding: 5px 10px;
@@ -256,7 +224,6 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-
     .nav-auth-btn {
       border: none;
       background: transparent;
@@ -268,22 +235,15 @@
       transition: background 0.15s ease, color 0.15s ease;
       white-space: nowrap;
     }
-
     .nav-auth-btn:hover {
       background: rgba(255, 237, 213, 0.95);
       color: #7a3410;
     }
-
     @media (max-width: 880px) {
       .nav-links { display: none; }
-      .nav-inner {
-        align-items: flex-start;
-      }
-      .nav-cta {
-        margin-left: 0;
-      }
+      .nav-inner { align-items: flex-start; }
+      .nav-cta { margin-left: 0; }
     }
-
     @media (max-width: 640px) {
       .nav-inner {
         padding: 8px 14px;
@@ -291,20 +251,14 @@
         flex-wrap: wrap;
         align-items: flex-start;
       }
-      .brand {
-        width: 100%;
-      }
+      .brand { width: 100%; }
       .brand-logo {
         width: 34px;
         height: 34px;
         font-size: 20px;
       }
-      .brand-text-main {
-        font-size: 16px;
-      }
-      .brand-text-sub {
-        font-size: 10px;
-      }
+      .brand-text-main { font-size: 16px; }
+      .brand-text-sub { font-size: 10px; }
       .nav-cta {
         width: 100%;
         justify-content: flex-end;
@@ -320,8 +274,6 @@
         font-size: 11px;
       }
     }
-
-    /* Main layout */
     main {
       flex: 1;
       display: flex;
@@ -329,7 +281,6 @@
       justify-content: center;
       padding: 40px 16px 32px;
     }
-
     .card {
       width: 100%;
       max-width: 460px;
@@ -340,7 +291,6 @@
       position: relative;
       overflow: hidden;
     }
-
     .card-glow {
       position: absolute;
       inset: -40px;
@@ -350,12 +300,10 @@
       opacity: 0.9;
       pointer-events: none;
     }
-
     .card-inner {
       position: relative;
       z-index: 1;
     }
-
     .card-pill {
       display: inline-flex;
       align-items: center;
@@ -368,14 +316,12 @@
       color: #a2643c;
       margin-bottom: 10px;
     }
-
     .card-pill-dot {
       width: 8px;
       height: 8px;
       border-radius: 999px;
       background: radial-gradient(circle at 30% 20%, #fff8f0 0%, #ff914d 60%, #d6632a 100%);
     }
-
     .card-title {
       font-size: 20px;
       font-weight: 650;
@@ -384,21 +330,18 @@
       align-items: center;
       gap: 6px;
     }
-
     .card-subtitle {
       font-size: 13px;
       color: var(--text-soft);
       margin-bottom: 14px;
       line-height: 1.6;
     }
-
     .status-row {
       display: flex;
       align-items: center;
       gap: 10px;
       margin-bottom: 12px;
     }
-
     .spinner {
       width: 22px;
       height: 22px;
@@ -407,23 +350,17 @@
       border-top-color: #ff914d;
       animation: spin 0.8s linear infinite;
     }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
+    @keyframes spin { to { transform: rotate(360deg); } }
     .status-text-main {
       font-size: 14px;
       font-weight: 550;
       color: #7a3b1f;
     }
-
     .status-text-sub {
       font-size: 12px;
       color: #9b6a4e;
       margin-bottom: 10px;
     }
-
     .status-error {
       font-size: 12px;
       color: #b91c1c;
@@ -432,7 +369,6 @@
       padding: 8px 10px;
       margin-top: 6px;
     }
-
     .meta-note {
       font-size: 11px;
       color: #a16a4b;
@@ -443,11 +379,7 @@
       margin-top: 10px;
       line-height: 1.5;
     }
-
-    .meta-note strong {
-      color: #7a3b1f;
-    }
-
+    .meta-note strong { color: #7a3b1f; }
     .card-footer {
       margin-top: 16px;
       display: flex;
@@ -458,7 +390,6 @@
       color: #a56a4d;
       flex-wrap: wrap;
     }
-
     .btn-link {
       border: none;
       background: transparent;
@@ -468,12 +399,10 @@
       cursor: pointer;
       padding: 0;
     }
-
     footer {
       border-top: 1px solid rgba(243, 217, 196, 0.8);
       background: rgba(255, 248, 241, 0.96);
     }
-
     .footer-inner {
       max-width: 1120px;
       margin: 0 auto;
@@ -485,43 +414,32 @@
       font-size: 11px;
       color: var(--text-soft);
     }
-
     .footer-links {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
     }
-
     .footer-links a:hover { color: #b05825; }
-
     @media (max-width: 640px) {
-      main {
-        padding: 26px 14px 18px;
-      }
+      main { padding: 26px 14px 18px; }
       .card {
         padding: 20px 16px 18px;
         border-radius: 22px;
       }
-      .card-title {
-        font-size: 18px;
-      }
-      .card-subtitle {
-        font-size: 12px;
-      }
+      .card-title { font-size: 18px; }
+      .card-subtitle { font-size: 12px; }
       .footer-inner {
         padding: 10px 14px 12px;
         font-size: 10px;
       }
-      .footer-links {
-        gap: 10px;
-      }
+      .footer-links { gap: 10px; }
     }
   </style>
 </head>
 <body>
   <header>
     <div class="nav-inner">
-      <a href="index.html" class="brand">
+      <a href="/" class="brand">
         <div class="brand-logo-wrap">
           <div class="brand-orbit"></div>
           <div class="brand-logo">🐾</div>
@@ -532,14 +450,14 @@
         </div>
       </a>
       <nav class="nav-links">
-        <a href="programs.html">Programs</a>
-        <a href="bundle.html">Complete Pack</a>
-        <a href="ai.html">Ask a Dog Trainer — AI Unlimited</a>
+        <a href="/programs">Programs</a>
+        <a href="/bundle">Complete Pack</a>
+        <a href="/ai">Ask a Dog Trainer — AI Unlimited</a>
       </nav>
       <div class="nav-cta">
         <div id="nav-auth-area">
           <!-- 默认：未登录 -->
-          <a class="btn-outline" href="auth.html?redirect=/ai-activate.html">
+          <a class="btn-outline" href="auth.html?redirect=%2Fai-activate">
             <span class="nav-login-emoji">🔑</span> Log in
           </a>
         </div>
@@ -598,7 +516,7 @@
     <div class="footer-inner">
       <div>© <span id="year"></span> CalmPaw Coach. All rights reserved.</div>
       <div class="footer-links">
-        <a href="ai.html">AI Trainer</a>
+        <a href="/ai">AI Trainer</a>
         <a href="refund.html">Refund policy</a>
         <a href="terms.html">Terms of service</a>
         <a href="privacy.html">Privacy policy</a>
@@ -611,10 +529,8 @@
   <script>
     const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
 
-    // 年份
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // 顶部登录状态
     async function hydrateNavAuth() {
       const area = document.getElementById("nav-auth-area");
       if (!area) return;
@@ -624,7 +540,7 @@
 
       if (!token) {
         area.innerHTML = `
-          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/ai-activate.html')}">
+          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/ai-activate')}">
             <span class="nav-login-emoji">🔑</span> Log in
           </a>`;
         return;
@@ -640,7 +556,7 @@
           localStorage.removeItem("calmpaw_token");
           localStorage.removeItem("calmpaw_email");
           area.innerHTML = `
-            <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/ai-activate.html')}">
+            <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/ai-activate')}">
               <span class="nav-login-emoji">🔑</span> Log in
             </a>`;
           return;
@@ -661,7 +577,7 @@
           switchBtn.addEventListener("click", () => {
             localStorage.removeItem("calmpaw_token");
             localStorage.removeItem("calmpaw_email");
-            const redirect = encodeURIComponent('/ai-activate.html');
+            const redirect = encodeURIComponent('/ai-activate');
             window.location.href = `auth.html?redirect=${redirect}`;
           });
         }
@@ -671,19 +587,18 @@
           logoutBtn.addEventListener("click", () => {
             localStorage.removeItem("calmpaw_token");
             localStorage.removeItem("calmpaw_email");
-            window.location.href = "/index.html";
+            window.location.href = "/";
           });
         }
       } catch (e) {
         console.error("auth hydrate error", e);
         area.innerHTML = `
-          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/ai-activate.html')}">
+          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent('/ai-activate')}">
             <span class="nav-login-emoji">🔑</span> Log in
           </a>`;
       }
     }
 
-    // 激活 AI 订阅
     async function activateAi() {
       const token = localStorage.getItem("calmpaw_token");
       const statusMain = document.getElementById("status-main");
@@ -696,7 +611,7 @@
         statusSub.textContent = "Please sign in first. Redirecting to login…";
         spinner.style.display = "none";
         setTimeout(() => {
-          const redirect = encodeURIComponent('/ai-activate.html');
+          const redirect = encodeURIComponent('/ai-activate');
           window.location.href = `auth.html?redirect=${redirect}`;
         }, 1500);
         return;
@@ -735,7 +650,7 @@
         statusSub.textContent = "You’ll be redirected to the AI Trainer chat in a moment.";
 
         setTimeout(() => {
-          window.location.href = "ai.html";
+          window.location.href = "/ai";
         }, 1800);
       } catch (err) {
         console.error("activateAi error", err);
@@ -754,7 +669,7 @@
       const btnGoAi = document.getElementById("btn-go-ai");
       if (btnGoAi) {
         btnGoAi.addEventListener("click", () => {
-          window.location.href = "ai.html";
+          window.location.href = "/ai";
         });
       }
     });
