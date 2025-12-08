@@ -188,10 +188,9 @@
     .footer-links a:hover{color:#b05825;}
   </style>
 
-  <!-- Paddle -->
+  <!-- Paddle（目前没实际用到，保留不影响） -->
   <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
   <script>
-    // TODO：上线时把 0 换成你真实的 Vendor ID 数字
     Paddle.Setup({ vendor: 0 });
   </script>
 </head>
@@ -401,7 +400,7 @@
   <!-- ★★ 已经拥有 anxiety 计划，则按钮变成“Open your plan” ★★ -->
   <script>
   (function () {
-    const PLAN_KEY = "anxiety";               // 后端里的键名
+    const PLAN_KEY = "anxiety";
     const ACCESS_URL = "/anxiety-access.html";
 
     const mainBtn = document.getElementById("cta-main-anxiety");
@@ -411,7 +410,7 @@
     if (!mainBtn || !bottomBtn) return;
     if (!token) return; // 未登录就保持“购买”逻辑（startAnxietyPurchase 里会强制登录）
 
-    fetch("/auth/check-plan", {
+    fetch("/auth/check-plan?slug=" + PLAN_KEY, {
       method: "GET",
       headers: {
         "Authorization": "Bearer " + token
@@ -419,22 +418,9 @@
     })
       .then(r => r.json())
       .then(data => {
-        if (!data) return;
+        // 预期结构：{ ok: true, access: true, slug: "anxiety" }
+        if (!data || !data.ok || !data.access) return;
 
-        // 兼容几种常见返回结构
-        const hasBundle =
-          !!(data.bundle ||
-             (data.plans && data.plans.bundle));
-
-        const hasAnxiety =
-          !!(data[PLAN_KEY] ||
-             (data.plans && data.plans[PLAN_KEY]) ||
-             (Array.isArray(data.slugs) && data.slugs.includes(PLAN_KEY)));
-
-        // 没权限就继续显示“购买”
-        if (!hasBundle && !hasAnxiety) return;
-
-        // 已经有权限：按钮改成“打开计划”
         function goAccess(e) {
           if (e) e.preventDefault();
           window.location.href = ACCESS_URL;
@@ -447,7 +433,7 @@
         bottomBtn.onclick = goAccess;
       })
       .catch(err => {
-        console.error("check-plan error", err);
+        console.error("check-plan anxiety error", err);
       });
   })();
   </script>
