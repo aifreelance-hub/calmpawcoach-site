@@ -151,7 +151,6 @@
     .hero-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:8px;}
     .hero-note{font-size:11px;color:var(--text-soft);}
 
-    /* 交付与扣款说明 */
     .delivery-note{
       font-size:11px;
       color:#2f647b;
@@ -242,7 +241,7 @@
           <span>⏱ Daily time: 10–20 minutes</span>
         </div>
         <div class="hero-cta">
-          <!-- 购买按钮：默认是 Digistore 链接，已购买后脚本会改成“Open” -->
+          <!-- 默认 Digistore 链接，点击由脚本接管 -->
           <a
             id="cta-main-leash"
             class="btn-primary"
@@ -329,7 +328,6 @@
         You can repeat it any time your dog needs a refresher.
       </p>
       <div style="margin-top:10px;">
-        <!-- 底部购买按钮：同样逻辑 -->
         <a
           id="cta-bottom-leash"
           class="btn-primary"
@@ -418,7 +416,7 @@
         btn.addEventListener("click", function (e) {
           const href = btn.getAttribute("href") || "";
 
-          // 如果已经变成 leash-access.html（已购买状态），让它走默认跳转打开计划
+          // 已经变成 leash-access.html（已购买状态）→ 让浏览器按默认行为直接打开计划
           if (href.indexOf("leash-access.html") !== -1) {
             return;
           }
@@ -444,65 +442,69 @@
     });
   </script>
 
-  <!-- 已经拥有 leash（多种 slug）或 bundle 的用户：按钮变成“Open your plan” -->
+  <!-- 已拥有 leash 或 bundle：按钮改成“Open”，从 checkout 回来自动轮询并跳转到 leash-access -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
+      const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
       const ACCESS_URL = "/leash-access.html";
+
       const mainBtn = document.getElementById("cta-main-leash");
       const bottomBtn = document.getElementById("cta-bottom-leash");
       const token = localStorage.getItem("calmpaw_token");
       if (!mainBtn || !bottomBtn) return;
       if (!token) return;
 
-      const BASE = "https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=";
+      const params = new URLSearchParams(window.location.search);
+      const fromCheckout = params.get("from") === "checkout";
 
-      // 尝试多种可能的 leash slug，再加上 bundle
-      const LEASH_SLUGS = [
-        "leash",
-        "leash-plan",
-        "leash_10day",
-        "leash10",
-        "leash-10-day"
-      ];
-      const ALL_SLUGS = LEASH_SLUGS.concat(["bundle"]);
+      function turnButtonsToOpen() {
+        function makeOpen(btn, text) {
+          if (!btn) return;
+          btn.removeAttribute("target");
+          btn.href = ACCESS_URL;
+          btn.textContent = text;
+        }
+        makeOpen(mainBtn, "Open your 10-day plan →");
+        makeOpen(bottomBtn, "Go to your leash plan →");
+      }
 
-      Promise.all(
-        ALL_SLUGS.map(slug =>
-          fetch(BASE + encodeURIComponent(slug), {
-            headers: { "Authorization": "Bearer " + token }
+      // 同时检查 leash + bundle，只要有一个有 access 就认为可以看这个计划
+      function checkAndMaybeRedirect(allowRedirect) {
+        const base = API_BASE + "/auth/check-plan?slug=";
+        Promise.all([
+          fetch(base + "leash",  { headers: { "Authorization": "Bearer " + token } }).then(r => r.json()).catch(() => null),
+          fetch(base + "bundle", { headers: { "Authorization": "Bearer " + token } }).then(r => r.json()).catch(() => null)
+        ])
+          .then(results => {
+            const hasAccess = results.some(data => data && data.ok && data.access);
+            if (!hasAccess) return;
+
+            turnButtonsToOpen();
+
+            if (allowRedirect) {
+              window.location.replace(ACCESS_URL);
+            }
           })
-            .then(r => r.json())
-            .then(data => ({ slug, data }))
-            .catch(() => ({ slug, data: null }))
-        )
-      )
-        .then(results => {
-          console.log("check-plan leash multi-slug results:", results);
+          .catch(err => {
+            console.error("check-plan leash/bundle error", err);
+          });
+      }
 
-          const hasAccess = results.some(
-            item =>
-              item.data &&
-              item.data.ok &&
-              item.data.access &&
-              (LEASH_SLUGS.includes(item.slug) || item.slug === "bundle")
-          );
+      // 普通打开页面：只把按钮变成“Open”，不自动跳转
+      checkAndMaybeRedirect(false);
 
-          if (!hasAccess) return;
-
-          function makeOpen(btn, text) {
-            if (!btn) return;
-            btn.removeAttribute("target");
-            btn.href = ACCESS_URL;
-            btn.textContent = text;
+      // 从 Digistore24 回跳（URL 带 ?from=checkout）：轮询几次等 webhook 生效，然后自动跳转
+      if (fromCheckout) {
+        let tries = 0;
+        const timer = setInterval(() => {
+          tries++;
+          if (tries > 6) { // 最多等 ~18 秒
+            clearInterval(timer);
+            return;
           }
-
-          makeOpen(mainBtn, "Open your 10-day plan →");
-          makeOpen(bottomBtn, "Go to your leash plan →");
-          // 这里只改按钮，不会自动整页跳转
-        })
-        .catch(err => {
-          console.error("check-plan leash/bundle error", err);
-        });
+          checkAndMaybeRedirect(true);
+        }, 3000);
+      }
     });
   </script>
 </body>
