@@ -214,6 +214,7 @@
 
     .nav-login-emoji{font-size:14px;}
 
+    /* 登录状态区域（统一） */
     .nav-auth{
       display:flex;
       align-items:center;
@@ -501,13 +502,13 @@
     }
   </style>
 
-  <!-- Paddle（原封不动，未删除） -->
+  <!-- Paddle（保留，但用 0 防止报错；现在实际支付走 Digistore24） -->
   <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
   <script>
-    Paddle.Setup({ vendor: YOUR_PADDLE_VENDOR_ID });
+    Paddle.Setup({ vendor: 0 });
   </script>
 </head>
-<body>
+<body data-slug="bundle">
   <header>
     <div class="nav-inner">
       <a href="index.html" class="brand">
@@ -534,9 +535,9 @@
           </a>
         </div>
 
-        <!-- ⭐ 顶部购买按钮：默认 Digistore，登录且已购买时脚本会改成“Open” -->
-        <a class="btn-primary"
-           id="bundle-cta-top"
+        <!-- 顶部购买按钮：默认是 Digistore 链接，已购买后脚本会改成“Open” -->
+        <a id="bundle-btn-top"
+           class="btn-primary"
            href="https://www.checkout-ds24.com/product/653891"
            target="_blank">
           Get Complete Pack – $49 →
@@ -561,9 +562,9 @@
         </div>
 
         <div class="hero-cta">
-          <!-- ⭐ 第二个购买按钮 -->
-          <a class="btn-primary"
-             id="bundle-cta-hero"
+          <!-- 第二个购买按钮 -->
+          <a id="bundle-btn-hero"
+             class="btn-primary"
              href="https://www.checkout-ds24.com/product/653891"
              target="_blank">
             Get all 3 plans – $49 →
@@ -671,13 +672,13 @@
       <p style="margin-top:6px;">
         If you only struggle in one area, you can start with a single plan. If
         your life feels like “everything at once”, the Complete Pack is designed
-        exactly for you。
+        exactly for you.
       </p>
 
       <div style="margin-top:10px;">
-        <!-- ⭐ 第三个购买按钮 -->
-        <a class="btn-primary"
-           id="bundle-cta-bottom"
+        <!-- 第三个购买按钮 -->
+        <a id="bundle-btn-bottom"
+           class="btn-primary"
            href="https://www.checkout-ds24.com/product/653891"
            target="_blank">
           Get the CalmPaw Complete Pack – $49 →
@@ -771,7 +772,7 @@
     });
   </script>
 
-  <!-- 原始 buyBundle 函数（目前不会被调用，可以先留着） -->
+  <!-- 原始 buyBundle 函数（现在不用了，可以保留） -->
   <script>
     function buyBundle() {
       const token = localStorage.getItem("calmpaw_token");
@@ -789,56 +790,39 @@
     }
   </script>
 
-  <!-- ⭐ 关键：检查是否已经拥有 bundle，有的话把 3 个按钮改成“Open your Complete Pack” -->
+  <!-- 新：根据 /auth/check-plan 返回的 access=true 自动把按钮变成“Open your plan” -->
   <script>
-  (function () {
-    const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
-    const token = localStorage.getItem("calmpaw_token");
-    if (!token) return; // 未登录就保持购买按钮
+    document.addEventListener("DOMContentLoaded", function () {
+      const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
+      const token = localStorage.getItem("calmpaw_token");
+      if (!token) return;
 
-    const topBtn = document.getElementById("bundle-cta-top");
-    const heroBtn = document.getElementById("bundle-cta-hero");
-    const bottomBtn = document.getElementById("bundle-cta-bottom");
-    if (!topBtn && !heroBtn && !bottomBtn) return;
-
-    fetch("https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=bundle", {
-      method: "GET",
-      headers: {
-        "Authorization": "Bearer " + token
-      }
-    })
-      .then(r => r.ok ? r.json() : null)
-      .then(data => {
-        if (!data) return;
-
-        // 尽量兼容多种返回结构
-        const hasBundle =
-          !!(
-            data.bundle ||
-            (data.plans && (data.plans.bundle || data.plans.complete_pack)) ||
-            (Array.isArray(data.slugs) &&
-              (data.slugs.includes("bundle") || data.slugs.includes("complete-pack")))
-          );
-
-        if (!hasBundle) return;
-
-        const accessUrl = "/bundle-access.html";
-
-        function patchBtn(btn) {
-          if (!btn) return;
-          btn.href = accessUrl;
-          btn.removeAttribute("target");
-          btn.textContent = "Open your Complete Pack →";
-        }
-
-        patchBtn(topBtn);
-        patchBtn(heroBtn);
-        patchBtn(bottomBtn);
+      fetch(API_BASE + "/auth/check-plan?slug=bundle", {
+        headers: { "Authorization": "Bearer " + token }
       })
-      .catch(err => {
-        console.error("check-plan bundle error", err);
-      });
-  })();
+        .then(res => res.json())
+        .then(data => {
+          console.log("check-plan bundle:", data);
+          if (!data || !data.ok || !data.access) return;
+
+          const accessUrl = "/bundle-access.html";
+
+          function makeOpenButton(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.removeAttribute("target");
+            el.href = accessUrl;
+            el.textContent = "Open your Complete Pack →";
+          }
+
+          makeOpenButton("bundle-btn-top");
+          makeOpenButton("bundle-btn-hero");
+          makeOpenButton("bundle-btn-bottom");
+        })
+        .catch(err => {
+          console.error("check-plan bundle error", err);
+        });
+    });
   </script>
 
 </body>
