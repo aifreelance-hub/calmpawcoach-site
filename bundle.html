@@ -502,10 +502,9 @@
     }
   </style>
 
-  <!-- Paddle（记得替换成你的真实 Vendor ID） -->
+  <!-- Paddle（原封不动，未删除） -->
   <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
   <script>
-    // TODO: 替换为你的真实 Paddle Vendor ID
     Paddle.Setup({ vendor: YOUR_PADDLE_VENDOR_ID });
   </script>
 </head>
@@ -530,15 +529,18 @@
       </nav>
 
       <div class="nav-cta">
-        <!-- 顶部登录状态区域：默认 Log in -->
         <div id="nav-auth-area">
           <a class="btn-outline" href="auth.html?redirect=/bundle.html">
             <span class="nav-login-emoji">🔑</span> Log in
           </a>
         </div>
-        <button class="btn-primary" onclick="buyBundle()">
+
+        <!-- ⭐ 顶部购买按钮：已替换为 Digistore 链接 -->
+        <a class="btn-primary"
+           href="https://www.checkout-ds24.com/product/653891"
+           target="_blank">
           Get Complete Pack – $49 →
-        </button>
+        </a>
       </div>
     </div>
   </header>
@@ -557,12 +559,18 @@
           <span>🏡 Separation anxiety · 14-day plan</span>
           <span>🚶‍♀️ Leash walking · 10-day plan</span>
         </div>
+
         <div class="hero-cta">
-          <button class="btn-primary" onclick="buyBundle()">
+          <!-- ⭐ 第二个购买按钮 -->
+          <a class="btn-primary"
+             href="https://www.checkout-ds24.com/product/653891"
+             target="_blank">
             Get all 3 plans – $49 →
-          </button>
+          </a>
+
           <a href="programs.html" class="btn-outline">Or pick a single problem</a>
         </div>
+
         <div class="hero-note">
           One-time purchase. Lifetime access to all 3 step-by-step plans.
         </div>
@@ -664,10 +672,14 @@
         your life feels like “everything at once”, the Complete Pack is designed
         exactly for you.
       </p>
+
       <div style="margin-top:10px;">
-        <button class="btn-primary" onclick="buyBundle()">
+        <!-- ⭐ 第三个购买按钮 -->
+        <a class="btn-primary"
+           href="https://www.checkout-ds24.com/product/653891"
+           target="_blank">
           Get the CalmPaw Complete Pack – $49 →
-        </button>
+        </a>
       </div>
     </section>
   </main>
@@ -757,24 +769,23 @@
     });
   </script>
 
-  <!-- 购买 Complete Pack：未登录先去登录，已登录走 Paddle 支付 -->
+  <!-- 原始 buyBundle 函数（未改动，只是不再使用） -->
   <script>
     function buyBundle() {
       const token = localStorage.getItem("calmpaw_token");
       const redirect = window.location.pathname + window.location.search;
 
       if (!token) {
-        // 未登录：先去登录，登录后再回到 bundle 页面
         window.location.href = "/auth.html?redirect=" + encodeURIComponent(redirect);
         return;
       }
 
-      // 已登录：打开 Paddle 付款（记得把 PRODUCT_ID_BUNDLE 换成真实 Product ID）
       Paddle.Checkout.open({
-        product: PRODUCT_ID_BUNDLE,  // TODO: 替换为真实 Product ID
+        product: PRODUCT_ID_BUNDLE,
         success: "https://calmpawcoach.com/bundle-access.html"
       });
     }
   </script>
+
 </body>
 </html>
