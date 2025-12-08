@@ -85,7 +85,6 @@
       max-width:130px;
       overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
     }
-
     .btn-mini{
       padding:4px 10px;
       border-radius:999px;
@@ -120,10 +119,6 @@
       border:1px solid var(--border-soft);font-size:13px;
       background:#fff8f2;color:var(--text-soft);cursor:pointer;
       white-space:nowrap;
-    }
-    .btn-outline:hover{
-      border-color:var(--accent);
-      color:var(--text-main);
     }
 
     @keyframes orbit{
@@ -177,20 +172,6 @@
     .hero-meta span{margin-right:10px;}
     .hero-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:8px;}
     .hero-note{font-size:11px;color:var(--text-soft);}
-
-    /* 交付与扣款说明 */
-    .delivery-note{
-      font-size:11px;
-      color:#a16a4b;
-      line-height:1.6;
-      margin-top:8px;
-      margin-bottom:4px;
-      max-width:540px;
-    }
-    .delivery-note strong{
-      color:#7a3b1f;
-    }
-
     .hero-card{
       border-radius:var(--radius-lg);
       background:rgba(255,246,238,0.96);
@@ -269,7 +250,7 @@
           <span>⏱ Daily time: 10–20 minutes</span>
         </div>
         <div class="hero-cta">
-          <!-- 默认：Digistore 链接，后面脚本会改成 “Open your plan” -->
+          <!-- 购买按钮：默认 Digistore 链接，之后由脚本接管点击逻辑 -->
           <a
             id="cta-main-anxiety"
             class="btn-primary"
@@ -283,13 +264,6 @@
         <div class="hero-note">
           One-time purchase. Instant access to the full 14-day plan after payment.
         </div>
-        <p class="delivery-note">
-          <strong>Delivery & billing:</strong>
-          This is a digital 14-day dog training plan. You get instant online access to the complete
-          program after payment; nothing physical will be shipped. Your purchase is covered by a
-          60-day money-back guarantee.
-          <strong>The withdrawal from your account will be done by Digistore24.</strong>
-        </p>
       </div>
 
       <div class="hero-card">
@@ -356,7 +330,6 @@
         You can repeat it whenever life changes or your dog needs a refresher.
       </p>
       <div style="margin-top:10px;">
-        <!-- 底部按钮同样逻辑 -->
         <a
           id="cta-bottom-anxiety"
           class="btn-primary"
@@ -387,7 +360,7 @@
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 
-  <!-- 顶部导航登录区域（和其它 program 页面统一） -->
+  <!-- 顶部导航登录区域 -->
   <script>
   (function () {
     const loginArea = document.getElementById("nav-login-area");
@@ -426,7 +399,7 @@
         document.getElementById("btn-logout").onclick = logoutAndStay;
       } else {
         loginArea.innerHTML = `
-          <button class="btn-outline" id="btn-login-nav">Log in</button>
+          <button class="btn-mini" id="btn-login-nav">Log in</button>
         `;
         document.getElementById("btn-login-nav").onclick = goAuth;
       }
@@ -434,105 +407,100 @@
   })();
   </script>
 
-  <!-- 购买逻辑：未登录先去登录，登录后用“同一窗口”打开 Digistore24 653885 -->
+  <!-- 购买逻辑：未登录先去登录，登录后同一窗口打开 Digistore24 -->
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653885";
+  document.addEventListener("DOMContentLoaded", function () {
+    const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653885";
 
-      function wireAnxietyButton(id) {
-        const btn = document.getElementById(id);
-        if (!btn) return;
+    function wireAnxietyButton(id) {
+      const btn = document.getElementById(id);
+      if (!btn) return;
 
-        btn.addEventListener("click", function (e) {
-          const href = btn.getAttribute("href") || "";
+      btn.addEventListener("click", function (e) {
+        const href = btn.getAttribute("href") || "";
 
-          // 如果已经变成 anxiety-access.html（已购买状态），让它按默认跳转打开计划
-          if (href.indexOf("anxiety-access.html") !== -1) {
-            return;
-          }
+        // 如果已经变成 anxiety-access.html（已购买状态），直接走默认跳转
+        if (href.indexOf("anxiety-access.html") !== -1) {
+          return;
+        }
 
-          const token = localStorage.getItem("calmpaw_token");
-          const redirect = window.location.pathname + window.location.search;
+        const token = localStorage.getItem("calmpaw_token");
+        const redirect = window.location.pathname + window.location.search;
 
-          // 没登录：先去登录
-          if (!token) {
-            e.preventDefault();
-            window.location.href = "/auth.html?redirect=" + encodeURIComponent(redirect);
-            return;
-          }
-
-          // 已登录但还没购买：用同一窗口跳到 Digistore24 收银台
+        // 没登录：先去登录
+        if (!token) {
           e.preventDefault();
-          window.location.href = CHECKOUT_URL;
-        });
-      }
+          window.location.href = "/auth.html?redirect=" + encodeURIComponent(redirect);
+          return;
+        }
 
-      wireAnxietyButton("cta-main-anxiety");
-      wireAnxietyButton("cta-bottom-anxiety");
-    });
+        // 已登录：同一窗口跳到 Digistore24
+        e.preventDefault();
+        window.location.href = CHECKOUT_URL;
+      });
+    }
+
+    wireAnxietyButton("cta-main-anxiety");
+    wireAnxietyButton("cta-bottom-anxiety");
+  });
   </script>
 
-  <!-- 已经拥有 barking 的用户：按钮变成“Open”，并支持从 Digistore 回来自动跳转 -->
-<script>
+  <!-- 自动把按钮变 Open + 从 Digistore 回跳后轮询并自动进入 anxiety-access -->
+  <script>
   document.addEventListener("DOMContentLoaded", function () {
-    const ACCESS_URL = "/barking-access.html";
     const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
+    const ACCESS_URL = "/anxiety-access.html";
 
-    const mainBtn = document.getElementById("cta-main-barking");
-    const bottomBtn = document.getElementById("cta-bottom-barking");
+    const mainBtn = document.getElementById("cta-main-anxiety");
+    const bottomBtn = document.getElementById("cta-bottom-anxiety");
     const token = localStorage.getItem("calmpaw_token");
+    if (!mainBtn || !bottomBtn) return;
+    if (!token) return;
 
-    if (!mainBtn || !bottomBtn || !token) return;
+    const params = new URLSearchParams(window.location.search);
+    const fromCheckout = params.get("from") === "checkout";
 
-    // 判断是不是刚从 Digistore24 收银台跳回来
-    const fromCheckout =
-      document.referrer && document.referrer.indexOf("checkout-ds24.com") !== -1;
-
-    // 把两个按钮都变成“Open your 7-day plan”
     function turnButtonsToOpen() {
-      [mainBtn, bottomBtn].forEach((btn) => {
+      function makeOpen(btn, text) {
         if (!btn) return;
         btn.removeAttribute("target");
         btn.href = ACCESS_URL;
-      });
-      mainBtn.textContent = "Open your 7-day plan →";
-      bottomBtn.textContent = "Go to your barking plan →";
+        btn.textContent = text;
+      }
+      makeOpen(mainBtn, "Open your 14-day plan →");
+      makeOpen(bottomBtn, "Go to your separation plan →");
     }
 
-    // 调用 check-plan，allowRedirect=true 时发现已开通就自动跳转
     function checkAndMaybeRedirect(allowRedirect) {
-      fetch(API_BASE + "/auth/check-plan?slug=barking", {
-        method: "GET",
-        headers: {
-          Authorization: "Bearer " + token,
-        },
+      fetch(API_BASE + "/auth/check-plan?slug=anxiety", {
+        headers: { "Authorization": "Bearer " + token }
       })
-        .then((r) => r.json())
-        .then((data) => {
+        .then(r => r.json())
+        .then(data => {
           if (!data || !data.ok || !data.access) return;
 
           // 已经有权限
           turnButtonsToOpen();
 
           if (allowRedirect) {
-            // 直接进入 barking-access 页面，不用手动点按钮
+            // 直接进入 anxiety-access 页面
             window.location.replace(ACCESS_URL);
           }
         })
-        .catch((err) => {
-          console.error("check-plan barking error", err);
+        .catch(err => {
+          console.error("check-plan anxiety error", err);
         });
     }
 
-    // 普通打开这个页面：只把按钮变成“Open…”，不自动跳转
+    // 普通打开：只把按钮变成“Open..”，不自动跳转
     checkAndMaybeRedirect(false);
 
-    // 如果是刚从 Digistore24 付款回来，就轮询几次等 webhook 生效，然后自动跳转
+    // 从 Digistore24 回跳：轮询等待几次 webhook 生效，然后自动跳转
     if (fromCheckout) {
       let tries = 0;
       const timer = setInterval(() => {
         tries++;
-        if (tries > 6) { // 最多再等大约 18 秒
+        if (tries > 6) {  // 最多等到 ~18 秒
           clearInterval(timer);
           return;
         }
@@ -540,6 +508,6 @@
       }, 3000);
     }
   });
-</script>
+  </script>
 </body>
 </html>
