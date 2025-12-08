@@ -161,18 +161,20 @@
     .hero-card h3{font-size:13px;margin-bottom:6px;}
     .hero-card ul{margin-left:14px;margin-bottom:4px;}
     .hero-card li{margin-bottom:4px;}
+
     .section{margin-bottom:24px;}
     .section h2{font-size:16px;margin-bottom:6px;}
     .section p{font-size:13px;color:var(--text-soft);margin-bottom:6px;line-height:1.6;}
     .bullets{font-size:13px;color:var(--text-soft);margin-left:16px;}
     .bullets li{margin-bottom:4px;}
+
     .days{
       border-radius:18px;
       background:#fffaf5;border:1px solid rgba(243,217,196,0.9);
       padding:12px;font-size:12px;color:var(--text-soft);
     }
     .day-item{margin-bottom:8px;}
-    .day-title{font-weight:600;color:#a0522b;margin-bottom:2px;}
+    .day-title{font-weight:600;color:#8a4b25;margin-bottom:2px;}
 
     footer{
       border-top:1px solid rgba(243,217,196,0.8);
@@ -187,6 +189,12 @@
     .footer-links{display:flex;gap:12px;flex-wrap:wrap;}
     .footer-links a:hover{color:#b05825;}
   </style>
+
+  <!-- Paddle（原样保留，不用也没关系） -->
+  <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
+  <script>
+    Paddle.Setup({ vendor: 0 });
+  </script>
 </head>
 <body>
   <header>
@@ -212,18 +220,17 @@
   <main>
     <section class="hero">
       <div>
-        <div class="hero-tag">7-day plan · Apartment & neighbor friendly</div>
-        <h1 class="hero-title">Stop Excessive Barking — CalmPaw 7-Day Plan</h1>
+        <div class="hero-tag">7-day plan · Doors, neighbors & hallway noise</div>
+        <h1 class="hero-title">Stop Excessive Barking — 7-Day Plan</h1>
         <p class="hero-sub">
-          A gentle, realistic plan to reduce door, hallway and neighbor barking
-          in just 7 days — without shouting, harsh tools or hours of training.
+          A realistic one-week plan to reduce barking at doors, neighbors and hallway sounds —
+          without shouting, punishment or feeling afraid of complaints.
         </p>
         <div class="hero-meta">
-          <span>🐶 Best for: noisy apartments & sensitive dogs</span>
+          <span>🐶 Best for: apartment / shared-wall living</span>
           <span>⏱ Daily time: 10–15 minutes</span>
         </div>
         <div class="hero-cta">
-          <!-- Digistore24 收款 -->
           <a href="#" class="btn-primary" id="cta-main-barking"
              onclick="return startBarkingPurchase();">
             Buy this plan – $19 →
@@ -231,34 +238,31 @@
           <a href="programs.html" class="btn-outline">← Back to all programs</a>
         </div>
         <div class="hero-note">
-          One-time purchase. Instant access to the full plan after payment.
+          One-time purchase. Instant access to the full 7-day plan after payment.
         </div>
       </div>
+
       <div class="hero-card">
         <h3>In this 7-day plan, you will:</h3>
         <ul>
-          <li>Teach your dog a clear “quiet” routine they can understand.</li>
-          <li>Reduce barking at doors, footsteps, neighbors and elevator sounds.</li>
-          <li>Practice short, realistic sessions that fit around your work schedule.</li>
+          <li>Set up a calm “barking corner” your dog can relax in.</li>
+          <li>Teach a soft “quiet” cue without scaring your dog.</li>
+          <li>Reduce door / hallway barking to a manageable level.</li>
         </ul>
         <p style="margin-top:6px;">
-          You’ll get a simple schedule for each day, plus exactly what to do in
-          the moment your dog barks — even when you’re tired or stressed.
+          It’s built for real apartments and neighbors — not soundproof training studios.
         </p>
       </div>
     </section>
 
     <section class="section">
       <h2>Who this plan is for</h2>
-      <p>
-        This plan is designed for real-life homes, not perfect training centers.
-        It’s especially helpful if:
-      </p>
+      <p>Especially helpful if:</p>
       <ul class="bullets">
-        <li>Your dog barks at doors, footsteps, neighbors or elevator sounds.</li>
-        <li>You’re worried about noise complaints in your building.</li>
-        <li>You feel guilty or stressed every time someone walks past your door.</li>
-        <li>You don’t have hours to train — 10–15 minutes a day is realistic for you.</li>
+        <li>Your dog explodes at every noise in the hallway.</li>
+        <li>You feel stressed every time someone uses the elevator or stairs.</li>
+        <li>Neighbors have already commented about the barking.</li>
+        <li>You want fewer outbursts, not a “perfect” silent robot dog.</li>
       </ul>
     </section>
 
@@ -266,32 +270,20 @@
       <h2>What’s inside the 7-day plan</h2>
       <div class="days">
         <div class="day-item">
-          <div class="day-title">Day 1 — Baseline & calm corner</div>
-          <div>Observe when your dog barks most, set up a calm resting spot and introduce a simple “settle” routine.</div>
+          <div class="day-title">Days 1–2 — Calm corner & “safe noise” setup</div>
+          <div>Create a cozy spot and start pairing mild noises with calm, predictable rewards.</div>
         </div>
         <div class="day-item">
-          <div class="day-title">Day 2 — Teaching a “quiet” cue</div>
-          <div>Reward short moments of silence and pair them with a soft cue, building the foundation of your quiet routine.</div>
+          <div class="day-title">Days 3–4 — Soft “quiet” cue and door routines</div>
+          <div>Teach a gentle, repeatable cue and adjust how you answer doors and deliveries.</div>
         </div>
         <div class="day-item">
-          <div class="day-title">Day 3 — Door sounds practice</div>
-          <div>Play low-volume door knocks / bell sounds and practice quiet + settle before the real thing happens.</div>
+          <div class="day-title">Days 5–6 — Hallway sounds & neighbors coming home</div>
+          <div>Practice with recorded or real hallway sounds, working just below your dog’s “explosion” level.</div>
         </div>
         <div class="day-item">
-          <div class="day-title">Day 4 — Real-world door practice</div>
-          <div>Practice calm door routines with family members or friends, step-by-step, without overwhelming your dog.</div>
-        </div>
-        <div class="day-item">
-          <div class="day-title">Day 5 — Hallway & neighbor noises</div>
-          <div>Pair outside noises with rewards for staying calm, teaching your dog that not every sound needs a reaction.</div>
-        </div>
-        <div class="day-item">
-          <div class="day-title">Day 6 — “Busy evening” rehearsal</div>
-          <div>Simulate a busy evening with multiple sounds and visitors while you practice your calm routine.</div>
-        </div>
-        <div class="day-item">
-          <div class="day-title">Day 7 — Reset & long-term routine</div>
-          <div>Review your progress, adjust the plan and lock in a simple daily routine to keep barking under control.</div>
+          <div class="day-title">Day 7 — Real-life practice & maintenance</div>
+          <div>Put the pieces together for a normal week and set up a simple long-term routine.</div>
         </div>
       </div>
     </section>
@@ -299,16 +291,19 @@
     <section class="section">
       <h2>What you’ll receive</h2>
       <ul class="bullets">
-        <li>A clear 7-day schedule with short daily tasks.</li>
-        <li>Step-by-step instructions for what to do when barking starts.</li>
-        <li>Tips for handling “bad days” and setbacks without getting discouraged.</li>
-        <li>Adjustments for sensitive, rescue or older dogs.</li>
+        <li>7-day schedule with short daily steps.</li>
+        <li>Ideas for quieter evenings and mornings.</li>
+        <li>Ways to handle “bad days” without giving up.</li>
+        <li>Tips for combining this with leash or anxiety plans later.</li>
       </ul>
     </section>
 
     <section class="section">
-      <h2>Ready to start?</h2>
-      <p>Click below to purchase and unlock the full 7-day plan immediately.</p>
+      <h2>Ready for fewer noise complaints?</h2>
+      <p>
+        Click below to purchase and unlock the full 7-day barking plan.
+        You can repeat it whenever life changes or a new neighbor moves in.
+      </p>
       <div style="margin-top:10px;">
         <a href="#" class="btn-primary" id="cta-bottom-barking"
            onclick="return startBarkingPurchase();">
@@ -324,9 +319,6 @@
       <div class="footer-links">
         <a href="about.html">About</a>
         <a href="contact.html">Contact</a>
-        <a href="terms.html">Terms of Use</a>
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="refunds.html">Refund Policy</a>
       </div>
     </div>
   </footer>
@@ -335,7 +327,7 @@
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 
-  <!-- 顶部导航登录区域 -->
+  <!-- 顶部导航登录区域（和其他页面保持一致） -->
   <script>
   (function () {
     const loginArea = document.getElementById("nav-login-area");
@@ -382,24 +374,25 @@
   })();
   </script>
 
-  <!-- 购买逻辑：未登录 → 登录；已登录 → Digistore24 收银台 -->
+  <!-- 购买逻辑：未登录先去登录，登录后跳 Digistore 653870 -->
   <script>
   function startBarkingPurchase() {
     const token = localStorage.getItem("calmpaw_token");
 
+    // 没登录 → 先去 auth.html 登录，带上返回地址
     if (!token) {
       const back = window.location.pathname + window.location.search;
       window.location.href = "/auth.html?redirect=" + encodeURIComponent(back);
       return false;
     }
 
-    // 登录后跳转 Digistore24 支付
-    window.location.href = "https://www.checkout-ds24.com/product/653870/";
+    // 已登录 → 直接打开 Digistore 收银台（Barking 计划）
+    window.open("https://www.checkout-ds24.com/product/653870", "_blank");
     return false;
   }
   </script>
 
-  <!-- 已购买则显示“Open your plan” -->
+  <!-- 已经拥有 barking 或 bundle 的用户：按钮变成“Open your plan” -->
   <script>
   (function () {
     const PLAN_KEY = "barking";
@@ -410,17 +403,22 @@
     const token = localStorage.getItem("calmpaw_token");
 
     if (!mainBtn || !bottomBtn) return;
-    if (!token) return;
+    if (!token) return; // 未登录就保持购买逻辑
 
     fetch("/auth/check-plan", {
       method: "GET",
-      headers: { "Authorization": "Bearer " + token }
+      headers: {
+        "Authorization": "Bearer " + token
+      }
     })
       .then(r => r.json())
       .then(data => {
         if (!data) return;
 
-        const hasBundle = !!(data.bundle || (data.plans && data.plans.bundle));
+        const hasBundle =
+          !!(data.bundle ||
+             (data.plans && data.plans.bundle));
+
         const hasBarking =
           !!(data[PLAN_KEY] ||
              (data.plans && data.plans[PLAN_KEY]) ||
@@ -439,18 +437,10 @@
         bottomBtn.textContent = "Go to your barking plan →";
         bottomBtn.onclick = goAccess;
       })
-      .catch(err => console.error("check-plan error", err));
+      .catch(err => {
+        console.error("check-plan error", err);
+      });
   })();
   </script>
-
-  <!-- Digistore24 促销追踪 -->
-  <script src="https://www.digistore24-scripts.com/service/digistore.js"></script>
-  <script>
-    digistorePromocode({
-      product_id: 653870,
-      adjust_domain: true
-    });
-  </script>
-
 </body>
 </html>
