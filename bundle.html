@@ -820,39 +820,66 @@
     }
   </script>
 
-  <!-- 根据 /auth/check-plan 返回的 access=true 把按钮变成“Open your plan”（不自动跳转） -->
+  <!-- ✅ 检查是否已拥有 bundle：改按钮 + 购买后自动轮询并跳转 -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
+      const ACCESS_URL = "/bundle-access.html";
       const token = localStorage.getItem("calmpaw_token");
       if (!token) return;
 
-      fetch(API_BASE + "/auth/check-plan?slug=bundle", {
-        headers: { "Authorization": "Bearer " + token }
-      })
-        .then(res => res.json())
-        .then(data => {
-          console.log("check-plan bundle:", data);
-          if (!data || !data.ok || !data.access) return;
+      const btnIds = ["bundle-btn-top", "bundle-btn-hero", "bundle-btn-bottom"];
 
-          const accessUrl = "/bundle-access.html";
-
-          function makeOpenButton(id) {
-            const el = document.getElementById(id);
-            if (!el) return;
-            el.removeAttribute("target");
-            el.href = accessUrl;
-            el.textContent = "Open your Complete Pack →";
-          }
-
-          makeOpenButton("bundle-btn-top");
-          makeOpenButton("bundle-btn-hero");
-          makeOpenButton("bundle-btn-bottom");
-          // ❗这里没有自动 window.location.href，只有按钮改文案
-        })
-        .catch(err => {
-          console.error("check-plan bundle error", err);
+      function turnButtonsToOpen() {
+        btnIds.forEach(id => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          el.removeAttribute("target");
+          el.href = ACCESS_URL;
+          el.textContent = "Open your Complete Pack →";
         });
+      }
+
+      function checkAndMaybeRedirect(allowRedirect) {
+        return fetch(API_BASE + "/auth/check-plan?slug=bundle", {
+          headers: { "Authorization": "Bearer " + token }
+        })
+          .then(res => res.json())
+          .then(data => {
+            console.log("check-plan bundle:", data);
+            if (!data || !data.ok || !data.access) return false;
+
+            turnButtonsToOpen();
+
+            if (allowRedirect) {
+              window.location.replace(ACCESS_URL);
+            }
+            return true;
+          })
+          .catch(err => {
+            console.error("check-plan bundle error", err);
+            return false;
+          });
+      }
+
+      // 1）普通打开页面：只把按钮变成 Open，不自动跳转
+      checkAndMaybeRedirect(false);
+
+      // 2）如果是 Digistore24 支付成功后回跳 ?fromCheckout=1，则轮询 3s * 6 次，成功就自动跳转
+      const url = new URL(window.location.href);
+      const fromCheckout = url.searchParams.get("fromCheckout") === "1";
+
+      if (fromCheckout) {
+        let tries = 0;
+        const timer = setInterval(() => {
+          tries++;
+          checkAndMaybeRedirect(true).then(done => {
+            if (done || tries > 6) {
+              clearInterval(timer);
+            }
+          });
+        }, 3000); // 最多等 ~18 秒
+      }
     });
   </script>
 
