@@ -445,20 +445,21 @@
   });
   </script>
 
-  <!-- 自动把按钮变 Open + 从 Digistore 回跳后轮询并自动进入 anxiety-access -->
-  <script>
+  <!-- 已经拥有 anxiety 或 bundle 的用户：按钮变成“Open your plan”，从结算回来时立即自动跳转 -->
+<script>
   document.addEventListener("DOMContentLoaded", function () {
-    const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
     const ACCESS_URL = "/anxiety-access.html";
-
     const mainBtn = document.getElementById("cta-main-anxiety");
     const bottomBtn = document.getElementById("cta-bottom-anxiety");
     const token = localStorage.getItem("calmpaw_token");
     if (!mainBtn || !bottomBtn) return;
     if (!token) return;
 
-    const params = new URLSearchParams(window.location.search);
-    const fromCheckout = params.get("from") === "checkout";
+    const BASE = "https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=";
+    const SLUGS = ["anxiety", "bundle"];
+
+    const url = new URL(window.location.href);
+    const fromCheckout = url.searchParams.get("from") === "checkout";
 
     function turnButtonsToOpen() {
       function makeOpen(btn, text) {
@@ -472,42 +473,34 @@
     }
 
     function checkAndMaybeRedirect(allowRedirect) {
-      fetch(API_BASE + "/auth/check-plan?slug=anxiety", {
-        headers: { "Authorization": "Bearer " + token }
-      })
-        .then(r => r.json())
-        .then(data => {
-          if (!data || !data.ok || !data.access) return;
+      Promise.all(
+        SLUGS.map(slug =>
+          fetch(BASE + encodeURIComponent(slug), {
+            headers: { "Authorization": "Bearer " + token }
+          })
+            .then(r => r.json())
+            .catch(() => null)
+        )
+      )
+        .then(results => {
+          const hasAccess = results.some(data => data && data.ok && data.access);
+          if (!hasAccess) return;
 
-          // 已经有权限
           turnButtonsToOpen();
-
           if (allowRedirect) {
-            // 直接进入 anxiety-access 页面
             window.location.replace(ACCESS_URL);
           }
         })
         .catch(err => {
-          console.error("check-plan anxiety error", err);
+          console.error("check-plan anxiety/bundle error", err);
         });
     }
 
-    // 普通打开：只把按钮变成“Open..”，不自动跳转
     checkAndMaybeRedirect(false);
-
-    // 从 Digistore24 回跳：轮询等待几次 webhook 生效，然后自动跳转
     if (fromCheckout) {
-      let tries = 0;
-      const timer = setInterval(() => {
-        tries++;
-        if (tries > 6) {  // 最多等到 ~18 秒
-          clearInterval(timer);
-          return;
-        }
-        checkAndMaybeRedirect(true);
-      }, 3000);
+      checkAndMaybeRedirect(true);
     }
   });
-  </script>
+</script>
 </body>
 </html>
