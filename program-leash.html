@@ -391,7 +391,7 @@
   }
   </script>
 
-  <!-- ★★ 已经拥有 leash 或 bundle 的用户：按钮变成“Open your plan” ★★ -->
+  <!-- ★★ 已经拥有 leash（或 bundle）用户：按钮变成“Open your plan” ★★ -->
   <script>
   (function () {
     const PLAN_KEY = "leash";
@@ -404,7 +404,8 @@
     if (!mainBtn || !bottomBtn) return;
     if (!token) return; // 未登录保持购买逻辑（startLeashPurchase 会处理）
 
-    fetch("/auth/check-plan", {
+    // 重要：带上 slug=leash，让后端单独判断这个计划或 bundle
+    fetch("/auth/check-plan?slug=" + PLAN_KEY, {
       method: "GET",
       headers: {
         "Authorization": "Bearer " + token
@@ -412,18 +413,8 @@
     })
       .then(r => r.json())
       .then(data => {
-        if (!data) return;
-
-        const hasBundle =
-          !!(data.bundle ||
-             (data.plans && data.plans.bundle));
-
-        const hasLeash =
-          !!(data[PLAN_KEY] ||
-             (data.plans && data.plans[PLAN_KEY]) ||
-             (Array.isArray(data.slugs) && data.slugs.includes(PLAN_KEY)));
-
-        if (!hasBundle && !hasLeash) return;
+        // 预期：如果有权限，后端返回 { ok:true, access:true, slug:"leash" }
+        if (!data || !data.ok || !data.access) return;
 
         function goAccess(e) {
           if (e) e.preventDefault();
@@ -437,7 +428,7 @@
         bottomBtn.onclick = goAccess;
       })
       .catch(err => {
-        console.error("check-plan error", err);
+        console.error("check-plan leash error", err);
       });
   })();
   </script>
