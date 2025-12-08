@@ -820,7 +820,7 @@
     }
   </script>
 
-  <!-- 新：根据 /auth/check-plan 返回的 access=true 自动把按钮变成“Open your plan” -->
+  <!-- 新：根据 /auth/check-plan 返回的 access=true 自动把按钮变成“Open your plan”并自动跳转 -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
@@ -848,6 +848,12 @@
           makeOpenButton("bundle-btn-top");
           makeOpenButton("bundle-btn-hero");
           makeOpenButton("bundle-btn-bottom");
+
+          // 已购买：访问 bundle 页面时自动跳转到 access 页
+          const path = window.location.pathname;
+          if (path === "/bundle" || path === "/bundle.html") {
+            window.location.href = accessUrl;
+          }
         })
         .catch(err => {
           console.error("check-plan bundle error", err);
@@ -855,7 +861,7 @@
     });
   </script>
 
-  <!-- 新增：没登录点购买先去登录；登录后用同一窗口打开 Digistore24（保持回跳） -->
+  <!-- 没登录点购买先去登录；登录后用同一窗口打开 Digistore24（保持回跳） -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653891";
