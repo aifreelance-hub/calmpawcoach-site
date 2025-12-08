@@ -855,5 +855,44 @@
     });
   </script>
 
+  <!-- 新增：没登录点购买先去登录；登录后才打开 Digistore24 -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653891";
+
+      function wireBundleButton(id) {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+
+        btn.addEventListener("click", function (e) {
+          const href = btn.getAttribute("href") || "";
+
+          // 如果已经变成了 bundle-access.html，就让它走默认跳转（打开课程页）
+          if (href.indexOf("bundle-access.html") !== -1) {
+            return;
+          }
+
+          const token = localStorage.getItem("calmpaw_token");
+          const redirect = window.location.pathname + window.location.search;
+
+          // 没登录：跳转到登录页
+          if (!token) {
+            e.preventDefault();
+            window.location.href = "auth.html?redirect=" + encodeURIComponent(redirect);
+            return;
+          }
+
+          // 已登录但未购买：打开 Digistore24 付款页
+          e.preventDefault();
+          window.open(CHECKOUT_URL, "_blank");
+        });
+      }
+
+      wireBundleButton("bundle-btn-top");
+      wireBundleButton("bundle-btn-hero");
+      wireBundleButton("bundle-btn-bottom");
+    });
+  </script>
+
 </body>
 </html>
