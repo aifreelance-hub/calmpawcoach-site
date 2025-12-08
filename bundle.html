@@ -214,7 +214,6 @@
 
     .nav-login-emoji{font-size:14px;}
 
-    /* 登录状态区域（统一） */
     .nav-auth{
       display:flex;
       align-items:center;
@@ -535,8 +534,9 @@
           </a>
         </div>
 
-        <!-- ⭐ 顶部购买按钮：已替换为 Digistore 链接 -->
+        <!-- ⭐ 顶部购买按钮：默认 Digistore，登录且已购买时脚本会改成“Open” -->
         <a class="btn-primary"
+           id="bundle-cta-top"
            href="https://www.checkout-ds24.com/product/653891"
            target="_blank">
           Get Complete Pack – $49 →
@@ -563,6 +563,7 @@
         <div class="hero-cta">
           <!-- ⭐ 第二个购买按钮 -->
           <a class="btn-primary"
+             id="bundle-cta-hero"
              href="https://www.checkout-ds24.com/product/653891"
              target="_blank">
             Get all 3 plans – $49 →
@@ -670,12 +671,13 @@
       <p style="margin-top:6px;">
         If you only struggle in one area, you can start with a single plan. If
         your life feels like “everything at once”, the Complete Pack is designed
-        exactly for you.
+        exactly for you。
       </p>
 
       <div style="margin-top:10px;">
         <!-- ⭐ 第三个购买按钮 -->
         <a class="btn-primary"
+           id="bundle-cta-bottom"
            href="https://www.checkout-ds24.com/product/653891"
            target="_blank">
           Get the CalmPaw Complete Pack – $49 →
@@ -769,7 +771,7 @@
     });
   </script>
 
-  <!-- 原始 buyBundle 函数（未改动，只是不再使用） -->
+  <!-- 原始 buyBundle 函数（目前不会被调用，可以先留着） -->
   <script>
     function buyBundle() {
       const token = localStorage.getItem("calmpaw_token");
@@ -785,6 +787,58 @@
         success: "https://calmpawcoach.com/bundle-access.html"
       });
     }
+  </script>
+
+  <!-- ⭐ 关键：检查是否已经拥有 bundle，有的话把 3 个按钮改成“Open your Complete Pack” -->
+  <script>
+  (function () {
+    const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
+    const token = localStorage.getItem("calmpaw_token");
+    if (!token) return; // 未登录就保持购买按钮
+
+    const topBtn = document.getElementById("bundle-cta-top");
+    const heroBtn = document.getElementById("bundle-cta-hero");
+    const bottomBtn = document.getElementById("bundle-cta-bottom");
+    if (!topBtn && !heroBtn && !bottomBtn) return;
+
+    fetch(API_BASE + "/auth/check-plan", {
+      method: "GET",
+      headers: {
+        "Authorization": "Bearer " + token
+      }
+    })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (!data) return;
+
+        // 尽量兼容多种返回结构
+        const hasBundle =
+          !!(
+            data.bundle ||
+            (data.plans && (data.plans.bundle || data.plans.complete_pack)) ||
+            (Array.isArray(data.slugs) &&
+              (data.slugs.includes("bundle") || data.slugs.includes("complete-pack")))
+          );
+
+        if (!hasBundle) return;
+
+        const accessUrl = "/bundle-access.html";
+
+        function patchBtn(btn) {
+          if (!btn) return;
+          btn.href = accessUrl;
+          btn.removeAttribute("target");
+          btn.textContent = "Open your Complete Pack →";
+        }
+
+        patchBtn(topBtn);
+        patchBtn(heroBtn);
+        patchBtn(bottomBtn);
+      })
+      .catch(err => {
+        console.error("check-plan bundle error", err);
+      });
+  })();
   </script>
 
 </body>
