@@ -245,11 +245,12 @@
           <span>⏱ Daily time: 10–15 minutes</span>
         </div>
         <div class="hero-cta">
-          <!-- 购买按钮：默认指向本页逻辑，真正的结账在 JS 里处理 -->
+          <!-- 购买按钮：默认是 Digistore 链接，已购买后脚本会改成“Open” -->
           <a
             id="cta-main-barking"
             class="btn-primary"
-            href="#"
+            href="https://www.checkout-ds24.com/product/653870"
+            target="_blank"
           >
             Buy this plan – $19 →
           </a>
@@ -334,7 +335,8 @@
         <a
           id="cta-bottom-barking"
           class="btn-primary"
-          href="#"
+          href="https://www.checkout-ds24.com/product/653870"
+          target="_blank"
         >
           Get the 7-day barking plan – $19 →
         </a>
@@ -359,7 +361,7 @@
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 
-  <!-- 顶部导航登录区域 -->
+  <!-- 顶部导航登录区域（保持你原本逻辑） -->
   <script>
     (function () {
       const loginArea = document.getElementById("nav-login-area");
@@ -406,7 +408,7 @@
     })();
   </script>
 
-  <!-- 购买逻辑：未登录先去登录，登录后同一窗口打开 Digistore 653870 -->
+  <!-- 购买逻辑：未登录先去登录，登录后用“同一窗口”打开 Digistore 653870 -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653870";
@@ -416,18 +418,25 @@
         if (!btn) return;
 
         btn.addEventListener("click", function (e) {
-          e.preventDefault();
+          const href = btn.getAttribute("href") || "";
+
+          // 如果已经变成 barking-access.html（已购买状态），让它走默认跳转打开计划
+          if (href.indexOf("barking-access.html") !== -1) {
+            return;
+          }
 
           const token = localStorage.getItem("calmpaw_token");
           const redirect = window.location.pathname + window.location.search;
 
           // 没登录：先去登录
           if (!token) {
+            e.preventDefault();
             window.location.href = "/auth.html?redirect=" + encodeURIComponent(redirect);
             return;
           }
 
-          // 已登录且未购买：同一窗口跳 Digistore（让 Digistore 处理支付和返回）
+          // 已登录且未购买：用同一窗口跳到 Digistore24 收银台
+          e.preventDefault();
           window.location.href = CHECKOUT_URL;
         });
       }
@@ -437,7 +446,7 @@
     });
   </script>
 
-  <!-- 已拥有 barking 或 bundle 的用户：按钮变成“Open your plan”（不自动整页跳转） -->
+  <!-- 已经拥有 barking / 任意 barking 相关 slug / bundle 的用户：按钮变成“Open your plan” -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const ACCESS_URL = "/barking-access.html";
@@ -449,12 +458,39 @@
 
       const BASE = "https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=";
 
-      Promise.all([
-        fetch(BASE + "barking", { headers: { "Authorization": "Bearer " + token } }).then(r => r.json()).catch(() => null),
-        fetch(BASE + "bundle",  { headers: { "Authorization": "Bearer " + token } }).then(r => r.json()).catch(() => null)
-      ])
+      // 尝试多种可能的 barking slug，再加上 bundle
+      const BARKING_SLUGS = [
+        "barking",
+        "barking-plan",
+        "barking_7day",
+        "barking7",
+        "barking-7-day"
+      ];
+      const ALL_SLUGS = BARKING_SLUGS.concat(["bundle"]);
+
+      Promise.all(
+        ALL_SLUGS.map(slug =>
+          fetch(BASE + encodeURIComponent(slug), {
+            headers: { "Authorization": "Bearer " + token }
+          })
+            .then(r => r.json())
+            .then(data => ({ slug, data }))
+            .catch(() => ({ slug, data: null }))
+        )
+      )
         .then(results => {
-          const hasAccess = results.some(d => d && d.ok && d.access);
+          // 控制台打印一下，方便你自己看是哪一个 slug 生效
+          console.log("check-plan barking multi-slug results:", results);
+
+          // 只要 barking 系列或 bundle 中有任何一个 access=true，就认为可以访问这个计划
+          const hasAccess = results.some(
+            item =>
+              item.data &&
+              item.data.ok &&
+              item.data.access &&
+              (BARKING_SLUGS.includes(item.slug) || item.slug === "bundle")
+          );
+
           if (!hasAccess) return;
 
           function makeOpen(btn, text) {
@@ -466,7 +502,7 @@
 
           makeOpen(mainBtn, "Open your 7-day plan →");
           makeOpen(bottomBtn, "Go to your barking plan →");
-          // 不自动 window.location.href，用户自己点按钮打开
+          // 这里只改按钮，不自动整页跳转，让用户自己点“Open”
         })
         .catch(err => {
           console.error("check-plan barking/bundle error", err);
