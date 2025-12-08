@@ -327,7 +327,7 @@
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 
-  <!-- 顶部导航登录区域 -->
+  <!-- 顶部导航登录区域（和其他页面保持一致） -->
   <script>
   (function () {
     const loginArea = document.getElementById("nav-login-area");
@@ -392,7 +392,7 @@
   }
   </script>
 
-  <!-- ★★ 已经拥有 barking（或通过后端判断 bundle）则按钮变成“Open your plan” ★★ -->
+  <!-- 已经拥有 barking 或 bundle 的用户：按钮变成“Open your plan” -->
   <script>
   (function () {
     const PLAN_KEY = "barking";
@@ -405,7 +405,8 @@
     if (!mainBtn || !bottomBtn) return;
     if (!token) return; // 未登录就保持购买逻辑
 
-    fetch("/auth/check-plan?slug=" + PLAN_KEY, {
+    // ★★ 关键：请求 Worker 的完整地址，带 slug ★★
+    fetch("https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=" + PLAN_KEY, {
       method: "GET",
       headers: {
         "Authorization": "Bearer " + token
@@ -413,7 +414,6 @@
     })
       .then(r => r.json())
       .then(data => {
-        // 预期：{ ok:true, access:true, slug:"barking" }（如果用户有 barking 或 bundle，后端直接返回 access:true）
         if (!data || !data.ok || !data.access) return;
 
         function goAccess(e) {
