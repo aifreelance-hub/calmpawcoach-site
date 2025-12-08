@@ -575,7 +575,6 @@
       <div class="nav-cta">
         <!-- Default: Log in -->
         <div id="nav-auth-area">
-          <!-- 这里改成指向本页 anxiety-access -->
           <a class="btn-outline" href="auth.html?redirect=/anxiety-access.html">
             <span class="nav-login-emoji">🔑</span> Log in
           </a>
@@ -851,7 +850,7 @@
       // Not logged in: show Log in button with redirect to current page
       if (!token) {
         area.innerHTML = `
-          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent(window.location.pathname || '/index.html')}">
+          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent(window.location.pathname || '/anxiety-access.html')}">
             <span class="nav-login-emoji">🔑</span> Log in
           </a>`;
         return;
@@ -867,7 +866,7 @@
           localStorage.removeItem("calmpaw_token");
           localStorage.removeItem("calmpaw_email");
           area.innerHTML = `
-            <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent(window.location.pathname || '/index.html')}">
+            <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent(window.location.pathname || '/anxiety-access.html')}">
               <span class="nav-login-emoji">🔑</span> Log in
             </a>`;
           return;
@@ -888,7 +887,7 @@
           switchBtn.addEventListener("click", () => {
             localStorage.removeItem("calmpaw_token");
             localStorage.removeItem("calmpaw_email");
-            const redirect = encodeURIComponent(window.location.pathname || "/index.html");
+            const redirect = encodeURIComponent(window.location.pathname || "/anxiety-access.html");
             window.location.href = `auth.html?redirect=${redirect}`;
           });
         }
@@ -904,7 +903,7 @@
       } catch (e) {
         console.error("auth hydrate error", e);
         area.innerHTML = `
-          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent(window.location.pathname || '/index.html')}">
+          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent(window.location.pathname || '/anxiety-access.html')}">
             <span class="nav-login-emoji">🔑</span> Log in
           </a>`;
       }
@@ -942,11 +941,12 @@
           }
           const data = await res.json();
           if (!data.ok || !data.access) {
-            // Logged in but did not purchase this plan → send back to program page
-            window.location.href = "/program-anxiety.html";
+            // 没有购买这个计划 → 回到 program 列表页（避免本页无限刷新）
+            window.location.href = "/programs.html";
           }
         })
-        .catch(() => {
+        .catch((err) => {
+          console.error("check-plan anxiety error", err);
           goAuth();
         });
     })();
