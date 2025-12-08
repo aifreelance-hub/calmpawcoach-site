@@ -820,7 +820,7 @@
     }
   </script>
 
-  <!-- 新：根据 /auth/check-plan 返回的 access=true 自动把按钮变成“Open your plan”并自动跳转 -->
+  <!-- 根据 /auth/check-plan 返回的 access=true 把按钮变成“Open your plan”（不自动跳转） -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
@@ -848,12 +848,7 @@
           makeOpenButton("bundle-btn-top");
           makeOpenButton("bundle-btn-hero");
           makeOpenButton("bundle-btn-bottom");
-
-          // 已购买：访问 bundle 页面时自动跳转到 access 页
-          const path = window.location.pathname;
-          if (path === "/bundle" || path === "/bundle.html") {
-            window.location.href = accessUrl;
-          }
+          // ❗这里没有自动 window.location.href，只有按钮改文案
         })
         .catch(err => {
           console.error("check-plan bundle error", err);
