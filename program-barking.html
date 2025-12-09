@@ -150,19 +150,6 @@
     .hero-meta span{margin-right:10px;}
     .hero-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:8px;}
     .hero-note{font-size:11px;color:var(--text-soft);}
-
-    .delivery-note{
-      font-size:11px;
-      color:#a16a4b;
-      line-height:1.6;
-      margin-top:8px;
-      margin-bottom:4px;
-      max-width:540px;
-    }
-    .delivery-note strong{
-      color:#7a3b1f;
-    }
-
     .hero-card{
       border-radius:var(--radius-lg);
       background:rgba(255,246,238,0.96);
@@ -244,13 +231,8 @@
           <span>⏱ Daily time: 10–15 minutes</span>
         </div>
         <div class="hero-cta">
-          <!-- 购买按钮：默认 Digistore 链接，脚本接管点击逻辑 -->
-          <a
-            id="cta-main-barking"
-            class="btn-primary"
-            href="https://www.checkout-ds24.com/product/653870"
-            target="_blank"
-          >
+          <a href="#" class="btn-primary" id="cta-main-barking"
+             onclick="return startBarkingPurchase();">
             Buy this plan – $19 →
           </a>
           <a href="programs.html" class="btn-outline">← Back to all programs</a>
@@ -258,13 +240,6 @@
         <div class="hero-note">
           One-time purchase. Instant access to the full 7-day plan after payment.
         </div>
-        <p class="delivery-note">
-          <strong>Delivery & billing:</strong>
-          This is a digital 7-day dog training plan. You get instant online access to the complete
-          program after payment; nothing physical will be shipped. Your purchase is covered by a
-          60-day money-back guarantee.
-          <strong>The withdrawal from your account will be done by Digistore24.</strong>
-        </p>
       </div>
 
       <div class="hero-card">
@@ -330,13 +305,8 @@
         You can repeat it whenever life changes or a new neighbor moves in.
       </p>
       <div style="margin-top:10px;">
-        <!-- 底部购买按钮：同样逻辑 -->
-        <a
-          id="cta-bottom-barking"
-          class="btn-primary"
-          href="https://www.checkout-ds24.com/product/653870"
-          target="_blank"
-        >
+        <a href="#" class="btn-primary" id="cta-bottom-barking"
+           onclick="return startBarkingPurchase();">
           Get the 7-day barking plan – $19 →
         </a>
       </div>
@@ -350,181 +320,117 @@
         <a href="about.html">About</a>
         <a href="contact.html">Contact</a>
       </div>
-      <p style="font-size:12px;color:#aaa;margin-top:8px;">
-        The withdrawal from your account will be done by Digistore24.
-      </p>
     </div>
   </footer>
 
-  <!-- 年份 -->
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 
-  <!-- 顶部导航登录区域 -->
+  <!-- 顶部导航登录区域（和其他页面保持一致） -->
   <script>
-    (function () {
-      const loginArea = document.getElementById("nav-login-area");
-      const token = localStorage.getItem("calmpaw_token");
+  (function () {
+    const loginArea = document.getElementById("nav-login-area");
+    const token = localStorage.getItem("calmpaw_token");
 
-      function currentRedirect() {
-        return window.location.pathname + window.location.search;
-      }
+    function currentRedirect() {
+      return window.location.pathname + window.location.search;
+    }
 
-      function goAuth() {
-        window.location.href = "/auth.html?redirect=" + encodeURIComponent(currentRedirect());
-      }
+    function goAuth() {
+      window.location.href = "/auth.html?redirect=" + encodeURIComponent(currentRedirect());
+    }
 
-      function logoutOnly() {
-        localStorage.removeItem("calmpaw_token");
-        localStorage.removeItem("calmpaw_email");
-      }
+    function logoutOnly() {
+      localStorage.removeItem("calmpaw_token");
+      localStorage.removeItem("calmpaw_email");
+    }
 
-      function logoutAndStay() {
-        logoutOnly();
-        window.location.reload();
-      }
+    function logoutAndStay() {
+      logoutOnly();
+      window.location.reload();
+    }
 
-      if (loginArea) {
-        const email = localStorage.getItem("calmpaw_email");
-        if (token && email) {
-          loginArea.innerHTML = `
-            <span class="nav-login-email">${email}</span>
-            <button class="btn-mini" id="btn-switch-account">Switch</button>
-            <button class="btn-mini btn-mini-danger" id="btn-logout">Log out</button>
-          `;
-          document.getElementById("btn-switch-account").onclick = function () {
-            logoutOnly();
-            goAuth();
-          };
-          document.getElementById("btn-logout").onclick = logoutAndStay;
-        } else {
-          loginArea.innerHTML = `
-            <button class="btn-outline" id="btn-login-nav">Log in</button>
-          `;
-          document.getElementById("btn-login-nav").onclick = goAuth;
-        }
+    if (loginArea) {
+      const email = localStorage.getItem("calmpaw_email");
+      if (token && email) {
+        loginArea.innerHTML = `
+          <span class="nav-login-email">${email}</span>
+          <button class="btn-mini" id="btn-switch-account">Switch</button>
+          <button class="btn-mini btn-mini-danger" id="btn-logout">Log out</button>
+        `;
+        document.getElementById("btn-switch-account").onclick = function () {
+          logoutOnly();
+          goAuth();
+        };
+        document.getElementById("btn-logout").onclick = logoutAndStay;
+      } else {
+        loginArea.innerHTML = `
+          <button class="btn-outline" id="btn-login-nav">Log in</button>
+        `;
+        document.getElementById("btn-login-nav").onclick = goAuth;
       }
-    })();
+    }
+  })();
   </script>
 
-  <!-- 点击按钮：未登录先去登录，登录后用同一窗口跳 Digistore24（653870） -->
+  <!-- 购买逻辑：未登录先去登录，登录后跳 Digistore 653870 -->
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653870";
+  function startBarkingPurchase() {
+    const token = localStorage.getItem("calmpaw_token");
 
-      function wireBarkingButton(id) {
-        const btn = document.getElementById(id);
-        if (!btn) return;
+    // 没登录 → 先去 auth.html 登录，带上返回地址
+    if (!token) {
+      const back = window.location.pathname + window.location.search;
+      window.location.href = "/auth.html?redirect=" + encodeURIComponent(back);
+      return false;
+    }
 
-        btn.addEventListener("click", function (e) {
-          const href = btn.getAttribute("href") || "";
-
-          // 已经变成 barking-access.html（已购买状态）→ 让浏览器默认跳转
-          if (href.indexOf("barking-access.html") !== -1) {
-            return;
-          }
-
-          const token = localStorage.getItem("calmpaw_token");
-          const redirect = window.location.pathname + window.location.search;
-
-          // 没登录：先去登录
-          if (!token) {
-            e.preventDefault();
-            window.location.href = "/auth.html?redirect=" + encodeURIComponent(redirect);
-            return;
-          }
-
-          // 已登录：同一窗口跳到 Digistore24 收银台
-          e.preventDefault();
-          window.location.href = CHECKOUT_URL;
-        });
-      }
-
-      wireBarkingButton("cta-main-barking");
-      wireBarkingButton("cta-bottom-barking");
-    });
+    // 已登录 → 直接打开 Digistore 收银台（Barking 计划）
+    window.open("https://www.checkout-ds24.com/product/653870", "_blank");
+    return false;
+  }
   </script>
 
-      <!-- 已拥有 barking 或 bundle：按钮变 Open，刚从收银台回来直接跳 barking-access -->
+  <!-- 已经拥有 barking 或 bundle 的用户：按钮变成“Open your plan” -->
   <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const API_BASE   = "https://calmpaw-auth.sophieinbg.workers.dev";
+  (function () {
+    const PLAN_KEY = "barking";
     const ACCESS_URL = "/barking-access.html";
-    const CHECKOUT_DOMAIN = "checkout-ds24.com";
 
-    const mainBtn   = document.getElementById("cta-main-barking");
+    const mainBtn = document.getElementById("cta-main-barking");
     const bottomBtn = document.getElementById("cta-bottom-barking");
-    const token     = localStorage.getItem("calmpaw_token");
+    const token = localStorage.getItem("calmpaw_token");
 
     if (!mainBtn || !bottomBtn) return;
+    if (!token) return; // 未登录就保持购买逻辑
 
-    // ---------- 1）如果刚从 Digistore24 收银台回来：立刻跳到 access ----------
-    const ref = document.referrer || "";
-    const fromCheckout = ref.indexOf(CHECKOUT_DOMAIN) !== -1;
-    if (fromCheckout) {
-      // 不管服务器那边 webhook 是否已经处理完，先直接送用户去内容页
-      window.location.replace(ACCESS_URL + "?from=checkout");
-      return;
-    }
-
-    // ---------- 2）工具函数：把按钮设为 Open / Buy ----------
-    function makeButtonsOpen() {
-      function set(btn, text) {
-        if (!btn) return;
-        btn.removeAttribute("target");
-        btn.href = ACCESS_URL;
-        btn.textContent = text;
+    // ★★ 关键：请求 Worker 的完整地址，带 slug ★★
+    fetch("https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=" + PLAN_KEY, {
+      method: "GET",
+      headers: {
+        "Authorization": "Bearer " + token
       }
-      set(mainBtn,  "Open your 7-day plan →");
-      set(bottomBtn,"Go to your barking plan →");
-    }
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (!data || !data.ok || !data.access) return;
 
-    function makeButtonsBuy() {
-      const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653870";
-      function set(btn, text) {
-        if (!btn) return;
-        btn.removeAttribute("target");
-        btn.href = CHECKOUT_URL;
-        btn.textContent = text;
-      }
-      set(mainBtn,  "Buy this plan – $19 →");
-      set(bottomBtn,"Get the 7-day barking plan – $19 →");
-    }
-
-    // 默认先当成未购买（按钮显示 Buy）
-    makeButtonsBuy();
-
-    // ---------- 3）正常打开页面：查服务器是否已经拥有 ----------
-    if (!token) {
-      // 没登录就不查，保持 Buy 按钮（点击时会被前一个脚本拦截去登录）
-      return;
-    }
-
-    const SLUGS = ["barking", "bundle"];
-    const BASE  = API_BASE + "/auth/check-plan?slug=";
-
-    Promise.all(
-      SLUGS.map(slug =>
-        fetch(BASE + encodeURIComponent(slug), {
-          headers: { "Authorization": "Bearer " + token }
-        })
-          .then(r => r.json())
-          .catch(() => null)
-      )
-    )
-      .then(results => {
-        const hasAccess = results.some(d => d && d.ok && d.access);
-        if (hasAccess) {
-          makeButtonsOpen();
-        } else {
-          makeButtonsBuy();
+        function goAccess(e) {
+          if (e) e.preventDefault();
+          window.location.href = ACCESS_URL;
         }
+
+        mainBtn.textContent = "Open your 7-day plan →";
+        mainBtn.onclick = goAccess;
+
+        bottomBtn.textContent = "Go to your barking plan →";
+        bottomBtn.onclick = goAccess;
       })
       .catch(err => {
-        console.error("check-plan barking/bundle error", err);
+        console.error("check-plan barking error", err);
       });
-  });
+  })();
   </script>
 </body>
 </html>
