@@ -48,7 +48,7 @@
 
     a{text-decoration:none;color:inherit;}
 
-    /* ===== Header（统一样式） ===== */
+    /* ===== Header ===== */
 
     header{
       position:sticky;
@@ -186,7 +186,6 @@
 
     .nav-login-emoji{font-size:14px;}
 
-    /* 登录状态区域 */
     .nav-auth{
       display:flex;
       align-items:center;
@@ -375,7 +374,16 @@
 
     .bullets li{margin-bottom:4px;}
 
-    /* ===== Footer（含法律链接） ===== */
+    .highlight-box{
+      border-radius:18px;
+      background:rgba(255,247,238,0.96);
+      border:1px solid rgba(243,217,196,0.9);
+      padding:12px;
+      font-size:12px;
+      color:#7b5847;
+    }
+
+    /* ===== Footer ===== */
 
     footer{
       border-top:1px solid rgba(243,217,196,0.8);
@@ -446,84 +454,90 @@
   </header>
 
   <main>
-    <section class="hero">
-      <h1 class="hero-title">You’ve unlocked the CalmPaw Complete Pack</h1>
-      <p class="hero-sub">
-        Thank you for purchasing the full bundle. You now have lifetime access
-        to the barking, separation anxiety and leash walking plans. Use the
-        links below to jump straight into the plan you want to start with.
-      </p>
-      <div class="hero-note">
-        Tip: bookmark this page — it’s your central access hub for all three plans.
-      </div>
-    </section>
+    <!-- 顶部状态提示 -->
+    <div id="access-status" class="highlight-box" style="display:none;margin-bottom:16px;"></div>
 
-    <section>
-      <div class="plans-grid">
-        <div class="plan-card">
-          <div class="plan-pill">Step 1 · If noise is urgent</div>
-          <div class="plan-title">Barking Plan · 7 days</div>
-          <div class="plan-desc">
-            Begin here if neighbors, hallway sounds or door barking are your
-            biggest stress. This plan builds a calm corner and quiet routine.
-          </div>
-          <a href="barking-access.html" class="plan-link">
-            Open barking plan <span>→</span>
-          </a>
+    <!-- 真正内容：有 bundle 权限后再展示 -->
+    <div id="paid-content" style="display:none;">
+      <section class="hero">
+        <h1 class="hero-title">You’ve unlocked the CalmPaw Complete Pack</h1>
+        <p class="hero-sub">
+          Thank you for purchasing the full bundle. You now have lifetime access
+          to the barking, separation anxiety and leash walking plans. Use the
+          links below to jump straight into the plan you want to start with.
+        </p>
+        <div class="hero-note">
+          Tip: bookmark this page — it’s your central access hub for all three plans.
         </div>
+      </section>
 
-        <div class="plan-card">
-          <div class="plan-pill">Step 1 · If panic is urgent</div>
-          <div class="plan-title">Separation Anxiety Plan · 14 days</div>
-          <div class="plan-desc">
-            Start here if alone-time panic is the hardest part of your life with
-            your dog. This plan builds safe, tiny absences step by step.
+      <section>
+        <div class="plans-grid">
+          <div class="plan-card">
+            <div class="plan-pill">Step 1 · If noise is urgent</div>
+            <div class="plan-title">Barking Plan · 7 days</div>
+            <div class="plan-desc">
+              Begin here if neighbors, hallway sounds or door barking are your
+              biggest stress. This plan builds a calm corner and quiet routine.
+            </div>
+            <a href="barking-access.html" class="plan-link">
+              Open barking plan <span>→</span>
+            </a>
           </div>
-          <a href="anxiety-access.html" class="plan-link">
-            Open separation plan <span>→</span>
-          </a>
-        </div>
 
-        <div class="plan-card">
-          <div class="plan-pill">Step 1 · If walks are the problem</div>
-          <div class="plan-title">Leash Walking Plan · 10 days</div>
-          <div class="plan-desc">
-            Choose this first if daily walks feel like a battle. This plan
-            focuses on pulling, zig-zagging and over-excitement outside.
+          <div class="plan-card">
+            <div class="plan-pill">Step 1 · If panic is urgent</div>
+            <div class="plan-title">Separation Anxiety Plan · 14 days</div>
+            <div class="plan-desc">
+              Start here if alone-time panic is the hardest part of your life with
+              your dog. This plan builds safe, tiny absences step by step.
+            </div>
+            <a href="anxiety-access.html" class="plan-link">
+              Open separation plan <span>→</span>
+            </a>
           </div>
-          <a href="leash-access.html" class="plan-link">
-            Open leash plan <span>→</span>
-          </a>
+
+          <div class="plan-card">
+            <div class="plan-pill">Step 1 · If walks are the problem</div>
+            <div class="plan-title">Leash Walking Plan · 10 days</div>
+            <div class="plan-desc">
+              Choose this first if daily walks feel like a battle. This plan
+              focuses on pulling, zig-zagging and over-excitement outside.
+            </div>
+            <a href="leash-access.html" class="plan-link">
+              Open leash plan <span>→</span>
+            </a>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section">
-      <h2>How to combine the plans without overwhelm</h2>
-      <p>You do not need to train everything at once. Here are two easy options:</p>
-      <ul class="bullets">
-        <li>
-          <strong>Option A:</strong> Focus on one main plan first (for example,
-          separation), then add short sessions from the others as you feel ready.
-        </li>
-        <li>
-          <strong>Option B:</strong> Use one plan as your “main focus” and do
-          very small, 5-minute sessions from a second plan 2–3 times per week.
-        </li>
-      </ul>
-      <p style="margin-top:6px;">
-        The right order is the one that reduces the most stress for your household
-        right now. There is no “wrong” order.
-      </p>
-    </section>
+      <section class="section">
+        <h2>How to combine the plans without overwhelm</h2>
+        <p>You do not need to train everything at once. Here are two easy options:</p>
+        <ul class="bullets">
+          <li>
+            <strong>Option A:</strong> Focus on one main plan first (for example,
+            separation), then add short sessions from the others as you feel ready.
+          </li>
+          <li>
+            <strong>Option B:</strong> Use one plan as your “main focus” and do
+            very small, 5-minute sessions from a second plan 2–3 times per week.
+          </li>
+        </ul>
+        <p style="margin-top:6px;">
+          The right order is the one that reduces the most stress for your household
+          right now. There is no “wrong” order.
+        </p>
+      </section>
 
-    <section class="section">
-      <h2>Need a reset later?</h2>
-      <p>
-        You can come back to this page any time and re-open any of the three plans.
-        You’re free to repeat plans after moves, life changes or new family members.
-      </p>
-    </section>
+      <section class="section">
+        <h2>Need a reset later?</h2>
+        <p>
+          You can come back to this page any time and re-open any of the three plans.
+          You’re free to repeat plans after moves, life changes or new family members.
+        </p>
+      </section>
+    </div>
   </main>
 
   <footer>
@@ -541,12 +555,11 @@
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
 
-  <!-- 顶部登录状态同步：邮箱 + Switch + Log out -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
+    const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
+
+    // 顶部登录状态
+    function hydrateNavAuth() {
       const area = document.getElementById("nav-auth-area");
       if (!area) return;
 
@@ -608,47 +621,64 @@
           console.error("auth hydrate error", err);
           renderLoggedOut();
         });
-    });
-  </script>
+    }
 
-  <!-- 登录 + 购买校验：必须已登录且拥有 bundle 才能访问 -->
-  <script>
+    document.addEventListener("DOMContentLoaded", hydrateNavAuth);
+
+    // 访问控制：必须登录 + 拥有 bundle
     (function () {
-      const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
       const token = localStorage.getItem("calmpaw_token");
+      const statusBox = document.getElementById("access-status");
+      const paidContent = document.getElementById("paid-content");
+
+      function showStatus(html) {
+        if (!statusBox) return;
+        statusBox.style.display = "block";
+        statusBox.innerHTML = html;
+      }
 
       function goAuth() {
         const redirect = window.location.pathname + window.location.search;
         window.location.href = "/auth.html?redirect=" + encodeURIComponent(redirect);
       }
 
-      // 未登录：去登录页
+      // 未登录
       if (!token) {
+        showStatus("Please log in with the same email you used to purchase the CalmPaw Complete Pack.");
         goAuth();
         return;
       }
 
-      // 已登录：检查是否拥有 bundle
+      showStatus("Checking your bundle access…");
+
       fetch(API_BASE + "/auth/check-plan?slug=bundle", {
         method: "GET",
         headers: { Authorization: "Bearer " + token },
       })
         .then(async (res) => {
           if (!res.ok) {
-            // token 失效等情况 → 清理后重新登录
             localStorage.removeItem("calmpaw_token");
             localStorage.removeItem("calmpaw_email");
+            showStatus("Session expired. Please log in again to view your bundle.");
             goAuth();
             return;
           }
           const data = await res.json();
-          if (!data.ok || !data.access) {
-            // 登录但没买 bundle → 回到 bundle 介绍页
-            window.location.href = "/bundle.html";
+
+          if (data.ok && data.access) {
+            if (paidContent) paidContent.style.display = "block";
+            showStatus("Access confirmed ✅ You can use this page as your permanent hub for all three plans.");
+          } else {
+            if (paidContent) paidContent.style.display = "none";
+            showStatus(
+              "We can't find the Complete Pack on this account yet.<br>" +
+              "If you just paid via Digistore24, it can take up to 1–2 minutes for access to sync. " +
+              "Please refresh this page shortly. If it still stays locked, contact support with your payment email."
+            );
           }
         })
         .catch(() => {
-          goAuth();
+          showStatus("Server error. Please refresh this page or try again later.");
         });
     })();
   </script>
