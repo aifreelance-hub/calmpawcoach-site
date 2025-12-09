@@ -250,12 +250,11 @@
           <span>⏱ Daily time: 10–20 minutes</span>
         </div>
         <div class="hero-cta">
-          <!-- 购买按钮：默认 Digistore 链接，之后由脚本接管点击逻辑 -->
+          <!-- 购买按钮：默认 Digistore 链接，之后由脚本接管 -->
           <a
             id="cta-main-anxiety"
             class="btn-primary"
             href="https://www.checkout-ds24.com/product/653885"
-            target="_blank"
           >
             Buy this plan – $29 →
           </a>
@@ -334,7 +333,6 @@
           id="cta-bottom-anxiety"
           class="btn-primary"
           href="https://www.checkout-ds24.com/product/653885"
-          target="_blank"
         >
           Get the 14-day separation plan – $29 →
         </a>
@@ -356,6 +354,7 @@
     </div>
   </footer>
 
+  <!-- 年份 -->
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
@@ -407,7 +406,7 @@
   })();
   </script>
 
-  <!-- 购买逻辑：未登录先去登录，登录后同一窗口打开 Digistore24 -->
+  <!-- 点击按钮：未登录先去登录，登录后跳 Digistore24 -->
   <script>
   document.addEventListener("DOMContentLoaded", function () {
     const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653885";
@@ -419,7 +418,7 @@
       btn.addEventListener("click", function (e) {
         const href = btn.getAttribute("href") || "";
 
-        // 如果已经变成 anxiety-access.html（已购买状态），直接走默认跳转
+        // 如果已经是访问页（已购买状态），让浏览器默认跳转
         if (href.indexOf("anxiety-access.html") !== -1) {
           return;
         }
@@ -434,7 +433,9 @@
           return;
         }
 
-        // 已登录：同一窗口跳到 Digistore24
+        // 已登录：跳到 Digistore24
+        // Digistore24 成功后的“下载 / 感谢页面 URL”请设置为：
+        // https://calmpawcoach.com/program-anxiety.html?justBought=anxiety
         e.preventDefault();
         window.location.href = CHECKOUT_URL;
       });
@@ -445,23 +446,22 @@
   });
   </script>
 
-  <!-- 已经拥有 anxiety 或 bundle 的用户：按钮变成“Open your plan”，从结算回来时立即自动跳转 -->
-<script>
+  <!-- 像 AI 一样：立即识别“已拥有”，买完立刻跳到 access -->
+  <script>
   document.addEventListener("DOMContentLoaded", function () {
+    const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
     const ACCESS_URL = "/anxiety-access.html";
+    const STORAGE_KEY = "cp_anxiety_owned";
+
     const mainBtn = document.getElementById("cta-main-anxiety");
     const bottomBtn = document.getElementById("cta-bottom-anxiety");
     const token = localStorage.getItem("calmpaw_token");
     if (!mainBtn || !bottomBtn) return;
-    if (!token) return;
-
-    const BASE = "https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=";
-    const SLUGS = ["anxiety", "bundle"];
 
     const url = new URL(window.location.href);
-    const fromCheckout = url.searchParams.get("from") === "checkout";
+    const justBought = url.searchParams.get("justBought");
 
-    function turnButtonsToOpen() {
+    function makeButtonsOpen() {
       function makeOpen(btn, text) {
         if (!btn) return;
         btn.removeAttribute("target");
@@ -472,7 +472,23 @@
       makeOpen(bottomBtn, "Go to your separation plan →");
     }
 
-    function checkAndMaybeRedirect(allowRedirect) {
+    function makeButtonsBuy() {
+      const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653885";
+      function makeBuy(btn, text) {
+        if (!btn) return;
+        btn.href = CHECKOUT_URL;
+        btn.textContent = text;
+      }
+      makeBuy(mainBtn, "Buy this plan – $29 →");
+      makeBuy(bottomBtn, "Get the 14-day separation plan – $29 →");
+    }
+
+    // 后台校验 anxiety 或 bundle 任一拥有即可
+    function verifyWithServer() {
+      if (!token) return;
+      const SLUGS = ["anxiety", "bundle"];
+      const BASE = API_BASE + "/auth/check-plan?slug=";
+
       Promise.all(
         SLUGS.map(slug =>
           fetch(BASE + encodeURIComponent(slug), {
@@ -483,12 +499,13 @@
         )
       )
         .then(results => {
-          const hasAccess = results.some(data => data && data.ok && data.access);
-          if (!hasAccess) return;
-
-          turnButtonsToOpen();
-          if (allowRedirect) {
-            window.location.replace(ACCESS_URL);
+          const hasAccess = results.some(d => d && d.ok && d.access);
+          if (hasAccess) {
+            localStorage.setItem(STORAGE_KEY, "1");
+            makeButtonsOpen();
+          } else {
+            localStorage.removeItem(STORAGE_KEY);
+            makeButtonsBuy();
           }
         })
         .catch(err => {
@@ -496,11 +513,41 @@
         });
     }
 
-    checkAndMaybeRedirect(false);
-    if (fromCheckout) {
-      checkAndMaybeRedirect(true);
+    // 1）刚从 Digistore24 回来：?justBought=anxiety
+    if (token && justBought === "anxiety") {
+      // 乐观：立刻当作已购买
+      localStorage.setItem(STORAGE_KEY, "1");
+      makeButtonsOpen();
+
+      // 直接送去 access 页面，体验类似 AI 订阅页
+      setTimeout(() => {
+        window.location.replace(ACCESS_URL);
+      }, 400);
+
+      // 后台再校验一次，不影响体验
+      verifyWithServer();
+      return;
+    }
+
+    // 2）正常打开页面
+    if (token) {
+      try {
+        const flag = localStorage.getItem(STORAGE_KEY);
+        if (flag === "1") {
+          makeButtonsOpen();
+          verifyWithServer();
+        } else {
+          makeButtonsBuy();
+          verifyWithServer();
+        }
+      } catch (e) {
+        console.error(e);
+        verifyWithServer();
+      }
+    } else {
+      makeButtonsBuy();
     }
   });
-</script>
+  </script>
 </body>
 </html>
