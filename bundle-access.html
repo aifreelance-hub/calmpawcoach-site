@@ -383,6 +383,37 @@
       color:#7b5847;
     }
 
+    /* 访问状态：小菊花 + 成功 / 错误样式 */
+    .access-status-row{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+    }
+    .access-spinner{
+      width:16px;
+      height:16px;
+      border-radius:999px;
+      border:2px solid rgba(255,184,107,0.3);
+      border-top-color:#ff914d;
+      animation:access-spin .8s linear infinite;
+      flex-shrink:0;
+      margin-top:2px;
+    }
+    @keyframes access-spin{
+      from{transform:rotate(0deg);}
+      to{transform:rotate(360deg);}
+    }
+    .access-status-ok{
+      background:rgba(209,250,229,0.96);
+      border-color:rgba(52,211,153,0.7);
+      color:#047857;
+    }
+    .access-status-error{
+      background:rgba(254,242,242,0.96);
+      border-color:rgba(248,113,113,0.7);
+      color:#b91c1c;
+    }
+
     /* ===== Footer ===== */
 
     footer{
@@ -625,16 +656,93 @@
 
     document.addEventListener("DOMContentLoaded", hydrateNavAuth);
 
-    // 访问控制：必须登录 + 拥有 bundle
+    // 访问控制：登录 + 拥有 bundle；带订单参数时轮询
     (function () {
       const token = localStorage.getItem("calmpaw_token");
       const statusBox = document.getElementById("access-status");
       const paidContent = document.getElementById("paid-content");
 
-      function showStatus(html) {
+      const search = window.location.search || "";
+      const hasOrderParams = /order_id=|transaction_id=/.test(search);
+      const POLL_INTERVAL = 3000;
+      const MAX_ATTEMPTS_AFTER_ORDER = 40; // ≈ 2 分钟
+      const MAX_ATTEMPTS_NORMAL = 1;
+
+      function ensureShown() {
         if (!statusBox) return;
         statusBox.style.display = "block";
-        statusBox.innerHTML = html;
+      }
+
+      function renderLoading() {
+        if (!statusBox) return;
+        ensureShown();
+        statusBox.classList.remove("access-status-ok","access-status-error");
+        statusBox.innerHTML = `
+          <div class="access-status-row">
+            <div class="access-spinner"></div>
+            <div>
+              Checking your bundle access…<br>
+              ${hasOrderParams
+                ? "We’re syncing your Digistore24 purchase. This can take up to 1–2 minutes. Please keep this page open."
+                : "Please wait a moment."}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderOk() {
+        if (!statusBox) return;
+        ensureShown();
+        statusBox.classList.remove("access-status-error");
+        statusBox.classList.add("access-status-ok");
+        statusBox.innerHTML = `
+          <div class="access-status-row">
+            <div>✅ Access confirmed. You can use this page as your permanent hub for all three plans.</div>
+          </div>
+        `;
+      }
+
+      function renderNoAccessFinal() {
+        if (!statusBox) return;
+        ensureShown();
+        statusBox.classList.remove("access-status-ok");
+        statusBox.classList.add("access-status-error");
+        statusBox.innerHTML = `
+          <div class="access-status-row">
+            <div>
+              We can't find the Complete Pack on this account yet.<br>
+              ${
+                hasOrderParams
+                  ? "If you just paid via Digistore24 and this page is still locked after a couple of minutes, please contact support with your payment email."
+                  : "If you haven’t purchased the bundle yet, please go back to the product page and buy it with the same email you use to log in."
+              }
+            </div>
+          </div>
+        `;
+      }
+
+      function renderServerError() {
+        if (!statusBox) return;
+        ensureShown();
+        statusBox.classList.remove("access-status-ok");
+        statusBox.classList.add("access-status-error");
+        statusBox.innerHTML = `
+          <div class="access-status-row">
+            <div>Server error. Please refresh this page or try again later.</div>
+          </div>
+        `;
+      }
+
+      function renderNeedLogin() {
+        if (!statusBox) return;
+        ensureShown();
+        statusBox.classList.remove("access-status-ok");
+        statusBox.classList.add("access-status-error");
+        statusBox.innerHTML = `
+          <div class="access-status-row">
+            <div>Please log in with the same email you used to purchase the CalmPaw Complete Pack.</div>
+          </div>
+        `;
       }
 
       function goAuth() {
@@ -642,44 +750,73 @@
         window.location.href = "/auth.html?redirect=" + encodeURIComponent(redirect);
       }
 
-      // 未登录
       if (!token) {
-        showStatus("Please log in with the same email you used to purchase the CalmPaw Complete Pack.");
+        renderNeedLogin();
         goAuth();
         return;
       }
 
-      showStatus("Checking your bundle access…");
+      let attempts = 0;
+      const maxAttempts = hasOrderParams ? MAX_ATTEMPTS_AFTER_ORDER : MAX_ATTEMPTS_NORMAL;
 
-      fetch(API_BASE + "/auth/check-plan?slug=bundle", {
-        method: "GET",
-        headers: { Authorization: "Bearer " + token },
-      })
-        .then(async (res) => {
-          if (!res.ok) {
-            localStorage.removeItem("calmpaw_token");
-            localStorage.removeItem("calmpaw_email");
-            showStatus("Session expired. Please log in again to view your bundle.");
-            goAuth();
-            return;
-          }
-          const data = await res.json();
+      function handleSuccessAccess() {
+        if (paidContent) paidContent.style.display = "block";
+        renderOk();
 
-          if (data.ok && data.access) {
-            if (paidContent) paidContent.style.display = "block";
-            showStatus("Access confirmed ✅ You can use this page as your permanent hub for all three plans.");
-          } else {
-            if (paidContent) paidContent.style.display = "none";
-            showStatus(
-              "We can't find the Complete Pack on this account yet.<br>" +
-              "If you just paid via Digistore24, it can take up to 1–2 minutes for access to sync. " +
-              "Please refresh this page shortly. If it still stays locked, contact support with your payment email."
-            );
+        // 清理 URL 里的订单参数
+        if (hasOrderParams) {
+          const cleanUrl = window.location.pathname;
+          if (cleanUrl) {
+            window.history.replaceState(null, "", cleanUrl);
           }
+        }
+      }
+
+      function poll() {
+        if (attempts >= maxAttempts) {
+          renderNoAccessFinal();
+          return;
+        }
+        attempts++;
+        if (attempts === 1) {
+          renderLoading();
+        }
+
+        fetch(API_BASE + "/auth/check-plan?slug=bundle", {
+          method: "GET",
+          headers: { Authorization: "Bearer " + token },
         })
-        .catch(() => {
-          showStatus("Server error. Please refresh this page or try again later.");
-        });
+          .then(res => res.json().then(data => ({ ok: res.ok, data })))
+          .then(({ ok, data }) => {
+            if (!ok) {
+              localStorage.removeItem("calmpaw_token");
+              localStorage.removeItem("calmpaw_email");
+              renderNeedLogin();
+              goAuth();
+              return;
+            }
+
+            if (data && data.ok && data.access) {
+              handleSuccessAccess();
+              return;
+            }
+
+            if (attempts >= maxAttempts || !hasOrderParams) {
+              renderNoAccessFinal();
+            } else {
+              setTimeout(poll, POLL_INTERVAL);
+            }
+          })
+          .catch(() => {
+            if (hasOrderParams && attempts < maxAttempts) {
+              setTimeout(poll, POLL_INTERVAL);
+            } else {
+              renderServerError();
+            }
+          });
+      }
+
+      poll();
     })();
   </script>
 </body>
