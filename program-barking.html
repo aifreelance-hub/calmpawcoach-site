@@ -446,61 +446,72 @@
     });
   </script>
 
-  <!-- 已拥有 barking 或 bundle：
-       1）正常进入时：按钮改成 Open
-       2）从结算回来（?from=checkout）：直接跳转到 barking-access.html -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const ACCESS_URL = "/barking-access.html";
-      const mainBtn = document.getElementById("cta-main-barking");
-      const bottomBtn = document.getElementById("cta-bottom-barking");
-      const token = localStorage.getItem("calmpaw_token");
-      if (!mainBtn || !bottomBtn) return;
-      if (!token) return;
+  <!-- 已拥有 barking 或 bundle：按钮变 Open，刚买完立刻跳 barking-access -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const ACCESS_URL = "/barking-access.html";
+  const mainBtn = document.getElementById("cta-main-barking");
+  const bottomBtn = document.getElementById("cta-bottom-barking");
+  const token = localStorage.getItem("calmpaw_token");
+  if (!mainBtn || !bottomBtn) return;
+  if (!token) return;
 
-      const BASE = "https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=";
-      const SLUGS = ["barking", "bundle"];
+  const BASE = "https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=";
+  const SLUGS = ["barking", "bundle"];
 
-      const url = new URL(window.location.href);
-      const fromCheckout = url.searchParams.get("from") === "checkout";
+  const url = new URL(window.location.href);
+  const qs = url.searchParams;
+  const justBought = qs.get("justBought");        // ?justBought=barking
+  const fromFlag   = qs.get("from");              // 或 ?from=checkout
+  const boughtNow  = (justBought === "barking") || (fromFlag === "checkout");
 
-      function makeButtonsOpen() {
-        function makeOpen(btn, text) {
-          if (!btn) return;
-          btn.removeAttribute("target");
-          btn.href = ACCESS_URL;
-          btn.textContent = text;
+  function turnButtonsToOpen() {
+    function makeOpen(btn, text) {
+      if (!btn) return;
+      btn.removeAttribute("target");
+      btn.href = ACCESS_URL;
+      btn.textContent = text;
+    }
+    makeOpen(mainBtn, "Open your 7-day plan →");
+    makeOpen(bottomBtn, "Go to your barking plan →");
+  }
+
+  function verifyAndMaybeRedirect(allowRedirect) {
+    Promise.all(
+      SLUGS.map(slug =>
+        fetch(BASE + encodeURIComponent(slug), {
+          headers: { "Authorization": "Bearer " + token }
+        })
+          .then(r => r.json())
+          .catch(() => null)
+      )
+    )
+      .then(results => {
+        const hasAccess = results.some(d => d && d.ok && d.access);
+        if (!hasAccess) return;
+
+        turnButtonsToOpen();
+
+        if (allowRedirect) {
+          window.location.replace(ACCESS_URL + "?from=checkout");
         }
-        makeOpen(mainBtn, "Open your 7-day plan →");
-        makeOpen(bottomBtn, "Go to your barking plan →");
-      }
+      })
+      .catch(err => {
+        console.error("check-plan barking/bundle error", err);
+      });
+  }
 
-      function checkAccessOnce() {
-        return Promise.all(
-          SLUGS.map(slug =>
-            fetch(BASE + encodeURIComponent(slug), {
-              headers: { "Authorization": "Bearer " + token }
-            })
-              .then(r => (r.ok ? r.json() : null))
-              .catch(() => null)
-          )
-        ).then(results => {
-          const hasAccess = results.some(data => data && data.ok && data.access);
-          if (hasAccess) {
-            makeButtonsOpen();
-          }
-          return hasAccess;
-        });
-      }
+  // 正常打开：查一次
+  verifyAndMaybeRedirect(false);
 
-      // 普通打开页面：查一次，有权限就把按钮变成 Open
-      checkAccessOnce();
-
-      // 从 Digistore24 结算回来：立刻进 access 页面，在 access 里再做轮询
-      if (fromCheckout) {
-        window.location.replace(ACCESS_URL + "?from=checkout");
-      }
-    });
-  </script>
+  // 刚买完：from=checkout 或 justBought=barking
+  if (boughtNow && token) {
+    turnButtonsToOpen();
+    setTimeout(() => {
+      window.location.replace(ACCESS_URL + "?from=checkout");
+    }, 400);
+  }
+});
+</script>
 </body>
 </html>
