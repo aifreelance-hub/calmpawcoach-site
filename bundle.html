@@ -48,7 +48,7 @@
 
     a{text-decoration:none;color:inherit;}
 
-    /* ===== Header（统一样式） ===== */
+    /* ===== Header ===== */
 
     header{
       position:sticky;
@@ -214,7 +214,7 @@
 
     .nav-login-emoji{font-size:14px;}
 
-    /* 登录状态区域（统一） */
+    /* 登录状态区域 */
     .nav-auth{
       display:flex;
       align-items:center;
@@ -473,7 +473,7 @@
       color:#7b5847;
     }
 
-    /* ===== Footer（含法律链接） ===== */
+    /* ===== Footer ===== */
 
     footer{
       border-top:1px solid rgba(243,217,196,0.8);
@@ -524,7 +524,7 @@
     }
   </style>
 
-  <!-- Paddle（保留，但用 0 防止报错；现在实际支付走 Digistore24） -->
+  <!-- Paddle 占位（现在支付走 Digistore24） -->
   <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
   <script>
     Paddle.Setup({ vendor: 0 });
@@ -557,7 +557,7 @@
           </a>
         </div>
 
-        <!-- 顶部购买按钮：默认是 Digistore 链接，已购买后脚本会改成“Open” -->
+        <!-- 顶部按钮：已购买后脚本会改成“Open” -->
         <a id="bundle-btn-top"
            class="btn-primary"
            href="https://www.checkout-ds24.com/product/653891"
@@ -589,7 +589,7 @@
         </div>
 
         <div class="hero-cta">
-          <!-- 第二个购买按钮 -->
+          <!-- 第二个按钮 -->
           <a id="bundle-btn-hero"
              class="btn-primary"
              href="https://www.checkout-ds24.com/product/653891"
@@ -703,7 +703,7 @@
       </p>
 
       <div style="margin-top:10px;">
-        <!-- 第三个购买按钮 -->
+        <!-- 第三个按钮 -->
         <a id="bundle-btn-bottom"
            class="btn-primary"
            href="https://www.checkout-ds24.com/product/653891"
@@ -802,32 +802,15 @@
     });
   </script>
 
-  <!-- 原始 buyBundle 函数（现在不用了，可以保留） -->
-  <script>
-    function buyBundle() {
-      const token = localStorage.getItem("calmpaw_token");
-      const redirect = window.location.pathname + window.location.search;
-
-      if (!token) {
-        window.location.href = "/auth.html?redirect=" + encodeURIComponent(redirect);
-        return;
-      }
-
-      Paddle.Checkout.open({
-        product: PRODUCT_ID_BUNDLE,
-        success: "https://calmpawcoach.com/bundle-access.html"
-      });
-    }
-  </script>
-
-  <!-- ✅ 检查是否已拥有 bundle：改按钮 + 购买后自动轮询并跳转 -->
+  <!-- ✅ 新：bundle 访问逻辑（像 AI 一样） -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
-      const ACCESS_URL = "/bundle-access.html";
-      const token = localStorage.getItem("calmpaw_token");
-      if (!token) return;
+      const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653891";
+      const ACCESS_URL = "/bundle-access.html"; // 你 bundle 内容页的地址
+      const STORAGE_KEY = "cp_bundle_owned";
 
+      const token = localStorage.getItem("calmpaw_token");
       const btnIds = ["bundle-btn-top", "bundle-btn-hero", "bundle-btn-bottom"];
 
       function turnButtonsToOpen() {
@@ -840,50 +823,77 @@
         });
       }
 
-      function checkAndMaybeRedirect(allowRedirect) {
-        return fetch(API_BASE + "/auth/check-plan?slug=bundle", {
+      function turnButtonsToBuy() {
+        btnIds.forEach(id => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          el.target = "";
+          el.href = CHECKOUT_URL;
+          el.textContent = "Get the CalmPaw Complete Pack – $49 →";
+        });
+      }
+
+      // 后台校验：用于正常打开时确认是否真的已拥有
+      function verifyWithServer() {
+        if (!token) return;
+        fetch(API_BASE + "/auth/check-plan?slug=bundle", {
           headers: { "Authorization": "Bearer " + token }
         })
           .then(res => res.json())
           .then(data => {
-            console.log("check-plan bundle:", data);
-            if (!data || !data.ok || !data.access) return false;
-
-            turnButtonsToOpen();
-
-            if (allowRedirect) {
-              window.location.replace(ACCESS_URL);
+            if (data && data.ok && data.access) {
+              localStorage.setItem(STORAGE_KEY, "1");
+              turnButtonsToOpen();
+            } else {
+              localStorage.removeItem(STORAGE_KEY);
+              turnButtonsToBuy();
             }
-            return true;
           })
           .catch(err => {
             console.error("check-plan bundle error", err);
-            return false;
           });
       }
 
-      // 1）普通打开页面：只把按钮变成 Open，不自动跳转
-      checkAndMaybeRedirect(false);
-
-      // 2）如果是 Digistore24 支付成功后回跳 ?fromCheckout=1，则轮询 3s * 6 次，成功就自动跳转
+      // 1）刚从 Digistore24 支付成功回来：?justBought=bundle
       const url = new URL(window.location.href);
-      const fromCheckout = url.searchParams.get("fromCheckout") === "1";
+      const justBought = url.searchParams.get("justBought");
+      if (token && justBought === "bundle") {
+        // 乐观：立刻认为已购买
+        localStorage.setItem(STORAGE_KEY, "1");
+        turnButtonsToOpen();
+        // 直接送到 access 页面，体验最接近“AI 已激活”
+        setTimeout(() => {
+          window.location.replace(ACCESS_URL);
+        }, 400);
+        // 后台再悄悄校验，不影响体验
+        verifyWithServer();
+        return;
+      }
 
-      if (fromCheckout) {
-        let tries = 0;
-        const timer = setInterval(() => {
-          tries++;
-          checkAndMaybeRedirect(true).then(done => {
-            if (done || tries > 6) {
-              clearInterval(timer);
-            }
-          });
-        }, 3000); // 最多等 ~18 秒
+      // 2）正常打开页面：
+      if (token) {
+        // 如果本地记得买过，就先显示 Open，后台再查一遍
+        try {
+          const flag = localStorage.getItem(STORAGE_KEY);
+          if (flag === "1") {
+            turnButtonsToOpen();
+            verifyWithServer();
+          } else {
+            turnButtonsToBuy();
+            verifyWithServer();
+          }
+        } catch (e) {
+          console.error(e);
+          verifyWithServer();
+        }
+      } else {
+        // 未登录：维持购买按钮，后面点击事件里会先引导去登录
+        turnButtonsToBuy();
       }
     });
   </script>
 
-  <!-- 没登录点购买先去登录；登录后用同一窗口打开 Digistore24（保持回跳） -->
+  <!-- 点击按钮逻辑：没登录先去登录；登录后去 Digistore24，下单成功后回到 ?justBought=bundle -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653891";
@@ -895,7 +905,7 @@
         btn.addEventListener("click", function (e) {
           const href = btn.getAttribute("href") || "";
 
-          // 已经变成 bundle-access.html（已购买状态），直接走默认跳转
+          // 已经变成 bundle-access.html（已购买状态），让浏览器按默认行为打开
           if (href.indexOf("bundle-access.html") !== -1) {
             return;
           }
@@ -910,7 +920,9 @@
             return;
           }
 
-          // 已登录：用同一窗口跳到 Digistore24，让它负责支付后回跳
+          // 已登录：同窗口跳到 Digistore24
+          // 请在 Digistore24 产品设置里的“下载/感谢页面 URL”填：
+          // https://calmpawcoach.com/bundle.html?justBought=bundle
           e.preventDefault();
           window.location.href = CHECKOUT_URL;
         });
