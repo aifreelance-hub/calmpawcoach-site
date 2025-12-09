@@ -48,7 +48,7 @@
 
     a{text-decoration:none;color:inherit;}
 
-    /* ===== Header ===== */
+    /* ===== Header（统一样式） ===== */
 
     header{
       position:sticky;
@@ -214,7 +214,7 @@
 
     .nav-login-emoji{font-size:14px;}
 
-    /* 登录状态区域 */
+    /* 登录状态区域（统一） */
     .nav-auth{
       display:flex;
       align-items:center;
@@ -319,21 +319,9 @@
     .hero-sub{
       font-size:13px;
       color:var(--text-soft);
-      margin-bottom:10px;
+      margin-bottom:12px;
       max-width:520px;
       line-height:1.6;
-    }
-
-    .hero-digital{
-      font-size:12px;
-      color:#9a6b4e;
-      margin-bottom:10px;
-      padding:6px 10px;
-      border-radius:var(--radius-pill);
-      background:rgba(255,249,242,0.9);
-      display:inline-block;
-      max-width:520px;
-      line-height:1.5;
     }
 
     .hero-meta{
@@ -473,7 +461,7 @@
       color:#7b5847;
     }
 
-    /* ===== Footer ===== */
+    /* ===== Footer（含法律链接） ===== */
 
     footer{
       border-top:1px solid rgba(243,217,196,0.8);
@@ -503,13 +491,6 @@
       color:#b05825;
     }
 
-    .footer-note{
-      width:100%;
-      margin-top:6px;
-      font-size:11px;
-      color:#9a6b4e;
-    }
-
     @media(max-width:640px){
       .footer-inner{
         padding:10px 14px 14px;
@@ -518,13 +499,10 @@
       .footer-links{
         gap:10px;
       }
-      .footer-note{
-        font-size:10px;
-      }
     }
   </style>
 
-  <!-- Paddle 占位（现在支付走 Digistore24） -->
+  <!-- Paddle（保留，但用 0 防止报错；现在实际支付走 Digistore24） -->
   <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
   <script>
     Paddle.Setup({ vendor: 0 });
@@ -557,7 +535,7 @@
           </a>
         </div>
 
-        <!-- 顶部按钮：已购买后脚本会改成“Open” -->
+        <!-- 顶部购买按钮：默认是 Digistore 链接，已购买后脚本会改成“Open” -->
         <a id="bundle-btn-top"
            class="btn-primary"
            href="https://www.checkout-ds24.com/product/653891"
@@ -577,11 +555,6 @@
           One gentle, realistic training pack for the three biggest problems:
           barking at home, panic when alone and stressful leash walks.
         </p>
-        <p class="hero-digital">
-          This is a <strong>digital training bundle</strong>. There is no physical shipment —
-          all three plans are accessed online after a secure payment via Digistore24,
-          and you keep lifetime access to the content.
-        </p>
         <div class="hero-meta">
           <span>🔕 Barking · 7-day plan</span>
           <span>🏡 Separation anxiety · 14-day plan</span>
@@ -589,7 +562,7 @@
         </div>
 
         <div class="hero-cta">
-          <!-- 第二个按钮 -->
+          <!-- 第二个购买按钮 -->
           <a id="bundle-btn-hero"
              class="btn-primary"
              href="https://www.checkout-ds24.com/product/653891"
@@ -703,7 +676,7 @@
       </p>
 
       <div style="margin-top:10px;">
-        <!-- 第三个按钮 -->
+        <!-- 第三个购买按钮 -->
         <a id="bundle-btn-bottom"
            class="btn-primary"
            href="https://www.checkout-ds24.com/product/653891"
@@ -723,9 +696,6 @@
         <a href="privacy.html">Privacy policy</a>
         <a href="legal.html">Legal / Imprint</a>
         <a href="contact.html">Contact</a>
-      </div>
-      <div class="footer-note">
-        The debit is made by Digistore24. The withdrawal from your account will be done by Digistore24.
       </div>
     </div>
   </footer>
@@ -802,78 +772,58 @@
     });
   </script>
 
-  <!-- ✅ bundle 访问逻辑：识别已拥有 + 结算回来直接跳转 access -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const API_BASE   = "https://calmpaw-auth.sophieinbg.workers.dev";
-  const ACCESS_URL = "/bundle-access.html";
-  const token      = localStorage.getItem("calmpaw_token");
-  const btnIds     = ["bundle-btn-top", "bundle-btn-hero", "bundle-btn-bottom"];
+  <!-- 原始 buyBundle 函数（现在不用了，可以保留） -->
+  <script>
+    function buyBundle() {
+      const token = localStorage.getItem("calmpaw_token");
+      const redirect = window.location.pathname + window.location.search;
 
-  function turnButtonsToOpen() {
-    btnIds.forEach(id => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.removeAttribute("target");
-      el.href = ACCESS_URL;
-      el.textContent = "Open your Complete Pack →";
-    });
-  }
+      if (!token) {
+        window.location.href = "/auth.html?redirect=" + encodeURIComponent(redirect);
+        return;
+      }
 
-  function turnButtonsToBuy() {
-    const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653891";
-    btnIds.forEach(id => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.removeAttribute("target");
-      el.href = CHECKOUT_URL;
-      el.textContent = "Get the CalmPaw Complete Pack – $49 →";
-    });
-  }
-
-  function verifyAndMaybeRedirect(allowRedirect) {
-    if (!token) return;
-    fetch(API_BASE + "/auth/check-plan?slug=bundle", {
-      headers: { "Authorization": "Bearer " + token }
-    })
-      .then(res => (res.ok ? res.json() : null))
-      .then(data => {
-        if (data && data.ok && data.access) {
-          turnButtonsToOpen();
-          if (allowRedirect) {
-            window.location.replace(ACCESS_URL + "?from=checkout");
-          }
-        } else {
-          turnButtonsToBuy();
-        }
-      })
-      .catch(err => {
-        console.error("check-plan bundle error", err);
+      Paddle.Checkout.open({
+        product: PRODUCT_ID_BUNDLE,
+        success: "https://calmpawcoach.com/bundle-access.html"
       });
-  }
+    }
+  </script>
 
-  const url = new URL(window.location.href);
-  const qs  = url.searchParams;
-  const justBought = qs.get("justBought");       // ?justBought=bundle
-  const fromFlag   = qs.get("from");             // 或 ?from=checkout
-  const boughtNow  = (justBought === "bundle") || (fromFlag === "checkout");
+  <!-- 新：根据 /auth/check-plan 返回的 access=true 自动把按钮变成“Open your plan” -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
+      const token = localStorage.getItem("calmpaw_token");
+      if (!token) return;
 
-  if (token) {
-    // 正常打开：查一次是否已拥有
-    verifyAndMaybeRedirect(false);
-  } else {
-    turnButtonsToBuy();
-  }
+      fetch(API_BASE + "/auth/check-plan?slug=bundle", {
+        headers: { "Authorization": "Bearer " + token }
+      })
+        .then(res => res.json())
+        .then(data => {
+          console.log("check-plan bundle:", data);
+          if (!data || !data.ok || !data.access) return;
 
-  // 刚买完：直接送去 access
-  if (token && boughtNow) {
-    turnButtonsToOpen();
-    setTimeout(() => {
-      window.location.replace(ACCESS_URL + "?from=checkout");
-    }, 400);
-  }
-});
-</script>
+          const accessUrl = "/bundle-access.html";
+
+          function makeOpenButton(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.removeAttribute("target");
+            el.href = accessUrl;
+            el.textContent = "Open your Complete Pack →";
+          }
+
+          makeOpenButton("bundle-btn-top");
+          makeOpenButton("bundle-btn-hero");
+          makeOpenButton("bundle-btn-bottom");
+        })
+        .catch(err => {
+          console.error("check-plan bundle error", err);
+        });
+    });
+  </script>
 
 </body>
 </html>
