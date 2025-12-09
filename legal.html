@@ -23,8 +23,8 @@
       min-height:100vh;
       padding:32px 16px;
       display:flex;
+      flex-direction:column;
       align-items:center;
-      justify-content:center;
     }
     .shell{
       width:100%;
@@ -34,6 +34,7 @@
       box-shadow:0 24px 60px rgba(210,145,110,0.32);
       padding:32px 28px 28px;
       border:1px solid var(--border-soft);
+      margin-top:20px;
     }
     h1{
       font-size:26px;
@@ -65,11 +66,47 @@
       color:var(--text-soft);
       margin-bottom:18px;
     }
-    .muted{font-size:12px;color:var(--text-soft);margin-top:24px;}
+    .muted{
+      font-size:12px;
+      color:var(--text-soft);
+      margin-top:24px;
+    }
     a{color:var(--accent-strong);text-decoration:none;}
+    
+    /* NAV BAR */
+    nav {
+      width:100%;
+      max-width:1000px;
+      padding:16px 20px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+      margin-bottom:10px;
+    }
+    nav a {
+      text-decoration:none;
+      color:#3b2824;
+      font-size:16px;
+    }
+    nav .right a {
+      margin-left:20px;
+      font-size:14px;
+    }
   </style>
 </head>
 <body>
+
+  <!-- 🔥 NAVIGATION BAR -->
+  <nav>
+    <a href="/" style="font-size:20px; font-weight:700;">CalmPaw Coach</a>
+    <div class="right">
+      <a href="/">Home</a>
+      <a href="/legal" style="color:#ff914d;">Legal</a>
+    </div>
+  </nav>
+
+  <!-- 🔥 MAIN CONTENT -->
   <main class="shell">
     <div class="pill">Legal information</div>
     <h1>Legal Notice — CalmPaw Coach</h1>
@@ -100,40 +137,19 @@
     <h2>Nature of the Products</h2>
     <p>
       CalmPaw Coach provides digital dog-training products, including structured online training plans
-      and AI-powered dog training support. All products are delivered digitally; no physical goods are shipped.
+      and AI-powered dog-training support. All products are delivered digitally; no physical goods are shipped.
     </p>
 
     <h2>Refund & Guarantee</h2>
     <p>
-      The maximum refund period for products sold through Digistore24 is limited to 60 days, in compliance with
-      Digistore24's refund policy. Refund requests beyond this timeframe cannot be processed.
+      The maximum refund period for products sold through Digistore24 is limited to 60 days, in compliance with Digistore24's refund policy. Refund requests beyond this timeframe cannot be processed.
     </p>
 
     <p class="muted">
-      If you have any questions about this legal notice, please contact us via
+      If you have any questions about this legal notice, please contact us via 
       <a href="mailto:support@aurumdesks.com">support@aurumdesks.com</a>.
     </p>
   </main>
+
 </body>
-  <body>
-  <nav style="
-    width:100%; 
-    max-width:1000px; 
-    margin:0 auto 20px auto; 
-    padding:16px 20px; 
-    display:flex; 
-    justify-content:space-between; 
-    align-items:center;
-    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-  ">
-    <a href="/" style="font-size:20px; font-weight:700; color:#3b2824; text-decoration:none;">
-      CalmPaw Coach
-    </a>
-
-    <div style="display:flex; gap:20px; font-size:14px;">
-      <a href="/" style="color:#3b2824; text-decoration:none;">Home</a>
-      <a href="/legal" style="color:#ff914d; text-decoration:none;">Legal</a>
-    </div>
-  </nav>
-
 </html>
