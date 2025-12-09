@@ -150,19 +150,6 @@
     .hero-meta span{margin-right:10px;}
     .hero-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:8px;}
     .hero-note{font-size:11px;color:var(--text-soft);}
-
-    .delivery-note{
-      font-size:11px;
-      color:#2f647b;
-      line-height:1.6;
-      margin-top:8px;
-      margin-bottom:4px;
-      max-width:540px;
-    }
-    .delivery-note strong{
-      color:#21465a;
-    }
-
     .hero-card{
       border-radius:var(--radius-lg);
       background:rgba(240,250,255,0.96);
@@ -241,13 +228,8 @@
           <span>⏱ Daily time: 10–20 minutes</span>
         </div>
         <div class="hero-cta">
-          <!-- 默认 Digistore 链接，点击由脚本接管 -->
-          <a
-            id="cta-main-leash"
-            class="btn-primary"
-            href="https://www.checkout-ds24.com/product/653887"
-            target="_blank"
-          >
+          <a href="#" class="btn-primary" id="cta-main-leash"
+             onclick="return startLeashPurchase();">
             Buy this plan – $19 →
           </a>
           <a href="programs.html" class="btn-outline">← Back to all programs</a>
@@ -255,13 +237,6 @@
         <div class="hero-note">
           One-time purchase. Instant access to the full 10-day plan after payment.
         </div>
-        <p class="delivery-note">
-          <strong>Delivery & billing:</strong>
-          This is a digital 10-day dog training plan. You get instant online access to the complete
-          program after payment; nothing physical will be shipped. Your purchase is covered by a
-          60-day money-back guarantee.
-          <strong>The withdrawal from your account will be done by Digistore24.</strong>
-        </p>
       </div>
 
       <div class="hero-card">
@@ -328,12 +303,8 @@
         You can repeat it any time your dog needs a refresher.
       </p>
       <div style="margin-top:10px;">
-        <a
-          id="cta-bottom-leash"
-          class="btn-primary"
-          href="https://www.checkout-ds24.com/product/653887"
-          target="_blank"
-        >
+        <a href="#" class="btn-primary" id="cta-bottom-leash"
+           onclick="return startLeashPurchase();">
           Get the 10-day leash plan – $19 →
         </a>
       </div>
@@ -347,9 +318,6 @@
         <a href="about.html">About</a>
         <a href="contact.html">Contact</a>
       </div>
-      <p style="font-size:12px;color:#aaa;margin-top:8px;">
-        The withdrawal from your account will be done by Digistore24.
-      </p>
     </div>
   </footer>
 
@@ -404,157 +372,63 @@
   })();
   </script>
 
-  <!-- 点击按钮：未登录先去登录，登录后记一个 pending 然后跳 Digistore24 -->
+  <!-- 购买逻辑：未登录先去登录，登录后跳 Digistore 链接 -->
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653887";
-      const PENDING_KEY  = "cp_leash_pending";
+  function startLeashPurchase() {
+    const token = localStorage.getItem("calmpaw_token");
 
-      function wireLeashButton(id) {
-        const btn = document.getElementById(id);
-        if (!btn) return;
+    // 没登录 → 去 auth.html 登录，带回跳
+    if (!token) {
+      const back = window.location.pathname + window.location.search;
+      window.location.href = "/auth.html?redirect=" + encodeURIComponent(back);
+      return false;
+    }
 
-        btn.addEventListener("click", function (e) {
-          const href = btn.getAttribute("href") || "";
-
-          // 已经变成 leash-access.html（已购买状态）→ 让浏览器按默认行为直接打开计划
-          if (href.indexOf("leash-access.html") !== -1) {
-            return;
-          }
-
-          const token    = localStorage.getItem("calmpaw_token");
-          const redirect = window.location.pathname + window.location.search;
-
-          // 没登录：先去登录
-          if (!token) {
-            e.preventDefault();
-            window.location.href = "/auth.html?redirect=" + encodeURIComponent(redirect);
-            return;
-          }
-
-          // 已登录：记录“正在购买 leash”，再跳 Digistore24 收银台
-          e.preventDefault();
-          try {
-            localStorage.setItem(PENDING_KEY, String(Date.now()));
-          } catch (e) {}
-          window.location.href = CHECKOUT_URL;
-        });
-      }
-
-      wireLeashButton("cta-main-leash");
-      wireLeashButton("cta-bottom-leash");
-    });
+    // 已登录 → 直接打开 Digistore 收银台（牵绳计划）
+    window.open("https://www.checkout-ds24.com/product/653887", "_blank");
+    return false;
+  }
   </script>
 
-  <!-- 已经拥有 leash 或 bundle 的用户：按钮变 Open；刚从收银台回来直接跳 leash-access -->
+  <!-- ★★ 已经拥有 leash 或 bundle 的用户：按钮变成“Open your plan” ★★ -->
   <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const API_BASE    = "https://calmpaw-auth.sophieinbg.workers.dev";
-    const ACCESS_URL  = "/leash-access.html";
-    const PENDING_KEY = "cp_leash_pending";
-    const OWNED_KEY   = "cp_leash_owned";
+  (function () {
+    const PLAN_KEY = "leash";
+    const ACCESS_URL = "/leash-access.html";
 
-    const mainBtn   = document.getElementById("cta-main-leash");
+    const mainBtn = document.getElementById("cta-main-leash");
     const bottomBtn = document.getElementById("cta-bottom-leash");
-    const token     = localStorage.getItem("calmpaw_token");
+    const token = localStorage.getItem("calmpaw_token");
 
     if (!mainBtn || !bottomBtn) return;
+    if (!token) return; // 未登录保持购买逻辑
 
-    function turnButtonsToOpen() {
-      function set(btn, text) {
-        if (!btn) return;
-        btn.removeAttribute("target");
-        btn.href = ACCESS_URL;
-        btn.textContent = text;
+    // 关键：请求 Worker 的 JSON 接口 + slug
+    fetch("https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=" + PLAN_KEY, {
+      method: "GET",
+      headers: {
+        "Authorization": "Bearer " + token
       }
-      set(mainBtn,  "Open your 10-day plan →");
-      set(bottomBtn,"Go to your leash plan →");
-    }
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (!data || !data.ok || !data.access) return;
 
-    function turnButtonsToBuy() {
-      const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653887";
-      function set(btn, text) {
-        if (!btn) return;
-        btn.removeAttribute("target");
-        btn.href = CHECKOUT_URL;
-        btn.textContent = text;
-      }
-      set(mainBtn,  "Buy this plan – $19 →");
-      set(bottomBtn,"Get the 10-day leash plan – $19 →");
-    }
-
-    // ① 判断：是否“刚刚从收银台回来”（有 pending 且在 30 分钟内）
-    let justReturned = false;
-    try {
-      const tsStr = localStorage.getItem(PENDING_KEY);
-      if (token && tsStr) {
-        const ts  = parseInt(tsStr, 10) || 0;
-        const age = Date.now() - ts;
-        if (age >= 0 && age < 30 * 60 * 1000) {
-          justReturned = true;
-        } else {
-          localStorage.removeItem(PENDING_KEY);
+        function goAccess(e) {
+          if (e) e.preventDefault();
+          window.location.href = ACCESS_URL;
         }
-      }
-    } catch (e) {}
 
-    if (justReturned) {
-      // 乐观认为已经买成功
-      try {
-        localStorage.setItem(OWNED_KEY, "1");
-        localStorage.removeItem(PENDING_KEY);
-      } catch (e) {}
-      turnButtonsToOpen();
-      // 直接送去内容页
-      window.location.replace(ACCESS_URL + "?from=checkout");
-      return;
-    }
+        mainBtn.textContent = "Open your 10-day plan →";
+        mainBtn.onclick = goAccess;
 
-    // ② 正常打开页面：先根据本地 owned 决定初始按钮，再调服务器确认
-    let ownedFlag = null;
-    try {
-      ownedFlag = localStorage.getItem(OWNED_KEY);
-    } catch (e) {}
-
-    if (ownedFlag === "1") {
-      turnButtonsToOpen();
-    } else {
-      turnButtonsToBuy();
-    }
-
-    // 没登录就不查服务器，保持按钮状态
-    if (!token) return;
-
-    const SLUGS = ["leash", "bundle"];
-    const BASE  = API_BASE + "/auth/check-plan?slug=";
-
-    Promise.all(
-      SLUGS.map(slug =>
-        fetch(BASE + encodeURIComponent(slug), {
-          headers: { "Authorization": "Bearer " + token }
-        })
-          .then(r => r.json())
-          .catch(() => null)
-      )
-    )
-      .then(results => {
-        const hasAccess = results.some(d => d && d.ok && d.access);
-        if (hasAccess) {
-          try {
-            localStorage.setItem(OWNED_KEY, "1");
-          } catch (e) {}
-          turnButtonsToOpen();
-        } else {
-          try {
-            localStorage.removeItem(OWNED_KEY);
-          } catch (e) {}
-          turnButtonsToBuy();
-        }
+        bottomBtn.textContent = "Go to your leash plan →";
+        bottomBtn.onclick = goAccess;
       })
       .catch(err => {
-        console.error("check-plan leash/bundle error", err);
+        console.error("check-plan leash error", err);
       });
-  });
+  })();
   </script>
 </body>
 </html>
