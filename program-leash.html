@@ -198,6 +198,44 @@
     }
     .footer-links{display:flex;gap:12px;flex-wrap:wrap;}
     .footer-links a:hover{color:#b05825;}
+
+    /* 购买后激活遮罩层（和 AI 一样的体验） */
+    .activation-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,0.72);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:999;
+    }
+    .activation-box{
+      background:#fffaf5;
+      border-radius:20px;
+      padding:18px 20px;
+      max-width:340px;
+      width:90%;
+      box-shadow:0 24px 60px rgba(15,23,42,0.55);
+      text-align:left;
+      font-size:13px;
+      color:var(--text-main);
+    }
+    .activation-title{
+      font-weight:650;
+      font-size:15px;
+      margin-bottom:6px;
+    }
+    .activation-text{
+      font-size:12px;
+      color:var(--text-soft);
+      line-height:1.6;
+      margin-bottom:4px;
+    }
+    .activation-small{
+      font-size:11px;
+      color:#9ca3af;
+      margin-top:4px;
+    }
   </style>
 
   <!-- Paddle（原样保留，不动） -->
@@ -442,62 +480,123 @@
     });
   </script>
 
-  <!-- 已经拥有 leash 或 bundle 的用户：按钮变成“Open your plan”，从结算回来时立即自动跳转 -->
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const ACCESS_URL = "/leash-access.html";
-    const mainBtn = document.getElementById("cta-main-leash");
-    const bottomBtn = document.getElementById("cta-bottom-leash");
-    const token = localStorage.getItem("calmpaw_token");
-    if (!mainBtn || !bottomBtn) return;
-    if (!token) return;
+  <!-- 已经拥有 leash 或 bundle 的用户：按钮变成“Open your plan”；从结算回来时轮询，一确认就自动跳转 -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const ACCESS_URL = "/leash-access.html";
+      const mainBtn = document.getElementById("cta-main-leash");
+      const bottomBtn = document.getElementById("cta-bottom-leash");
+      const token = localStorage.getItem("calmpaw_token");
+      if (!mainBtn || !bottomBtn) return;
+      if (!token) return;
 
-    const BASE = "https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=";
-    const SLUGS = ["leash", "bundle"];
+      const BASE = "https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=";
+      const SLUGS = ["leash", "bundle"];
 
-    const url = new URL(window.location.href);
-    const fromCheckout = url.searchParams.get("from") === "checkout";
+      const url = new URL(window.location.href);
+      const fromCheckout = url.searchParams.get("from") === "checkout";
 
-    function turnButtonsToOpen() {
-      function makeOpen(btn, text) {
-        if (!btn) return;
-        btn.removeAttribute("target");
-        btn.href = ACCESS_URL;
-        btn.textContent = text;
+      function makeButtonsOpen() {
+        function makeOpen(btn, text) {
+          if (!btn) return;
+          btn.removeAttribute("target");
+          btn.href = ACCESS_URL;
+          btn.textContent = text;
+        }
+        makeOpen(mainBtn, "Open your 10-day plan →");
+        makeOpen(bottomBtn, "Go to your leash plan →");
       }
-      makeOpen(mainBtn, "Open your 10-day plan →");
-      makeOpen(bottomBtn, "Go to your leash plan →");
-    }
 
-    function checkAndMaybeRedirect(allowRedirect) {
-      Promise.all(
-        SLUGS.map(slug =>
-          fetch(BASE + encodeURIComponent(slug), {
-            headers: { "Authorization": "Bearer " + token }
-          })
-            .then(r => r.json())
-            .catch(() => null)
-        )
-      )
-        .then(results => {
+      function createOverlay() {
+        const overlay = document.createElement("div");
+        overlay.className = "activation-overlay";
+        overlay.innerHTML = `
+          <div class="activation-box">
+            <div class="activation-title">Activating your leash plan…</div>
+            <p class="activation-text">
+              We’ve received your payment and are asking Digistore24 for confirmation.
+              This usually takes 3–10 seconds.
+            </p>
+            <p class="activation-small">
+              Please don’t close this page. You’ll be redirected as soon as access is ready.
+            </p>
+          </div>
+        `;
+        document.body.appendChild(overlay);
+        return overlay;
+      }
+
+      function checkAccessOnce() {
+        return Promise.all(
+          SLUGS.map(slug =>
+            fetch(BASE + encodeURIComponent(slug), {
+              headers: { "Authorization": "Bearer " + token }
+            })
+              .then(r => (r.ok ? r.json() : null))
+              .catch(() => null)
+          )
+        ).then(results => {
           const hasAccess = results.some(data => data && data.ok && data.access);
-          if (!hasAccess) return;
-
-          turnButtonsToOpen();
-          if (allowRedirect) {
-            window.location.replace(ACCESS_URL);
+          if (hasAccess) {
+            makeButtonsOpen();
           }
-        })
-        .catch(err => {
-          console.error("check-plan leash/bundle error", err);
+          return hasAccess;
         });
-    }
+      }
 
-    checkAndMaybeRedirect(false);
-    if (fromCheckout) {
-      checkAndMaybeRedirect(true);
-    }
-  });
-</script>
+      function pollAccess(attempt, maxAttempts, delayMs, overlayEl) {
+        checkAccessOnce()
+          .then(hasAccess => {
+            if (hasAccess) {
+              if (overlayEl) {
+                const text = overlayEl.querySelector(".activation-text");
+                if (text) {
+                  text.textContent = "Access found. Opening your 10-day leash plan…";
+                }
+              }
+              setTimeout(function () {
+                window.location.replace(ACCESS_URL);
+              }, 800);
+              return;
+            }
+
+            if (attempt >= maxAttempts) {
+              if (overlayEl) {
+                const text = overlayEl.querySelector(".activation-text");
+                if (text) {
+                  text.textContent = "We couldn't confirm your access yet.";
+                }
+                const small = overlayEl.querySelector(".activation-small");
+                if (small) {
+                  small.textContent =
+                    "If you just paid, wait 20–30 seconds and refresh this page. If it still doesn't open, contact support with your Digistore24 receipt.";
+                }
+              }
+              return;
+            }
+
+            setTimeout(function () {
+              pollAccess(attempt + 1, maxAttempts, delayMs, overlayEl);
+            }, delayMs);
+          })
+          .catch(() => {
+            if (attempt >= maxAttempts) return;
+            setTimeout(function () {
+              pollAccess(attempt + 1, maxAttempts, delayMs, overlayEl);
+            }, delayMs);
+          });
+      }
+
+      // 普通进入页面：快速 check 一次，有权限就把按钮改成 Open
+      checkAccessOnce();
+
+      // 从 Digistore24 回来（?from=checkout）：显示遮罩 + 轮询，确认后自动跳转
+      if (fromCheckout) {
+        const overlay = createOverlay();
+        // 最多轮询约 30 秒（15 次 * 2 秒），和 AI 逻辑一样，防止 webhook 有延迟
+        pollAccess(1, 15, 2000, overlay);
+      }
+    });
+  </script>
 </body>
 </html>
