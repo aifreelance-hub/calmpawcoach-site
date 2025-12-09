@@ -442,61 +442,73 @@
     });
   </script>
 
-  <!-- 已经拥有 leash 或 bundle：
-       1）正常进入时：把按钮改成 Open
-       2）从结算回来（?from=checkout）：直接跳转到 leash-access.html -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const ACCESS_URL = "/leash-access.html";
-      const mainBtn = document.getElementById("cta-main-leash");
-      const bottomBtn = document.getElementById("cta-bottom-leash");
-      const token = localStorage.getItem("calmpaw_token");
-      if (!mainBtn || !bottomBtn) return;
-      if (!token) return;
+  <!-- 已经拥有 leash 或 bundle：按钮变“Open”，刚买完立刻跳 leash-access -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const ACCESS_URL = "/leash-access.html";
+  const mainBtn = document.getElementById("cta-main-leash");
+  const bottomBtn = document.getElementById("cta-bottom-leash");
+  const token = localStorage.getItem("calmpaw_token");
+  if (!mainBtn || !bottomBtn) return;
+  if (!token) return;
 
-      const BASE = "https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=";
-      const SLUGS = ["leash", "bundle"];
+  const BASE = "https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=";
+  const SLUGS = ["leash", "bundle"];
 
-      const url = new URL(window.location.href);
-      const fromCheckout = url.searchParams.get("from") === "checkout";
+  const url = new URL(window.location.href);
+  const qs = url.searchParams;
+  const justBought = qs.get("justBought");          // 支持 ?justBought=leash
+  const fromFlag   = qs.get("from");                // 也支持 ?from=checkout
+  const boughtNow  = (justBought === "leash") || (fromFlag === "checkout");
 
-      function makeButtonsOpen() {
-        function makeOpen(btn, text) {
-          if (!btn) return;
-          btn.removeAttribute("target");
-          btn.href = ACCESS_URL;
-          btn.textContent = text;
+  function turnButtonsToOpen() {
+    function makeOpen(btn, text) {
+      if (!btn) return;
+      btn.removeAttribute("target");
+      btn.href = ACCESS_URL;
+      btn.textContent = text;
+    }
+    makeOpen(mainBtn, "Open your 10-day plan →");
+    makeOpen(bottomBtn, "Go to your leash plan →");
+  }
+
+  function verifyAndMaybeRedirect(allowRedirect) {
+    Promise.all(
+      SLUGS.map(slug =>
+        fetch(BASE + encodeURIComponent(slug), {
+          headers: { "Authorization": "Bearer " + token }
+        })
+          .then(r => r.json())
+          .catch(() => null)
+      )
+    )
+      .then(results => {
+        const hasAccess = results.some(d => d && d.ok && d.access);
+        if (!hasAccess) return;
+
+        turnButtonsToOpen();
+
+        if (allowRedirect) {
+          window.location.replace(ACCESS_URL + "?from=checkout");
         }
-        makeOpen(mainBtn, "Open your 10-day plan →");
-        makeOpen(bottomBtn, "Go to your leash plan →");
-      }
+      })
+      .catch(err => {
+        console.error("check-plan leash/bundle error", err);
+      });
+  }
 
-      function checkAccessOnce() {
-        return Promise.all(
-          SLUGS.map(slug =>
-            fetch(BASE + encodeURIComponent(slug), {
-              headers: { "Authorization": "Bearer " + token }
-            })
-              .then(r => (r.ok ? r.json() : null))
-              .catch(() => null)
-          )
-        ).then(results => {
-          const hasAccess = results.some(data => data && data.ok && data.access);
-          if (hasAccess) {
-            makeButtonsOpen();
-          }
-          return hasAccess;
-        });
-      }
+  // 正常打开页面时：查一次是否已拥有
+  verifyAndMaybeRedirect(false);
 
-      // 普通打开页面：查一次，有权限就把按钮直接变成 Open
-      checkAccessOnce();
-
-      // 从 Digistore24 结算回来：立刻进 access 页面，在那边等 / 轮询
-      if (fromCheckout) {
-        window.location.replace(ACCESS_URL + "?from=checkout");
-      }
-    });
-  </script>
+  // 刚从 Digistore24 回来：?from=checkout 或 ?justBought=leash
+  if (boughtNow) {
+    // 乐观：先直接送去 access，再后台校验
+    turnButtonsToOpen();
+    setTimeout(() => {
+      window.location.replace(ACCESS_URL + "?from=checkout");
+    }, 400);
+  }
+});
+</script>
 </body>
 </html>
