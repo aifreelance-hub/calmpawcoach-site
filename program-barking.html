@@ -446,27 +446,29 @@
     });
   </script>
 
-    <!-- 已拥有 barking 或 bundle：按钮变 Open，刚买完立刻跳 barking-access -->
+      <!-- 已拥有 barking 或 bundle：按钮变 Open，刚从收银台回来直接跳 barking-access -->
   <script>
   document.addEventListener("DOMContentLoaded", function () {
     const API_BASE   = "https://calmpaw-auth.sophieinbg.workers.dev";
     const ACCESS_URL = "/barking-access.html";
+    const CHECKOUT_DOMAIN = "checkout-ds24.com";
 
-    const mainBtn  = document.getElementById("cta-main-barking");
+    const mainBtn   = document.getElementById("cta-main-barking");
     const bottomBtn = document.getElementById("cta-bottom-barking");
-    const token    = localStorage.getItem("calmpaw_token");
+    const token     = localStorage.getItem("calmpaw_token");
 
     if (!mainBtn || !bottomBtn) return;
-    // 正常情况下：你是先登录再付款，所以这里一般是有 token 的
-    // 没有 token 我们也不做自动跳转，避免乱跳
 
-    const url  = new URL(window.location.href);
-    const qs   = url.searchParams;
-    const justBought = qs.get("justBought");   // 支持 ?justBought=barking
-    const fromFlag   = qs.get("from");         // 支持 ?from=checkout
-    const fromRef    = (document.referrer || "").includes("checkout-ds24.com"); // 没参数时靠 referrer
-    const boughtNow  = !!token && (justBought === "barking" || fromFlag === "checkout" || fromRef);
+    // ---------- 1）如果刚从 Digistore24 收银台回来：立刻跳到 access ----------
+    const ref = document.referrer || "";
+    const fromCheckout = ref.indexOf(CHECKOUT_DOMAIN) !== -1;
+    if (fromCheckout) {
+      // 不管服务器那边 webhook 是否已经处理完，先直接送用户去内容页
+      window.location.replace(ACCESS_URL + "?from=checkout");
+      return;
+    }
 
+    // ---------- 2）工具函数：把按钮设为 Open / Buy ----------
     function makeButtonsOpen() {
       function set(btn, text) {
         if (!btn) return;
@@ -490,53 +492,38 @@
       set(bottomBtn,"Get the 7-day barking plan – $19 →");
     }
 
-    // 后台校验：正常打开页面时用（不依赖“刚买完”）
-    function verifyWithServer() {
-      if (!token) return;
-      const SLUGS = ["barking", "bundle"];
-      const BASE  = API_BASE + "/auth/check-plan?slug=";
-
-      Promise.all(
-        SLUGS.map(slug =>
-          fetch(BASE + encodeURIComponent(slug), {
-            headers: { "Authorization": "Bearer " + token }
-          })
-            .then(r => r.json())
-            .catch(() => null)
-        )
-      )
-        .then(results => {
-          const hasAccess = results.some(d => d && d.ok && d.access);
-          if (hasAccess) {
-            makeButtonsOpen();
-          } else {
-            makeButtonsBuy();
-          }
-        })
-        .catch(err => {
-          console.error("check-plan barking/bundle error", err);
-        });
-    }
-
-    // ------- 逻辑顺序 -------
-
-    // ① 不管怎么样，先把按钮当成“可以买”
+    // 默认先当成未购买（按钮显示 Buy）
     makeButtonsBuy();
 
-    // ② 正常打开页面：查一次服务器，如果有 access 就变成 Open
-    verifyWithServer();
-
-    // ③ 如果是「刚从 Digistore24 收银台回来」
-    //    （有 token 且 URL 参数 / referrer 任一命中）
-    if (boughtNow) {
-      // 立刻当成已经拥有，按钮变 Open
-      makeButtonsOpen();
-      // 直接送到 barking-access 页面
-      // 不等服务器，给用户即时反馈
-      setTimeout(() => {
-        window.location.replace(ACCESS_URL + "?from=checkout");
-      }, 300);
+    // ---------- 3）正常打开页面：查服务器是否已经拥有 ----------
+    if (!token) {
+      // 没登录就不查，保持 Buy 按钮（点击时会被前一个脚本拦截去登录）
+      return;
     }
+
+    const SLUGS = ["barking", "bundle"];
+    const BASE  = API_BASE + "/auth/check-plan?slug=";
+
+    Promise.all(
+      SLUGS.map(slug =>
+        fetch(BASE + encodeURIComponent(slug), {
+          headers: { "Authorization": "Bearer " + token }
+        })
+          .then(r => r.json())
+          .catch(() => null)
+      )
+    )
+      .then(results => {
+        const hasAccess = results.some(d => d && d.ok && d.access);
+        if (hasAccess) {
+          makeButtonsOpen();
+        } else {
+          makeButtonsBuy();
+        }
+      })
+      .catch(err => {
+        console.error("check-plan barking/bundle error", err);
+      });
   });
   </script>
 </body>
