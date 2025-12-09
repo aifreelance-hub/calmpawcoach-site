@@ -503,7 +503,7 @@
   </style>
 
   <!-- Paddle（保留，但用 0 防止报错；现在实际支付走 Digistore24） -->
-  <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
+  <script src="https://cdn.paddle.com/paddle.js"></script>
   <script>
     Paddle.Setup({ vendor: 0 });
   </script>
@@ -578,18 +578,40 @@
         </div>
       </div>
 
-      <div class="hero-card">
-        <h3>Perfect if your life looks like this:</h3>
-        <ul>
-          <li>Neighbors complain about barking or hallway noise.</li>
-          <li>Your dog panics when you leave, even for a short time.</li>
-          <li>Walks feel like a battle instead of a break.</li>
-          <li>You work, you’re tired, and you just want a simple roadmap.</li>
-        </ul>
-        <p style="margin-top:6px;">
-          The Complete Pack helps you create a quieter home, calmer alone time
-          and easier walks — without expecting you to be a full-time trainer.
-        </p>
+      <!-- 右侧：新增“卖什么 + 交付方式 + 扣款说明” + 原来的说明卡片 -->
+      <div>
+        <div style="font-size:13px;color:var(--text-soft);margin-bottom:10px;">
+          <h2 style="font-size:16px;margin-bottom:6px;color:var(--text-main);">What you get</h2>
+          <ul style="margin-left:16px;margin-bottom:8px;">
+            <li>Full access to all 3 step-by-step training plans (barking, separation anxiety and leash walking).</li>
+            <li>Daily, realistic exercises you can fit around work and family life.</li>
+            <li>Lifetime access so you can repeat or slow down whenever life changes.</li>
+          </ul>
+
+          <h3 style="font-size:14px;margin:10px 0 4px;color:var(--text-main);">Product type &amp; delivery</h3>
+          <p>
+            This is a <strong>purely digital dog training product bundle</strong>. No physical goods will be shipped.<br>
+            After purchase, you will receive access digitally via our online platform and email.
+          </p>
+
+          <p style="margin-top:8px;font-size:12px;color:#8a6a63;">
+            The debit is made by Digistore24.
+          </p>
+        </div>
+
+        <div class="hero-card">
+          <h3>Perfect if your life looks like this:</h3>
+          <ul>
+            <li>Neighbors complain about barking or hallway noise.</li>
+            <li>Your dog panics when you leave, even for a short time.</li>
+            <li>Walks feel like a battle instead of a break.</li>
+            <li>You work, you’re tired, and you just want a simple roadmap.</li>
+          </ul>
+          <p style="margin-top:6px;">
+            The Complete Pack helps you create a quieter home, calmer alone time
+            and easier walks — without expecting you to be a full-time trainer.
+          </p>
+        </div>
       </div>
     </section>
 
@@ -824,9 +846,10 @@
         });
     });
   </script>
-<footer style="margin-top:40px; padding:20px 0; text-align:center; font-size:12px; color:#8a6a63;">
-  <a href="/legal" style="color:#ff914d; text-decoration:none;">Legal Information</a>
-</footer>
+
+  <footer style="margin-top:40px; padding:20px 0; text-align:center; font-size:12px; color:#8a6a63;">
+    <a href="/legal" style="color:#ff914d; text-decoration:none;">Legal Information</a>
+  </footer>
 
 </body>
 </html>
