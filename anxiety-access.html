@@ -495,6 +495,37 @@
       color: #7b5847;
     }
 
+    /* 访问状态：小菊花 + 成功/错误状态 */
+    .access-status-row{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+    }
+    .access-spinner{
+      width:16px;
+      height:16px;
+      border-radius:999px;
+      border:2px solid rgba(255,184,107,0.3);
+      border-top-color:#ff914d;
+      animation:access-spin .8s linear infinite;
+      flex-shrink:0;
+      margin-top:2px;
+    }
+    @keyframes access-spin{
+      from{transform:rotate(0deg);}
+      to{transform:rotate(360deg);}
+    }
+    .access-status-ok{
+      background:rgba(209,250,229,0.96);
+      border-color:rgba(52,211,153,0.7);
+      color:#047857;
+    }
+    .access-status-error{
+      background:rgba(254,242,242,0.96);
+      border-color:rgba(248,113,113,0.7);
+      color:#b91c1c;
+    }
+
     /* Footer */
     footer {
       border-top: 1px solid rgba(243, 217, 196, 0.8);
@@ -565,7 +596,7 @@
   </header>
 
   <main>
-    <!-- 访问状态提示 -->
+    <!-- 顶部访问状态条：轮询时转圈，成功/失败会变色 -->
     <div id="access-status" class="highlight-box" style="display:none; margin-bottom:16px;"></div>
 
     <!-- 付费用户内容：初始隐藏，检查通过后再显示 -->
@@ -890,17 +921,94 @@
     document.addEventListener("DOMContentLoaded", hydrateNavAuth);
   </script>
 
-  <!-- 访问控制：只在检查通过时显示内容，不再自动跳回购买页 -->
+  <!-- 访问控制：带订单参数时轮询，没有订单参数只检查一次 -->
   <script>
     (function () {
       const token = localStorage.getItem("calmpaw_token");
       const statusBox = document.getElementById("access-status");
       const paidContent = document.getElementById("paid-content");
 
-      function showStatus(html) {
+      const search = window.location.search || "";
+      const hasOrderParams = /order_id=|transaction_id=/.test(search);
+      const POLL_INTERVAL = 3000;
+      const MAX_ATTEMPTS_AFTER_ORDER = 40; // ≈ 2 分钟
+      const MAX_ATTEMPTS_NORMAL = 1;
+
+      function ensureShown() {
         if (!statusBox) return;
         statusBox.style.display = "block";
-        statusBox.innerHTML = html;
+      }
+
+      function renderLoading() {
+        if (!statusBox) return;
+        ensureShown();
+        statusBox.classList.remove("access-status-ok", "access-status-error");
+        statusBox.innerHTML = `
+          <div class="access-status-row">
+            <div class="access-spinner"></div>
+            <div>
+              Checking your access…<br>
+              ${hasOrderParams
+                ? "We’re syncing your Digistore24 purchase. This can take up to 1–2 minutes. Please keep this page open."
+                : "Please wait a moment."}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderOk() {
+        if (!statusBox) return;
+        ensureShown();
+        statusBox.classList.remove("access-status-error");
+        statusBox.classList.add("access-status-ok");
+        statusBox.innerHTML = `
+          <div class="access-status-row">
+            <div>✅ Access confirmed. You can use this page as your permanent 14-day separation plan.</div>
+          </div>
+        `;
+      }
+
+      function renderNoAccessFinal() {
+        if (!statusBox) return;
+        ensureShown();
+        statusBox.classList.remove("access-status-ok");
+        statusBox.classList.add("access-status-error");
+        statusBox.innerHTML = `
+          <div class="access-status-row">
+            <div>
+              We can't find this plan on your account yet.<br>
+              ${
+                hasOrderParams
+                  ? "If you just paid via Digistore24, and this page is still locked after a couple of minutes, please contact support with your payment email."
+                  : "If you haven’t purchased this plan yet, please go back to the program page and buy it with the same email you use to log in."
+              }
+            </div>
+          </div>
+        `;
+      }
+
+      function renderServerError() {
+        if (!statusBox) return;
+        ensureShown();
+        statusBox.classList.remove("access-status-ok");
+        statusBox.classList.add("access-status-error");
+        statusBox.innerHTML = `
+          <div class="access-status-row">
+            <div>Server error. Please refresh this page or try again later.</div>
+          </div>
+        `;
+      }
+
+      function renderNeedLogin() {
+        if (!statusBox) return;
+        ensureShown();
+        statusBox.classList.remove("access-status-ok");
+        statusBox.classList.add("access-status-error");
+        statusBox.innerHTML = `
+          <div class="access-status-row">
+            <div>Please log in with the same email you used to purchase this plan.</div>
+          </div>
+        `;
       }
 
       function goAuth() {
@@ -909,42 +1017,75 @@
       }
 
       if (!token) {
-        showStatus("Please log in with the same email you used to purchase this plan.");
+        renderNeedLogin();
         goAuth();
         return;
       }
 
-      showStatus("Checking your access…");
+      let attempts = 0;
+      const maxAttempts = hasOrderParams ? MAX_ATTEMPTS_AFTER_ORDER : MAX_ATTEMPTS_NORMAL;
 
-      fetch(API_BASE + "/auth/check-plan?slug=anxiety", {
-        method: "GET",
-        headers: { Authorization: "Bearer " + token },
-      })
-        .then(async (res) => {
-          if (!res.ok) {
-            localStorage.removeItem("calmpaw_token");
-            localStorage.removeItem("calmpaw_email");
-            showStatus("Session expired. Please log in again to view your 14-day plan.");
-            goAuth();
-            return;
-          }
-          const data = await res.json();
+      function handleSuccessAccess() {
+        if (paidContent) paidContent.style.display = "block";
+        renderOk();
 
-          if (data.ok && data.access) {
-            if (paidContent) paidContent.style.display = "block";
-            showStatus("Access confirmed ✅ You can use this page as your permanent 14-day separation plan.");
-          } else {
-            if (paidContent) paidContent.style.display = "none";
-            showStatus(
-              "We can't find this plan on your account yet.<br>" +
-              "If you just paid via Digistore24, it can take up to 1–2 minutes for access to sync. " +
-              "Please refresh this page shortly. If it still stays locked, contact support with your payment email."
-            );
+        // 如果是带订单参数的回跳，把 URL 清理一下
+        if (hasOrderParams) {
+          const cleanUrl = window.location.pathname;
+          if (cleanUrl) {
+            window.history.replaceState(null, "", cleanUrl);
           }
+        }
+      }
+
+      function poll() {
+        if (attempts >= maxAttempts) {
+          renderNoAccessFinal();
+          return;
+        }
+        attempts++;
+        if (attempts === 1) {
+          renderLoading();
+        }
+
+        fetch(API_BASE + "/auth/check-plan?slug=anxiety", {
+          method: "GET",
+          headers: { Authorization: "Bearer " + token },
         })
-        .catch(() => {
-          showStatus("Server error. Please refresh this page or try again later.");
-        });
+          .then(res => res.json().then(data => ({ ok: res.ok, data })))
+          .then(({ ok, data }) => {
+            if (!ok) {
+              // token 失效：清掉并去登录
+              localStorage.removeItem("calmpaw_token");
+              localStorage.removeItem("calmpaw_email");
+              renderNeedLogin();
+              goAuth();
+              return;
+            }
+
+            if (data && data.ok && data.access) {
+              handleSuccessAccess();
+              return;
+            }
+
+            // 还没有开通
+            if (attempts >= maxAttempts || !hasOrderParams) {
+              renderNoAccessFinal();
+            } else {
+              setTimeout(poll, POLL_INTERVAL);
+            }
+          })
+          .catch(() => {
+            if (hasOrderParams && attempts < maxAttempts) {
+              // 订单模式：偶尔网络错误继续试
+              setTimeout(poll, POLL_INTERVAL);
+            } else {
+              renderServerError();
+            }
+          });
+      }
+
+      poll();
     })();
   </script>
 </body>
