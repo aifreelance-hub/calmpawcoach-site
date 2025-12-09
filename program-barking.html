@@ -446,72 +446,98 @@
     });
   </script>
 
-  <!-- 已拥有 barking 或 bundle：按钮变 Open，刚买完立刻跳 barking-access -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const ACCESS_URL = "/barking-access.html";
-  const mainBtn = document.getElementById("cta-main-barking");
-  const bottomBtn = document.getElementById("cta-bottom-barking");
-  const token = localStorage.getItem("calmpaw_token");
-  if (!mainBtn || !bottomBtn) return;
-  if (!token) return;
+    <!-- 已拥有 barking 或 bundle：按钮变 Open，刚买完立刻跳 barking-access -->
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const API_BASE   = "https://calmpaw-auth.sophieinbg.workers.dev";
+    const ACCESS_URL = "/barking-access.html";
 
-  const BASE = "https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=";
-  const SLUGS = ["barking", "bundle"];
+    const mainBtn  = document.getElementById("cta-main-barking");
+    const bottomBtn = document.getElementById("cta-bottom-barking");
+    const token    = localStorage.getItem("calmpaw_token");
 
-  const url = new URL(window.location.href);
-  const qs = url.searchParams;
-  const justBought = qs.get("justBought");        // ?justBought=barking
-  const fromFlag   = qs.get("from");              // 或 ?from=checkout
-  const boughtNow  = (justBought === "barking") || (fromFlag === "checkout");
+    if (!mainBtn || !bottomBtn) return;
+    // 正常情况下：你是先登录再付款，所以这里一般是有 token 的
+    // 没有 token 我们也不做自动跳转，避免乱跳
 
-  function turnButtonsToOpen() {
-    function makeOpen(btn, text) {
-      if (!btn) return;
-      btn.removeAttribute("target");
-      btn.href = ACCESS_URL;
-      btn.textContent = text;
+    const url  = new URL(window.location.href);
+    const qs   = url.searchParams;
+    const justBought = qs.get("justBought");   // 支持 ?justBought=barking
+    const fromFlag   = qs.get("from");         // 支持 ?from=checkout
+    const fromRef    = (document.referrer || "").includes("checkout-ds24.com"); // 没参数时靠 referrer
+    const boughtNow  = !!token && (justBought === "barking" || fromFlag === "checkout" || fromRef);
+
+    function makeButtonsOpen() {
+      function set(btn, text) {
+        if (!btn) return;
+        btn.removeAttribute("target");
+        btn.href = ACCESS_URL;
+        btn.textContent = text;
+      }
+      set(mainBtn,  "Open your 7-day plan →");
+      set(bottomBtn,"Go to your barking plan →");
     }
-    makeOpen(mainBtn, "Open your 7-day plan →");
-    makeOpen(bottomBtn, "Go to your barking plan →");
-  }
 
-  function verifyAndMaybeRedirect(allowRedirect) {
-    Promise.all(
-      SLUGS.map(slug =>
-        fetch(BASE + encodeURIComponent(slug), {
-          headers: { "Authorization": "Bearer " + token }
-        })
-          .then(r => r.json())
-          .catch(() => null)
+    function makeButtonsBuy() {
+      const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653870";
+      function set(btn, text) {
+        if (!btn) return;
+        btn.removeAttribute("target");
+        btn.href = CHECKOUT_URL;
+        btn.textContent = text;
+      }
+      set(mainBtn,  "Buy this plan – $19 →");
+      set(bottomBtn,"Get the 7-day barking plan – $19 →");
+    }
+
+    // 后台校验：正常打开页面时用（不依赖“刚买完”）
+    function verifyWithServer() {
+      if (!token) return;
+      const SLUGS = ["barking", "bundle"];
+      const BASE  = API_BASE + "/auth/check-plan?slug=";
+
+      Promise.all(
+        SLUGS.map(slug =>
+          fetch(BASE + encodeURIComponent(slug), {
+            headers: { "Authorization": "Bearer " + token }
+          })
+            .then(r => r.json())
+            .catch(() => null)
+        )
       )
-    )
-      .then(results => {
-        const hasAccess = results.some(d => d && d.ok && d.access);
-        if (!hasAccess) return;
+        .then(results => {
+          const hasAccess = results.some(d => d && d.ok && d.access);
+          if (hasAccess) {
+            makeButtonsOpen();
+          } else {
+            makeButtonsBuy();
+          }
+        })
+        .catch(err => {
+          console.error("check-plan barking/bundle error", err);
+        });
+    }
 
-        turnButtonsToOpen();
+    // ------- 逻辑顺序 -------
 
-        if (allowRedirect) {
-          window.location.replace(ACCESS_URL + "?from=checkout");
-        }
-      })
-      .catch(err => {
-        console.error("check-plan barking/bundle error", err);
-      });
-  }
+    // ① 不管怎么样，先把按钮当成“可以买”
+    makeButtonsBuy();
 
-  // 正常打开：查一次
-  verifyAndMaybeRedirect(false);
+    // ② 正常打开页面：查一次服务器，如果有 access 就变成 Open
+    verifyWithServer();
 
-  // 刚买完：from=checkout 或 justBought=barking
-  if (boughtNow && token) {
-    turnButtonsToOpen();
-    setTimeout(() => {
-      window.location.replace(ACCESS_URL + "?from=checkout");
-    }, 400);
-  }
-});
-</script>
+    // ③ 如果是「刚从 Digistore24 收银台回来」
+    //    （有 token 且 URL 参数 / referrer 任一命中）
+    if (boughtNow) {
+      // 立刻当成已经拥有，按钮变 Open
+      makeButtonsOpen();
+      // 直接送到 barking-access 页面
+      // 不等服务器，给用户即时反馈
+      setTimeout(() => {
+        window.location.replace(ACCESS_URL + "?from=checkout");
+      }, 300);
+    }
+  });
+  </script>
 </body>
 </html>
