@@ -5,6 +5,16 @@
   <title>Leash Plan Access — CalmPaw 10-Day Walking Plan</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="favicon.png" />
+
+  <!-- Google tag (gtag.js) 和其他 access 页保持一致 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17779181109"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "AW-17779181109");
+  </script>
+
   <style>
     *{box-sizing:border-box;margin:0;padding:0;}
     :root{
@@ -144,6 +154,7 @@
       box-shadow:0 16px 36px rgba(214,139,86,0.6);
       display:inline-flex;align-items:center;gap:6px;
       white-space:nowrap;
+      transition:transform .18s ease, box-shadow .18s ease;
     }
     .btn-primary:hover{transform:translateY(-1px) scale(1.01);}
 
@@ -204,6 +215,37 @@
       background:rgba(240,250,255,0.96);
       border:1px solid rgba(200,228,245,0.9);
       padding:12px;font-size:12px;color:#35596f;
+    }
+
+    /* 顶部访问状态样式：小菊花 + 成功 / 错误 */
+    .access-status-row{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+    }
+    .access-spinner{
+      width:16px;
+      height:16px;
+      border-radius:999px;
+      border:2px solid rgba(125,211,252,0.3);
+      border-top-color:#0ea5e9;
+      animation:access-spin .8s linear infinite;
+      flex-shrink:0;
+      margin-top:2px;
+    }
+    @keyframes access-spin{
+      from{transform:rotate(0deg);}
+      to{transform:rotate(360deg);}
+    }
+    .access-status-ok{
+      background:rgba(209,250,229,0.96);
+      border-color:rgba(52,211,153,0.7);
+      color:#047857;
+    }
+    .access-status-error{
+      background:rgba(254,242,242,0.96);
+      border-color:rgba(248,113,113,0.7);
+      color:#b91c1c;
     }
 
     footer{
@@ -568,16 +610,93 @@
 
     document.addEventListener("DOMContentLoaded", hydrateNavAuth);
 
-    // 访问控制：必须登录 + 拥有 leash 计划；不再跳回销售页，只提示状态
+    // 访问控制：必须登录 + 拥有 leash 计划；带 Digistore24 订单参数时轮询同步
     (function () {
       const statusBox = document.getElementById("access-status");
       const paidContent = document.getElementById("paid-content");
       const token = localStorage.getItem("calmpaw_token");
 
-      function showStatus(html) {
+      const search = window.location.search || "";
+      const hasOrderParams = /order_id=|transaction_id=/.test(search);
+      const POLL_INTERVAL = 3000;
+      const MAX_ATTEMPTS_AFTER_ORDER = 40; // ≈ 2 分钟
+      const MAX_ATTEMPTS_NORMAL = 1;
+
+      function ensureShown() {
         if (!statusBox) return;
         statusBox.style.display = "block";
-        statusBox.innerHTML = html;
+      }
+
+      function renderLoading() {
+        if (!statusBox) return;
+        ensureShown();
+        statusBox.classList.remove("access-status-ok","access-status-error");
+        statusBox.innerHTML = `
+          <div class="access-status-row">
+            <div class="access-spinner"></div>
+            <div>
+              Checking your access to the Leash Walking Plan…<br>
+              ${hasOrderParams
+                ? "We’re syncing your Digistore24 purchase. This can take up to 1–2 minutes. Please keep this page open."
+                : "Please wait a moment."}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderOk() {
+        if (!statusBox) return;
+        ensureShown();
+        statusBox.classList.remove("access-status-error");
+        statusBox.classList.add("access-status-ok");
+        statusBox.innerHTML = `
+          <div class="access-status-row">
+            <div>✅ Access confirmed. You can use this page as your permanent access to the 10-day leash plan.</div>
+          </div>
+        `;
+      }
+
+      function renderNoAccessFinal() {
+        if (!statusBox) return;
+        ensureShown();
+        statusBox.classList.remove("access-status-ok");
+        statusBox.classList.add("access-status-error");
+        statusBox.innerHTML = `
+          <div class="access-status-row">
+            <div>
+              We can't find the Leash Walking Plan on this account yet.<br>
+              ${
+                hasOrderParams
+                  ? "If you just paid via Digistore24 and this page is still locked after a couple of minutes, please contact support with your payment email."
+                  : "If you haven’t purchased this plan yet, please go back to the product page and buy it with the same email you use to log in."
+              }
+            </div>
+          </div>
+        `;
+      }
+
+      function renderServerError() {
+        if (!statusBox) return;
+        ensureShown();
+        statusBox.classList.remove("access-status-ok");
+        statusBox.classList.add("access-status-error");
+        statusBox.innerHTML = `
+          <div class="access-status-row">
+            <div>Server error. Please refresh this page or try again later.</div>
+          </div>
+        `;
+      }
+
+      function renderNeedLogin() {
+        if (!statusBox) return;
+        ensureShown();
+        statusBox.classList.remove("access-status-ok");
+        statusBox.classList.add("access-status-error");
+        statusBox.innerHTML = `
+          <div class="access-status-row">
+            <div>Please log in with the same email you used to purchase the Leash Walking Plan.</div>
+          </div>
+        `;
       }
 
       function currentRedirect() {
@@ -589,41 +708,72 @@
       }
 
       if (!token) {
-        showStatus("Please log in with the same email you used to purchase the Leash Walking Plan.");
+        renderNeedLogin();
         goAuth();
         return;
       }
 
-      showStatus("Checking your access to the Leash Walking Plan…");
+      let attempts = 0;
+      const maxAttempts = hasOrderParams ? MAX_ATTEMPTS_AFTER_ORDER : MAX_ATTEMPTS_NORMAL;
 
-      fetch(API_BASE + "/auth/check-plan?slug=leash", {
-        method: "GET",
-        headers: { Authorization: "Bearer " + token },
-      })
-        .then(async (res) => {
-          if (!res.ok) {
-            localStorage.removeItem("calmpaw_token");
-            localStorage.removeItem("calmpaw_email");
-            showStatus("Session expired. Please log in again to view your leash plan.");
-            goAuth();
-            return;
+      function handleSuccessAccess() {
+        if (paidContent) paidContent.style.display = "block";
+        renderOk();
+
+        // 清理 URL 里的订单参数
+        if (hasOrderParams) {
+          const cleanUrl = window.location.pathname;
+          if (cleanUrl) {
+            window.history.replaceState(null, "", cleanUrl);
           }
-          const data = await res.json();
-          if (data.ok && data.access) {
-            if (paidContent) paidContent.style.display = "block";
-            showStatus("Access confirmed ✅ You can use this page as your permanent access to the 10-day leash plan.");
-          } else {
-            if (paidContent) paidContent.style.display = "none";
-            showStatus(
-              "We can't find the Leash Walking Plan on this account yet.<br>" +
-              "If you just paid via Digistore24, it may take 1–2 minutes for access to sync. " +
-              "Please refresh this page shortly. If it still stays locked, contact support with your payment email."
-            );
-          }
+        }
+      }
+
+      function poll() {
+        if (attempts >= maxAttempts) {
+          renderNoAccessFinal();
+          return;
+        }
+        attempts++;
+        if (attempts === 1) {
+          renderLoading();
+        }
+
+        fetch(API_BASE + "/auth/check-plan?slug=leash", {
+          method: "GET",
+          headers: { Authorization: "Bearer " + token },
         })
-        .catch(() => {
-          showStatus("Server error. Please refresh this page or try again later.");
-        });
+          .then(res => res.json().then(data => ({ ok: res.ok, data })))
+          .then(({ ok, data }) => {
+            if (!ok) {
+              localStorage.removeItem("calmpaw_token");
+              localStorage.removeItem("calmpaw_email");
+              renderNeedLogin();
+              goAuth();
+              return;
+            }
+
+            if (data && data.ok && data.access) {
+              handleSuccessAccess();
+              return;
+            }
+
+            if (attempts >= maxAttempts || !hasOrderParams) {
+              renderNoAccessFinal();
+            } else {
+              setTimeout(poll, POLL_INTERVAL);
+            }
+          })
+          .catch(() => {
+            if (hasOrderParams && attempts < maxAttempts) {
+              setTimeout(poll, POLL_INTERVAL);
+            } else {
+              renderServerError();
+            }
+          });
+      }
+
+      poll();
     })();
   </script>
 </body>
