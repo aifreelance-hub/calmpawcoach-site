@@ -521,6 +521,37 @@
       color: #7b5847;
     }
 
+    /* 访问状态：小菊花 + 成功 / 错误样式 */
+    .access-status-row{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+    }
+    .access-spinner{
+      width:16px;
+      height:16px;
+      border-radius:999px;
+      border:2px solid rgba(255,184,107,0.3);
+      border-top-color:#ff914d;
+      animation:access-spin .8s linear infinite;
+      flex-shrink:0;
+      margin-top:2px;
+    }
+    @keyframes access-spin{
+      from{transform:rotate(0deg);}
+      to{transform:rotate(360deg);}
+    }
+    .access-status-ok{
+      background:rgba(209,250,229,0.96);
+      border-color:rgba(52,211,153,0.7);
+      color:#047857;
+    }
+    .access-status-error{
+      background:rgba(254,242,242,0.96);
+      border-color:rgba(248,113,113,0.7);
+      color:#b91c1c;
+    }
+
     footer {
       border-top: 1px solid rgba(243, 217, 196, 0.8);
       background: rgba(255, 248, 241, 0.96);
@@ -694,7 +725,7 @@
             <ul class="day-steps">
               <li>Do 5–8 fake events: light knock, door handle sound, or play a door sound on your phone.</li>
               <li>Each time: trigger → “Thank you, all done” → guide to mat → reward calm.</li>
-              <li>End the session before your dog gets too wound up.</li>
+              <li>End the session before your dog gets too wound up。</li>
             </ul>
             <div class="day-tip">
               🎬 Think of this as a movie rehearsal: same script, many easy repetitions.
@@ -724,7 +755,7 @@
             </div>
             <div class="day-focus">Gently increase the difficulty while keeping your dog under “panic level”.</div>
             <ul class="day-steps">
-              <li>Ask a friend or family member to knock or ring in a planned way.</li>
+              <li>Ask a friend or family member to knock or ring in a planned way。</li>
               <li>Use your full routine: phrase → mat → reward → calm exit.</li>
               <li>Take breaks between reps; you want your dog to reset, not escalate.</li>
             </ul>
@@ -738,7 +769,7 @@
               <div class="day-title">Day 7 — Maintenance & future plan</div>
               <div class="day-time">10 minutes</div>
             </div>
-            <div class="day-focus">Create a simple routine you can keep using weekly.</div>
+            <div class="day-focus">Create a simple routine you can keep using weekly。</div>
             <ul class="day-steps">
               <li>Choose 1–2 days each week for “quiet practice sessions”.</li>
               <li>Decide on your non-negotiables: no shouting, no hitting, no scary tools.</li>
@@ -755,10 +786,10 @@
       <section class="section">
         <h2>When barking spikes again</h2>
         <ul class="checklist">
-          <li><strong>Check the environment.</strong> New building noises, visitors or changes can temporarily make things louder.</li>
-          <li><strong>Go back a step.</strong> It’s completely normal to return to an easier day and build back up.</li>
-          <li><strong>Protect your own nerves.</strong> Use white noise, a fan or background sound so every small bark doesn’t feel huge.</li>
-          <li><strong>Take short breaks.</strong> If you feel angry, pause training. Your calmness matters more than one perfect rep.</li>
+          <li><strong>Check the environment.</strong> New building noises, visitors or changes can temporarily make things louder。</li>
+          <li><strong>Go back a step。</strong> It’s completely normal to return to an easier day and build back up。</li>
+          <li><strong>Protect your own nerves。</strong> Use white noise, a fan or background sound so every small bark doesn’t feel huge。</li>
+          <li><strong>Take short breaks。</strong> If you feel angry, pause training. Your calmness matters more than one perfect rep。</li>
         </ul>
       </section>
 
@@ -907,17 +938,94 @@
     document.addEventListener("DOMContentLoaded", hydrateNavAuth);
   </script>
 
-  <!-- 访问控制：检查 barking 计划，决定是否显示内容 -->
+  <!-- 访问控制：带订单参数时轮询，没有订单参数只检查一次 -->
   <script>
     (function () {
       const token = localStorage.getItem("calmpaw_token");
       const statusBox = document.getElementById("access-status");
       const paidContent = document.getElementById("paid-content");
 
-      function showStatus(html) {
+      const search = window.location.search || "";
+      const hasOrderParams = /order_id=|transaction_id=/.test(search);
+      const POLL_INTERVAL = 3000;
+      const MAX_ATTEMPTS_AFTER_ORDER = 40; // ≈ 2 分钟
+      const MAX_ATTEMPTS_NORMAL = 1;
+
+      function ensureShown() {
         if (!statusBox) return;
         statusBox.style.display = "block";
-        statusBox.innerHTML = html;
+      }
+
+      function renderLoading() {
+        if (!statusBox) return;
+        ensureShown();
+        statusBox.classList.remove("access-status-ok", "access-status-error");
+        statusBox.innerHTML = `
+          <div class="access-status-row">
+            <div class="access-spinner"></div>
+            <div>
+              Checking your access…<br>
+              ${hasOrderParams
+                ? "We’re syncing your Digistore24 purchase. This can take up to 1–2 minutes. Please keep this page open."
+                : "Please wait a moment."}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderOk() {
+        if (!statusBox) return;
+        ensureShown();
+        statusBox.classList.remove("access-status-error");
+        statusBox.classList.add("access-status-ok");
+        statusBox.innerHTML = `
+          <div class="access-status-row">
+            <div>✅ Access confirmed. You can use this page as your permanent 7-day barking plan.</div>
+          </div>
+        `;
+      }
+
+      function renderNoAccessFinal() {
+        if (!statusBox) return;
+        ensureShown();
+        statusBox.classList.remove("access-status-ok");
+        statusBox.classList.add("access-status-error");
+        statusBox.innerHTML = `
+          <div class="access-status-row">
+            <div>
+              We can't find this plan on your account yet.<br>
+              ${
+                hasOrderParams
+                  ? "If you just paid via Digistore24, and this page is still locked after a couple of minutes, please contact support with your payment email."
+                  : "If you haven’t purchased this plan yet, please go back to the program page and buy it with the same email you use to log in."
+              }
+            </div>
+          </div>
+        `;
+      }
+
+      function renderServerError() {
+        if (!statusBox) return;
+        ensureShown();
+        statusBox.classList.remove("access-status-ok");
+        statusBox.classList.add("access-status-error");
+        statusBox.innerHTML = `
+          <div class="access-status-row">
+            <div>Server error. Please refresh this page or try again later.</div>
+          </div>
+        `;
+      }
+
+      function renderNeedLogin() {
+        if (!statusBox) return;
+        ensureShown();
+        statusBox.classList.remove("access-status-ok");
+        statusBox.classList.add("access-status-error");
+        statusBox.innerHTML = `
+          <div class="access-status-row">
+            <div>Please log in with the same email you used to purchase this plan.</div>
+          </div>
+        `;
       }
 
       function goAuth() {
@@ -926,42 +1034,72 @@
       }
 
       if (!token) {
-        showStatus("Please log in with the same email you used to purchase this plan.");
+        renderNeedLogin();
         goAuth();
         return;
       }
 
-      showStatus("Checking your access…");
+      let attempts = 0;
+      const maxAttempts = hasOrderParams ? MAX_ATTEMPTS_AFTER_ORDER : MAX_ATTEMPTS_NORMAL;
 
-      fetch(API_BASE + "/auth/check-plan?slug=barking", {
-        method: "GET",
-        headers: { Authorization: "Bearer " + token },
-      })
-        .then(async (res) => {
-          if (!res.ok) {
-            localStorage.removeItem("calmpaw_token");
-            localStorage.removeItem("calmpaw_email");
-            showStatus("Session expired. Please log in again to view your 7-day barking plan.");
-            goAuth();
-            return;
-          }
-          const data = await res.json();
+      function handleSuccessAccess() {
+        if (paidContent) paidContent.style.display = "block";
+        renderOk();
 
-          if (data.ok && data.access) {
-            if (paidContent) paidContent.style.display = "block";
-            showStatus("Access confirmed ✅ You can use this page as your permanent 7-day barking plan.");
-          } else {
-            if (paidContent) paidContent.style.display = "none";
-            showStatus(
-              "We can't find this plan on your account yet.<br>" +
-              "If you just paid via Digistore24, it can take up to 1–2 minutes for access to sync. " +
-              "Please refresh this page shortly. If it still stays locked, contact support with your payment email."
-            );
+        // 带订单参数回跳：清理 URL
+        if (hasOrderParams) {
+          const cleanUrl = window.location.pathname;
+          if (cleanUrl) {
+            window.history.replaceState(null, "", cleanUrl);
           }
+        }
+      }
+
+      function poll() {
+        if (attempts >= maxAttempts) {
+          renderNoAccessFinal();
+          return;
+        }
+        attempts++;
+        if (attempts === 1) {
+          renderLoading();
+        }
+
+        fetch(API_BASE + "/auth/check-plan?slug=barking", {
+          method: "GET",
+          headers: { Authorization: "Bearer " + token },
         })
-        .catch(() => {
-          showStatus("Server error. Please refresh this page or try again later.");
-        });
+          .then(res => res.json().then(data => ({ ok: res.ok, data })))
+          .then(({ ok, data }) => {
+            if (!ok) {
+              localStorage.removeItem("calmpaw_token");
+              localStorage.removeItem("calmpaw_email");
+              renderNeedLogin();
+              goAuth();
+              return;
+            }
+
+            if (data && data.ok && data.access) {
+              handleSuccessAccess();
+              return;
+            }
+
+            if (attempts >= maxAttempts || !hasOrderParams) {
+              renderNoAccessFinal();
+            } else {
+              setTimeout(poll, POLL_INTERVAL);
+            }
+          })
+          .catch(() => {
+            if (hasOrderParams && attempts < maxAttempts) {
+              setTimeout(poll, POLL_INTERVAL);
+            } else {
+              renderServerError();
+            }
+          });
+      }
+
+      poll();
     })();
   </script>
 </body>
