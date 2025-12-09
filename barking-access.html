@@ -55,7 +55,7 @@
       color: inherit;
     }
 
-    /* Header - unified with index.html */
+    /* Header */
 
     header {
       position: sticky;
@@ -217,8 +217,6 @@
       font-size: 14px;
     }
 
-    /* Login state area */
-
     .nav-auth {
       display: flex;
       align-items: center;
@@ -303,8 +301,6 @@
         font-size: 11px;
       }
     }
-
-    /* Main layout & sections */
 
     main {
       max-width: 1120px;
@@ -525,8 +521,6 @@
       color: #7b5847;
     }
 
-    /* Footer - with legal links */
-
     footer {
       border-top: 1px solid rgba(243, 217, 196, 0.8);
       background: rgba(255, 248, 241, 0.96);
@@ -585,7 +579,6 @@
         <a href="ai.html">Ask a Dog Trainer — AI Unlimited</a>
       </nav>
       <div class="nav-cta">
-        <!-- Login area: default is Log in -->
         <div id="nav-auth-area">
           <a class="btn-outline" href="auth.html?redirect=/barking-access.html">
             <span class="nav-login-emoji">🔑</span> Log in
@@ -596,230 +589,236 @@
   </header>
 
   <main>
-    <!-- Hero / intro -->
-    <section class="hero">
-      <div>
-        <div class="hero-tag">Access page · 7-day barking plan unlocked</div>
-        <h1 class="hero-title">Your 7-Day Quiet Home Barking Plan</h1>
-        <p class="hero-sub">
-          Thank you for getting the CalmPaw barking plan. This page contains your
-          full 7-day schedule to help your dog understand when to stay calm and quiet,
-          especially in apartments and busy neighborhoods.
-        </p>
-        <div class="hero-note">
-          <span>Bookmark this page</span> — this is your permanent access to the full
-          plan. You can repeat weeks, slow down, or start again after moves or big changes.
-        </div>
-        <div class="hero-actions">
-          <a href="bundle.html" class="btn-primary">See Complete Pack →</a>
-          <a href="programs.html" class="btn-outline">View other programs</a>
-        </div>
-      </div>
+    <!-- 顶部访问状态提示 -->
+    <div id="access-status" class="highlight-box" style="display:none; margin-bottom:16px;"></div>
 
-      <div class="hero-card">
-        <h2>How to use this plan</h2>
-        <ul>
-          <li>Short, consistent sessions (5–15 minutes) are better than long battles.</li>
-          <li>We want your dog <em>thinking</em>, not shouting — no harsh tools, no yelling.</li>
-          <li>When in doubt, step back to an easier level instead of pushing through barking.</li>
+    <!-- 真正的付费内容：初始隐藏，检查通过后再显示 -->
+    <div id="paid-content" style="display:none;">
+      <!-- Hero / intro -->
+      <section class="hero">
+        <div>
+          <div class="hero-tag">Access page · 7-day barking plan unlocked</div>
+          <h1 class="hero-title">Your 7-Day Quiet Home Barking Plan</h1>
+          <p class="hero-sub">
+            Thank you for getting the CalmPaw barking plan. This page contains your
+            full 7-day schedule to help your dog understand when to stay calm and quiet,
+            especially in apartments and busy neighborhoods.
+          </p>
+          <div class="hero-note">
+            <span>Bookmark this page</span> — this is your permanent access to the full
+            plan. You can repeat weeks, slow down, or start again after moves or big changes.
+          </div>
+          <div class="hero-actions">
+            <a href="bundle.html" class="btn-primary">See Complete Pack →</a>
+            <a href="programs.html" class="btn-outline">View other programs</a>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <h2>How to use this plan</h2>
+          <ul>
+            <li>Short, consistent sessions (5–15 minutes) are better than long battles.</li>
+            <li>We want your dog <em>thinking</em>, not shouting — no harsh tools, no yelling.</li>
+            <li>When in doubt, step back to an easier level instead of pushing through barking.</li>
+          </ul>
+          <p style="margin-top:6px;">
+            Your dog is not “being bad” — they’re reacting to sounds, surprises and habits.
+            This plan shows you exactly how to build a calmer routine step by step.
+          </p>
+        </div>
+      </section>
+
+      <!-- Overview structure -->
+      <section class="section">
+        <h2>7-day structure overview</h2>
+        <p>
+          The plan is divided into seven focused days. You can treat each day as a
+          “module” and repeat any day that still feels challenging before moving on.
+        </p>
+
+        <div class="days-grid">
+          <div class="day-block">
+            <div class="day-title-row">
+              <div class="day-title">Day 1 — Understanding triggers</div>
+              <div class="day-time">15–20 minutes total</div>
+            </div>
+            <div class="day-focus">Notice when, where and why your dog barks the most.</div>
+            <ul class="day-steps">
+              <li>Keep a simple log of barking: time, sound, what your dog does.</li>
+              <li>Identify top 1–2 triggers (for example: door knocks, elevator sounds).</li>
+              <li>Begin saying a calm phrase like “Thank you, all done” in a steady voice.</li>
+            </ul>
+            <div class="day-tip">
+              📝 Goal: You understand your dog’s biggest barking patterns instead of feeling overwhelmed.
+            </div>
+          </div>
+
+          <div class="day-block">
+            <div class="day-title-row">
+              <div class="day-title">Day 2 — Calm “thank you” response</div>
+              <div class="day-time">10–15 minutes</div>
+            </div>
+            <div class="day-focus">Teach your dog that “thank you” means “you can relax now”.</div>
+            <ul class="day-steps">
+              <li>Play a very low-volume trigger (or gently knock yourself).</li>
+              <li>As soon as your dog notices but before full bark mode, say “Thank you, all done”.</li>
+              <li>Toss a treat onto a mat or bed behind them so they turn away from the door.</li>
+            </ul>
+            <div class="day-tip">
+              🎯 Reward the moment of turning away and taking a breath, not the barking itself.
+            </div>
+          </div>
+
+          <div class="day-block">
+            <div class="day-title-row">
+              <div class="day-title">Day 3 — Mat training near the trigger</div>
+              <div class="day-time">10–15 minutes</div>
+            </div>
+            <div class="day-focus">Create a “quiet mat” where good things happen.</div>
+            <ul class="day-steps">
+              <li>Place a mat or bed in a spot away from the window/door but still in the room.</li>
+              <li>Scatter a few treats on the mat so your dog chooses to stand or lie there.</li>
+              <li>Pair the mat with chews or a stuffed toy during calm periods.</li>
+            </ul>
+            <div class="day-tip">
+              🛏 The mat becomes the “calm zone” your dog can go to instead of running to the door.
+            </div>
+          </div>
+
+          <div class="day-block">
+            <div class="day-title-row">
+              <div class="day-title">Day 4 — Practicing fake “events”</div>
+              <div class="day-time">15 minutes</div>
+            </div>
+            <div class="day-focus">Rehearse what happens when someone “arrives”.</div>
+            <ul class="day-steps">
+              <li>Do 5–8 fake events: light knock, door handle sound, or play a door sound on your phone.</li>
+              <li>Each time: trigger → “Thank you, all done” → guide to mat → reward calm.</li>
+              <li>End the session before your dog gets too wound up.</li>
+            </ul>
+            <div class="day-tip">
+              🎬 Think of this as a movie rehearsal: same script, many easy repetitions.
+            </div>
+          </div>
+
+          <div class="day-block">
+            <div class="day-title-row">
+              <div class="day-title">Day 5 — Real-world practice (light version)</div>
+              <div class="day-time">A few moments during the day</div>
+            </div>
+            <div class="day-focus">Use the script during actual everyday noises.</div>
+            <ul class="day-steps">
+              <li>When real sounds happen (elevator, neighbors), pause and breathe first.</li>
+              <li>Use your practiced phrase, guide to mat, reward any attempt to settle.</li>
+              <li>If your dog is too loud to think, shorten the session next time.</li>
+            </ul>
+            <div class="day-tip">
+              🌡️ Treat barking like a volume knob — we’re trying to turn it down, not demand perfection.
+            </div>
+          </div>
+
+          <div class="day-block">
+            <div class="day-title-row">
+              <div class="day-title">Day 6 — Harder triggers, softer response</div>
+              <div class="day-time">10–15 minutes</div>
+            </div>
+            <div class="day-focus">Gently increase the difficulty while keeping your dog under “panic level”.</div>
+            <ul class="day-steps">
+              <li>Ask a friend or family member to knock or ring in a planned way.</li>
+              <li>Use your full routine: phrase → mat → reward → calm exit.</li>
+              <li>Take breaks between reps; you want your dog to reset, not escalate.</li>
+            </ul>
+            <div class="day-tip">
+              📉 If barking spikes, go back to easier practice instead of pushing through.
+            </div>
+          </div>
+
+          <div class="day-block">
+            <div class="day-title-row">
+              <div class="day-title">Day 7 — Maintenance & future plan</div>
+              <div class="day-time">10 minutes</div>
+            </div>
+            <div class="day-focus">Create a simple routine you can keep using weekly.</div>
+            <ul class="day-steps">
+              <li>Choose 1–2 days each week for “quiet practice sessions”.</li>
+              <li>Decide on your non-negotiables: no shouting, no hitting, no scary tools.</li>
+              <li>Write down what helped the most so you can repeat it after moves or new neighbors.</li>
+            </ul>
+            <div class="day-tip">
+              🔁 Quiet living with a dog is an ongoing habit, not a one-time trick — and that’s okay.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- When barking spikes / reminders -->
+      <section class="section">
+        <h2>When barking spikes again</h2>
+        <ul class="checklist">
+          <li><strong>Check the environment.</strong> New building noises, visitors or changes can temporarily make things louder.</li>
+          <li><strong>Go back a step.</strong> It’s completely normal to return to an easier day and build back up.</li>
+          <li><strong>Protect your own nerves.</strong> Use white noise, a fan or background sound so every small bark doesn’t feel huge.</li>
+          <li><strong>Take short breaks.</strong> If you feel angry, pause training. Your calmness matters more than one perfect rep.</li>
         </ul>
-        <p style="margin-top:6px;">
-          Your dog is not “being bad” — they’re reacting to sounds, surprises and habits.
-          This plan shows you exactly how to build a calmer routine step by step.
-        </p>
-      </div>
-    </section>
+      </section>
 
-    <!-- Overview structure -->
-    <section class="section">
-      <h2>7-day structure overview</h2>
-      <p>
-        The plan is divided into seven focused days. You can treat each day as a
-        “module” and repeat any day that still feels challenging before moving on.
-      </p>
+      <!-- FAQ -->
+      <section class="section">
+        <h2>FAQ</h2>
 
-      <div class="days-grid">
-        <div class="day-block">
-          <div class="day-title-row">
-            <div class="day-title">Day 1 — Understanding triggers</div>
-            <div class="day-time">15–20 minutes total</div>
+        <div class="faq-item">
+          <div class="faq-q">What if my dog barks at everything all day?</div>
+          <div class="faq-a">
+            Start with the most stressful trigger first (often the door or hallway sounds)
+            instead of trying to fix everything at once. Once your dog has a clear “quiet
+            routine” for one situation, it becomes easier to copy to others.
           </div>
-          <div class="day-focus">Notice when, where and why your dog barks the most.</div>
-          <ul class="day-steps">
-            <li>Keep a simple log of barking: time, sound, what your dog does.</li>
-            <li>Identify top 1–2 triggers (for example: door knocks, elevator sounds).</li>
-            <li>Begin saying a calm phrase like “Thank you, all done” in a steady voice.</li>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Is it okay to tell my dog “no” when they bark?</div>
+          <div class="faq-a">
+            You can use a calm, short word like “enough” or “thank you”, but shouting,
+            punishing or startling usually makes anxious or reactive dogs worse. This
+            plan focuses on giving them something clear to <em>do</em> instead.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Will my dog ever stop barking completely?</div>
+          <div class="faq-a">
+            Probably not — and that’s okay. Dogs bark. The realistic goal is fewer,
+            shorter barking episodes that are easier to interrupt, so your home feels
+            livable again and neighbors are happier.
+          </div>
+        </div>
+      </section>
+
+      <!-- Next steps / bundle -->
+      <section class="section">
+        <h2>Next steps</h2>
+        <div class="highlight-box">
+          <p style="margin-bottom:6px;">
+            You can return to this page any time and repeat the full 7-day plan whenever
+            life changes — new neighbors, a move, a baby, or other big shifts.
+          </p>
+          <p style="margin-bottom:6px;">
+            If you’d also like support with <strong>separation anxiety</strong> or
+            <strong>stressful leash walks</strong>, the
+            <strong>CalmPaw Complete Pack</strong> includes:
+          </p>
+          <ul style="margin-left:16px;margin-bottom:6px;">
+            <li>🔕 Barking plan (7 days — this one)</li>
+            <li>🏡 Separation anxiety plan (14 days)</li>
+            <li>🚶‍♀️ Leash walking plan (10 days)</li>
           </ul>
-          <div class="day-tip">
-            📝 Goal: You understand your dog’s biggest barking patterns instead of feeling overwhelmed.
+          <p>Most owners start with the bundle and move between plans as life changes.</p>
+          <div style="margin-top:8px;">
+            <a href="bundle.html" class="btn-primary">View Complete Pack →</a>
           </div>
         </div>
-
-        <div class="day-block">
-          <div class="day-title-row">
-            <div class="day-title">Day 2 — Calm “thank you” response</div>
-            <div class="day-time">10–15 minutes</div>
-          </div>
-          <div class="day-focus">Teach your dog that “thank you” means “you can relax now”.</div>
-          <ul class="day-steps">
-            <li>Play a very low-volume trigger (or gently knock yourself).</li>
-            <li>As soon as your dog notices but before full bark mode, say “Thank you, all done”.</li>
-            <li>Toss a treat onto a mat or bed behind them so they turn away from the door.</li>
-          </ul>
-          <div class="day-tip">
-            🎯 Reward the moment of turning away and taking a breath, not the barking itself.
-          </div>
-        </div>
-
-        <div class="day-block">
-          <div class="day-title-row">
-            <div class="day-title">Day 3 — Mat training near the trigger</div>
-            <div class="day-time">10–15 minutes</div>
-          </div>
-          <div class="day-focus">Create a “quiet mat” where good things happen.</div>
-          <ul class="day-steps">
-            <li>Place a mat or bed in a spot away from the window/door but still in the room.</li>
-            <li>Scatter a few treats on the mat so your dog chooses to stand or lie there.</li>
-            <li>Pair the mat with chews or a stuffed toy during calm periods.</li>
-          </ul>
-          <div class="day-tip">
-            🛏 The mat becomes the “calm zone” your dog can go to instead of running to the door.
-          </div>
-        </div>
-
-        <div class="day-block">
-          <div class="day-title-row">
-            <div class="day-title">Day 4 — Practicing fake “events”</div>
-            <div class="day-time">15 minutes</div>
-          </div>
-          <div class="day-focus">Rehearse what happens when someone “arrives”.</div>
-          <ul class="day-steps">
-            <li>Do 5–8 fake events: light knock, door handle sound, or play a door sound on your phone.</li>
-            <li>Each time: trigger → “Thank you, all done” → guide to mat → reward calm.</li>
-            <li>End the session before your dog gets too wound up.</li>
-          </ul>
-          <div class="day-tip">
-            🎬 Think of this as a movie rehearsal: same script, many easy repetitions.
-          </div>
-        </div>
-
-        <div class="day-block">
-          <div class="day-title-row">
-            <div class="day-title">Day 5 — Real-world practice (light version)</div>
-            <div class="day-time">A few moments during the day</div>
-          </div>
-          <div class="day-focus">Use the script during actual everyday noises.</div>
-          <ul class="day-steps">
-            <li>When real sounds happen (elevator, neighbors), pause and breathe first.</li>
-            <li>Use your practiced phrase, guide to mat, reward any attempt to settle.</li>
-            <li>If your dog is too loud to think, shorten the session next time.</li>
-          </ul>
-          <div class="day-tip">
-            🌡️ Treat barking like a volume knob — we’re trying to turn it down, not demand perfection.
-          </div>
-        </div>
-
-        <div class="day-block">
-          <div class="day-title-row">
-            <div class="day-title">Day 6 — Harder triggers, softer response</div>
-            <div class="day-time">10–15 minutes</div>
-          </div>
-          <div class="day-focus">Gently increase the difficulty while keeping your dog under “panic level”.</div>
-          <ul class="day-steps">
-            <li>Ask a friend or family member to knock or ring in a planned way.</li>
-            <li>Use your full routine: phrase → mat → reward → calm exit.</li>
-            <li>Take breaks between reps; you want your dog to reset, not escalate.</li>
-          </ul>
-          <div class="day-tip">
-            📉 If barking spikes, go back to easier practice instead of pushing through.
-          </div>
-        </div>
-
-        <div class="day-block">
-          <div class="day-title-row">
-            <div class="day-title">Day 7 — Maintenance & future plan</div>
-            <div class="day-time">10 minutes</div>
-          </div>
-          <div class="day-focus">Create a simple routine you can keep using weekly.</div>
-          <ul class="day-steps">
-            <li>Choose 1–2 days each week for “quiet practice sessions”.</li>
-            <li>Decide on your non-negotiables: no shouting, no hitting, no scary tools.</li>
-            <li>Write down what helped the most so you can repeat it after moves or new neighbors.</li>
-          </ul>
-          <div class="day-tip">
-            🔁 Quiet living with a dog is an ongoing habit, not a one-time trick — and that’s okay.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- When barking spikes / reminders -->
-    <section class="section">
-      <h2>When barking spikes again</h2>
-      <ul class="checklist">
-        <li><strong>Check the environment.</strong> New building noises, visitors or changes can temporarily make things louder.</li>
-        <li><strong>Go back a step.</strong> It’s completely normal to return to an easier day and build back up.</li>
-        <li><strong>Protect your own nerves.</strong> Use white noise, a fan or background sound so every small bark doesn’t feel huge.</li>
-        <li><strong>Take short breaks.</strong> If you feel angry, pause training. Your calmness matters more than one perfect rep.</li>
-      </ul>
-    </section>
-
-    <!-- FAQ -->
-    <section class="section">
-      <h2>FAQ</h2>
-
-      <div class="faq-item">
-        <div class="faq-q">What if my dog barks at everything all day?</div>
-        <div class="faq-a">
-          Start with the most stressful trigger first (often the door or hallway sounds)
-          instead of trying to fix everything at once. Once your dog has a clear “quiet
-          routine” for one situation, it becomes easier to copy to others.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q">Is it okay to tell my dog “no” when they bark?</div>
-        <div class="faq-a">
-          You can use a calm, short word like “enough” or “thank you”, but shouting,
-          punishing or startling usually makes anxious or reactive dogs worse. This
-          plan focuses on giving them something clear to <em>do</em> instead.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q">Will my dog ever stop barking completely?</div>
-        <div class="faq-a">
-          Probably not — and that’s okay. Dogs bark. The realistic goal is fewer,
-          shorter barking episodes that are easier to interrupt, so your home feels
-          livable again and neighbors are happier.
-        </div>
-      </div>
-    </section>
-
-    <!-- Next steps / bundle -->
-    <section class="section">
-      <h2>Next steps</h2>
-      <div class="highlight-box">
-        <p style="margin-bottom:6px;">
-          You can return to this page any time and repeat the full 7-day plan whenever
-          life changes — new neighbors, a move, a baby, or other big shifts.
-        </p>
-        <p style="margin-bottom:6px;">
-          If you’d also like support with <strong>separation anxiety</strong> or
-          <strong>stressful leash walks</strong>, the
-          <strong>CalmPaw Complete Pack</strong> includes:
-        </p>
-        <ul style="margin-left:16px;margin-bottom:6px;">
-          <li>🔕 Barking plan (7 days — this one)</li>
-          <li>🏡 Separation anxiety plan (14 days)</li>
-          <li>🚶‍♀️ Leash walking plan (10 days)</li>
-        </ul>
-        <p>Most owners start with the bundle and move between plans as life changes.</p>
-        <div style="margin-top:8px;">
-          <a href="bundle.html" class="btn-primary">View Complete Pack →</a>
-        </div>
-      </div>
-    </section>
+      </section>
+    </div>
   </main>
 
   <footer>
@@ -835,15 +834,13 @@
     </div>
   </footer>
 
+  <!-- 年份 + 全局 API_BASE + 顶部登录状态 -->
   <script>
-    // Year
     document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
 
-  <!-- Login state sync in header -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
+    const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
+
+    function hydrateNavAuth() {
       const area = document.getElementById("nav-auth-area");
       if (!area) return;
 
@@ -905,14 +902,23 @@
           console.error("auth hydrate error", err);
           renderLoggedOut();
         });
-    });
+    }
+
+    document.addEventListener("DOMContentLoaded", hydrateNavAuth);
   </script>
 
-  <!-- Access control: must be logged in & have barking plan -->
+  <!-- 访问控制：检查 barking 计划，决定是否显示内容 -->
   <script>
     (function () {
-      const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
       const token = localStorage.getItem("calmpaw_token");
+      const statusBox = document.getElementById("access-status");
+      const paidContent = document.getElementById("paid-content");
+
+      function showStatus(html) {
+        if (!statusBox) return;
+        statusBox.style.display = "block";
+        statusBox.innerHTML = html;
+      }
 
       function goAuth() {
         const redirect = window.location.pathname + window.location.search;
@@ -920,9 +926,12 @@
       }
 
       if (!token) {
+        showStatus("Please log in with the same email you used to purchase this plan.");
         goAuth();
         return;
       }
+
+      showStatus("Checking your access…");
 
       fetch(API_BASE + "/auth/check-plan?slug=barking", {
         method: "GET",
@@ -932,17 +941,26 @@
           if (!res.ok) {
             localStorage.removeItem("calmpaw_token");
             localStorage.removeItem("calmpaw_email");
+            showStatus("Session expired. Please log in again to view your 7-day barking plan.");
             goAuth();
             return;
           }
           const data = await res.json();
-          if (!data.ok || !data.access) {
-            // Logged in but not purchased barking → back to barking program intro
-            window.location.href = "/program-barking.html";
+
+          if (data.ok && data.access) {
+            if (paidContent) paidContent.style.display = "block";
+            showStatus("Access confirmed ✅ You can use this page as your permanent 7-day barking plan.");
+          } else {
+            if (paidContent) paidContent.style.display = "none";
+            showStatus(
+              "We can't find this plan on your account yet.<br>" +
+              "If you just paid via Digistore24, it can take up to 1–2 minutes for access to sync. " +
+              "Please refresh this page shortly. If it still stays locked, contact support with your payment email."
+            );
           }
         })
         .catch(() => {
-          goAuth();
+          showStatus("Server error. Please refresh this page or try again later.");
         });
     })();
   </script>
