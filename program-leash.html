@@ -404,10 +404,11 @@
   })();
   </script>
 
-  <!-- 购买逻辑：未登录先去登录，登录后用“同一窗口”打开 Digistore 653887 -->
+  <!-- 点击按钮：未登录先去登录，登录后记一个 pending 然后跳 Digistore24 -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653887";
+      const PENDING_KEY  = "cp_leash_pending";
 
       function wireLeashButton(id) {
         const btn = document.getElementById(id);
@@ -421,7 +422,7 @@
             return;
           }
 
-          const token = localStorage.getItem("calmpaw_token");
+          const token    = localStorage.getItem("calmpaw_token");
           const redirect = window.location.pathname + window.location.search;
 
           // 没登录：先去登录
@@ -431,8 +432,11 @@
             return;
           }
 
-          // 已登录且未购买：用同一窗口跳到 Digistore24 收银台
+          // 已登录：记录“正在购买 leash”，再跳 Digistore24 收银台
           e.preventDefault();
+          try {
+            localStorage.setItem(PENDING_KEY, String(Date.now()));
+          } catch (e) {}
           window.location.href = CHECKOUT_URL;
         });
       }
@@ -442,37 +446,88 @@
     });
   </script>
 
-  <!-- 已经拥有 leash 或 bundle：按钮变“Open”，刚买完立刻跳 leash-access -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const ACCESS_URL = "/leash-access.html";
-  const mainBtn = document.getElementById("cta-main-leash");
-  const bottomBtn = document.getElementById("cta-bottom-leash");
-  const token = localStorage.getItem("calmpaw_token");
-  if (!mainBtn || !bottomBtn) return;
-  if (!token) return;
+  <!-- 已经拥有 leash 或 bundle 的用户：按钮变 Open；刚从收银台回来直接跳 leash-access -->
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const API_BASE    = "https://calmpaw-auth.sophieinbg.workers.dev";
+    const ACCESS_URL  = "/leash-access.html";
+    const PENDING_KEY = "cp_leash_pending";
+    const OWNED_KEY   = "cp_leash_owned";
 
-  const BASE = "https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=";
-  const SLUGS = ["leash", "bundle"];
+    const mainBtn   = document.getElementById("cta-main-leash");
+    const bottomBtn = document.getElementById("cta-bottom-leash");
+    const token     = localStorage.getItem("calmpaw_token");
 
-  const url = new URL(window.location.href);
-  const qs = url.searchParams;
-  const justBought = qs.get("justBought");          // 支持 ?justBought=leash
-  const fromFlag   = qs.get("from");                // 也支持 ?from=checkout
-  const boughtNow  = (justBought === "leash") || (fromFlag === "checkout");
+    if (!mainBtn || !bottomBtn) return;
 
-  function turnButtonsToOpen() {
-    function makeOpen(btn, text) {
-      if (!btn) return;
-      btn.removeAttribute("target");
-      btn.href = ACCESS_URL;
-      btn.textContent = text;
+    function turnButtonsToOpen() {
+      function set(btn, text) {
+        if (!btn) return;
+        btn.removeAttribute("target");
+        btn.href = ACCESS_URL;
+        btn.textContent = text;
+      }
+      set(mainBtn,  "Open your 10-day plan →");
+      set(bottomBtn,"Go to your leash plan →");
     }
-    makeOpen(mainBtn, "Open your 10-day plan →");
-    makeOpen(bottomBtn, "Go to your leash plan →");
-  }
 
-  function verifyAndMaybeRedirect(allowRedirect) {
+    function turnButtonsToBuy() {
+      const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653887";
+      function set(btn, text) {
+        if (!btn) return;
+        btn.removeAttribute("target");
+        btn.href = CHECKOUT_URL;
+        btn.textContent = text;
+      }
+      set(mainBtn,  "Buy this plan – $19 →");
+      set(bottomBtn,"Get the 10-day leash plan – $19 →");
+    }
+
+    // ① 判断：是否“刚刚从收银台回来”（有 pending 且在 30 分钟内）
+    let justReturned = false;
+    try {
+      const tsStr = localStorage.getItem(PENDING_KEY);
+      if (token && tsStr) {
+        const ts  = parseInt(tsStr, 10) || 0;
+        const age = Date.now() - ts;
+        if (age >= 0 && age < 30 * 60 * 1000) {
+          justReturned = true;
+        } else {
+          localStorage.removeItem(PENDING_KEY);
+        }
+      }
+    } catch (e) {}
+
+    if (justReturned) {
+      // 乐观认为已经买成功
+      try {
+        localStorage.setItem(OWNED_KEY, "1");
+        localStorage.removeItem(PENDING_KEY);
+      } catch (e) {}
+      turnButtonsToOpen();
+      // 直接送去内容页
+      window.location.replace(ACCESS_URL + "?from=checkout");
+      return;
+    }
+
+    // ② 正常打开页面：先根据本地 owned 决定初始按钮，再调服务器确认
+    let ownedFlag = null;
+    try {
+      ownedFlag = localStorage.getItem(OWNED_KEY);
+    } catch (e) {}
+
+    if (ownedFlag === "1") {
+      turnButtonsToOpen();
+    } else {
+      turnButtonsToBuy();
+    }
+
+    // 没登录就不查服务器，保持按钮状态
+    if (!token) return;
+
+    const SLUGS = ["leash", "bundle"];
+    const BASE  = API_BASE + "/auth/check-plan?slug=";
+
     Promise.all(
       SLUGS.map(slug =>
         fetch(BASE + encodeURIComponent(slug), {
@@ -484,31 +539,22 @@ document.addEventListener("DOMContentLoaded", function () {
     )
       .then(results => {
         const hasAccess = results.some(d => d && d.ok && d.access);
-        if (!hasAccess) return;
-
-        turnButtonsToOpen();
-
-        if (allowRedirect) {
-          window.location.replace(ACCESS_URL + "?from=checkout");
+        if (hasAccess) {
+          try {
+            localStorage.setItem(OWNED_KEY, "1");
+          } catch (e) {}
+          turnButtonsToOpen();
+        } else {
+          try {
+            localStorage.removeItem(OWNED_KEY);
+          } catch (e) {}
+          turnButtonsToBuy();
         }
       })
       .catch(err => {
         console.error("check-plan leash/bundle error", err);
       });
-  }
-
-  // 正常打开页面时：查一次是否已拥有
-  verifyAndMaybeRedirect(false);
-
-  // 刚从 Digistore24 回来：?from=checkout 或 ?justBought=leash
-  if (boughtNow) {
-    // 乐观：先直接送去 access，再后台校验
-    turnButtonsToOpen();
-    setTimeout(() => {
-      window.location.replace(ACCESS_URL + "?from=checkout");
-    }, 400);
-  }
-});
-</script>
+  });
+  </script>
 </body>
 </html>
