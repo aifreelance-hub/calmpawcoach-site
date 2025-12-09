@@ -47,7 +47,6 @@
       color: inherit;
     }
 
-    /* Animations (for logo glow) */
     @keyframes glow-orbit {
       0% { transform: translate(0, 0) scale(1); opacity: 0.65; }
       50% { transform: translate(6px, -8px) scale(1.05); opacity: 0.9; }
@@ -55,7 +54,6 @@
     }
 
     /* Header */
-
     header {
       position: sticky;
       top: 0;
@@ -215,8 +213,6 @@
       font-size: 14px;
     }
 
-    /* Logged-in status in header */
-
     .nav-auth {
       display: flex;
       align-items: center;
@@ -290,8 +286,7 @@
       }
     }
 
-    /* Layout & page content */
-
+    /* Layout */
     main {
       max-width: 1120px;
       margin: 0 auto;
@@ -501,7 +496,6 @@
     }
 
     /* Footer */
-
     footer {
       border-top: 1px solid rgba(243, 217, 196, 0.8);
       background: rgba(255, 248, 241, 0.96);
@@ -560,9 +554,9 @@
         <a href="ai.html">Ask a Dog Trainer — AI Unlimited</a>
       </nav>
       <div class="nav-cta">
-        <!-- Default: Log in -->
         <div id="nav-auth-area">
-          <a class="btn-outline" href="auth.html?redirect=/program-anxiety-access.html">
+          <!-- 如果没登录，会在 JS 里重写成带 redirect 的 Log in 按钮 -->
+          <a class="btn-outline" href="auth.html?redirect=/anxiety-access.html">
             <span class="nav-login-emoji">🔑</span> Log in
           </a>
         </div>
@@ -571,229 +565,235 @@
   </header>
 
   <main>
-    <section class="hero">
-      <div>
-        <div class="hero-tag">Access page · 14-day separation plan unlocked</div>
-        <h1 class="hero-title">Your 14-Day Separation Anxiety Reset</h1>
-        <p class="hero-sub">
-          Thank you for getting the CalmPaw separation plan. This page contains your
-          full 14-day schedule to help your dog handle being alone more calmly.
-        </p>
-        <div class="hero-note">
-          <span>Bookmark this page</span> — this is your permanent access to the full
-          plan. You can slow down, repeat weeks, or start again after a move.
-        </div>
-        <div class="hero-actions">
-          <a href="bundle.html" class="btn-primary">See Complete Pack →</a>
-          <a href="programs.html" class="btn-outline">View other programs</a>
-        </div>
-      </div>
+    <!-- 访问状态提示 -->
+    <div id="access-status" class="highlight-box" style="display:none; margin-bottom:16px;"></div>
 
-      <div class="hero-card">
-        <h2>How to use this plan</h2>
-        <ul>
-          <li>Go at your dog’s pace — slow is okay, panic is not.</li>
-          <li>Only move to the next step when your dog is mostly calm at the current one.</li>
-          <li>Short, frequent sessions are better than long, stressful ones.</li>
+    <!-- 付费用户内容：初始隐藏，检查通过后再显示 -->
+    <div id="paid-content" style="display:none;">
+      <section class="hero">
+        <div>
+          <div class="hero-tag">Access page · 14-day separation plan unlocked</div>
+          <h1 class="hero-title">Your 14-Day Separation Anxiety Reset</h1>
+          <p class="hero-sub">
+            Thank you for getting the CalmPaw separation plan. This page contains your
+            full 14-day schedule to help your dog handle being alone more calmly.
+          </p>
+          <div class="hero-note">
+            <span>Bookmark this page</span> — this is your permanent access to the full
+            plan. You can slow down, repeat weeks, or start again after a move.
+          </div>
+          <div class="hero-actions">
+            <a href="bundle.html" class="btn-primary">See Complete Pack →</a>
+            <a href="programs.html" class="btn-outline">View other programs</a>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <h2>How to use this plan</h2>
+          <ul>
+            <li>Go at your dog’s pace — slow is okay, panic is not.</li>
+            <li>Only move to the next step when your dog is mostly calm at the current one.</li>
+            <li>Short, frequent sessions are better than long, stressful ones.</li>
+          </ul>
+          <p style="margin-top:6px;">
+            You don’t need perfect training. You just need to create predictable,
+            safe absences that your dog can slowly learn to trust.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>14-day structure overview</h2>
+        <p>
+          The plan is divided into four phases. Each phase covers several days.
+          You can repeat or extend any phase if your dog needs more time.
+        </p>
+
+        <div class="days-grid">
+          <div class="phase">
+            <div class="phase-title">Phase 1 — Safety & predictability</div>
+            <div class="phase-days">Days 1–3</div>
+            <ul class="phase-list">
+              <li>Build calm leaving and returning rituals.</li>
+              <li>Reduce confusing signals (grabbing keys and sitting back down).</li>
+              <li>Introduce “I’m leaving” cues paired with gentle rewards.</li>
+            </ul>
+            <div class="phase-tip">
+              🧩 Goal: Your dog starts to see your small movements (keys, shoes, door)
+              as less scary, more predictable.
+            </div>
+          </div>
+
+          <div class="phase">
+            <div class="phase-title">Phase 2 — Micro absences they can tolerate</div>
+            <div class="phase-days">Days 4–7</div>
+            <ul class="phase-list">
+              <li>Step out of sight for seconds, not minutes.</li>
+              <li>Watch your dog via a camera if possible (optional but helpful).</li>
+              <li>Return <em>before</em> they reach full panic mode.</li>
+            </ul>
+            <div class="phase-tip">
+              ⏱ It’s better to leave for 15 seconds calmly than 15 minutes in panic.
+            </div>
+          </div>
+
+          <div class="phase">
+            <div class="phase-title">Phase 3 — Door work & building duration</div>
+            <div class="phase-days">Days 8–11</div>
+            <ul class="phase-list">
+              <li>Add the sound of the door and small walks down the hallway.</li>
+              <li>Carefully increase time away as long as your dog stays below panic.</li>
+              <li>Use calm background sound or a fan if it helps your dog relax.</li>
+            </ul>
+            <div class="phase-tip">
+              🚪 The door is a big trigger. We’ll treat it gently, like a training exercise,
+              not a stressful surprise.
+            </div>
+          </div>
+
+          <div class="phase">
+            <div class="phase-title">Phase 4 — Real-life leaving & long-term routine</div>
+            <div class="phase-days">Days 12–14</div>
+            <ul class="phase-list">
+              <li>Match your leaving routine to real work days.</li>
+              <li>Decide on safe maximum times for your dog right now.</li>
+              <li>Create a weekly plan that protects your dog’s progress.</li>
+            </ul>
+            <div class="phase-tip">
+              🔁 Separation work is a marathon, not a sprint. A realistic routine
+              matters more than a “perfect” 14 days.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Detailed daily guidance</h2>
+        <p>You can treat the days as guideposts. If needed, repeat a day before moving on.</p>
+
+        <div class="days-grid" style="margin-top:10px;">
+          <div class="phase">
+            <div class="phase-title">Days 1–2 — Calm comings and goings</div>
+            <ul class="phase-list">
+              <li>Keep your arrivals and departures low-key — no big “goodbyes” or “I’m back!” parties.</li>
+              <li>Introduce a simple leaving phrase such as “Back soon” in a calm tone.</li>
+              <li>Give a small chew or stuffed toy <em>after</em> you put on shoes but before you leave.</li>
+            </ul>
+            <div class="phase-tip">
+              ❤️ Your dog learns: leaving happens, and it always follows the same safe pattern.
+            </div>
+          </div>
+
+          <div class="phase">
+            <div class="phase-title">Day 3 — Reading your dog’s stress</div>
+            <ul class="phase-list">
+              <li>Watch for early stress signs: pacing, lip licking, yawning, heavy panting.</li>
+              <li>Decide your dog’s “yellow zone” (mild worry) vs “red zone” (panic).</li>
+              <li>Your training aim: stay in the yellow zone or below.</li>
+            </ul>
+          </div>
+
+          <div class="phase">
+            <div class="phase-title">Days 4–5 — Out-of-sight moments</div>
+            <ul class="phase-list">
+              <li>Step into another room for 3–10 seconds, door half-closed if needed.</li>
+              <li>Return before your dog reaches panic, calmly praise and carry on.</li>
+              <li>Do 5–10 reps at this level, then stop while it still feels easy.</li>
+            </ul>
+          </div>
+
+          <div class="phase">
+            <div class="phase-title">Days 6–7 — Short door closes</div>
+            <ul class="phase-list">
+              <li>Close the main door for 5–15 seconds while you stay just outside.</li>
+              <li>Listen or watch for signs of distress. Come back before a full meltdown.</li>
+              <li>Gradually combine door closing with your leaving phrase.</li>
+            </ul>
+          </div>
+
+          <div class="phase">
+            <div class="phase-title">Days 8–9 — Down the hall & back</div>
+            <ul class="phase-list">
+              <li>Walk down the hallway or just outside the building, then return.</li>
+              <li>Use a timer so you can track how long your dog comfortably manages.</li>
+              <li>Write down your dog’s “easy” time (for example, 45 seconds, 2 minutes).</li>
+            </ul>
+          </div>
+
+          <div class="phase">
+            <div class="phase-title">Days 10–11 — Matching daily life</div>
+            <ul class="phase-list">
+              <li>Practice leaving at the same time you normally go to work or errands.</li>
+              <li>Stick to a duration your dog has already handled calmly.</li>
+              <li>If needed, combine this with support (dog walker, family, daycare) to avoid big jumps.</li>
+            </ul>
+          </div>
+
+          <div class="phase">
+            <div class="phase-title">Days 12–14 — Maintain & protect progress</div>
+            <ul class="phase-list">
+              <li>Decide on a safe maximum alone-time window for now.</li>
+              <li>Plan alternate care for situations that would push far beyond that limit.</li>
+              <li>Set 2–3 short “maintenance” sessions per week to keep your dog’s confidence strong.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Reminders when you feel overwhelmed</h2>
+        <ul class="checklist">
+          <li><strong>You are not alone.</strong> Separation issues are extremely common, especially in rescue dogs.</li>
+          <li><strong>Your dog is not being spiteful.</strong> Panic is not “naughtiness” — it’s fear.</li>
+          <li><strong>If your dog is panicking, go slower.</strong> Shorter absences are progress, not failure.</li>
+          <li><strong>Get help if needed.</strong> A local vet or behaviorist can rule out medical or extreme cases.</li>
         </ul>
-        <p style="margin-top:6px;">
-          You don’t need perfect training. You just need to create predictable,
-          safe absences that your dog can slowly learn to trust.
-        </p>
-      </div>
-    </section>
+      </section>
 
-    <section class="section">
-      <h2>14-day structure overview</h2>
-      <p>
-        The plan is divided into four phases. Each phase covers several days.
-        You can repeat or extend any phase if your dog needs more time.
-      </p>
-
-      <div class="days-grid">
-        <div class="phase">
-          <div class="phase-title">Phase 1 — Safety & predictability</div>
-          <div class="phase-days">Days 1–3</div>
-          <ul class="phase-list">
-            <li>Build calm leaving and returning rituals.</li>
-            <li>Reduce confusing signals (grabbing keys and sitting back down).</li>
-            <li>Introduce “I’m leaving” cues paired with gentle rewards.</li>
-          </ul>
-          <div class="phase-tip">
-            🧩 Goal: Your dog starts to see your small movements (keys, shoes, door)
-            as less scary, more predictable.
+      <section class="section">
+        <h2>FAQ</h2>
+        <div class="faq-item">
+          <div class="faq-q">What if I work full-time and can’t follow the plan perfectly?</div>
+          <div class="faq-a">
+            Do what you can consistently. You might use evenings and weekends for
+            structured practice, and arrange dog walkers, daycare or family help on
+            longer work days while your dog is still learning.
           </div>
         </div>
-
-        <div class="phase">
-          <div class="phase-title">Phase 2 — Micro absences they can tolerate</div>
-          <div class="phase-days">Days 4–7</div>
-          <ul class="phase-list">
-            <li>Step out of sight for seconds, not minutes.</li>
-            <li>Watch your dog via a camera if possible (optional but helpful).</li>
-            <li>Return <em>before</em> they reach full panic mode.</li>
-          </ul>
-          <div class="phase-tip">
-            ⏱ It’s better to leave for 15 seconds calmly than 15 minutes in panic.
+        <div class="faq-item">
+          <div class="faq-q">Will my dog ever be “normal” with alone time?</div>
+          <div class="faq-a">
+            Many dogs can become much calmer with consistent, gentle training. For
+            some, “normal” may still include shorter alone times and a bit more
+            support — and that’s okay. Your job is to make things kinder and easier,
+            not perfect.
           </div>
         </div>
+      </section>
 
-        <div class="phase">
-          <div class="phase-title">Phase 3 — Door work & building duration</div>
-          <div class="phase-days">Days 8–11</div>
-          <ul class="phase-list">
-            <li>Add the sound of the door and small walks down the hallway.</li>
-            <li>Carefully increase time away as long as your dog stays below panic.</li>
-            <li>Use calm background sound or a fan if it helps your dog relax.</li>
+      <section class="section">
+        <h2>Next steps</h2>
+        <div class="highlight-box">
+          <p style="margin-bottom:6px;">
+            You can return to this page any time, repeat phases and re-start the
+            plan after big life changes such as moving home or changing jobs.
+          </p>
+          <p style="margin-bottom:6px;">
+            If you’d also like support with barking at doors or stressful walks,
+            the <strong>CalmPaw Complete Pack</strong> includes:
+          </p>
+          <ul style="margin-left:16px;margin-bottom:6px;">
+            <li>🔕 Barking plan (7 days)</li>
+            <li>🏡 Separation anxiety plan (14 days — this one)</li>
+            <li>🚶‍♀️ Leash walking plan (10 days)</li>
           </ul>
-          <div class="phase-tip">
-            🚪 The door is a big trigger. We’ll treat it gently, like a training exercise,
-            not a stressful surprise.
+          <p>You can explore the bundle here:</p>
+          <div style="margin-top:8px;">
+            <a href="bundle.html" class="btn-primary">View Complete Pack →</a>
           </div>
         </div>
-
-        <div class="phase">
-          <div class="phase-title">Phase 4 — Real-life leaving & long-term routine</div>
-          <div class="phase-days">Days 12–14</div>
-          <ul class="phase-list">
-            <li>Match your leaving routine to real work days.</li>
-            <li>Decide on safe maximum times for your dog right now.</li>
-            <li>Create a weekly plan that protects your dog’s progress.</li>
-          </ul>
-          <div class="phase-tip">
-            🔁 Separation work is a marathon, not a sprint. A realistic routine
-            matters more than a “perfect” 14 days.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <h2>Detailed daily guidance</h2>
-      <p>You can treat the days as guideposts. If needed, repeat a day before moving on.</p>
-
-      <div class="days-grid" style="margin-top:10px;">
-        <div class="phase">
-          <div class="phase-title">Days 1–2 — Calm comings and goings</div>
-          <ul class="phase-list">
-            <li>Keep your arrivals and departures low-key — no big “goodbyes” or “I’m back!” parties.</li>
-            <li>Introduce a simple leaving phrase such as “Back soon” in a calm tone.</li>
-            <li>Give a small chew or stuffed toy <em>after</em> you put on shoes but before you leave.</li>
-          </ul>
-          <div class="phase-tip">
-            ❤️ Your dog learns: leaving happens, and it always follows the same safe pattern.
-          </div>
-        </div>
-
-        <div class="phase">
-          <div class="phase-title">Day 3 — Reading your dog’s stress</div>
-          <ul class="phase-list">
-            <li>Watch for early stress signs: pacing, lip licking, yawning, heavy panting.</li>
-            <li>Decide your dog’s “yellow zone” (mild worry) vs “red zone” (panic).</li>
-            <li>Your training aim: stay in the yellow zone or below.</li>
-          </ul>
-        </div>
-
-        <div class="phase">
-          <div class="phase-title">Days 4–5 — Out-of-sight moments</div>
-          <ul class="phase-list">
-            <li>Step into another room for 3–10 seconds, door half-closed if needed.</li>
-            <li>Return before your dog reaches panic, calmly praise and carry on.</li>
-            <li>Do 5–10 reps at this level, then stop while it still feels easy.</li>
-          </ul>
-        </div>
-
-        <div class="phase">
-          <div class="phase-title">Days 6–7 — Short door closes</div>
-          <ul class="phase-list">
-            <li>Close the main door for 5–15 seconds while you stay just outside.</li>
-            <li>Listen or watch for signs of distress. Come back before a full meltdown.</li>
-            <li>Gradually combine door closing with your leaving phrase.</li>
-          </ul>
-        </div>
-
-        <div class="phase">
-          <div class="phase-title">Days 8–9 — Down the hall & back</div>
-          <ul class="phase-list">
-            <li>Walk down the hallway or just outside the building, then return.</li>
-            <li>Use a timer so you can track how long your dog comfortably manages.</li>
-            <li>Write down your dog’s “easy” time (for example, 45 seconds, 2 minutes).</li>
-          </ul>
-        </div>
-
-        <div class="phase">
-          <div class="phase-title">Days 10–11 — Matching daily life</div>
-          <ul class="phase-list">
-            <li>Practice leaving at the same time you normally go to work or errands.</li>
-            <li>Stick to a duration your dog has already handled calmly.</li>
-            <li>If needed, combine this with support (dog walker, family, daycare) to avoid big jumps.</li>
-          </ul>
-        </div>
-
-        <div class="phase">
-          <div class="phase-title">Days 12–14 — Maintain & protect progress</div>
-          <ul class="phase-list">
-            <li>Decide on a safe maximum alone-time window for now.</li>
-            <li>Plan alternate care for situations that would push far beyond that limit.</li>
-            <li>Set 2–3 short “maintenance” sessions per week to keep your dog’s confidence strong.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <h2>Reminders when you feel overwhelmed</h2>
-      <ul class="checklist">
-        <li><strong>You are not alone.</strong> Separation issues are extremely common, especially in rescue dogs.</li>
-        <li><strong>Your dog is not being spiteful.</strong> Panic is not “naughtiness” — it’s fear.</li>
-        <li><strong>If your dog is panicking, go slower.</strong> Shorter absences are progress, not failure.</li>
-        <li><strong>Get help if needed.</strong> A local vet or behaviorist can rule out medical or extreme cases.</li>
-      </ul>
-    </section>
-
-    <section class="section">
-      <h2>FAQ</h2>
-      <div class="faq-item">
-        <div class="faq-q">What if I work full-time and can’t follow the plan perfectly?</div>
-        <div class="faq-a">
-          Do what you can consistently. You might use evenings and weekends for
-          structured practice, and arrange dog walkers, daycare or family help on
-          longer work days while your dog is still learning.
-        </div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q">Will my dog ever be “normal” with alone time?</div>
-        <div class="faq-a">
-          Many dogs can become much calmer with consistent, gentle training. For
-          some, “normal” may still include shorter alone times and a bit more
-          support — and that’s okay. Your job is to make things kinder and easier,
-          not perfect.
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <h2>Next steps</h2>
-      <div class="highlight-box">
-        <p style="margin-bottom:6px;">
-          You can return to this page any time, repeat phases and re-start the
-          plan after big life changes such as moving home or changing jobs.
-        </p>
-        <p style="margin-bottom:6px;">
-          If you’d also like support with barking at doors or stressful walks,
-          the <strong>CalmPaw Complete Pack</strong> includes:
-        </p>
-        <ul style="margin-left:16px;margin-bottom:6px;">
-          <li>🔕 Barking plan (7 days)</li>
-          <li>🏡 Separation anxiety plan (14 days — this one)</li>
-          <li>🚶‍♀️ Leash walking plan (10 days)</li>
-        </ul>
-        <p>You can explore the bundle here:</p>
-        <div style="margin-top:8px;">
-          <a href="bundle.html" class="btn-primary">View Complete Pack →</a>
-        </div>
-      </div>
-    </section>
+      </section>
+    </div>
   </main>
 
   <footer>
@@ -807,15 +807,13 @@
         <a href="privacy.html">Privacy Policy</a>
         <a href="legal.html">Legal Notice</a>
       </div>
-      
       <p style="font-size:12px; color:#aaa; margin-top:10px;">
-  The debit will be performed by Digistore24.com
-</p>
-      
+        The debit will be performed by Digistore24.com
+      </p>
     </div>
   </footer>
 
-  <!-- Year + header auth state (same style as index) -->
+  <!-- 全局 API_BASE + 顶部登录状态 -->
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
 
@@ -828,10 +826,9 @@
       const token = localStorage.getItem("calmpaw_token");
       const email = localStorage.getItem("calmpaw_email");
 
-      // Not logged in: show Log in button with redirect to current page
       if (!token) {
         area.innerHTML = `
-          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent(window.location.pathname || '/index.html')}">
+          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent(window.location.pathname || '/anxiety-access.html')}">
             <span class="nav-login-emoji">🔑</span> Log in
           </a>`;
         return;
@@ -847,7 +844,7 @@
           localStorage.removeItem("calmpaw_token");
           localStorage.removeItem("calmpaw_email");
           area.innerHTML = `
-            <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent(window.location.pathname || '/index.html')}">
+            <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent(window.location.pathname || '/anxiety-access.html')}">
               <span class="nav-login-emoji">🔑</span> Log in
             </a>`;
           return;
@@ -868,7 +865,7 @@
           switchBtn.addEventListener("click", () => {
             localStorage.removeItem("calmpaw_token");
             localStorage.removeItem("calmpaw_email");
-            const redirect = encodeURIComponent(window.location.pathname || "/index.html");
+            const redirect = encodeURIComponent(window.location.pathname || "/anxiety-access.html");
             window.location.href = `auth.html?redirect=${redirect}`;
           });
         }
@@ -884,7 +881,7 @@
       } catch (e) {
         console.error("auth hydrate error", e);
         area.innerHTML = `
-          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent(window.location.pathname || '/index.html')}">
+          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent(window.location.pathname || '/anxiety-access.html')}">
             <span class="nav-login-emoji">🔑</span> Log in
           </a>`;
       }
@@ -893,11 +890,18 @@
     document.addEventListener("DOMContentLoaded", hydrateNavAuth);
   </script>
 
-  <!-- Access control: redirect if not logged in / didn't buy this plan -->
+  <!-- 访问控制：只在检查通过时显示内容，不再自动跳回购买页 -->
   <script>
     (function () {
-      const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
       const token = localStorage.getItem("calmpaw_token");
+      const statusBox = document.getElementById("access-status");
+      const paidContent = document.getElementById("paid-content");
+
+      function showStatus(html) {
+        if (!statusBox) return;
+        statusBox.style.display = "block";
+        statusBox.innerHTML = html;
+      }
 
       function goAuth() {
         const redirect = window.location.pathname + window.location.search;
@@ -905,9 +909,12 @@
       }
 
       if (!token) {
+        showStatus("Please log in with the same email you used to purchase this plan.");
         goAuth();
         return;
       }
+
+      showStatus("Checking your access…");
 
       fetch(API_BASE + "/auth/check-plan?slug=anxiety", {
         method: "GET",
@@ -917,20 +924,28 @@
           if (!res.ok) {
             localStorage.removeItem("calmpaw_token");
             localStorage.removeItem("calmpaw_email");
+            showStatus("Session expired. Please log in again to view your 14-day plan.");
             goAuth();
             return;
           }
           const data = await res.json();
-          if (!data.ok || !data.access) {
-            // Logged in but did not purchase this plan → send back to program page
-            window.location.href = "/program-anxiety.html";
+
+          if (data.ok && data.access) {
+            if (paidContent) paidContent.style.display = "block";
+            showStatus("Access confirmed ✅ You can use this page as your permanent 14-day separation plan.");
+          } else {
+            if (paidContent) paidContent.style.display = "none";
+            showStatus(
+              "We can't find this plan on your account yet.<br>" +
+              "If you just paid via Digistore24, it can take up to 1–2 minutes for access to sync. " +
+              "Please refresh this page shortly. If it still stays locked, contact support with your payment email."
+            );
           }
         })
         .catch(() => {
-          goAuth();
+          showStatus("Server error. Please refresh this page or try again later.");
         });
     })();
   </script>
 </body>
 </html>
-
