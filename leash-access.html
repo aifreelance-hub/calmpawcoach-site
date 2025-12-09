@@ -62,55 +62,58 @@
       display:flex;align-items:center;gap:10px;
       flex-shrink:0;
     }
-    .nav-login-area{
-      display:flex;align-items:center;gap:6px;
-      font-size:12px;color:var(--text-soft);
-      max-width:220px;
+
+    /* 顶部登录区域（跟其他 access 页统一） */
+    .nav-auth{
+      display:flex;
+      align-items:center;
+      gap:6px;
     }
-    .nav-login-email{
-      max-width:140px;
-      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    .nav-auth-email{
+      max-width:160px;
       padding:5px 10px;
       border-radius:var(--radius-pill);
-      background:#fff9f3;
+      background:rgba(255,250,244,0.95);
       border:1px solid rgba(243,217,196,0.9);
+      font-size:12px;
       color:#6b4532;
-    }
-    .btn-mini{
-      padding:4px 10px;
-      border-radius:999px;
-      border:1px solid var(--border-soft);
-      background:#fff8f2;
-      font-size:11px;
-      cursor:pointer;
-      color:var(--text-soft);
       white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
-    .btn-mini-danger{
-      border-color:rgba(248,113,113,0.7);
-      color:#b91c1c;
-      background:#fff5f5;
+    .nav-auth-btn{
+      border:none;
+      background:transparent;
+      font-size:11px;
+      color:#b05825;
+      padding:4px 7px;
+      border-radius:999px;
+      cursor:pointer;
+      white-space:nowrap;
+      transition:background .15s ease,color .15s ease;
     }
-    .btn-mini:hover{
-      border-color:var(--accent);
-      color:var(--text-main);
+    .nav-auth-btn:hover{
+      background:rgba(255,237,213,0.95);
+      color:#7a3410;
     }
 
-    .btn-primary{
-      padding:7px 16px;border-radius:var(--radius-pill);border:none;
-      font-size:13px;font-weight:600;cursor:pointer;
-      background:linear-gradient(135deg,#ffb86b,#ff914d);color:#4a251a;
-      box-shadow:0 16px 36px rgba(214,139,86,0.6);
-      display:inline-flex;align-items:center;gap:6px;
-      white-space:nowrap;
-    }
-    .btn-primary:hover{transform:translateY(-1px) scale(1.01);}
     .btn-outline{
       padding:7px 14px;border-radius:var(--radius-pill);
       border:1px solid var(--border-soft);font-size:13px;
       background:#fff8f2;color:var(--text-soft);cursor:pointer;
       white-space:nowrap;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
     }
+    .btn-outline:hover{
+      border-color:var(--accent);
+      color:var(--text-main);
+      box-shadow:0 14px 32px rgba(204,145,107,0.28);
+      transform:translateY(-1px);
+      background:#fffaf5;
+    }
+    .nav-login-emoji{font-size:14px;}
 
     @media(max-width:640px){
       .nav-inner{
@@ -124,18 +127,25 @@
         justify-content:flex-end;
         gap:6px;
       }
-      .btn-primary{
-        padding:7px 12px;
-        font-size:12px;
-      }
       .btn-outline{
         padding:6px 10px;
         font-size:12px;
       }
-      .nav-login-email{
-        max-width:110px;
+      .nav-auth-email{
+        max-width:130px;
+        font-size:11px;
       }
     }
+
+    .btn-primary{
+      padding:7px 16px;border-radius:var(--radius-pill);border:none;
+      font-size:13px;font-weight:600;cursor:pointer;
+      background:linear-gradient(135deg,#ffb86b,#ff914d);color:#4a251a;
+      box-shadow:0 16px 36px rgba(214,139,86,0.6);
+      display:inline-flex;align-items:center;gap:6px;
+      white-space:nowrap;
+    }
+    .btn-primary:hover{transform:translateY(-1px) scale(1.01);}
 
     main{max-width:1120px;margin:0 auto;padding:24px 20px 40px;}
     .hero{
@@ -236,232 +246,241 @@
         <a href="ai.html">Ask a Dog Trainer — AI Unlimited</a>
       </nav>
       <div class="nav-cta">
-        <div id="nav-login-area" class="nav-login-area">
-          <!-- JS 渲染登录状态 -->
+        <!-- 顶部登录状态区域 -->
+        <div id="nav-auth-area">
+          <a class="btn-outline" href="auth.html?redirect=/leash-access.html">
+            <span class="nav-login-emoji">🔑</span> Log in
+          </a>
         </div>
       </div>
     </div>
   </header>
 
   <main>
-    <section class="hero">
-      <div>
-        <div class="hero-tag">Access page · 10-day leash plan unlocked</div>
-        <h1 class="hero-title">Your 10-Day Leash Walking Plan</h1>
-        <p class="hero-sub">
-          This page contains your full 10-day structure for calmer, more
-          enjoyable walks. You can bookmark it and come back anytime.
-        </p>
-        <div class="hero-note">
-          <span>Tip:</span> keep sessions short. It’s better to do 5 quality
-          minutes than 40 minutes of pulling and frustration.
-        </div>
-        <div class="hero-actions">
-          <a href="bundle.html" class="btn-primary">See Complete Pack →</a>
-          <a href="programs.html" class="btn-outline">View other programs</a>
-        </div>
-      </div>
+    <!-- 顶部访问状态提示 -->
+    <div id="access-status" class="highlight-box" style="display:none;margin-bottom:16px;"></div>
 
-      <div class="hero-card">
-        <h2>How to use this plan</h2>
-        <ul>
-          <li>Choose one or two short sessions per day (5–15 minutes).</li>
-          <li>Practice indoors or in quiet areas first, then build outwards.</li>
-          <li>End sessions while your dog is still thinking, not overwhelmed.</li>
-        </ul>
-        <p style="margin-top:6px;">
-          Progress is measured in more moments of slack leash, faster recovery
-          from distractions and walks you don’t dread.
-        </p>
-      </div>
-    </section>
+    <!-- 下面是真正内容：确认有 leash 权限后再展示 -->
+    <div id="paid-content" style="display:none;">
+      <section class="hero">
+        <div>
+          <div class="hero-tag">Access page · 10-day leash plan unlocked</div>
+          <h1 class="hero-title">Your 10-Day Leash Walking Plan</h1>
+          <p class="hero-sub">
+            This page contains your full 10-day structure for calmer, more
+            enjoyable walks. You can bookmark it and come back anytime.
+          </p>
+          <div class="hero-note">
+            <span>Tip:</span> keep sessions short. It’s better to do 5 quality
+            minutes than 40 minutes of pulling and frustration.
+          </div>
+          <div class="hero-actions">
+            <a href="bundle.html" class="btn-primary">See Complete Pack →</a>
+            <a href="programs.html" class="btn-outline">View other programs</a>
+          </div>
+        </div>
 
-    <section class="section">
-      <h2>10-day schedule</h2>
-      <div class="days-grid">
-        <div class="day-block">
-          <div class="day-title-row">
-            <div class="day-title">Day 1 — Gear & expectations</div>
-            <div class="day-time">10–15 minutes</div>
-          </div>
-          <div class="day-focus">
-            Set up safe equipment and a calm “walk start” routine.
-          </div>
-          <ul class="day-steps">
-            <li>Choose a well-fitted harness or flat collar and a non-retractable leash.</li>
-            <li>Before you clip the leash, wait for a brief moment of calm — then clip and praise.</li>
-            <li>Practice clipping / unclipping 5–10 times while rewarding calm, not jumping.</li>
+        <div class="hero-card">
+          <h2>How to use this plan</h2>
+          <ul>
+            <li>Choose one or two short sessions per day (5–15 minutes).</li>
+            <li>Practice indoors or in quiet areas first, then build outwards.</li>
+            <li>End sessions while your dog is still thinking, not overwhelmed.</li>
           </ul>
-          <div class="day-tip">
-            🎯 Goal: Your dog learns that walks begin with a pause, not a launch.
+          <p style="margin-top:6px;">
+            Progress is measured in more moments of slack leash, faster recovery
+            from distractions and walks you don’t dread.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>10-day schedule</h2>
+        <div class="days-grid">
+          <div class="day-block">
+            <div class="day-title-row">
+              <div class="day-title">Day 1 — Gear & expectations</div>
+              <div class="day-time">10–15 minutes</div>
+            </div>
+            <div class="day-focus">
+              Set up safe equipment and a calm “walk start” routine.
+            </div>
+            <ul class="day-steps">
+              <li>Choose a well-fitted harness or flat collar and a non-retractable leash.</li>
+              <li>Before you clip the leash, wait for a brief moment of calm — then clip and praise.</li>
+              <li>Practice clipping / unclipping 5–10 times while rewarding calm, not jumping.</li>
+            </ul>
+            <div class="day-tip">
+              🎯 Goal: Your dog learns that walks begin with a pause, not a launch.
+            </div>
+          </div>
+
+          <div class="day-block">
+            <div class="day-title-row">
+              <div class="day-title">Day 2 — “Check-in” indoors</div>
+              <div class="day-time">10 minutes</div>
+            </div>
+            <div class="day-focus">
+              Teach your dog to look back at you and reconnect.
+            </div>
+            <ul class="day-steps">
+              <li>In a quiet room with the leash on, take a few steps.</li>
+              <li>When your dog glances back at you, softly mark it (“yes” / “nice”) and reward by your leg.</li>
+              <li>Repeat 10–15 times. You’re building a habit: checking in is valuable.</li>
+            </ul>
+          </div>
+
+          <div class="day-block">
+            <div class="day-title-row">
+              <div class="day-title">Day 3 — Loose leash game inside</div>
+              <div class="day-time">10–15 minutes</div>
+            </div>
+            <div class="day-focus">
+              Reward slack leash before you go outside.
+            </div>
+            <ul class="day-steps">
+              <li>Walk slowly around the room. When the leash hangs in a “J” shape, reward by your leg.</li>
+              <li>If the leash goes tight, stop moving. Wait for your dog to step back or turn, then reward and walk again.</li>
+              <li>Keep the tone light — this is a game, not a battle.</li>
+            </ul>
+          </div>
+
+          <div class="day-block">
+            <div class="day-title-row">
+              <div class="day-title">Day 4 — First short outside session</div>
+              <div class="day-time">5–10 minutes</div>
+            </div>
+            <div class="day-focus">
+              Take the indoor game to a quiet outdoor spot.
+            </div>
+            <ul class="day-steps">
+              <li>Pick the calmest area near your home (courtyard, quiet street, parking lot).</li>
+              <li>Walk small loops, rewarding slack leash and check-ins.</li>
+              <li>End before your dog gets over-excited or tired.</li>
+            </ul>
+          </div>
+
+          <div class="day-block">
+            <div class="day-title-row">
+              <div class="day-title">Day 5 — Start, stop, start</div>
+              <div class="day-time">10–15 minutes</div>
+            </div>
+            <div class="day-focus">
+              Show your dog that pulling stops the walk, connection restarts it.
+            </div>
+            <ul class="day-steps">
+              <li>On a normal route, walk at a comfortable pace.</li>
+              <li>If your dog pulls hard, gently stop and plant your feet.</li>
+              <li>When your dog softens the leash or looks back, mark it and walk again.</li>
+            </ul>
+          </div>
+
+          <div class="day-block">
+            <div class="day-title-row">
+              <div class="day-title">Day 6 — Focus near mild distractions</div>
+              <div class="day-time">10–15 minutes</div>
+            </div>
+            <div class="day-focus">
+              Practice near distant people, cars or dogs.
+            </div>
+            <ul class="day-steps">
+              <li>Stay far enough away that your dog can still think and take treats.</li>
+              <li>Reward check-ins and slack leash while the distraction is visible.</li>
+              <li>If your dog locks on and can’t respond, move further away and try again.</li>
+            </ul>
+          </div>
+
+          <div class="day-block">
+            <div class="day-title-row">
+              <div class="day-title">Day 7 — “Choose you” game</div>
+              <div class="day-time">10 minutes</div>
+            </div>
+            <div class="day-focus">
+              Make you the most interesting part of the walk.
+            </div>
+            <ul class="day-steps">
+              <li>Randomly change direction or speed for a few steps.</li>
+              <li>Each time your dog follows and reconnects, reward warmly.</li>
+              <li>Keep sessions short and playful, not dizzy or chaotic.</li>
+            </ul>
+          </div>
+
+          <div class="day-block">
+            <div class="day-title-row">
+              <div class="day-title">Day 8 — Real route rehearsal</div>
+              <div class="day-time">15–20 minutes</div>
+            </div>
+            <div class="day-focus">
+              Use your usual walk route and apply all your tools.
+            </div>
+            <ul class="day-steps">
+              <li>Plan one “training walk” with extra time, separate from potty needs.</li>
+              <li>Use stop/start, check-ins and changes of direction when needed.</li>
+              <li>Notice where your dog struggles most and plan extra practice there.</li>
+            </ul>
+          </div>
+
+          <div class="day-block">
+            <div class="day-title-row">
+              <div class="day-title">Day 9 — Busy-day backup plan</div>
+              <div class="day-time">10 minutes</div>
+            </div>
+            <div class="day-focus">
+              Create a version of the walk for days when you’re tired or rushed.
+            </div>
+            <ul class="day-steps">
+              <li>Choose a shorter, easier route for “busy days”.</li>
+              <li>Focus on one skill only (for example, check-ins) instead of everything.</li>
+              <li>End with a simple sniffing break so your dog still feels satisfied.</li>
+            </ul>
+          </div>
+
+          <div class="day-block">
+            <div class="day-title-row">
+              <div class="day-title">Day 10 — Review & future routine</div>
+              <div class="day-time">10–15 minutes</div>
+            </div>
+            <div class="day-focus">
+              Lock in habits and decide how you’ll maintain them.
+            </div>
+            <ul class="day-steps">
+              <li>Notice how your walks feel compared to Day 1.</li>
+              <li>Pick 1–2 core rules (for example: “we don’t move forward on a tight leash”).</li>
+              <li>Schedule 1 “training-focused” walk per week to keep progress strong.</li>
+            </ul>
           </div>
         </div>
+      </section>
 
-        <div class="day-block">
-          <div class="day-title-row">
-            <div class="day-title">Day 2 — “Check-in” indoors</div>
-            <div class="day-time">10 minutes</div>
-          </div>
-          <div class="day-focus">
-            Teach your dog to look back at you and reconnect.
-          </div>
-          <ul class="day-steps">
-            <li>In a quiet room with the leash on, take a few steps.</li>
-            <li>When your dog glances back at you, softly mark it (“yes” / “nice”) and reward by your leg.</li>
-            <li>Repeat 10–15 times. You’re building a habit: checking in is valuable.</li>
+      <section class="section">
+        <h2>On days when it feels hopeless</h2>
+        <div class="highlight-box">
+          <p style="margin-bottom:6px;">
+            Every dog-human pair has bad walks. Progress is rarely a straight line.
+          </p>
+          <ul style="margin-left:16px;margin-bottom:6px;">
+            <li>Shorten your walk and lower your expectations that day.</li>
+            <li>Celebrate small wins: one calmer corner, one easier passing of a dog.</li>
+            <li>Remember: your dog is not trying to annoy you. They’re excited, curious or anxious.</li>
           </ul>
+          <p>
+            You can revisit any day of this plan whenever you need a reset.
+          </p>
         </div>
+      </section>
 
-        <div class="day-block">
-          <div class="day-title-row">
-            <div class="day-title">Day 3 — Loose leash game inside</div>
-            <div class="day-time">10–15 minutes</div>
-          </div>
-          <div class="day-focus">
-            Reward slack leash before you go outside.
-          </div>
-          <ul class="day-steps">
-            <li>Walk slowly around the room. When the leash hangs in a “J” shape, reward by your leg.</li>
-            <li>If the leash goes tight, stop moving. Wait for your dog to step back or turn, then reward and walk again.</li>
-            <li>Keep the tone light — this is a game, not a battle.</li>
-          </ul>
-        </div>
-
-        <div class="day-block">
-          <div class="day-title-row">
-            <div class="day-title">Day 4 — First short outside session</div>
-            <div class="day-time">5–10 minutes</div>
-          </div>
-          <div class="day-focus">
-            Take the indoor game to a quiet outdoor spot.
-          </div>
-          <ul class="day-steps">
-            <li>Pick the calmest area near your home (courtyard, quiet street, parking lot).</li>
-            <li>Walk small loops, rewarding slack leash and check-ins.</li>
-            <li>End before your dog gets over-excited or tired.</li>
-          </ul>
-        </div>
-
-        <div class="day-block">
-          <div class="day-title-row">
-            <div class="day-title">Day 5 — Start, stop, start</div>
-            <div class="day-time">10–15 minutes</div>
-          </div>
-          <div class="day-focus">
-            Show your dog that pulling stops the walk, connection restarts it.
-          </div>
-          <ul class="day-steps">
-            <li>On a normal route, walk at a comfortable pace.</li>
-            <li>If your dog pulls hard, gently stop and plant your feet.</li>
-            <li>When your dog softens the leash or looks back, mark it and walk again.</li>
-          </ul>
-        </div>
-
-        <div class="day-block">
-          <div class="day-title-row">
-            <div class="day-title">Day 6 — Focus near mild distractions</div>
-            <div class="day-time">10–15 minutes</div>
-          </div>
-          <div class="day-focus">
-            Practice near distant people, cars or dogs.
-          </div>
-          <ul class="day-steps">
-            <li>Stay far enough away that your dog can still think and take treats.</li>
-            <li>Reward check-ins and slack leash while the distraction is visible.</li>
-            <li>If your dog locks on and can’t respond, move further away and try again.</li>
-          </ul>
-        </div>
-
-        <div class="day-block">
-          <div class="day-title-row">
-            <div class="day-title">Day 7 — “Choose you” game</div>
-            <div class="day-time">10 minutes</div>
-          </div>
-          <div class="day-focus">
-            Make you the most interesting part of the walk.
-          </div>
-          <ul class="day-steps">
-            <li>Randomly change direction or speed for a few steps.</li>
-            <li>Each time your dog follows and reconnects, reward warmly.</li>
-            <li>Keep sessions short and playful, not dizzy or chaotic.</li>
-          </ul>
-        </div>
-
-        <div class="day-block">
-          <div class="day-title-row">
-            <div class="day-title">Day 8 — Real route rehearsal</div>
-            <div class="day-time">15–20 minutes</div>
-          </div>
-          <div class="day-focus">
-            Use your usual walk route and apply all your tools.
-          </div>
-          <ul class="day-steps">
-            <li>Plan one “training walk” with extra time, separate from potty needs.</li>
-            <li>Use stop/start, check-ins and changes of direction when needed.</li>
-            <li>Notice where your dog struggles most and plan extra practice there.</li>
-          </ul>
-        </div>
-
-        <div class="day-block">
-          <div class="day-title-row">
-            <div class="day-title">Day 9 — Busy-day backup plan</div>
-            <div class="day-time">10 minutes</div>
-          </div>
-          <div class="day-focus">
-            Create a version of the walk for days when you’re tired or rushed.
-          </div>
-          <ul class="day-steps">
-            <li>Choose a shorter, easier route for “busy days”.</li>
-            <li>Focus on one skill only (for example, check-ins) instead of everything.</li>
-            <li>End with a simple sniffing break so your dog still feels satisfied.</li>
-          </ul>
-        </div>
-
-        <div class="day-block">
-          <div class="day-title-row">
-            <div class="day-title">Day 10 — Review & future routine</div>
-            <div class="day-time">10–15 minutes</div>
-          </div>
-          <div class="day-focus">
-            Lock in habits and decide how you’ll maintain them.
-          </div>
-          <ul class="day-steps">
-            <li>Notice how your walks feel compared to Day 1.</li>
-            <li>Pick 1–2 core rules (for example: “we don’t move forward on a tight leash”).</li>
-            <li>Schedule 1 “training-focused” walk per week to keep progress strong.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <h2>On days when it feels hopeless</h2>
-      <div class="highlight-box">
-        <p style="margin-bottom:6px;">
-          Every dog-human pair has bad walks. Progress is rarely a straight line.
-        </p>
-        <ul style="margin-left:16px;margin-bottom:6px;">
-          <li>Shorten your walk and lower your expectations that day.</li>
-          <li>Celebrate small wins: one calmer corner, one easier passing of a dog.</li>
-          <li>Remember: your dog is not trying to annoy you. They’re excited, curious or anxious.</li>
-        </ul>
+      <section class="section">
+        <h2>Want help with other struggles too?</h2>
         <p>
-          You can revisit any day of this plan whenever you need a reset.
+          If barking at doors or alone-time panic also affect your life, the
+          <strong>CalmPaw Complete Pack</strong> combines leash walking, barking
+          and separation anxiety plans in one bundle.
         </p>
-      </div>
-    </section>
-
-    <section class="section">
-      <h2>Want help with other struggles too?</h2>
-      <p>
-        If barking at doors or alone-time panic also affect your life, the
-        <strong>CalmPaw Complete Pack</strong> combines leash walking, barking
-        and separation anxiety plans in one bundle.
-      </p>
-      <div style="margin-top:8px;">
-        <a href="bundle.html" class="btn-primary">View Complete Pack →</a>
-      </div>
-    </section>
+        <div style="margin-top:8px;">
+          <a href="bundle.html" class="btn-primary">View Complete Pack →</a>
+        </div>
+      </section>
+    </div>
   </main>
 
   <footer>
@@ -479,86 +498,133 @@
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
 
-  <script>
-  (function () {
     const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
-    const loginArea = document.getElementById("nav-login-area");
 
-    function currentRedirect() {
-      return window.location.pathname + window.location.search;
-    }
+    // 顶部登录状态
+    function hydrateNavAuth() {
+      const area = document.getElementById("nav-auth-area");
+      if (!area) return;
 
-    function goAuth() {
-      window.location.href = "/auth.html?redirect=" + encodeURIComponent(currentRedirect());
-    }
+      function renderLoggedOut() {
+        const redirect = window.location.pathname + window.location.search;
+        area.innerHTML = `
+          <a class="btn-outline" href="auth.html?redirect=${encodeURIComponent(redirect)}">
+            <span class="nav-login-emoji">🔑</span> Log in
+          </a>
+        `;
+      }
 
-    function logoutOnly() {
-      localStorage.removeItem("calmpaw_token");
-      localStorage.removeItem("calmpaw_email");
-    }
-
-    function logoutAndStay() {
-      logoutOnly();
-      window.location.reload();
-    }
-
-    // 顶部登录状态渲染
-    function renderNavLogin() {
-      if (!loginArea) return;
       const token = localStorage.getItem("calmpaw_token");
       const email = localStorage.getItem("calmpaw_email");
 
-      if (token && email) {
-        loginArea.innerHTML = `
-          <span class="nav-login-email" title="${email}">${email}</span>
-          <button class="btn-mini" id="btn-switch-account">Switch</button>
-          <button class="btn-mini btn-mini-danger" id="btn-logout">Log out</button>
-        `;
-        document.getElementById("btn-switch-account").onclick = function () {
-          logoutOnly();
-          goAuth();
-        };
-        document.getElementById("btn-logout").onclick = logoutAndStay;
-      } else {
-        loginArea.innerHTML = `
-          <button class="btn-outline" id="btn-login-nav">Log in</button>
-        `;
-        const btn = document.getElementById("btn-login-nav");
-        if (btn) btn.onclick = goAuth;
+      if (!token) {
+        renderLoggedOut();
+        return;
       }
-    }
 
-    renderNavLogin();
-
-    // 访问权限检查：必须登录 + 拥有 leash 计划
-    const token = localStorage.getItem("calmpaw_token");
-    if (!token) {
-      goAuth();
-      return;
-    }
-
-    fetch(API_BASE + "/auth/check-plan?slug=leash", {
-      method: "GET",
-      headers: { Authorization: "Bearer " + token },
-    })
-      .then(async (res) => {
-        if (!res.ok) {
-          logoutOnly();
-          goAuth();
-          return;
-        }
-        const data = await res.json();
-        if (!data.ok || !data.access) {
-          // 登录但没买 leash → 回到对应介绍页
-          window.location.href = "/program-leash.html";
-        }
+      fetch(API_BASE + "/auth/me", {
+        headers: { "Authorization": "Bearer " + token }
       })
-      .catch(() => {
+        .then(res => res.json().then(data => ({ ok: res.ok, data })))
+        .then(({ ok, data }) => {
+          if (!ok || !data.ok) {
+            localStorage.removeItem("calmpaw_token");
+            localStorage.removeItem("calmpaw_email");
+            renderLoggedOut();
+            return;
+          }
+          const showEmail = email || data.email || "Member";
+          area.innerHTML = `
+            <div class="nav-auth">
+              <span class="nav-auth-email" title="${showEmail}">${showEmail}</span>
+              <button class="nav-auth-btn" id="nav-switch-account">Switch</button>
+              <button class="nav-auth-btn" id="nav-logout">Log out</button>
+            </div>
+          `;
+          const switchBtn = document.getElementById("nav-switch-account");
+          if (switchBtn) {
+            switchBtn.addEventListener("click", () => {
+              localStorage.removeItem("calmpaw_token");
+              localStorage.removeItem("calmpaw_email");
+              const redirect = window.location.pathname + window.location.search;
+              window.location.href = "auth.html?redirect=" + encodeURIComponent(redirect);
+            });
+          }
+          const logoutBtn = document.getElementById("nav-logout");
+          if (logoutBtn) {
+            logoutBtn.addEventListener("click", () => {
+              localStorage.removeItem("calmpaw_token");
+              localStorage.removeItem("calmpaw_email");
+              window.location.href = "/index.html";
+            });
+          }
+        })
+        .catch(err => {
+          console.error("auth hydrate error", err);
+          renderLoggedOut();
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", hydrateNavAuth);
+
+    // 访问控制：必须登录 + 拥有 leash 计划；不再跳回销售页，只提示状态
+    (function () {
+      const statusBox = document.getElementById("access-status");
+      const paidContent = document.getElementById("paid-content");
+      const token = localStorage.getItem("calmpaw_token");
+
+      function showStatus(html) {
+        if (!statusBox) return;
+        statusBox.style.display = "block";
+        statusBox.innerHTML = html;
+      }
+
+      function currentRedirect() {
+        return window.location.pathname + window.location.search;
+      }
+
+      function goAuth() {
+        window.location.href = "/auth.html?redirect=" + encodeURIComponent(currentRedirect());
+      }
+
+      if (!token) {
+        showStatus("Please log in with the same email you used to purchase the Leash Walking Plan.");
         goAuth();
-      });
-  })();
+        return;
+      }
+
+      showStatus("Checking your access to the Leash Walking Plan…");
+
+      fetch(API_BASE + "/auth/check-plan?slug=leash", {
+        method: "GET",
+        headers: { Authorization: "Bearer " + token },
+      })
+        .then(async (res) => {
+          if (!res.ok) {
+            localStorage.removeItem("calmpaw_token");
+            localStorage.removeItem("calmpaw_email");
+            showStatus("Session expired. Please log in again to view your leash plan.");
+            goAuth();
+            return;
+          }
+          const data = await res.json();
+          if (data.ok && data.access) {
+            if (paidContent) paidContent.style.display = "block";
+            showStatus("Access confirmed ✅ You can use this page as your permanent access to the 10-day leash plan.");
+          } else {
+            if (paidContent) paidContent.style.display = "none";
+            showStatus(
+              "We can't find the Leash Walking Plan on this account yet.<br>" +
+              "If you just paid via Digistore24, it may take 1–2 minutes for access to sync. " +
+              "Please refresh this page shortly. If it still stays locked, contact support with your payment email."
+            );
+          }
+        })
+        .catch(() => {
+          showStatus("Server error. Please refresh this page or try again later.");
+        });
+    })();
   </script>
 </body>
 </html>
