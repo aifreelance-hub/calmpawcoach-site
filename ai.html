@@ -325,13 +325,23 @@
           (<strong>the withdrawal from your account will be done by Digistore24</strong>).
         </p>
 
-        <!-- ✅ Digistore24 Trust Badge：已经换成 seal-light.png -->
+        <!-- ✅ Digistore24 Trust Badge：内置 SVG 图标 + 文案，不会再坏图 -->
         <div style="text-align:center;margin:18px 0;">
-          <img
-            src="https://cdn.digistore24.com/images/payment/seal-light.png"
-            alt="Digistore24 Secure Checkout"
-            style="max-width:200px;width:180px;height:auto;display:block;margin:0 auto;"
-          >
+          <div style="display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border-radius:999px;background:#fffaf5;border:1px solid rgba(243,217,196,0.9);box-shadow:0 10px 26px rgba(210,145,110,0.15);">
+            <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+              <defs>
+                <linearGradient id="ds24Shield" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#ffb86b"/>
+                  <stop offset="100%" stop-color="#ff914d"/>
+                </linearGradient>
+              </defs>
+              <path fill="url(#ds24Shield)" d="M12 2.25l7 2.5v6.08c0 4.23-2.84 8.02-7 9.17-4.16-1.15-7-4.94-7-9.17v-6.08l7-2.5z"/>
+              <path fill="#fff" d="M10.5 12.25l-1.75-1.75-1.25 1.25 3 3 5-5-1.25-1.25z"/>
+            </svg>
+            <span style="font-size:14px;color:#7a5f58;font-weight:600;">
+              Digistore24 Secure Checkout
+            </span>
+          </div>
         </div>
 
         <!-- Refund Guarantee -->
@@ -354,18 +364,6 @@
           <div class="hero-pill">🛋 For real homes, not training halls</div>
           <div class="hero-pill">📩 Answers in minutes, not weeks</div>
           <div class="hero-pill">🔒 Private — just you and your AI trainer</div>
-        </div>
-
-        <!-- 未登录提示区（保持不变） -->
-        <div id="state-not-logged" class="state-box hidden">
-          <div class="state-title">Log in to use the AI trainer</div>
-          <p>
-            Please log in with your email first. You’ll come straight back to
-            this page after signing in.
-          </p>
-          <div class="state-actions">
-            <a class="btn-primary" href="auth.html?redirect=/ai">Log in / create account →</a>
-          </div>
         </div>
 
         <!-- 已登录但没订阅 -->
@@ -406,15 +404,15 @@
             </div>
           </div>
           <div class="chat-status-pill" id="chat-status-pill">
-            Checking access…
+            Please log in via the top-right button
           </div>
         </div>
 
         <div class="chat-window" id="chat-window">
           <div class="bubble ai">
             Hi, I’m your CalmPaw AI trainer. Tell me what’s happening at home —
-            the dog, the neighbors, your schedule — and I’ll help you find
-            realistic, gentle steps.
+            the dog, the neighbors, your schedule — and I’ll help you find realistic,
+            gentle steps.
           </div>
         </div>
 
@@ -442,7 +440,6 @@
     const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653899";
 
     const navAuthArea = document.getElementById("nav-auth-area");
-    const stateNotLogged = document.getElementById("state-not-logged");
     const stateNoSub = document.getElementById("state-no-sub");
     const stateActiveInfo = document.getElementById("state-active-info");
     const chatStatusPill = document.getElementById("chat-status-pill");
@@ -461,7 +458,6 @@
       },
     ];
 
-    // 订阅按钮：跳 Digistore24
     if (subscribeLink) {
       subscribeLink.addEventListener("click", (e) => {
         e.preventDefault();
@@ -507,8 +503,7 @@
           )}">
             🔑 Log in
           </a>`;
-        stateNotLogged.classList.remove("hidden");
-        chatStatusPill.textContent = "Please log in";
+        chatStatusPill.textContent = "Please log in via the top-right button";
         setChatEnabled(false);
         return;
       }
@@ -527,8 +522,7 @@
             )}">
               🔑 Log in
             </a>`;
-          stateNotLogged.classList.remove("hidden");
-          chatStatusPill.textContent = "Please log in";
+          chatStatusPill.textContent = "Please log in via the top-right button";
           setChatEnabled(false);
           return;
         }
@@ -559,7 +553,6 @@
             window.location.href = "/";
           });
 
-        stateNotLogged.classList.add("hidden");
         await checkSubscription();
       } catch (e) {
         console.error(e);
@@ -599,7 +592,8 @@
 
         let line = `Active from ${started} to ${until}.`;
         if (leftSec > 0 && leftSec <= 5 * 24 * 60 * 60) {
-          line += " Your AI Trainer is close to renewal — if your Digistore24 subscription is recurring, it will renew automatically.";
+          line +=
+            " Your AI Trainer is close to renewal — if your Digistore24 subscription is recurring, it will renew automatically.";
         }
         subDates.textContent = line;
 
@@ -619,7 +613,7 @@
 
       const token = localStorage.getItem("calmpaw_token");
       if (!token) {
-        alert("Please log in first.");
+        alert("Please log in first via the top-right button.");
         return;
       }
 
@@ -684,7 +678,6 @@
     document.addEventListener("DOMContentLoaded", hydrateNavAuth);
   </script>
 
-  <!-- Footer：邮箱已是 support@aurumdesks.com -->
   <footer style="margin-top:40px;padding:30px 0;text-align:center;font-size:14px;color:#8a6a63;border-top:1px solid #f3d9c4;">
     <div style="margin-bottom:10px;">
       <a href="/legal" style="color:#8a6a63;margin:0 10px;text-decoration:none;">Legal Notice</a> |
