@@ -166,6 +166,12 @@
         </div>
       </div>
 
+      <!-- 这里加一句说明：看到“已存在”就去登录 -->
+      <p class="hint">
+        Please use the same email address you used at checkout. If you see a message that
+        your email is already registered, please go to the “Log in” tab and sign in instead.
+      </p>
+
       <button class="btn btn-primary" id="btn-register" type="button">Create account & sign in</button>
     </div>
 
@@ -206,20 +212,26 @@ const forms = {
   reset: document.getElementById("form-reset"),
 };
 
-tabs.forEach(btn => btn.addEventListener("click", () => {
-  tabs.forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
+function switchTab(name) {
+  tabs.forEach(b => {
+    if (b.dataset.tab === name) b.classList.add("active");
+    else b.classList.remove("active");
+  });
   Object.keys(forms).forEach(k => forms[k].classList.remove("active"));
-  forms[btn.dataset.tab].classList.add("active");
+  if (forms[name]) forms[name].classList.add("active");
+}
+
+tabs.forEach(btn => btn.addEventListener("click", () => {
+  switchTab(btn.dataset.tab);
 }));
 
 document.getElementById("link-to-register").onclick = e => {
   e.preventDefault();
-  tabs[1].click();
+  switchTab("register");
 };
 document.getElementById("link-to-reset").onclick = e => {
   e.preventDefault();
-  tabs[2].click();
+  switchTab("reset");
 };
 
 // -------- Helpers --------
@@ -288,7 +300,21 @@ document.getElementById("btn-send-reg-code").onclick = async () => {
       body: JSON.stringify({ email, purpose: "register" })
     });
     const data = await res.json();
-    showStatus(data.ok ? "Code sent!" : (data.error || "Failed to send code."), data.ok ? "ok" : "err");
+
+    if (data.ok) {
+      showStatus("Code sent!", "ok");
+    } else {
+      // 针对“用户已存在”的特殊处理
+      const errMsg = (data.error || "").toString();
+      if (errMsg.toLowerCase().includes("user already exists")) {
+        showStatus("This email is already registered. Please log in instead.", "err");
+        // 切换到登录 tab，并预填邮箱
+        switchTab("login");
+        document.getElementById("login-email").value = email;
+      } else {
+        showStatus(errMsg || "Failed to send code.", "err");
+      }
+    }
   } catch {
     showStatus("Network error.", "err");
   }
@@ -314,8 +340,19 @@ document.getElementById("btn-register").onclick = async () => {
       body: JSON.stringify({ email, password, code })
     });
     const data = await res.json();
-    if (data.ok) finishLogin(data.token, data.email);
-    else showStatus(data.error || "Register failed.", "err");
+    if (data.ok) {
+      finishLogin(data.token, data.email);
+    } else {
+      const errMsg = (data.error || "").toString();
+      // 这里重点：如果后端说“User already exists”
+      if (errMsg.toLowerCase().includes("user already exists")) {
+        showStatus("This email is already registered. Please log in instead.", "err");
+        switchTab("login");
+        document.getElementById("login-email").value = email;
+      } else {
+        showStatus(errMsg || "Register failed.", "err");
+      }
+    }
   } catch {
     showStatus("Network error.", "err");
   }
