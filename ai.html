@@ -325,7 +325,7 @@
           (<strong>the withdrawal from your account will be done by Digistore24</strong>).
         </p>
 
-        <!-- ✅ Digistore24 Trust Badge：内置 SVG 图标 + 文案，不会再坏图 -->
+        <!-- Digistore24 Trust Badge (inline SVG so it always shows) -->
         <div style="text-align:center;margin:18px 0;">
           <div style="display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border-radius:999px;background:#fffaf5;border:1px solid rgba(243,217,196,0.9);box-shadow:0 10px 26px rgba(210,145,110,0.15);">
             <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
@@ -349,8 +349,8 @@
           <strong>60-day money-back guarantee — no questions asked.</strong>
         </div>
 
-        <!-- 购买按钮 -->
-        <div style="text-align:center;margin:14px 0 18px;">
+        <!-- Main purchase CTA: shown only when no active subscription -->
+        <div id="ai-cta-block" style="text-align:center;margin:14px 0 18px;">
           <a href="https://www.checkout-ds24.com/product/653899"
              style="display:inline-flex;align-items:center;justify-content:center;padding:12px 28px;border-radius:999px;background:#ff914d;color:#fff;font-weight:600;font-size:15px;text-decoration:none;box-shadow:0 14px 40px rgba(255,145,77,0.45);border:none;cursor:pointer;">
             Start AI Trainer for $29/month
@@ -366,7 +366,7 @@
           <div class="hero-pill">🔒 Private — just you and your AI trainer</div>
         </div>
 
-        <!-- 已登录但没订阅 -->
+        <!-- Logged in but no subscription -->
         <div id="state-no-sub" class="state-box hidden">
           <div class="state-title">$29/month — infinite CalmPaw AI trainer</div>
           <p>
@@ -383,7 +383,7 @@
           </div>
         </div>
 
-        <!-- 已订阅提示 -->
+        <!-- Active subscription info -->
         <div id="state-active-info" class="state-box hidden">
           <div class="state-title">Your AI Trainer is active</div>
           <p>
@@ -394,7 +394,7 @@
         </div>
       </div>
 
-      <!-- Chat 卡片 -->
+      <!-- Chat card -->
       <div class="chat-card" id="chat-card">
         <div class="chat-header">
           <div>
@@ -449,6 +449,7 @@
     const chatInput = document.getElementById("chat-input");
     const chatSendBtn = document.getElementById("chat-send-btn");
     const subscribeLink = document.getElementById("ai-subscribe-link");
+    const ctaBlock = document.getElementById("ai-cta-block");
 
     let history = [
       {
@@ -458,6 +459,7 @@
       },
     ];
 
+    // Subscribe button: go to Digistore24
     if (subscribeLink) {
       subscribeLink.addEventListener("click", (e) => {
         e.preventDefault();
@@ -505,6 +507,7 @@
           </a>`;
         chatStatusPill.textContent = "Please log in via the top-right button";
         setChatEnabled(false);
+        if (ctaBlock) ctaBlock.style.display = "block";
         return;
       }
 
@@ -524,6 +527,7 @@
             </a>`;
           chatStatusPill.textContent = "Please log in via the top-right button";
           setChatEnabled(false);
+          if (ctaBlock) ctaBlock.style.display = "block";
           return;
         }
 
@@ -558,6 +562,7 @@
         console.error(e);
         chatStatusPill.textContent = "Error checking login";
         setChatEnabled(false);
+        if (ctaBlock) ctaBlock.style.display = "block";
       }
     }
 
@@ -579,6 +584,7 @@
           stateActiveInfo.classList.add("hidden");
           chatStatusPill.textContent = "No active subscription";
           setChatEnabled(false);
+          if (ctaBlock) ctaBlock.style.display = "block";
           return;
         }
 
@@ -592,17 +598,18 @@
 
         let line = `Active from ${started} to ${until}.`;
         if (leftSec > 0 && leftSec <= 5 * 24 * 60 * 60) {
-          line +=
-            " Your AI Trainer is close to renewal — if your Digistore24 subscription is recurring, it will renew automatically.";
+          line += " Your AI Trainer is close to renewal — if your Digistore24 subscription is recurring, it will renew automatically.";
         }
         subDates.textContent = line;
 
         chatStatusPill.textContent = "AI Trainer active";
         setChatEnabled(true);
+        if (ctaBlock) ctaBlock.style.display = "none"; // hide purchase CTA when active
       } catch (e) {
         console.error(e);
         chatStatusPill.textContent = "Error checking subscription";
         setChatEnabled(false);
+        if (ctaBlock) ctaBlock.style.display = "block";
       }
     }
 
@@ -641,6 +648,7 @@
           stateNoSub.classList.remove("hidden");
           stateActiveInfo.classList.add("hidden");
           setChatEnabled(false);
+          if (ctaBlock) ctaBlock.style.display = "block";
           appendBubble(
             "ai",
             "Your AI Trainer subscription is not active right now. Please renew the plan to keep chatting."
