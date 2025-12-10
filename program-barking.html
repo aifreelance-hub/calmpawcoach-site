@@ -6,484 +6,444 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <style>
-    *{box-sizing:border-box;margin:0;padding:0;}
-    :root{
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
       --bg:#fff7f0;--accent:#ffb86b;--accent-strong:#ff914d;
       --text-main:#3b2824;--text-soft:#8a6a63;
       --border-soft:#f3d9c4;--radius-lg:26px;--radius-md:18px;--radius-pill:999px;
       --shadow-soft:0 24px 60px rgba(210,145,110,0.32);
     }
+
     body{
       font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"Segoe UI",sans-serif;
       background:
-        radial-gradient(circle at 5% 0%, #ffe0c0 0%, transparent 55%),
-        radial-gradient(circle at 100% 0%, #ffd4d4 0%, transparent 55%),
-        linear-gradient(180deg,#fff7f0 0%,#fff2e7 40%,#fff8f2 100%);
-      color:var(--text-main);min-height:100vh;-webkit-font-smoothing:antialiased;
+        radial-gradient(circle at 5% 0%,#ffe0c0 0%,transparent 55%),
+        radial-gradient(circle at 100% 0%,#ffd4d4 0%,transparent 55%),
+        #fff7f0;
+      color:var(--text-main);
+      min-height:100vh;
     }
-    a{text-decoration:none;color:inherit;}
 
-    header{
-      position:sticky;top:0;z-index:50;
-      backdrop-filter:blur(18px);
-      background:linear-gradient(to bottom,rgba(255,248,240,0.98),rgba(255,248,240,0.85));
-      border-bottom:1px solid rgba(243,217,196,0.8);
+    .page {
+      max-width:1040px;
+      margin:0 auto;
+      padding:24px 16px 40px;
     }
-    .nav-inner{
-      max-width:1120px;margin:0 auto;padding:12px 20px;
-      display:flex;align-items:center;justify-content:space-between;gap:14px;
+
+    /* Nav */
+    .nav {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:24px;
+    }
+    .nav-left {
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .logo {
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      background:#ffcf99;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:20px;
+    }
+    .site-title {
+      font-weight:700;
+      font-size:18px;
+    }
+    .nav-links {
+      display:flex;
+      align-items:center;
+      gap:18px;
+      font-size:14px;
+    }
+    .nav-links a {
+      text-decoration:none;
+      color:var(--text-soft);
+    }
+    .nav-links a:hover { color:var(--accent-strong); }
+    .nav-login {
+      padding:6px 14px;
+      border-radius:999px;
+      border:1px solid #f1c9a3;
+      font-size:13px;
+      text-decoration:none;
+      color:var(--text-main);
+      background:#fff7f0;
+    }
+
+    /* Hero layout */
+    .hero {
+      display:grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr);
+      gap:28px;
+      align-items:flex-start;
+    }
+    @media (max-width:860px){
+      .hero {
+        grid-template-columns: 1fr;
+      }
+    }
+    .tag-row {
+      display:flex;
+      gap:8px;
       flex-wrap:wrap;
+      margin-bottom:10px;
     }
-    .brand{display:flex;align-items:center;gap:10px;flex-shrink:0;}
-    .brand-logo{
-      width:40px;height:40px;border-radius:18px;
-      background:radial-gradient(circle at 20% 15%,#fff9f3 0%,#ffb86b 40%,#ff914d 84%);
-      display:flex;align-items:center;justify-content:center;
-      font-size:22px;box-shadow:0 16px 40px rgba(214,139,86,0.6);
-    }
-    .brand-text-main{font-weight:750;letter-spacing:.03em;font-size:18px;}
-    .brand-text-sub{font-size:11px;color:var(--text-soft);}
-
-    .nav-links{
-      display:flex;align-items:center;gap:16px;font-size:14px;color:var(--text-soft);
-      flex:1;justify-content:center;min-width:0;
-    }
-    .nav-links a{
-      padding:6px 11px;border-radius:999px;
-      transition:background .18s ease,color .18s ease,transform .12s ease;
-      white-space:nowrap;
-    }
-    .nav-links a:hover{
-      background:rgba(255,222,186,0.7);color:var(--text-main);transform:translateY(-1px);
-    }
-    @media(max-width:880px){.nav-links{display:none;}}
-
-    .nav-cta{
-      display:flex;align-items:center;gap:10px;
-      flex-shrink:0;
-    }
-    .nav-login-area{
-      display:flex;align-items:center;gap:6px;
-      font-size:12px;color:var(--text-soft);
-      max-width:190px;
-    }
-    .nav-login-email{
-      max-width:130px;
-      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-    }
-    .btn-mini{
+    .tag {
       padding:4px 10px;
       border-radius:999px;
-      border:1px solid var(--border-soft);
-      background:#fff8f2;
+      background:#ffe6cf;
       font-size:11px;
-      cursor:pointer;
+      color:#8a6a63;
+    }
+    .hero h1{
+      font-size:30px;
+      letter-spacing:0.02em;
+      margin-bottom:10px;
+    }
+    .hero-sub {
+      font-size:14px;
       color:var(--text-soft);
-      white-space:nowrap;
-    }
-    .btn-mini-danger{
-      border-color:rgba(248,113,113,0.7);
-      color:#b91c1c;
-      background:#fff5f5;
-    }
-    .btn-mini:hover{
-      border-color:var(--accent);
-      color:var(--text-main);
+      line-height:1.6;
+      margin-bottom:14px;
     }
 
-    .btn-primary{
-      padding:8px 18px;border-radius:var(--radius-pill);border:none;
-      font-size:13px;font-weight:600;cursor:pointer;
-      background:linear-gradient(135deg,#ffb86b,#ff914d);color:#4a251a;
-      box-shadow:0 16px 36px rgba(214,139,86,0.6);
-      display:inline-flex;align-items:center;gap:6px;
-      white-space:nowrap;
-    }
-    .btn-primary:hover{transform:translateY(-1px) scale(1.01);}
-    .btn-outline{
-      padding:7px 14px;border-radius:var(--radius-pill);
-      border:1px solid var(--border-soft);font-size:13px;
-      background:#fff8f2;color:var(--text-soft);cursor:pointer;
-      white-space:nowrap;
-    }
-
-    @media(max-width:640px){
-      .nav-inner{
-        padding:10px 14px;
-      }
-      .brand{
-        width:100%;
-      }
-      .nav-cta{
-        width:100%;
-        justify-content:flex-end;
-        gap:6px;
-      }
-      .btn-primary{
-        padding:7px 12px;
-        font-size:12px;
-      }
-      .btn-outline{
-        padding:6px 10px;
-        font-size:12px;
-      }
-      .nav-login-email{
-        max-width:110px;
-      }
-    }
-
-    main{max-width:1120px;margin:0 auto;padding:26px 20px 40px;}
-    .hero{
-      display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);
-      gap:22px;margin-bottom:26px;align-items:flex-start;
-    }
-    @media(max-width:840px){.hero{grid-template-columns:minmax(0,1fr);}}
-    .hero-tag{
-      display:inline-flex;align-items:center;gap:6px;
-      padding:4px 10px;border-radius:999px;
-      background:rgba(255,222,186,0.9);font-size:11px;color:#6b4532;
-      margin-bottom:8px;
-    }
-    .hero-title{font-size:22px;margin-bottom:6px;}
-    .hero-sub{font-size:13px;color:var(--text-soft);margin-bottom:12px;max-width:520px;line-height:1.6;}
-    .hero-meta{font-size:11px;color:var(--text-soft);margin-bottom:12px;}
-    .hero-meta span{margin-right:10px;}
-    .hero-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:8px;}
-    .hero-note{font-size:11px;color:var(--text-soft);margin-top:4px;}
-
-    .hero-card{
-      border-radius:var(--radius-lg);
-      background:rgba(255,246,238,0.96);
-      border:1px solid rgba(243,217,196,0.9);
-      padding:14px 14px 12px;
-      box-shadow:var(--shadow-soft);
-      font-size:11px;color:#7b5847;
-    }
-    .hero-card h3{font-size:13px;margin-bottom:6px;}
-    .hero-card ul{margin-left:14px;margin-bottom:4px;}
-    .hero-card li{margin-bottom:4px;}
-
-    .section{margin-bottom:24px;}
-    .section h2{font-size:16px;margin-bottom:6px;}
-    .section p{font-size:13px;color:var(--text-soft);margin-bottom:6px;line-height:1.6;}
-    .bullets{font-size:13px;color:var(--text-soft);margin-left:16px;}
-    .bullets li{margin-bottom:4px;}
-
-    .days{
-      border-radius:18px;
-      background:#fffaf5;border:1px solid rgba(243,217,196,0.9);
-      padding:12px;font-size:12px;color:var(--text-soft);
-    }
-    .day-item{margin-bottom:8px;}
-    .day-title{font-weight:600;color:#8a4b25;margin-bottom:2px;}
-
-    footer{
-      border-top:1px solid rgba(243,217,196,0.8);
-      background:rgba(255,248,241,0.96);margin-top:10px;
-      padding:18px 0 20px;
-      text-align:center;
+    .hero-metas {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:16px;
       font-size:12px;
-      color:#8a6a63;
+      color:#7a5f58;
     }
-    .footer-links{
-      margin-bottom:6px;
+    .hero-metas span {
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:4px 10px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid #f3d9c4;
     }
-    .footer-links a{
-      margin:0 8px;
-      color:#8a6a63;
+
+    .hero-offer-note {
+      background:#fff2e0;
+      border-radius:18px;
+      padding:10px 12px;
+      font-size:12px;
+      color:#7a5f58;
+      border:1px solid #f3d9c4;
+      margin-bottom:10px;
+    }
+
+    .hero-offer-note strong {
+      font-weight:600;
+    }
+
+    .hero-button-row {
+      margin-top:10px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .btn-primary {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 20px;
+      border-radius:999px;
+      border:none;
+      background:linear-gradient(135deg,var(--accent),var(--accent-strong));
+      color:#fff;
+      font-size:14px;
+      font-weight:600;
+      text-decoration:none;
+      box-shadow:0 14px 40px rgba(210,145,110,0.35);
+    }
+    .btn-secondary {
+      font-size:13px;
+      color:var(--text-soft);
       text-decoration:none;
     }
-    .footer-links a:hover{
-      color:#b05825;
+
+    .hero-caption {
+      margin-top:10px;
+      font-size:11px;
+      color:#987064;
+      line-height:1.5;
     }
-    @media(max-width:640px){
-      footer{
-        font-size:11px;
-        padding:16px 8px 18px;
-      }
-      .footer-links a{
-        margin:0 6px;
-      }
+
+    .hero-right-card {
+      background:#fff;
+      border-radius:var(--radius-lg);
+      padding:18px 18px 18px;
+      border:1px solid var(--border-soft);
+      box-shadow:var(--shadow-soft);
+      font-size:13px;
     }
+
+    .hero-right-title {
+      font-size:16px;
+      font-weight:600;
+      margin-bottom:8px;
+    }
+    .hero-right-section-title {
+      font-size:13px;
+      font-weight:600;
+      margin-top:12px;
+      margin-bottom:4px;
+    }
+    .hero-right-list {
+      padding-left:18px;
+      color:var(--text-soft);
+      line-height:1.5;
+    }
+
+    .section {
+      margin-top:32px;
+      background:#fff7f0d9;
+      border-radius:22px;
+      padding:18px 18px 18px;
+      border:1px solid #f3d9c4;
+    }
+    .section h2{
+      font-size:18px;
+      margin-bottom:8px;
+    }
+    .section p{
+      font-size:14px;
+      color:var(--text-soft);
+      line-height:1.6;
+      margin-bottom:10px;
+    }
+    .section ul{
+      padding-left:20px;
+      font-size:14px;
+      color:var(--text-soft);
+      line-height:1.6;
+    }
+
+    .two-cols {
+      display:grid;
+      grid-template-columns: minmax(0,1.2fr) minmax(0,1fr);
+      gap:18px;
+    }
+    @media (max-width:860px){
+      .two-cols { grid-template-columns:1fr; }
+    }
+
+    footer{
+      margin-top:32px;
+      padding:16px 0 10px;
+      font-size:12px;
+      color:#8a6a63;
+      border-top:1px solid #f3d9c4;
+      text-align:center;
+    }
+    footer a{
+      color:#ff914d;
+      text-decoration:none;
+      margin:0 8px;
+    }
+    footer a:hover{text-decoration:underline;}
   </style>
 </head>
 <body>
-  <header>
-    <div class="nav-inner">
-      <a href="index.html" class="brand">
-        <div class="brand-logo">🐾</div>
+  <div class="page">
+    <!-- Nav -->
+    <header class="nav">
+      <div class="nav-left">
+        <div class="logo">🐾</div>
         <div>
-          <div class="brand-text-main">CalmPaw Coach</div>
-          <div class="brand-text-sub">Gentle, realistic dog training</div>
+          <div class="site-title">CalmPaw Coach</div>
+          <div style="font-size:11px;color:#a17a6d;">Gentle, realistic dog training</div>
         </div>
-      </a>
-      <nav class="nav-links">
-        <a href="programs.html">Programs</a>
-        <a href="bundle.html">Complete Pack</a>
-        <a href="ai.html">Ask a Dog Trainer — AI Unlimited</a>
-      </nav>
-      <div class="nav-cta">
-        <div id="nav-login-area" class="nav-login-area"></div>
       </div>
-    </div>
-  </header>
+      <div class="nav-links">
+        <a href="/programs.html">Programs</a>
+        <a href="/bundle.html">Complete Pack</a>
+        <a href="/ai-trainer.html">Ask a Dog Trainer — AI Unlimited</a>
+        <a href="/auth.html" class="nav-login">Log in</a>
+      </div>
+    </header>
 
-  <main>
+    <!-- Hero -->
     <section class="hero">
+      <!-- Left -->
       <div>
-        <div class="hero-tag">7-day plan · Doors, neighbors & hallway noise</div>
-        <h1 class="hero-title">Stop Excessive Barking — 7-Day Plan</h1>
+        <div class="tag-row">
+          <span class="tag">7-day plan</span>
+          <span class="tag">Calmer, quieter home</span>
+        </div>
+
+        <h1>Stop Excessive Barking — 7-Day Plan</h1>
         <p class="hero-sub">
-          A realistic one-week plan to reduce barking at doors, neighbors and hallway sounds —
-          without shouting, punishment or feeling afraid of complaints.
+          Turn chaotic, noisy days into calmer, quieter ones in just one week.
+          This realistic plan fits into busy lives and focuses on practical daily
+          steps instead of harsh tools or impossible rules.
         </p>
-        <div class="hero-meta">
-          <span>🐶 Best for: apartment / shared-wall living</span>
+
+        <div class="hero-metas">
+          <span>🐕 Best for: nuisance / demand barking</span>
           <span>⏱ Daily time: 10–15 minutes</span>
         </div>
 
-        <!-- Digistore24 badge + guarantee -->
-        <div style="margin:10px 0 4px;">
-          <div style="display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border-radius:999px;background:#fffaf5;border:1px solid rgba(243,217,196,0.9);box-shadow:0 10px 26px rgba(210,145,110,0.15);">
-            <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+        <!-- 新增：清楚说明卖的是什么 & 交付方式 -->
+        <div class="hero-offer-note">
+          <strong>What you’re buying:</strong>
+          This is a digital-only dog training program delivered online.
+          After purchase, you will receive instant access to the full 7-day plan
+          through our platform and via email. No physical products will be shipped.
+        </div>
+
+        <div class="hero-offer-note">
+          <strong>One-time purchase.</strong>
+          Lifetime access to the 7-day plan after payment.  
+          60-day money-back guarantee — no questions asked.
+        </div>
+
+        <div style="margin-top:12px;font-size:12px;color:#7a5f58;display:flex;align-items:center;gap:8px;">
+          <div style="display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;background:#fff;border:1px solid #f3d9c4;">
+            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
               <defs>
-                <linearGradient id="ds24Shield" x1="0" y1="0" x2="1" y2="1">
+                <linearGradient id="dsBadge" x1="0" y1="0" x2="1" y2="1">
                   <stop offset="0%" stop-color="#ffb86b"/>
                   <stop offset="100%" stop-color="#ff914d"/>
                 </linearGradient>
               </defs>
-              <path fill="url(#ds24Shield)" d="M12 2.25l7 2.5v6.08c0 4.23-2.84 8.02-7 9.17-4.16-1.15-7-4.94-7-9.17v-6.08l7-2.5z"/>
+              <path fill="url(#dsBadge)" d="M12 2.25l7 2.5v6.08c0 4.23-2.84 8.02-7 9.17-4.16-1.15-7-4.94-7-9.17v-6.08l7-2.5z"/>
               <path fill="#fff" d="M10.5 12.25l-1.75-1.75-1.25 1.25 3 3 5-5-1.25-1.25z"/>
             </svg>
-            <span style="font-size:14px;color:#7a5f58;font-weight:600;">
-              Digistore24 Secure Checkout
-            </span>
+            <span>Digistore24 Secure Checkout</span>
           </div>
         </div>
-        <div style="font-size:12px;color:#7a5f58;margin:4px 0 10px;">
-          <strong>60-day money-back guarantee — no questions asked.</strong>
-        </div>
 
-        <div class="hero-cta">
-          <!-- Main buy button: direct Digistore24 checkout -->
-          <a href="https://www.checkout-ds24.com/product/653870"
-             class="btn-primary"
-             id="cta-main-barking"
-             target="_blank">
+        <div class="hero-button-row">
+          <!-- 把链接换成你 barking 产品的 Digistore24 订单链接 -->
+          <a class="btn-primary" href="https://www.checkout-ds24.com/product/653870">
             Buy this plan – $19 →
           </a>
-          <a href="programs.html" class="btn-outline">← Back to all programs</a>
+          <a href="/programs.html" class="btn-secondary">← Back to all programs</a>
         </div>
-        <div class="hero-note">
-          One-time purchase. Instant access to the full 7-day plan after payment.
-        </div>
-        <div class="hero-note">
-          <strong>Product type &amp; delivery:</strong> This is a purely digital dog training program.
-          No physical goods will be shipped. After purchase, you will receive access digitally via our
-          online platform and email. All billing and the 60-day money-back guarantee are handled securely
-          by Digistore24 (the debit is made by Digistore24).
+
+        <div class="hero-caption">
+          All billing and the 60-day money-back guarantee are handled securely by Digistore24
+          (the debit is made by Digistore24).
         </div>
       </div>
 
-      <!-- Right side: what you get -->
-      <div style="font-size:13px;color:var(--text-soft);margin-top:4px;">
-        <h2 style="font-size:16px;margin-bottom:6px;color:var(--text-main);">What you get</h2>
-        <ul style="margin-left:16px;margin-bottom:8px;">
-          <li>7 days of structured, step-by-step barking control exercises.</li>
-          <li>Daily guidance to reduce nuisance barking at home.</li>
-          <li>Easy-to-follow instructions suitable for busy dog owners.</li>
+      <!-- Right: summary card -->
+      <aside class="hero-right-card">
+        <div class="hero-right-title">In this 7-day plan, you will:</div>
+        <ul class="hero-right-list">
+          <li>Understand why your dog barks — and which barking actually matters.</li>
+          <li>Teach calmer ways to ask for attention instead of shouting at the door.</li>
+          <li>Use simple daily games to tire your dog mentally, not just physically.</li>
+          <li>Create house rules that feel fair and consistent, not confusing.</li>
         </ul>
 
-        <h3 style="font-size:14px;margin:10px 0 4px;color:var(--text-main);">Who this plan is for</h3>
-        <p>
-          This plan is built for real apartments and neighbors — not soundproof training studios.
-        </p>
-      </div>
-
-      <div class="hero-card">
-        <h3>In this 7-day plan, you will:</h3>
-        <ul>
-          <li>Set up a calm “barking corner” your dog can relax in.</li>
-          <li>Teach a soft “quiet” cue without scaring your dog.</li>
-          <li>Reduce door and hallway barking to a manageable level.</li>
+        <div class="hero-right-section-title">Who this is for</div>
+        <ul class="hero-right-list">
+          <li>Dogs who bark at every small noise or person walking by.</li>
+          <li>Owners who feel embarrassed or exhausted by constant barking.</li>
+          <li>Families who want a calmer home without harsh punishment.</li>
         </ul>
-        <p style="margin-top:6px;">
-          You’ll get a realistic routine that makes sense for thin walls, elevators and busy neighbors.
-        </p>
-      </div>
+      </aside>
     </section>
 
-    <section class="section">
-      <h2>Who this plan is for</h2>
-      <p>Especially helpful if:</p>
-      <ul class="bullets">
-        <li>Your dog explodes at every noise in the hallway.</li>
-        <li>You feel stressed every time someone uses the elevator or stairs.</li>
-        <li>Neighbors have already commented about the barking.</li>
-        <li>You want fewer outbursts, not a “perfect” silent robot dog.</li>
-      </ul>
-    </section>
-
-    <section class="section">
-      <h2>What’s inside the 7-day plan</h2>
-      <div class="days">
-        <div class="day-item">
-          <div class="day-title">Days 1–2 — Calm corner &amp; “safe noise” setup</div>
-          <div>Create a cozy spot and start pairing mild noises with calm, predictable rewards.</div>
+    <!-- What’s inside -->
+    <section class="section" style="margin-top:28px;">
+      <div class="two-cols">
+        <div>
+          <h2>What’s inside the 7-day plan</h2>
+          <p>
+            Each day you’ll get a clear focus, simple exercises, and short notes on
+            what to watch for. The plan is designed so that busy people can still
+            complete it — no fancy equipment, no perfect schedule required.
+          </p>
+          <ul>
+            <li><strong>Day 1–2:</strong> Reset the baseline — understand triggers, set up the environment, and reduce background noise that keeps your dog on edge.</li>
+            <li><strong>Day 3–4:</strong> Teaching “quiet” the kind way — pair calm moments with rewards and phase out constant nagging.</li>
+            <li><strong>Day 5:</strong> Attention-seeking barking — show your dog better ways to ask for what they want.</li>
+            <li><strong>Day 6:</strong> Sound sensitivity — practice calm around doorbells, outside footsteps, and routine noises.</li>
+            <li><strong>Day 7:</strong> Real-life routine — build a daily schedule that keeps barking low in real apartments and neighborhoods.</li>
+          </ul>
         </div>
-        <div class="day-item">
-          <div class="day-title">Days 3–4 — Soft “quiet” cue and door routines</div>
-          <div>Teach a gentle, repeatable cue and adjust how you answer doors and deliveries.</div>
-        </div>
-        <div class="day-item">
-          <div class="day-title">Days 5–6 — Hallway sounds &amp; neighbors coming home</div>
-          <div>Practice with recorded or real hallway sounds, working just below your dog’s “explosion” level.</div>
-        </div>
-        <div class="day-item">
-          <div class="day-title">Day 7 — Real-life practice &amp; maintenance</div>
-          <div>Put the pieces together for a normal week and set up a simple long-term routine.</div>
+        <div>
+          <h2>How the plan works</h2>
+          <p>
+            You’ll get a simple daily page you can open on your phone, tablet, or laptop.
+            Most sessions take 10–15 minutes and can be done in normal home conditions.
+          </p>
+          <ul>
+            <li>Short written instructions — no hour-long videos to sit through.</li>
+            <li>Realistic examples for busy homes, not perfect training halls.</li>
+            <li>Tips for adjusting if your dog is more sensitive or more energetic.</li>
+          </ul>
         </div>
       </div>
     </section>
 
+    <!-- Who this plan is for -->
     <section class="section">
-      <h2>What you’ll receive</h2>
-      <ul class="bullets">
-        <li>7-day schedule with short daily steps.</li>
-        <li>Ideas for quieter evenings and mornings.</li>
-        <li>Ways to handle “bad days” without giving up.</li>
-        <li>Tips for combining this with leash or anxiety plans later.</li>
-      </ul>
-    </section>
-
-    <section class="section">
-      <h2>Ready for fewer noise complaints?</h2>
+      <h2>Who this plan is for (and not for)</h2>
       <p>
-        Click below to purchase and unlock the full 7-day barking plan.
-        You can repeat it whenever life changes or a new neighbor moves in.
+        This plan is especially helpful if barking is annoying, embarrassing, or tiring
+        — but your dog is otherwise healthy and safe.
       </p>
-      <div style="margin-top:10px;">
-        <!-- Bottom CTA: same product checkout -->
-        <a href="https://www.checkout-ds24.com/product/653870"
-           class="btn-primary"
-           id="cta-bottom-barking"
-           target="_blank">
-          Get the 7-day barking plan – $19 →
-        </a>
-      </div>
+      <ul>
+        <li>Your dog barks at the door, out the window, or when people walk past.</li>
+        <li>You feel like you’ve tried “shouting over the barking” and it doesn’t work.</li>
+        <li>You want to stay kind and fair while still setting clear boundaries.</li>
+      </ul>
+      <p style="margin-top:10px;">
+        If your dog is showing signs of aggression or is in pain, please talk to a
+        qualified vet or behavior professional. This plan does not replace medical
+        or one-on-one behavioral support.
+      </p>
     </section>
-  </main>
 
-  <footer>
-    <div class="footer-links">
-      <a href="legal.html">Legal Notice</a> |
-      <a href="privacy.html">Privacy Policy</a> |
-      <a href="terms.html">Terms &amp; Conditions</a> |
-      <a href="contact.html">Contact Us</a>
-    </div>
-    <div style="margin-top:4px;">
-      60-day money-back guarantee, no questions asked.
-    </div>
-    <div style="margin-top:6px;">
-      For unsubscribing or support, contact
-      <a href="mailto:support@aurumdesks.com" style="color:#b05825;text-decoration:underline;">
-        support@aurumdesks.com
-      </a>.
-    </div>
-    <div style="margin-top:4px;">
-      © <span id="year"></span> CalmPaw Coach. All rights reserved.
-    </div>
-  </footer>
+    <!-- Delivery & guarantee -->
+    <section class="section">
+      <h2>Delivery, payment & guarantee</h2>
+      <p><strong>Product type:</strong> This is a digital-only dog training program delivered online. No physical goods will be shipped.</p>
+      <p>
+        After purchase you will receive instant access to the full 7-day plan via
+        our online platform and by email. You can revisit the material any time.
+      </p>
+      <p>
+        All payments and refunds are handled securely by Digistore24.
+        On your bank or card statement, the debit will appear as <strong>“Digistore24”</strong>.
+      </p>
+      <p>
+        You are protected by a 60-day money-back guarantee. If you feel the plan
+        didn’t help you and your dog, you can request a refund within 60 days of purchase.
+      </p>
+    </section>
+
+    <footer>
+      <div style="margin-bottom:8px;">
+        <a href="/legal">Legal Notice</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+      <div style="font-size:11px;">
+        © <span id="year"></span> CalmPaw Coach. All rights reserved.
+      </div>
+    </footer>
+  </div>
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
-
-  <!-- Top nav login area (same pattern as other pages) -->
-  <script>
-  (function () {
-    const loginArea = document.getElementById("nav-login-area");
-    const token = localStorage.getItem("calmpaw_token");
-
-    function currentRedirect() {
-      return window.location.pathname + window.location.search;
-    }
-
-    function goAuth() {
-      window.location.href = "/auth.html?redirect=" + encodeURIComponent(currentRedirect());
-    }
-
-    function logoutOnly() {
-      localStorage.removeItem("calmpaw_token");
-      localStorage.removeItem("calmpaw_email");
-    }
-
-    function logoutAndStay() {
-      logoutOnly();
-      window.location.reload();
-    }
-
-    if (!loginArea) return;
-
-    const email = localStorage.getItem("calmpaw_email");
-    if (token && email) {
-      loginArea.innerHTML = `
-        <span class="nav-login-email">${email}</span>
-        <button class="btn-mini" id="btn-switch-account">Switch</button>
-        <button class="btn-mini btn-mini-danger" id="btn-logout">Log out</button>
-      `;
-      document.getElementById("btn-switch-account").onclick = function () {
-        logoutOnly();
-        goAuth();
-      };
-      document.getElementById("btn-logout").onclick = logoutAndStay;
-    } else {
-      loginArea.innerHTML = `
-        <button class="btn-outline" id="btn-login-nav">Log in</button>
-      `;
-      document.getElementById("btn-login-nav").onclick = goAuth;
-    }
-  })();
-  </script>
-
-  <!-- If user already owns this plan, change buttons to “Open your plan” -->
-  <script>
-  (function () {
-    const PLAN_KEY = "barking";
-    const ACCESS_URL = "/barking-access.html";
-
-    const mainBtn = document.getElementById("cta-main-barking");
-    const bottomBtn = document.getElementById("cta-bottom-barking");
-    const token = localStorage.getItem("calmpaw_token");
-
-    if (!mainBtn || !bottomBtn) return;
-    if (!token) return; // not logged in → keep as purchase buttons
-
-    fetch("https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=" + PLAN_KEY, {
-      method: "GET",
-      headers: { "Authorization": "Bearer " + token }
-    })
-      .then(r => r.json())
-      .then(data => {
-        if (!data || !data.ok || !data.access) return;
-
-        function goAccess(e) {
-          if (e) e.preventDefault();
-          window.location.href = ACCESS_URL;
-        }
-
-        mainBtn.textContent = "Open your 7-day plan →";
-        mainBtn.removeAttribute("target");
-        mainBtn.onclick = goAccess;
-
-        bottomBtn.textContent = "Go to your barking plan →";
-        bottomBtn.removeAttribute("target");
-        bottomBtn.onclick = goAccess;
-      })
-      .catch(err => {
-        console.error("check-plan barking error", err);
-      });
-  })();
   </script>
 </body>
 </html>
