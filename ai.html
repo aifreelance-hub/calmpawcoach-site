@@ -179,7 +179,6 @@
       font-size:12px;color:#a7714f;
       line-height:1.6;margin-bottom:10px;
     }
-    /* 新增：交付 & 扣款说明 */
     .delivery-note{
       font-size:11px;
       color:#a16a4b;
@@ -319,16 +318,39 @@
           questions.
         </p>
         <p class="delivery-note">
-          <strong>Delivery & billing:</strong> This is a fully digital monthly subscription.
+          <strong>Delivery &amp; billing:</strong> This is a fully digital monthly subscription.
           You access the CalmPaw AI Trainer chat directly on this page as long as your
           subscription stays active. Nothing physical will be shipped. Your 60-day
           money-back guarantee and all billing are processed securely by Digistore24
           (<strong>the withdrawal from your account will be done by Digistore24</strong>).
         </p>
 
+        <!-- Digistore24 Trust Badge -->
+        <div style="text-align:center;margin:18px 0;">
+          <img src="https://www.digistore24.com/service/payment_badge"
+               alt="Digistore24 Secure Checkout"
+               style="max-width:220px;width:100%;height:auto;">
+        </div>
+
+        <!-- Refund Guarantee -->
+        <div style="text-align:center;margin:10px 0;font-size:14px;color:#7a5f58;">
+          <strong>60-day money-back guarantee — no questions asked.</strong>
+        </div>
+
+        <!-- Direct checkout button (always visible on Sales Page) -->
+        <div style="text-align:center;margin:14px 0 18px;">
+          <a href="https://www.checkout-ds24.com/product/653899"
+             style="display:inline-flex;align-items:center;justify-content:center;padding:12px 28px;border-radius:999px;background:#ff914d;color:#fff;font-weight:600;font-size:15px;text-decoration:none;box-shadow:0 14px 40px rgba(255,145,77,0.45);border:none;cursor:pointer;">
+            Start AI Trainer for $29/month
+          </a>
+          <div style="font-size:11px;color:#8a6a63;margin-top:6px;">
+            Secure checkout via Digistore24. You can cancel the subscription at any time via Digistore24.
+          </div>
+        </div>
+
         <div class="hero-pill-row">
           <div class="hero-pill">🛋 For real homes, not training halls</div>
-          <div class="hero-pill">📩 Answer in minutes, not weeks</div>
+          <div class="hero-pill">📩 Answers in minutes, not weeks</div>
           <div class="hero-pill">🔒 Private — just you and your AI trainer</div>
         </div>
 
@@ -415,7 +437,7 @@
 
   <script>
     const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
-    // ✅ Digistore24 结算链接（你已经创建好的）
+    // Digistore24 checkout link for AI Trainer
     const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653899";
 
     const navAuthArea = document.getElementById("nav-auth-area");
@@ -660,9 +682,21 @@
 
     document.addEventListener("DOMContentLoaded", hydrateNavAuth);
   </script>
-  <footer style="margin-top:40px; padding:20px 0; text-align:center; font-size:12px; color:#8a6a63;">
-  <a href="/legal" style="color:#ff914d; text-decoration:none;">Legal Information</a>
-</footer>
 
+  <!-- Full legal footer for Digistore24 compliance -->
+  <footer style="margin-top:40px;padding:30px 0;text-align:center;font-size:14px;color:#8a6a63;border-top:1px solid #f3d9c4;">
+    <div style="margin-bottom:10px;">
+      <a href="/legal" style="color:#8a6a63;margin:0 10px;text-decoration:none;">Legal Notice</a> |
+      <a href="/privacy" style="color:#8a6a63;margin:0 10px;text-decoration:none;">Privacy Policy</a> |
+      <a href="/terms" style="color:#8a6a63;margin:0 10px;text-decoration:none;">Terms &amp; Conditions</a> |
+      <a href="/contact" style="color:#8a6a63;margin:0 10px;text-decoration:none;">Contact Us</a>
+    </div>
+    <div style="margin-top:8px;color:#b38a7d;font-size:13px;">
+      To unsubscribe from future emails, please contact our support at
+      <a href="mailto:support@calmpawcoach.com" style="color:#b38a7d;text-decoration:underline;">
+        support@calmpawcoach.com
+      </a>.
+    </div>
+  </footer>
 </body>
 </html>
