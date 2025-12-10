@@ -149,7 +149,7 @@
     .hero-meta{font-size:11px;color:var(--text-soft);margin-bottom:12px;}
     .hero-meta span{margin-right:10px;}
     .hero-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:8px;}
-    .hero-note{font-size:11px;color:var(--text-soft);}
+    .hero-note{font-size:11px;color:var(--text-soft);margin-top:4px;}
     .hero-card{
       border-radius:var(--radius-lg);
       background:rgba(240,250,255,0.96);
@@ -161,11 +161,13 @@
     .hero-card h3{font-size:13px;margin-bottom:6px;}
     .hero-card ul{margin-left:14px;margin-bottom:4px;}
     .hero-card li{margin-bottom:4px;}
+
     .section{margin-bottom:24px;}
     .section h2{font-size:16px;margin-bottom:6px;}
     .section p{font-size:13px;color:var(--text-soft);margin-bottom:6px;line-height:1.6;}
     .bullets{font-size:13px;color:var(--text-soft);margin-left:16px;}
     .bullets li{margin-bottom:4px;}
+
     .days{
       border-radius:18px;
       background:#fffaf5;border:1px solid rgba(243,217,196,0.9);
@@ -173,25 +175,37 @@
     }
     .day-item{margin-bottom:8px;}
     .day-title{font-weight:600;color:#2f647b;margin-bottom:2px;}
+
     footer{
       border-top:1px solid rgba(243,217,196,0.8);
-      background:rgba(255,248,241,0.96);margin-top:10px;
+      background:rgba(255,248,241,0.96);
+      margin-top:10px;
+      padding:18px 0 20px;
+      text-align:center;
+      font-size:12px;
+      color:#8a6a63;
     }
-    .footer-inner{
-      max-width:1120px;margin:0 auto;
-      padding:12px 20px 16px;
-      display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;
-      font-size:11px;color:var(--text-soft);
+    .footer-links{
+      margin-bottom:6px;
     }
-    .footer-links{display:flex;gap:12px;flex-wrap:wrap;}
-    .footer-links a:hover{color:#b05825;}
+    .footer-links a{
+      margin:0 8px;
+      color:#8a6a63;
+      text-decoration:none;
+    }
+    .footer-links a:hover{
+      color:#b05825;
+    }
+    @media(max-width:640px){
+      footer{
+        font-size:11px;
+        padding:16px 8px 18px;
+      }
+      .footer-links a{
+        margin:0 6px;
+      }
+    }
   </style>
-
-  <!-- Paddle（原样保留，不动） -->
-  <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
-  <script>
-    Paddle.Setup({ vendor: 0 });
-  </script>
 </head>
 <body>
   <header>
@@ -227,9 +241,35 @@
           <span>🐶 Best for: pulling, zig-zagging, distracted walkers</span>
           <span>⏱ Daily time: 10–20 minutes</span>
         </div>
+
+        <!-- Digistore24 trust badge + guarantee -->
+        <div style="margin:10px 0 4px;">
+          <div style="display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border-radius:999px;background:#fffaf5;border:1px solid rgba(243,217,196,0.9);box-shadow:0 10px 26px rgba(210,145,110,0.15);">
+            <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+              <defs>
+                <linearGradient id="ds24Shield" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#ffb86b"/>
+                  <stop offset="100%" stop-color="#ff914d"/>
+                </linearGradient>
+              </defs>
+              <path fill="url(#ds24Shield)" d="M12 2.25l7 2.5v6.08c0 4.23-2.84 8.02-7 9.17-4.16-1.15-7-4.94-7-9.17v-6.08l7-2.5z"/>
+              <path fill="#fff" d="M10.5 12.25l-1.75-1.75-1.25 1.25 3 3 5-5-1.25-1.25z"/>
+            </svg>
+            <span style="font-size:14px;color:#7a5f58;font-weight:600;">
+              Digistore24 Secure Checkout
+            </span>
+          </div>
+        </div>
+        <div style="font-size:12px;color:#7a5f58;margin:4px 0 10px;">
+          <strong>60-day money-back guarantee — no questions asked.</strong>
+        </div>
+
         <div class="hero-cta">
-          <a href="#" class="btn-primary" id="cta-main-leash"
-             onclick="return startLeashPurchase();">
+          <!-- Main buy button: direct Digistore24 checkout -->
+          <a href="https://www.checkout-ds24.com/product/653887"
+             class="btn-primary"
+             id="cta-main-leash"
+             target="_blank">
             Buy this plan – $19 →
           </a>
           <a href="programs.html" class="btn-outline">← Back to all programs</a>
@@ -237,25 +277,27 @@
         <div class="hero-note">
           One-time purchase. Instant access to the full 10-day plan after payment.
         </div>
+        <div class="hero-note">
+          <strong>Product type &amp; delivery:</strong> This is a purely digital dog training program.
+          No physical goods will be shipped. After purchase, you will receive access digitally via our
+          online platform and email. All billing and the 60-day money-back guarantee are handled securely
+          by Digistore24 (the debit is made by Digistore24).
+        </div>
       </div>
 
-      <!-- 右侧说明：产品内容 + 交付方式 + Digistore24 扣款说明 -->
+      <!-- Right side: what you get -->
       <div style="font-size:13px;color:var(--text-soft);margin-top:4px;">
         <h2 style="font-size:16px;margin-bottom:6px;color:var(--text-main);">What you get</h2>
         <ul style="margin-left:16px;margin-bottom:8px;">
-          <li>10 days of structured leash-walking exercises</li>
-          <li>Daily guidance to reduce pulling and chaos on walks</li>
-          <li>Simple, kind routines suitable for busy city life</li>
+          <li>10 days of structured leash-walking exercises.</li>
+          <li>Daily guidance to reduce pulling and chaos on walks.</li>
+          <li>Simple, kind routines suitable for busy city life.</li>
         </ul>
 
-        <h3 style="font-size:14px;margin:10px 0 4px;color:var(--text-main);">Product type &amp; delivery</h3>
+        <h3 style="font-size:14px;margin:10px 0 4px;color:var(--text-main);">Who this plan is for</h3>
         <p>
-          This is a <strong>purely digital dog training program</strong>. No physical goods will be shipped.<br>
-          After purchase, you will receive access digitally via our online platform and email.
-        </p>
-
-        <p style="margin-top:8px;font-size:12px;color:#8a6a63;">
-          The debit is made by Digistore24.
+          This plan is built for real streets, real distractions and real tired humans —
+          not perfect training halls.
         </p>
       </div>
 
@@ -268,7 +310,7 @@
         </ul>
         <p style="margin-top:6px;">
           You’ll get realistic steps for city streets, apartments and busy
-          neighborhoods — not empty fields or perfect training halls.
+          neighborhoods — not empty fields or silent spaces.
         </p>
       </div>
     </section>
@@ -323,8 +365,11 @@
         You can repeat it any time your dog needs a refresher.
       </p>
       <div style="margin-top:10px;">
-        <a href="#" class="btn-primary" id="cta-bottom-leash"
-           onclick="return startLeashPurchase();">
+        <!-- Bottom CTA: same product checkout -->
+        <a href="https://www.checkout-ds24.com/product/653887"
+           class="btn-primary"
+           id="cta-bottom-leash"
+           target="_blank">
           Get the 10-day leash plan – $19 →
         </a>
       </div>
@@ -332,12 +377,23 @@
   </main>
 
   <footer>
-    <div class="footer-inner">
-      <div>© <span id="year"></span> CalmPaw Coach. All rights reserved.</div>
-      <div class="footer-links">
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-      </div>
+    <div class="footer-links">
+      <a href="legal.html">Legal Notice</a> |
+      <a href="privacy.html">Privacy Policy</a> |
+      <a href="terms.html">Terms &amp; Conditions</a> |
+      <a href="contact.html">Contact Us</a>
+    </div>
+    <div style="margin-top:4px;">
+      60-day money-back guarantee, no questions asked.
+    </div>
+    <div style="margin-top:6px;">
+      For unsubscribing or support, contact
+      <a href="mailto:support@aurumdesks.com" style="color:#b05825;text-decoration:underline;">
+        support@aurumdesks.com
+      </a>.
+    </div>
+    <div style="margin-top:4px;">
+      © <span id="year"></span> CalmPaw Coach. All rights reserved.
     </div>
   </footer>
 
@@ -392,25 +448,7 @@
   })();
   </script>
 
-  <!-- 购买逻辑：未登录先去登录，登录后跳 Digistore 链接 -->
-  <script>
-  function startLeashPurchase() {
-    const token = localStorage.getItem("calmpaw_token");
-
-    // 没登录 → 去 auth.html 登录，带回跳
-    if (!token) {
-      const back = window.location.pathname + window.location.search;
-      window.location.href = "/auth.html?redirect=" + encodeURIComponent(back);
-      return false;
-    }
-
-    // 已登录 → 直接打开 Digistore 收银台（牵绳计划）
-    window.open("https://www.checkout-ds24.com/product/653887", "_blank");
-    return false;
-  }
-  </script>
-
-  <!-- ★★ 已经拥有 leash 或 bundle 的用户：按钮变成“Open your plan” ★★ -->
+  <!-- 已拥有 leash 的用户：按钮变成 “Open your plan” -->
   <script>
   (function () {
     const PLAN_KEY = "leash";
@@ -421,9 +459,8 @@
     const token = localStorage.getItem("calmpaw_token");
 
     if (!mainBtn || !bottomBtn) return;
-    if (!token) return; // 未登录保持购买逻辑
+    if (!token) return; // 未登录 → 保持购买按钮状态
 
-    // 关键：请求 Worker 的 JSON 接口 + slug
     fetch("https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=" + PLAN_KEY, {
       method: "GET",
       headers: {
@@ -440,9 +477,11 @@
         }
 
         mainBtn.textContent = "Open your 10-day plan →";
+        mainBtn.removeAttribute("target");
         mainBtn.onclick = goAccess;
 
         bottomBtn.textContent = "Go to your leash plan →";
+        bottomBtn.removeAttribute("target");
         bottomBtn.onclick = goAccess;
       })
       .catch(err => {
@@ -450,10 +489,5 @@
       });
   })();
   </script>
-
-  <footer style="margin-top:40px; padding:20px 0; text-align:center; font-size:12px; color:#8a6a63;">
-    <a href="/legal" style="color:#ff914d; text-decoration:none;">Legal Information</a>
-  </footer>
-
 </body>
 </html>
