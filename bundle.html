@@ -48,7 +48,7 @@
 
     a{text-decoration:none;color:inherit;}
 
-    /* ===== Header（统一样式） ===== */
+    /* ===== Header ===== */
 
     header{
       position:sticky;
@@ -214,7 +214,8 @@
 
     .nav-login-emoji{font-size:14px;}
 
-    /* 登录状态区域（统一） */
+    /* login area */
+
     .nav-auth{
       display:flex;
       align-items:center;
@@ -277,7 +278,7 @@
       }
     }
 
-    /* ===== Main 内容 ===== */
+    /* ===== Main ===== */
 
     main{
       max-width:1120px;
@@ -327,7 +328,7 @@
     .hero-meta{
       font-size:11px;
       color:var(--text-soft);
-      margin-bottom:12px;
+      margin-bottom:8px;
     }
 
     .hero-meta span{margin-right:10px;}
@@ -343,6 +344,7 @@
     .hero-note{
       font-size:11px;
       color:var(--text-soft);
+      margin-top:4px;
     }
 
     .hero-card{
@@ -461,30 +463,26 @@
       color:#7b5847;
     }
 
-    /* ===== Footer（含法律链接） ===== */
+    /* ===== Footer ===== */
 
     footer{
       border-top:1px solid rgba(243,217,196,0.8);
       background:rgba(255,248,241,0.96);
       margin-top:10px;
-    }
-
-    .footer-inner{
-      max-width:1120px;
-      margin:0 auto;
-      padding:12px 20px 16px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      justify-content:space-between;
-      font-size:11px;
-      color:var(--text-soft);
+      padding:20px 0;
+      text-align:center;
+      font-size:12px;
+      color:#8a6a63;
     }
 
     .footer-links{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
+      margin-bottom:6px;
+    }
+
+    .footer-links a{
+      margin:0 8px;
+      color:#8a6a63;
+      text-decoration:none;
     }
 
     .footer-links a:hover{
@@ -492,21 +490,15 @@
     }
 
     @media(max-width:640px){
-      .footer-inner{
-        padding:10px 14px 14px;
-        font-size:10px;
+      footer{
+        font-size:11px;
+        padding:18px 10px;
       }
-      .footer-links{
-        gap:10px;
+      .footer-links a{
+        margin:0 6px;
       }
     }
   </style>
-
-  <!-- Paddle（保留，但用 0 防止报错；现在实际支付走 Digistore24） -->
-  <script src="https://cdn.paddle.com/paddle.js"></script>
-  <script>
-    Paddle.Setup({ vendor: 0 });
-  </script>
 </head>
 <body data-slug="bundle">
   <header>
@@ -535,7 +527,7 @@
           </a>
         </div>
 
-        <!-- 顶部购买按钮：默认是 Digistore 链接，已购买后脚本会改成“Open” -->
+        <!-- Top buy button: Digistore24 checkout, will change to “Open your Complete Pack” if access is active -->
         <a id="bundle-btn-top"
            class="btn-primary"
            href="https://www.checkout-ds24.com/product/653891"
@@ -561,8 +553,30 @@
           <span>🚶‍♀️ Leash walking · 10-day plan</span>
         </div>
 
+        <!-- Digistore24 trust badge + 60-day guarantee -->
+        <div style="text-align:left;margin:10px 0 4px;">
+          <div style="display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border-radius:999px;background:#fffaf5;border:1px solid rgba(243,217,196,0.9);box-shadow:0 10px 26px rgba(210,145,110,0.15);">
+            <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+              <defs>
+                <linearGradient id="ds24Shield" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#ffb86b"/>
+                  <stop offset="100%" stop-color="#ff914d"/>
+                </linearGradient>
+              </defs>
+              <path fill="url(#ds24Shield)" d="M12 2.25l7 2.5v6.08c0 4.23-2.84 8.02-7 9.17-4.16-1.15-7-4.94-7-9.17v-6.08l7-2.5z"/>
+              <path fill="#fff" d="M10.5 12.25l-1.75-1.75-1.25 1.25 3 3 5-5-1.25-1.25z"/>
+            </svg>
+            <span style="font-size:14px;color:#7a5f58;font-weight:600;">
+              Digistore24 Secure Checkout
+            </span>
+          </div>
+        </div>
+        <div style="font-size:12px;color:#7a5f58;margin:4px 0 10px;">
+          <strong>60-day money-back guarantee — no questions asked.</strong>
+        </div>
+
         <div class="hero-cta">
-          <!-- 第二个购买按钮 -->
+          <!-- Main buy button -->
           <a id="bundle-btn-hero"
              class="btn-primary"
              href="https://www.checkout-ds24.com/product/653891"
@@ -576,9 +590,14 @@
         <div class="hero-note">
           One-time purchase. Lifetime access to all 3 step-by-step plans.
         </div>
+        <div class="hero-note">
+          <strong>Product type &amp; delivery:</strong> This is a purely digital dog training bundle. Nothing physical will be shipped.
+          You will receive access to all 3 plans online and via email immediately after purchase.
+          All billing and the 60-day money-back guarantee are handled securely by Digistore24
+          (the debit will be made by Digistore24).
+        </div>
       </div>
 
-      <!-- 右侧：新增“卖什么 + 交付方式 + 扣款说明” + 原来的说明卡片 -->
       <div>
         <div style="font-size:13px;color:var(--text-soft);margin-bottom:10px;">
           <h2 style="font-size:16px;margin-bottom:6px;color:var(--text-main);">What you get</h2>
@@ -587,16 +606,6 @@
             <li>Daily, realistic exercises you can fit around work and family life.</li>
             <li>Lifetime access so you can repeat or slow down whenever life changes.</li>
           </ul>
-
-          <h3 style="font-size:14px;margin:10px 0 4px;color:var(--text-main);">Product type &amp; delivery</h3>
-          <p>
-            This is a <strong>purely digital dog training product bundle</strong>. No physical goods will be shipped.<br>
-            After purchase, you will receive access digitally via our online platform and email.
-          </p>
-
-          <p style="margin-top:8px;font-size:12px;color:#8a6a63;">
-            The debit is made by Digistore24.
-          </p>
         </div>
 
         <div class="hero-card">
@@ -698,7 +707,7 @@
       </p>
 
       <div style="margin-top:10px;">
-        <!-- 第三个购买按钮 -->
+        <!-- Bottom buy button -->
         <a id="bundle-btn-bottom"
            class="btn-primary"
            href="https://www.checkout-ds24.com/product/653891"
@@ -710,15 +719,23 @@
   </main>
 
   <footer>
-    <div class="footer-inner">
-      <div>© <span id="year"></span> CalmPaw Coach. All rights reserved.</div>
-      <div class="footer-links">
-        <a href="refund.html">Refund policy</a>
-        <a href="terms.html">Terms of service</a>
-        <a href="privacy.html">Privacy policy</a>
-        <a href="legal.html">Legal / Imprint</a>
-        <a href="contact.html">Contact</a>
-      </div>
+    <div class="footer-links">
+      <a href="legal.html">Legal Notice</a> |
+      <a href="privacy.html">Privacy Policy</a> |
+      <a href="terms.html">Terms &amp; Conditions</a> |
+      <a href="contact.html">Contact Us</a>
+    </div>
+    <div style="margin-top:4px;">
+      60-day money-back guarantee, no questions asked.
+    </div>
+    <div style="margin-top:6px;">
+      For unsubscribing or support, contact
+      <a href="mailto:support@aurumdesks.com" style="color:#b05825;text-decoration:underline;">
+        support@aurumdesks.com
+      </a>.
+    </div>
+    <div style="margin-top:4px;">
+      © <span id="year"></span> CalmPaw Coach. All rights reserved.
     </div>
   </footer>
 
@@ -726,7 +743,7 @@
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 
-  <!-- 顶部登录状态同步：邮箱 + Switch + Log out -->
+  <!-- Top login status: email + Switch + Log out -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
@@ -794,25 +811,7 @@
     });
   </script>
 
-  <!-- 原始 buyBundle 函数（现在不用了，可以保留） -->
-  <script>
-    function buyBundle() {
-      const token = localStorage.getItem("calmpaw_token");
-      const redirect = window.location.pathname + window.location.search;
-
-      if (!token) {
-        window.location.href = "/auth.html?redirect=" + encodeURIComponent(redirect);
-        return;
-      }
-
-      Paddle.Checkout.open({
-        product: PRODUCT_ID_BUNDLE,
-        success: "https://calmpawcoach.com/bundle-access.html"
-      });
-    }
-  </script>
-
-  <!-- 新：根据 /auth/check-plan 返回的 access=true 自动把按钮变成“Open your plan” -->
+  <!-- Change buttons to “Open your Complete Pack” when user already has access -->
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
@@ -846,10 +845,5 @@
         });
     });
   </script>
-
-  <footer style="margin-top:40px; padding:20px 0; text-align:center; font-size:12px; color:#8a6a63;">
-    <a href="/legal" style="color:#ff914d; text-decoration:none;">Legal Information</a>
-  </footer>
-
 </body>
 </html>
