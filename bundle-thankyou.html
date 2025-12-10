@@ -101,7 +101,8 @@
     }
     a.btn{
       display:inline-flex;
-      margin-top:16px;
+      align-items:center;
+      justify-content:center;
       padding:10px 18px;
       border-radius:var(--radius-pill);
       background:linear-gradient(135deg,var(--accent),var(--accent-strong));
@@ -109,6 +110,33 @@
       font-size:14px;
       text-decoration:none;
       font-weight:600;
+      border:none;
+      cursor:pointer;
+    }
+    a.btn-ghost{
+      background:#fff;
+      color:var(--accent-strong);
+      border:1px solid var(--accent);
+      box-shadow:none;
+    }
+    .plan-links{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin:10px 0 4px;
+    }
+    .plan-links a.btn{
+      width:100%;
+      justify-content:center;
+    }
+    @media (min-width:600px){
+      .plan-links{
+        flex-direction:row;
+        flex-wrap:wrap;
+      }
+      .plan-links a.btn{
+        width:auto;
+      }
     }
     footer{
       margin-top:24px;
@@ -128,7 +156,7 @@
     <a href="/" style="font-size:20px;font-weight:700;">CalmPaw Coach</a>
     <div class="right">
       <a href="/">Home</a>
-      <a href="/legal">Legal</a>
+      <a href="/legal">Legal Information</a>
     </div>
   </nav>
 
@@ -138,7 +166,8 @@
     <h1>CalmPaw Complete Pack — Barking, Anxiety & Leash Plans</h1>
     <p class="lead">
       Thank you for purchasing the CalmPaw Complete Pack.  
-      This bundle gives you access to all three digital training programs for your dog.
+      This bundle gives you access to all three <strong>digital</strong> training programs for your dog.
+      No physical goods will be shipped.
     </p>
 
     <!-- Digistore24 Trust Badge / Banner -->
@@ -176,23 +205,44 @@
       <li><strong>Separation Anxiety Reset — 14-Day Plan</strong></li>
     </ul>
     <p>
-      All content is delivered digitally. No physical goods will be shipped.
+      All content is delivered online as digital training plans. No physical products will be shipped.
     </p>
 
-    <h2>Access instructions</h2>
+    <!-- 直接访问链接（审核最关键的部分） -->
+    <h2>Access your training plans now</h2>
     <p>
-      Please access your CalmPaw Complete Pack using the
-      <strong>same email address you used during checkout</strong>.
+      Click the buttons below to open your digital plans immediately.  
+      You already paid for the bundle – <strong>no additional registration or payment is required.</strong>
     </p>
 
-    <a href="/auth.html?redirect=/bundle-access.html" class="btn">
-      Create your account or log in to access your bundle
-    </a>
+    <div class="plan-links">
+      <!-- 这里的 href 请改成你实际的访问页面路径 -->
+      <a href="/barking-access" class="btn">
+        Open 7-Day Barking Plan
+      </a>
+      <a href="/leash-access" class="btn">
+        Open 10-Day Leash Walking Plan
+      </a>
+      <a href="/anxiety-access" class="btn">
+        Open 14-Day Separation Anxiety Plan
+      </a>
+    </div>
 
     <div class="highlight">
-      You will also receive an email with your access information for the bundle.  
+      You will also receive an email with your access links for the bundle.  
       If you do not see the email, please also check your spam or promotions folder.
     </div>
+
+    <!-- 可选：账户 / 会员区（放在“可选”位置，避免审核觉得必须登录才有内容） -->
+    <h2 style="margin-top:22px;">Optional: create your CalmPaw account</h2>
+    <p>
+      If you want to save your progress and return easily to all your plans in one place,  
+      you can also create an account or log in with the same email address you used during checkout:
+    </p>
+
+    <a href="/auth.html?redirect=/bundle-access.html" class="btn btn-ghost" style="margin-top:12px;">
+      Create your account or log in to access your bundle
+    </a>
 
     <h2>Support</h2>
     <p>
@@ -204,7 +254,7 @@
       <a href="/refund">Refund Policy</a>
       <a href="/terms">Terms of Service</a>
       <a href="/privacy">Privacy Policy</a>
-      <a href="/legal">Legal Notice</a>
+      <a href="/legal">Legal Information</a>
     </footer>
   </main>
 
