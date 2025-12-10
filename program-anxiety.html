@@ -149,7 +149,7 @@
     .hero-meta{font-size:11px;color:var(--text-soft);margin-bottom:12px;}
     .hero-meta span{margin-right:10px;}
     .hero-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:8px;}
-    .hero-note{font-size:11px;color:var(--text-soft);}
+    .hero-note{font-size:11px;color:var(--text-soft);margin-top:4px;}
     .hero-card{
       border-radius:var(--radius-lg);
       background:rgba(255,246,238,0.96);
@@ -176,24 +176,34 @@
 
     footer{
       border-top:1px solid rgba(243,217,196,0.8);
-      background:rgba(255,248,241,0.96);margin-top:10px;
+      background:rgba(255,248,241,0.96);
+      margin-top:10px;
+      padding:18px 0 20px;
+      text-align:center;
+      font-size:12px;
+      color:var(--text-soft);
     }
-    .footer-inner{
-      max-width:1120px;margin:0 auto;
-      padding:12px 20px 16px;
-      display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;
-      font-size:11px;color:var(--text-soft);
+    .footer-links{
+      margin-bottom:6px;
     }
-    .footer-links{display:flex;gap:12px;flex-wrap:wrap;}
-    .footer-links a:hover{color:#b05825;}
+    .footer-links a{
+      margin:0 8px;
+      color:var(--text-soft);
+      text-decoration:none;
+    }
+    .footer-links a:hover{
+      color:#b05825;
+    }
+    @media(max-width:640px){
+      footer{
+        font-size:11px;
+        padding:16px 8px 18px;
+      }
+      .footer-links a{
+        margin:0 6px;
+      }
+    }
   </style>
-
-  <!-- Paddle -->
-  <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
-  <script>
-    /* TODO: 上线时把 0 换成你真实 Vendor ID */
-    Paddle.Setup({ vendor: 0 });
-  </script>
 </head>
 <body>
   <header>
@@ -208,7 +218,7 @@
       <nav class="nav-links">
         <a href="programs.html">Programs</a>
         <a href="bundle.html">Complete Pack</a>
-        <a href="about.html">About</a>
+        <a href="ai.html">AI Trainer</a>
         <a href="contact.html">Contact</a>
       </nav>
       <div class="nav-cta">
@@ -230,10 +240,35 @@
           <span>🐶 Best for: anxious / rescue dogs, apartment life</span>
           <span>⏱ Daily time: 10–20 minutes</span>
         </div>
+
+        <!-- Digistore24 trust badge + guarantee -->
+        <div style="margin:10px 0 4px;">
+          <div style="display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border-radius:999px;background:#fffaf5;border:1px solid rgba(243,217,196,0.9);box-shadow:0 10px 26px rgba(210,145,110,0.15);">
+            <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+              <defs>
+                <linearGradient id="ds24Shield" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#ffb86b"/>
+                  <stop offset="100%" stop-color="#ff914d"/>
+                </linearGradient>
+              </defs>
+              <path fill="url(#ds24Shield)" d="M12 2.25l7 2.5v6.08c0 4.23-2.84 8.02-7 9.17-4.16-1.15-7-4.94-7-9.17v-6.08l7-2.5z"/>
+              <path fill="#fff" d="M10.5 12.25l-1.75-1.75-1.25 1.25 3 3 5-5-1.25-1.25z"/>
+            </svg>
+            <span style="font-size:14px;color:#7a5f58;font-weight:600;">
+              Digistore24 Secure Checkout
+            </span>
+          </div>
+        </div>
+        <div style="font-size:12px;color:#7a5f58;margin:4px 0 10px;">
+          <strong>60-day money-back guarantee — no questions asked.</strong>
+        </div>
+
         <div class="hero-cta">
-          <!-- 没登录时：触发 startAnxietyPurchase，先去登录 -->
-          <a href="#" class="btn-primary" id="cta-main-anxiety"
-             onclick="return startAnxietyPurchase();">
+          <!-- Main buy button: direct Digistore24 checkout -->
+          <a href="https://www.checkout-ds24.com/product/653885"
+             class="btn-primary"
+             id="cta-main-anxiety"
+             target="_blank">
             Buy this plan – $29 →
           </a>
           <a href="programs.html" class="btn-outline">← Back to all programs</a>
@@ -241,25 +276,27 @@
         <div class="hero-note">
           One-time purchase. Instant access to the full 14-day plan after payment.
         </div>
+        <div class="hero-note">
+          <strong>Product type &amp; delivery:</strong> This is a purely digital dog training program. Nothing physical will be shipped.
+          After purchase, you will receive access digitally via our online platform and by email.
+          All billing and the 60-day money-back guarantee are handled securely by Digistore24
+          (the debit is made by Digistore24).
+        </div>
       </div>
 
-      <!-- 右侧说明：产品内容 + 交付方式 + Digistore24 扣款说明 -->
+      <!-- Right side: what you get -->
       <div style="font-size:13px;color:var(--text-soft);margin-top:4px;">
         <h2 style="font-size:16px;margin-bottom:6px;color:var(--text-main);">What you get</h2>
         <ul style="margin-left:16px;margin-bottom:8px;">
-          <li>14 days of structured, step-by-step separation anxiety training</li>
-          <li>Daily guidance to build safe, tolerable absences</li>
-          <li>Realistic routines that fit around work and family life</li>
+          <li>14 days of structured, step-by-step separation anxiety training.</li>
+          <li>Daily guidance to build safe, tolerable absences.</li>
+          <li>Realistic routines that fit around work and family life.</li>
         </ul>
 
-        <h3 style="font-size:14px;margin:10px 0 4px;color:var(--text-main);">Product type &amp; delivery</h3>
+        <h3 style="font-size:14px;margin:10px 0 4px;color:var(--text-main);">Who this plan is for</h3>
         <p>
-          This is a <strong>purely digital dog training program</strong>. No physical goods will be shipped.<br>
-          After purchase, you will receive access digitally via our online platform and email.
-        </p>
-
-        <p style="margin-top:8px;font-size:12px;color:#8a6a63;">
-          The debit is made by Digistore24.
+          This plan is made for real homes and real worries, especially if neighbors,
+          landlords or your own schedule make things feel complicated.
         </p>
       </div>
 
@@ -331,9 +368,11 @@
         You can repeat or slow down the program as needed.
       </p>
       <div style="margin-top:10px;">
-        <!-- 底部 CTA，同样复用购买逻辑 -->
-        <a href="#" class="btn-primary" id="cta-bottom-anxiety"
-           onclick="return startAnxietyPurchase();">
+        <!-- Bottom CTA: same product checkout -->
+        <a href="https://www.checkout-ds24.com/product/653885"
+           class="btn-primary"
+           id="cta-bottom-anxiety"
+           target="_blank">
           Get the 14-day anxiety plan – $29 →
         </a>
       </div>
@@ -341,12 +380,23 @@
   </main>
 
   <footer>
-    <div class="footer-inner">
-      <div>© <span id="year"></span> CalmPaw Coach. All rights reserved.</div>
-      <div class="footer-links">
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-      </div>
+    <div class="footer-links">
+      <a href="legal.html">Legal Notice</a> |
+      <a href="privacy.html">Privacy Policy</a> |
+      <a href="terms.html">Terms &amp; Conditions</a> |
+      <a href="contact.html">Contact Us</a>
+    </div>
+    <div style="margin-top:4px;">
+      60-day money-back guarantee, no questions asked.
+    </div>
+    <div style="margin-top:6px;">
+      For unsubscribing or support, contact
+      <a href="mailto:support@aurumdesks.com" style="color:#b05825;text-decoration:underline;">
+        support@aurumdesks.com
+      </a>.
+    </div>
+    <div style="margin-top:4px;">
+      © <span id="year"></span> CalmPaw Coach. All rights reserved.
     </div>
   </footer>
 
@@ -354,11 +404,10 @@
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 
-  <!-- 顶部导航登录区域 -->
+  <!-- Top nav login area -->
   <script>
   (function () {
     const loginArea = document.getElementById("nav-login-area");
-    const token = localStorage.getItem("calmpaw_token");
 
     function currentRedirect() {
       return window.location.pathname + window.location.search;
@@ -378,48 +427,32 @@
       window.location.reload();
     }
 
-    if (loginArea) {
-      const email = localStorage.getItem("calmpaw_email");
-      if (token && email) {
-        loginArea.innerHTML = `
-          <span class="nav-login-email">${email}</span>
-          <button class="btn-mini" id="btn-switch-account">Switch</button>
-          <button class="btn-mini btn-mini-danger" id="btn-logout">Log out</button>
-        `;
-        document.getElementById("btn-switch-account").onclick = function () {
-          logoutOnly();
-          goAuth();
-        };
-        document.getElementById("btn-logout").onclick = logoutAndStay;
-      } else {
-        loginArea.innerHTML = `
-          <button class="btn-outline" id="btn-login-nav">Log in</button>
-        `;
-        document.getElementById("btn-login-nav").onclick = goAuth;
-      }
+    if (!loginArea) return;
+
+    const token = localStorage.getItem("calmpaw_token");
+    const email = localStorage.getItem("calmpaw_email");
+
+    if (token && email) {
+      loginArea.innerHTML = `
+        <span class="nav-login-email">${email}</span>
+        <button class="btn-mini" id="btn-switch-account">Switch</button>
+        <button class="btn-mini btn-mini-danger" id="btn-logout">Log out</button>
+      `;
+      document.getElementById("btn-switch-account").onclick = function () {
+        logoutOnly();
+        goAuth();
+      };
+      document.getElementById("btn-logout").onclick = logoutAndStay;
+    } else {
+      loginArea.innerHTML = `
+        <button class="btn-outline" id="btn-login-nav">Log in</button>
+      `;
+      document.getElementById("btn-login-nav").onclick = goAuth;
     }
   })();
   </script>
 
-  <!-- 购买逻辑：未登录先去登录，登录后跳 Digistore 链接 -->
-  <script>
-  function startAnxietyPurchase() {
-    const token = localStorage.getItem("calmpaw_token");
-
-    // 1. 没登录 → 先去 auth.html 登录
-    if (!token) {
-      const back = window.location.pathname + window.location.search;
-      window.location.href = "/auth.html?redirect=" + encodeURIComponent(back);
-      return false;
-    }
-
-    // 2. 已登录 → 打开 Digistore 收银台（分离焦虑计划）
-    window.open("https://www.checkout-ds24.com/product/653885", "_blank");
-    return false;
-  }
-  </script>
-
-  <!-- ★★ 已经拥有 anxiety 或 bundle：按钮变成“Open your plan” ★★ -->
+  <!-- If user already owns this plan, change buttons to “Open your plan” -->
   <script>
   (function () {
     const PLAN_KEY = "anxiety";
@@ -430,18 +463,14 @@
     const token = localStorage.getItem("calmpaw_token");
 
     if (!mainBtn || !bottomBtn) return;
-    if (!token) return; // 未登录保持“购买”按钮
+    if (!token) return; // not logged in → keep as purchase buttons
 
-    // 关键：请求 Worker 的 JSON 接口 + slug
     fetch("https://calmpaw-auth.sophieinbg.workers.dev/auth/check-plan?slug=" + PLAN_KEY, {
       method: "GET",
-      headers: {
-        "Authorization": "Bearer " + token
-      }
+      headers: { "Authorization": "Bearer " + token }
     })
       .then(r => r.json())
       .then(data => {
-        // 只在 ok 且 access=true 时改按钮
         if (!data || !data.ok || !data.access) return;
 
         function goAccess(e) {
@@ -450,9 +479,11 @@
         }
 
         mainBtn.textContent = "Open your 14-day plan →";
+        mainBtn.removeAttribute("target");
         mainBtn.onclick = goAccess;
 
         bottomBtn.textContent = "Go to your anxiety plan →";
+        bottomBtn.removeAttribute("target");
         bottomBtn.onclick = goAccess;
       })
       .catch(err => {
@@ -460,10 +491,5 @@
       });
   })();
   </script>
-
-  <footer style="margin-top:40px; padding:20px 0; text-align:center; font-size:12px; color:#8a6a63;">
-    <a href="/legal" style="color:#ff914d; text-decoration:none;">Legal Information</a>
-  </footer>
-
 </body>
 </html>
