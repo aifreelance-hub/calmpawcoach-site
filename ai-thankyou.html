@@ -40,10 +40,6 @@
       color:#3b2824;
       font-size:16px;
     }
-    nav .right a {
-      margin-left:20px;
-      font-size:14px;
-    }
     .card{
       width:100%;
       max-width:720px;
@@ -111,7 +107,7 @@
       font-weight:600;
     }
 
-    /* 统一底部链接条样式，跟首页风格类似 */
+    /* 底部链接条 */
     .site-footer{
       width:100%;
       max-width:1000px;
@@ -122,7 +118,7 @@
     .site-footer-nav{
       display:flex;
       flex-wrap:wrap;
-      gap:18px;
+      gap:24px;
       font-size:13px;
       color:#7b4b38;
       justify-content:center;
@@ -138,13 +134,10 @@
 </head>
 <body>
 
-  <!-- 顶部导航 -->
+  <!-- 顶部导航：只保留品牌和 Home -->
   <nav>
     <a href="/" style="font-size:20px;font-weight:700;">CalmPaw Coach</a>
-    <div class="right">
-      <a href="/">Home</a>
-      <a href="/legal-notice">Legal</a>
-    </div>
+    <a href="/">Home</a>
   </nav>
 
   <!-- 主内容 -->
@@ -179,6 +172,10 @@
       <li>24/7 availability via our digital platform</li>
       <li>No physical items — this is a digital service</li>
     </ul>
+    <p style="font-size:13px;margin-top:6px;">
+      This subscription gives you access to the <strong>AI Trainer only</strong> and does not include
+      our separate Barking, Leash Walking, or Separation Anxiety training plans.
+    </p>
 
     <h2>Delivery & access</h2>
     <p>
@@ -193,7 +190,7 @@
       <ol style="margin-left:18px;margin-top:4px;margin-bottom:6px;">
         <li>If you are a new customer, create your account on the next page using this email.</li>
         <li>If you already created an account before, please log in instead.</li>
-        <li>After you sign in, your AI Trainer subscription will be available on your dashboard and on the AI page.</li>
+        <li>After you sign in, your AI Trainer subscription will be shown on your account and on the AI pages.</li>
       </ol>
       <p style="margin-top:4px;">
         If you see a message that your email is already registered, this simply means you already have an account.
@@ -201,9 +198,9 @@
       </p>
     </div>
 
-    <!-- 登录 / 注册统一入口：带 redirect 回 AI 访问页 -->
-    <!-- 如果你的 AI 访问地址不是 /ai-access.html，把 redirect 改成正确路径 -->
-    <a href="https://calmpawcoach.com/login.html?redirect=/ai-access.html" class="btn">
+    <!-- 登录 / 注册统一入口：带 redirect 回 AI 激活说明页 -->
+    <!-- 你的实际文件是 ai-activate.html，所以这里用这个路径 -->
+    <a href="https://calmpawcoach.com/login.html?redirect=/ai-activate.html" class="btn">
       Create your account or log in to start
     </a>
 
@@ -219,15 +216,15 @@
     </p>
   </main>
 
-  <!-- 底部链接条：About / Contact / Refund / Terms / Privacy / Legal Notice -->
+  <!-- 底部链接条：使用你真实存在的页面 -->
   <footer class="site-footer">
     <nav class="site-footer-nav">
       <a href="/about">About</a>
       <a href="/contact">Contact</a>
-      <a href="/refund-policy">Refund Policy</a>
+      <a href="/refund">Refund Policy</a>
       <a href="/terms">Terms of Service</a>
       <a href="/privacy">Privacy Policy</a>
-      <a href="/legal-notice">Legal Notice</a>
+      <a href="/legal">Legal Notice</a>
     </nav>
   </footer>
 
