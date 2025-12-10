@@ -325,11 +325,11 @@
           (<strong>the withdrawal from your account will be done by Digistore24</strong>).
         </p>
 
-        <!-- Digistore24 Trust Badge (static PNG, 更稳定) -->
+        <!-- Digistore24 Trust Badge（现在有图 + 下面的文字） -->
         <div style="text-align:center;margin:18px 0;">
-          <img src="https://cdn.digistore24.com/image/payment/secure-badge.png"
+          <img src="https://www.digistore24.com/service/payment_badge"
                alt="Digistore24 Secure Checkout"
-               style="max-width:220px;width:200px;height:auto;display:block;margin:0 auto;">
+               style="max-width:260px;width:220px;height:auto;display:block;margin:0 auto;">
         </div>
 
         <!-- Refund Guarantee -->
@@ -337,7 +337,7 @@
           <strong>60-day money-back guarantee — no questions asked.</strong>
         </div>
 
-        <!-- Direct checkout button (always visible on Sales Page) -->
+        <!-- 主购买按钮（永远显示在销售页） -->
         <div style="text-align:center;margin:14px 0 18px;">
           <a href="https://www.checkout-ds24.com/product/653899"
              style="display:inline-flex;align-items:center;justify-content:center;padding:12px 28px;border-radius:999px;background:#ff914d;color:#fff;font-weight:600;font-size:15px;text-decoration:none;box-shadow:0 14px 40px rgba(255,145,77,0.45);border:none;cursor:pointer;">
@@ -352,18 +352,6 @@
           <div class="hero-pill">🛋 For real homes, not training halls</div>
           <div class="hero-pill">📩 Answers in minutes, not weeks</div>
           <div class="hero-pill">🔒 Private — just you and your AI trainer</div>
-        </div>
-
-        <!-- 未登录 -->
-        <div id="state-not-logged" class="state-box hidden">
-          <div class="state-title">Log in to use the AI trainer</div>
-          <p>
-            Please log in with your email first. You’ll come straight back to
-            this page after signing in.
-          </p>
-          <div class="state-actions">
-            <a class="btn-primary" href="auth.html?redirect=/ai">Log in / create account →</a>
-          </div>
         </div>
 
         <!-- 已登录但没订阅 -->
@@ -411,8 +399,8 @@
         <div class="chat-window" id="chat-window">
           <div class="bubble ai">
             Hi, I’m your CalmPaw AI trainer. Tell me what’s happening at home —
-            the dog, the neighbors, your schedule — and I’ll help you find
-            realistic, gentle steps.
+            the dog, the neighbors, your schedule — and I’ll help you find realistic,
+            gentle steps.
           </div>
         </div>
 
@@ -437,11 +425,9 @@
 
   <script>
     const API_BASE = "https://calmpaw-auth.sophieinbg.workers.dev";
-    // Digistore24 checkout link for AI Trainer
     const CHECKOUT_URL = "https://www.checkout-ds24.com/product/653899";
 
     const navAuthArea = document.getElementById("nav-auth-area");
-    const stateNotLogged = document.getElementById("state-not-logged");
     const stateNoSub = document.getElementById("state-no-sub");
     const stateActiveInfo = document.getElementById("state-active-info");
     const chatStatusPill = document.getElementById("chat-status-pill");
@@ -460,7 +446,7 @@
       },
     ];
 
-    // 点击订阅 → 跳 Digistore24
+    // 订阅按钮：跳 Digistore24
     if (subscribeLink) {
       subscribeLink.addEventListener("click", (e) => {
         e.preventDefault();
@@ -506,8 +492,7 @@
           )}">
             🔑 Log in
           </a>`;
-        stateNotLogged.classList.remove("hidden");
-        chatStatusPill.textContent = "Please log in";
+        chatStatusPill.textContent = "Please log in via the top-right button";
         setChatEnabled(false);
         return;
       }
@@ -526,8 +511,7 @@
             )}">
               🔑 Log in
             </a>`;
-          stateNotLogged.classList.remove("hidden");
-          chatStatusPill.textContent = "Please log in";
+          chatStatusPill.textContent = "Please log in via the top-right button";
           setChatEnabled(false);
           return;
         }
@@ -558,7 +542,6 @@
             window.location.href = "/";
           });
 
-        stateNotLogged.classList.add("hidden");
         await checkSubscription();
       } catch (e) {
         console.error(e);
@@ -618,7 +601,7 @@
 
       const token = localStorage.getItem("calmpaw_token");
       if (!token) {
-        alert("Please log in first.");
+        alert("Please log in first via the top-right button.");
         return;
       }
 
@@ -683,7 +666,7 @@
     document.addEventListener("DOMContentLoaded", hydrateNavAuth);
   </script>
 
-  <!-- Full legal footer for Digistore24 compliance -->
+  <!-- Footer：邮箱已换成 support@aurumdesks.com -->
   <footer style="margin-top:40px;padding:30px 0;text-align:center;font-size:14px;color:#8a6a63;border-top:1px solid #f3d9c4;">
     <div style="margin-bottom:10px;">
       <a href="/legal" style="color:#8a6a63;margin:0 10px;text-decoration:none;">Legal Notice</a> |
