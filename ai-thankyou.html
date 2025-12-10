@@ -21,7 +21,7 @@
         #fff7f0;
       color:var(--text-main);
       min-height:100vh;
-      padding:32px 16px;
+      padding:32px 16px 24px;
       display:flex;
       flex-direction:column;
       align-items:center;
@@ -110,14 +110,30 @@
       text-decoration:none;
       font-weight:600;
     }
-    footer{
-      margin-top:24px;
-      padding:16px 0 0;
-      font-size:12px;
-      color:#8a6a63;
-      text-align:center;
+
+    /* 统一底部链接条样式，跟首页风格类似 */
+    .site-footer{
+      width:100%;
+      max-width:1000px;
+      margin-top:28px;
+      padding:10px 24px 0;
+      border-top:1px solid rgba(244, 212, 188, 0.9);
     }
-    footer a{color:#ff914d;text-decoration:none;}
+    .site-footer-nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:18px;
+      font-size:13px;
+      color:#7b4b38;
+      justify-content:center;
+    }
+    .site-footer-nav a{
+      text-decoration:none;
+      color:#7b4b38;
+    }
+    .site-footer-nav a:hover{
+      text-decoration:underline;
+    }
   </style>
 </head>
 <body>
@@ -127,7 +143,7 @@
     <a href="/" style="font-size:20px;font-weight:700;">CalmPaw Coach</a>
     <div class="right">
       <a href="/">Home</a>
-      <a href="/legal">Legal</a>
+      <a href="/legal-notice">Legal</a>
     </div>
   </nav>
 
@@ -158,8 +174,8 @@
     </p>
     <ul>
       <li>Unlimited access to the AI-powered training assistant</li>
-      <li>Daily guidance tailored to your dog’s behavior</li>
-      <li>Barking, leash pulling, and anxiety training support</li>
+      <li>Personalized guidance for your dog’s behavior</li>
+      <li>AI-generated step-by-step training suggestions</li>
       <li>24/7 availability via our digital platform</li>
       <li>No physical items — this is a digital service</li>
     </ul>
@@ -186,8 +202,8 @@
     </div>
 
     <!-- 登录 / 注册统一入口：带 redirect 回 AI 访问页 -->
-    <!-- 如果你的 AI 访问地址不是 /ai-access.html，请把下面的 redirect 改成正确路径 -->
-    <a href="https://calmpawcoach.com/login.html?redirect=/ai.html" class="btn">
+    <!-- 如果你的 AI 访问地址不是 /ai-access.html，把 redirect 改成正确路径 -->
+    <a href="https://calmpawcoach.com/login.html?redirect=/ai-access.html" class="btn">
       Create your account or log in to start
     </a>
 
@@ -201,11 +217,19 @@
       If you have any questions about your subscription or access, please contact us at  
       <a href="mailto:support@aurumdesks.com">support@aurumdesks.com</a>.
     </p>
-
-    <footer>
-      <a href="/legal">Legal Information</a>
-    </footer>
   </main>
+
+  <!-- 底部链接条：About / Contact / Refund / Terms / Privacy / Legal Notice -->
+  <footer class="site-footer">
+    <nav class="site-footer-nav">
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+      <a href="/refund-policy">Refund Policy</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/legal-notice">Legal Notice</a>
+    </nav>
+  </footer>
 
 </body>
 </html>
