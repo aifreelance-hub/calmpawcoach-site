@@ -106,8 +106,6 @@
       text-decoration:none;
       font-weight:600;
     }
-
-    /* 底部链接条 */
     .site-footer{
       width:100%;
       max-width:1000px;
@@ -132,15 +130,14 @@
     }
   </style>
 </head>
+
 <body>
 
-  <!-- 顶部导航：只保留品牌和 Home -->
   <nav>
     <a href="/" style="font-size:20px;font-weight:700;">CalmPaw Coach</a>
     <a href="/">Home</a>
   </nav>
 
-  <!-- 主内容 -->
   <main class="card">
     <div class="badge">Thank you for your purchase</div>
 
@@ -149,25 +146,6 @@
       Thank you for subscribing to the CalmPaw AI Trainer monthly plan.<br>
       Below you will find important information about your product and how to access it.
     </p>
-
-    <!-- Digistore24 信任徽章 / banner -->
-    <div style="margin-bottom:16px;">
-      <div style="display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border-radius:999px;background:#fffaf5;border:1px solid rgba(243,217,196,0.9);box-shadow:0 10px 26px rgba(210,145,110,0.15);">
-        <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
-          <defs>
-            <linearGradient id="ds24Shield" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#ffb86b"/>
-              <stop offset="100%" stop-color="#ff914d"/>
-            </linearGradient>
-          </defs>
-          <path fill="url(#ds24Shield)" d="M12 2.25l7 2.5v6.08c0 4.23-2.84 8.02-7 9.17-4.16-1.15-7-4.94-7-9.17v-6.08l7-2.5z"/>
-          <path fill="#fff" d="M10.5 12.25l-1.75-1.75-1.25 1.25 3 3 5-5-1.25-1.25z"/>
-        </svg>
-        <span style="font-size:14px;color:#7a5f58;font-weight:600;">
-          Digistore24 Secure Checkout
-        </span>
-      </div>
-    </div>
 
     <div class="notice">
       <strong>The debit is made by Digistore24.</strong><br/>
@@ -182,59 +160,35 @@
     <ul>
       <li>Unlimited access to the AI-powered training assistant</li>
       <li>Personalized guidance for your dog’s behavior</li>
-      <li>AI-generated step-by-step training suggestions</li>
-      <li>24/7 availability via our digital platform</li>
-      <li>No physical items — this is a digital service</li>
+      <li>AI-generated training suggestions</li>
+      <li>24/7 availability</li>
+      <li>Digital service only — no physical products</li>
     </ul>
-    <p style="font-size:13px;margin-top:6px;">
-      This subscription gives you access to the <strong>AI Trainer only</strong> and does not include
-      our separate Barking, Leash Walking, or Separation Anxiety training plans.
-    </p>
 
-    <h2>Delivery &amp; access</h2>
-    <p>
-      This is a <strong>digital subscription product</strong>. No physical goods will be shipped.
-    </p>
+    <h2>Delivery & access</h2>
 
     <div class="highlight">
-      <p style="margin-bottom:6px;">
-        To use your CalmPaw AI Trainer, please sign in to your CalmPaw Coach account
-        with the <strong>same email address you used at checkout</strong>.
-      </p>
-      <ol style="margin-left:18px;margin-top:4px;margin-bottom:6px;">
-        <li>If you are a new customer, create your account on the next page using this email address.</li>
-        <li>If you already created an account before, please log in instead.</li>
-        <li>After you sign in, your AI Trainer subscription will be shown in your account and on the AI page.</li>
-      </ol>
-      <p style="margin-top:4px;">
-        If you see a message that your email is already registered, this simply means you already have an account.
-        In that case, just log in instead of creating a new account.
+      <p>
+        To start using your AI Trainer, please sign in using the
+        <strong>same email address used at checkout</strong>.
       </p>
     </div>
 
-    <!-- 登录 / 注册统一入口：带 redirect 回 AI 激活说明页 -->
     <a href="/auth.html?redirect=/ai-activate.html" class="btn">
       Create your account or log in to start
     </a>
 
-    <!-- 新增：公开预览链接（不用登录也能看） -->
     <a href="/ai-plan-preview.html" class="btn" style="margin-top:10px;background:#fff;color:#ff914d;border:1px solid #ffb86b;box-shadow:none;">
       View AI Trainer access details (no login required)
     </a>
 
-    <h2>Support</h2>
-    <p>
-      Within a few minutes, you will also receive an email with a link and instructions
-      on how to access your CalmPaw AI Trainer. If the email does not appear shortly,
-      please also check your spam folder.
-    </p>
-    <p>
-      If you have any questions about your subscription or access, please contact us at
-      <a href="mailto:support@aurumdesks.com">support@aurumdesks.com</a>.
-    </p>
+    <!-- ⭐ 新增：公共 Demo 按钮 -->
+    <a href="/ai-trainer-public.html" class="btn" style="margin-top:10px;">
+      Open AI Trainer Demo (public access)
+    </a>
+
   </main>
 
-  <!-- 底部链接条：使用你真实存在的页面 -->
   <footer class="site-footer">
     <nav class="site-footer-nav">
       <a href="/about">About</a>
