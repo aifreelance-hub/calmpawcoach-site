@@ -34,6 +34,7 @@
       align-items:center;
       justify-content:space-between;
       margin-bottom:24px;
+      gap:16px;
     }
     .nav-left{
       display:flex;
@@ -62,6 +63,7 @@
       align-items:center;
       gap:18px;
       font-size:14px;
+      flex-wrap:wrap;
     }
     .nav-links a{
       text-decoration:none;
@@ -76,6 +78,7 @@
       text-decoration:none;
       color:var(--text-main);
       background:#fff7f0;
+      cursor:pointer;
     }
 
     /* Hero */
@@ -176,6 +179,8 @@
       font-weight:600;
       text-decoration:none;
       box-shadow:0 14px 40px rgba(210,145,110,0.35);
+      cursor:pointer;
+      white-space:nowrap;
     }
     .btn-secondary{
       font-size:13px;
@@ -261,6 +266,55 @@
       margin:0 8px;
     }
     footer a:hover{text-decoration:underline;}
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+      .page{
+        padding:18px 12px 32px;
+      }
+      nav{
+        flex-wrap:wrap;
+        gap:10px;
+      }
+      .site-title{
+        font-size:16px;
+      }
+      h1{
+        font-size:24px;
+        line-height:1.3;
+      }
+      .hero-sub{
+        font-size:13px;
+      }
+      .hero-right-card{
+        padding:14px;
+        margin-top:4px;
+      }
+      .hero-offer-note{
+        font-size:11px;
+        padding:8px 10px;
+      }
+      .section{
+        padding:14px;
+      }
+      .section h2{
+        font-size:16px;
+      }
+      .section p,
+      .section ul{
+        font-size:13px;
+      }
+      .hero-buttons{
+        flex-direction:column;
+        align-items:stretch;
+      }
+      .btn-primary,
+      .btn-secondary{
+        width:100%;
+        text-align:center;
+        justify-content:center;
+      }
+    }
   </style>
 </head>
 <body>
@@ -334,7 +388,13 @@
         </div>
 
         <div class="hero-buttons">
-          <a class="btn-primary" href="https://www.checkout-ds24.com/product/653887" target="_blank">
+          <!-- 默认：去 Digistore24 下单 -->
+          <a
+            id="btn-leash-cta"
+            class="btn-primary"
+            href="https://www.checkout-ds24.com/product/653887"
+            target="_blank"
+          >
             Buy this plan – $19 →
           </a>
           <a href="/programs.html" class="btn-secondary">← Back to all programs</a>
@@ -436,11 +496,108 @@
     </section>
 
     <footer>
-      <a href="/legal">Legal Notice</a>
-      <a href="/privacy">Privacy Policy</a>
-      <a href="/terms">Terms of Service</a>
-      <a href="/contact.html">Contact</a>
+      <div style="margin-bottom:8px;">
+        <a href="/legal">Legal Notice</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+      <div style="font-size:11px;">
+        © <span id="year"></span> CalmPaw Coach. All rights reserved.
+      </div>
+      <p style="font-size:12px;color:#a16a4b;margin-top:8px;">
+        The withdrawal from your account will be done by Digistore24.
+      </p>
     </footer>
   </div>
+
+  <script>
+    // footer year
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+
+  <script>
+  // 登录状态 + 已购买 leash 计划状态
+  (function () {
+    const loginLink = document.querySelector(".nav-login");
+    const token = localStorage.getItem("calmpaw_token");
+    const email = localStorage.getItem("calmpaw_email");
+    const buyBtn = document.getElementById("btn-leash-cta");
+
+    function currentRedirect() {
+      return window.location.pathname + window.location.search;
+    }
+    function goAuth() {
+      window.location.href =
+        "/auth.html?redirect=" + encodeURIComponent(currentRedirect());
+    }
+    function logoutOnly() {
+      localStorage.removeItem("calmpaw_token");
+      localStorage.removeItem("calmpaw_email");
+    }
+
+    // 顶部登录区域：用 email / Switch / Logout 替换原来的 Log in
+    if (loginLink) {
+      if (token && email) {
+        const container = loginLink.parentElement;
+        const wrap = document.createElement("div");
+        wrap.style.display = "flex";
+        wrap.style.alignItems = "center";
+        wrap.style.gap = "8px";
+        wrap.style.fontSize = "12px";
+        wrap.innerHTML = `
+          <span style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+            ${email}
+          </span>
+          <button id="btn-switch-account" style="
+            padding:4px 10px;border-radius:999px;
+            border:1px solid #f1c9a3;background:#fff7f0;
+            font-size:11px;cursor:pointer;
+          ">Switch</button>
+          <button id="btn-logout" style="
+            padding:4px 10px;border-radius:999px;
+            border:1px solid #fda4a4;background:#fff5f5;
+            font-size:11px;cursor:pointer;color:#b91c1c;
+          ">Log out</button>
+        `;
+        container.replaceChild(wrap, loginLink);
+
+        document.getElementById("btn-switch-account").onclick = function () {
+          logoutOnly();
+          goAuth();
+        };
+        document.getElementById("btn-logout").onclick = function () {
+          logoutOnly();
+          window.location.reload();
+        };
+      } else {
+        // 未登录 → 点击 Log in 跳到 auth，并带 redirect
+        loginLink.addEventListener("click", function (e) {
+          e.preventDefault();
+          goAuth();
+        });
+      }
+    }
+
+    // 如果已经登录，再检查这个账号是否已经买过 leash 计划
+    if (token && buyBtn) {
+      fetch("https://api.calmpawcoach.com/auth/check-plan?slug=leash", {
+        headers: { Authorization: "Bearer " + token },
+      })
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data && data.ok && data.access) {
+            // 已购买：改成直接打开访问页面
+            buyBtn.textContent = "Open your 10-day plan →";
+            buyBtn.removeAttribute("target");
+            buyBtn.setAttribute("href", "/leash-access.html"); // 如果访问页文件名不同，这里改一下
+          }
+        })
+        .catch((err) => {
+          console.error("check-plan leash error", err);
+        });
+    }
+  })();
+  </script>
 </body>
 </html>
