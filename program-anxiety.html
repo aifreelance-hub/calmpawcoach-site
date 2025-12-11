@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <style>
-    /* 和 Leash 完全同一套样式，方便三个页面统一风格 */
     *{box-sizing:border-box;margin:0;padding:0;}
     :root{
       --bg:#fff7f0;--accent:#ffb86b;--accent-strong:#ff914d;
@@ -50,6 +49,11 @@
       gap:18px;
       font-size:14px;
     }
+    .nav-links a{
+      text-decoration:none;
+      color:var(--text-soft);
+    }
+    .nav-links a:hover{color:var(--accent-strong);}
 
     .nav-login-area{
       display:flex;
@@ -80,20 +84,6 @@
       background:#ffeede;
     }
 
-    .nav-links a{
-      text-decoration:none;
-      color:var(--text-soft);
-    }
-    .nav-links a:hover{color:var(--accent-strong);}
-    .nav-login{
-      padding:6px 14px;
-      border-radius:999px;
-      border:1px solid #f1c9a3;
-      font-size:13px;
-      text-decoration:none;
-      color:var(--text-main);
-      background:#fff7f0;
-    }
     .hero{
       display:grid;
       grid-template-columns:minmax(0,1.5fr) minmax(0,1.1fr);
@@ -340,14 +330,15 @@
           </div>
         </div>
 
-        <div class="hero-buttons">
+        <!-- CTA 区，加 id，方便脚本替换 -->
+        <div class="hero-buttons" id="hero-cta">
           <a class="btn-primary" href="https://www.checkout-ds24.com/product/653885" target="_blank">
             Buy this plan – $29 →
           </a>
           <a href="/programs.html" class="btn-secondary">← Back to all programs</a>
         </div>
 
-        <div class="hero-caption">
+        <div class="hero-caption" id="hero-caption">
           All billing and the 60-day money-back guarantee are handled securely by Digistore24
           (the debit is made by Digistore24).
         </div>
@@ -449,53 +440,95 @@
       <a href="/terms">Terms of Service</a>
       <a href="/contact.html">Contact</a>
     </footer>
-    <script>
-      (function () {
-        const loginArea = document.getElementById("nav-login-area");
-        const token = localStorage.getItem("calmpaw_token");
+  </div>
 
-        function currentRedirect() {
-          return window.location.pathname + window.location.search;
+  <script>
+    // ===== 导航登录状态同步（你之前已经有这套逻辑） =====
+    (function () {
+      const loginArea = document.getElementById("nav-login-area");
+      const token = localStorage.getItem("calmpaw_token");
+
+      function currentRedirect() {
+        return window.location.pathname + window.location.search;
+      }
+
+      function goAuth() {
+        window.location.href = "/auth.html?redirect=" + encodeURIComponent(currentRedirect());
+      }
+
+      function logoutOnly() {
+        localStorage.removeItem("calmpaw_token");
+        localStorage.removeItem("calmpaw_email");
+      }
+
+      function logoutAndStay() {
+        logoutOnly();
+        window.location.reload();
+      }
+
+      if (loginArea) {
+        const email = localStorage.getItem("calmpaw_email");
+
+        if (token && email) {
+          loginArea.innerHTML = `
+            <span class="nav-login-email">${email}</span>
+            <button class="btn-mini" id="btn-switch-account">Switch</button>
+            <button class="btn-mini btn-mini-danger" id="btn-logout">Log out</button>
+          `;
+
+          document.getElementById("btn-switch-account").onclick = function () {
+            logoutOnly();
+            goAuth();
+          };
+          document.getElementById("btn-logout").onclick = logoutAndStay;
+        } else {
+          loginArea.innerHTML = `
+            <button class="btn-mini" id="btn-login-nav">Log in</button>
+          `;
+          document.getElementById("btn-login-nav").onclick = goAuth;
         }
+      }
+    })();
 
-        function goAuth() {
-          window.location.href = "/auth.html?redirect=" + encodeURIComponent(currentRedirect());
-        }
+    // ===== 购买状态：从后端按账号查询，决定按钮是 Buy 还是 Open plan =====
+    (async function () {
+      const token = localStorage.getItem("calmpaw_token");
+      if (!token) return; // 未登录不用查
 
-        function logoutOnly() {
-          localStorage.removeItem("calmpaw_token");
-          localStorage.removeItem("calmpaw_email");
-        }
+      try {
+        const res = await fetch("/api/my-products", {
+          method: "GET",
+          headers: {
+            "Authorization": "Bearer " + token
+          }
+        });
 
-        function logoutAndStay() {
-          logoutOnly();
-          window.location.reload();
-        }
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!data.products || !Array.isArray(data.products)) return;
 
-        if (loginArea) {
-          const email = localStorage.getItem("calmpaw_email");
+        const OWN_PRODUCT_ID = "653885"; // 分离焦虑 14 天计划的 Digistore24 产品 ID
 
-          if (token && email) {
-            loginArea.innerHTML = `
-              <span class="nav-login-email">${email}</span>
-              <button class="btn-mini" id="btn-switch-account">Switch</button>
-              <button class="btn-mini btn-mini-danger" id="btn-logout">Log out</button>
+        if (data.products.includes(OWN_PRODUCT_ID)) {
+          const cta = document.getElementById("hero-cta");
+          const caption = document.getElementById("hero-caption");
+          if (cta) {
+            cta.innerHTML = `
+              <a class="btn-primary" href="/anxiety-plan-access.html">
+                Open my 14-day plan →
+              </a>
+              <a href="/programs.html" class="btn-secondary">← Back to all programs</a>
             `;
-
-            document.getElementById("btn-switch-account").onclick = function () {
-              logoutOnly();
-              goAuth();
-            };
-            document.getElementById("btn-logout").onclick = logoutAndStay;
-          } else {
-            loginArea.innerHTML = `
-              <button class="btn-mini" id="btn-login-nav">Log in</button>
-            `;
-            document.getElementById("btn-login-nav").onclick = goAuth;
+          }
+          if (caption) {
+            caption.textContent =
+              "You already own this plan. You can access it any time when logged in.";
           }
         }
-      })();
-    </script>
-  </div>
+      } catch (e) {
+        console.error("my-products error", e);
+      }
+    })();
+  </script>
 </body>
 </html>
