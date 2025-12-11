@@ -112,6 +112,7 @@
       font-weight:600;
       border:none;
       cursor:pointer;
+      box-shadow:0 14px 30px rgba(210,145,110,0.35);
     }
     a.btn-ghost{
       background:#fff;
@@ -147,6 +148,16 @@
     }
     footer a{color:#ff914d;text-decoration:none;margin:0 8px;}
     footer a:hover{text-decoration:underline;}
+    /* 预览 iframe 简单适配 */
+    .preview-frame{
+      width:100%;
+      max-width:100%;
+      height:480px;
+      border:1px solid #e2c9b6;
+      border-radius:18px;
+      margin:10px 0 4px;
+      background:#fff;
+    }
   </style>
 </head>
 <body>
@@ -156,7 +167,7 @@
     <a href="/" style="font-size:20px;font-weight:700;">CalmPaw Coach</a>
     <div class="right">
       <a href="/">Home</a>
-      <a href="/legal">Legal Information</a>
+      <a href="/legal-information.html">Legal Information</a>
     </div>
   </nav>
 
@@ -208,7 +219,26 @@
       All content is delivered online as digital training plans. No physical products will be shipped.
     </p>
 
-    <!-- 直接访问链接（审核最关键的部分） -->
+    <!-- ✅ 新增：在线预览 + 下载整个套餐 -->
+    <h2>Online preview & download (full pack)</h2>
+    <p>
+      You can preview the entire CalmPaw Complete Pack directly on this page or download it as a PDF file.
+    </p>
+
+    <!-- 在线预览整个套餐 PDF（把 src 换成你真实的 PDF 路径） -->
+    <iframe
+      class="preview-frame"
+      src="/downloads/calm-complete-pack.pdf">
+    </iframe>
+
+    <div class="plan-links" style="margin-top:10px;">
+      <!-- 下载完整套餐 PDF（同样把 href 改成你的真实路径） -->
+      <a href="/downloads/calm-complete-pack.pdf" class="btn" download>
+        Download Complete Pack (PDF)
+      </a>
+    </div>
+
+    <!-- 直接访问三个计划（原来的按钮保留） -->
     <h2>Access your training plans now</h2>
     <p>
       Click the buttons below to open your digital plans immediately.  
@@ -216,24 +246,23 @@
     </p>
 
     <div class="plan-links">
-  <a href="/barking-plan-preview.html" class="btn">
-    Open 7-Day Barking Plan
-  </a>
-  <a href="/leash-plan-preview.html" class="btn">
-    Open 10-Day Leash Walking Plan
-  </a>
-  <a href="/anxiety-plan-preview.html" class="btn">
-    Open 14-Day Separation Anxiety Plan
-  </a>
-</div>
-
+      <a href="/barking-plan-preview.html" class="btn">
+        Open 7-Day Barking Plan
+      </a>
+      <a href="/leash-plan-preview.html" class="btn">
+        Open 10-Day Leash Walking Plan
+      </a>
+      <a href="/anxiety-plan-preview.html" class="btn">
+        Open 14-Day Separation Anxiety Plan
+      </a>
+    </div>
 
     <div class="highlight">
       You will also receive an email with your access links for the bundle.  
       If you do not see the email, please also check your spam or promotions folder.
     </div>
 
-    <!-- 可选：账户 / 会员区（放在“可选”位置，避免审核觉得必须登录才有内容） -->
+    <!-- 可选：账户 / 会员区 -->
     <h2 style="margin-top:22px;">Optional: create your CalmPaw account</h2>
     <p>
       If you want to save your progress and return easily to all your plans in one place,  
@@ -254,7 +283,7 @@
       <a href="/refund">Refund Policy</a>
       <a href="/terms">Terms of Service</a>
       <a href="/privacy">Privacy Policy</a>
-      <a href="/legal">Legal Information</a>
+      <a href="/legal-information.html">Legal Information</a>
     </footer>
   </main>
 
