@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CalmPaw AI Trainer — Demo Access</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:#fff7f0; --accent:#ffb86b; --accent-strong:#ff914d;
+      --text-main:#3b2824; --text-soft:#8a6a63;
+      --border-soft:#f3d9c4;
+      --radius-lg:26px; --radius-pill:999px;
+      --shadow-soft:0 24px 60px rgba(210,145,110,0.32);
+    }
+
+    body {
+      font-family:-apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 5% 0%, #ffe0c0 0%, transparent 55%),
+        radial-gradient(circle at 100% 0%, #ffd4d4 0%, transparent 55%),
+        var(--bg);
+      padding: 40px 20px;
+      color: var(--text-main);
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+
+    p {
+      margin-bottom: 14px;
+      line-height: 1.6;
+      color: var(--text-soft);
+    }
+
+    .chat-box {
+      margin-top: 30px;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      background: #fff7f4;
+    }
+
+    .msg {
+      padding: 14px 18px;
+      border-radius: var(--radius-lg);
+      margin-bottom: 16px;
+      max-width: 85%;
+      line-height: 1.55;
+    }
+
+    .user {
+      background: #ffe7d6;
+      margin-left: auto;
+      text-align: right;
+    }
+
+    .assistant {
+      background: #fffdfb;
+      border: 1px solid var(--border-soft);
+    }
+
+    .input-area {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    input {
+      flex: 1;
+      padding: 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-soft);
+      font-size: 16px;
+    }
+
+    button {
+      background: var(--accent);
+      padding: 14px 24px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: not-allowed;
+      opacity: 0.6;
+      font-size: 16px;
+      color: white;
+    }
+
+    .note {
+      background: #fff4e6;
+      border-left: 4px solid var(--accent);
+      padding: 14px;
+      margin-top: 28px;
+      border-radius: 12px;
+      color: var(--text-soft);
+      font-size: 15px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <h1>CalmPaw AI Trainer — Demo Access</h1>
+    <p>
+      Below is a preview of the CalmPaw AI Trainer. This demonstration shows how the
+      AI helps dog owners with real-time training guidance, behavior correction tips,
+      and step-by-step exercises.
+    </p>
+
+    <p>
+      This demo displays sample conversations. The full version (available after purchase)
+      includes unlimited AI chats, personalized training plans, and progress tracking.
+    </p>
+
+    <!-- Chat Demo -->
+    <div class="chat-box">
+
+      <div class="msg user">
+        My dog barks every time someone knocks on the door. What should I do?
+      </div>
+
+      <div class="msg assistant">
+        First, thank you for your question — this is one of the most common behavior
+        issues in dogs and can be improved quickly with consistent training.<br><br>
+
+        Here's a 3-step exercise you can start today:
+        <br><br>
+        <strong>1️⃣ Controlled Knock Practice</strong><br>
+        Ask a friend to knock softly. The moment your dog stays calm, reward with a
+        treat. Repeat 5–7 times.
+
+        <br><br>
+        <strong>2️⃣ “Quiet” Cue Introduction</strong><br>
+        When your dog begins to bark, calmly say “Quiet” and wait for 1–2 seconds
+        of silence → reward immediately.
+
+        <br><br>
+        <strong>3️⃣ Increase Knock Intensity</strong><br>
+        Gradually increase the volume of the knock as your dog improves.
+
+        <br><br>
+        Let me know if you want a personalized plan!
+      </div>
+
+      <div class="msg user">
+        He also gets anxious when I leave home. Can AI help with that?
+      </div>
+
+      <div class="msg assistant">
+        Absolutely — separation anxiety is highly trainable with structured daily
+        exercises. Here's a simple starting routine:
+        <br><br>
+
+        <strong>• Warm-up Desensitization</strong><br>
+        Pick up your keys, put on shoes → sit down again. Repeat until your dog
+        stops reacting.
+
+        <br><br>
+        <strong>• Short Absence Training</strong><br>
+        Step outside for 10–20 seconds, return calmly, no excitement. Repeat 8–10 times.
+
+        <br><br>
+        <strong>• Build to Longer Absences</strong><br>
+        Slowly increase to 2–3 minutes once your dog stays relaxed.
+
+        <br><br>
+        Want me to generate a full 14-day anxiety program?
+      </div>
+
+      <div class="msg user">
+        Can you make a custom plan for my 2-year-old Golden Retriever?
+      </div>
+
+      <div class="msg assistant">
+        Yes! In the full version, I can create personalized daily exercises based on
+        your dog’s age, breed, routine, and behavior triggers.
+      </div>
+
+    </div>
+
+    <div class="note">
+      This is a demonstration preview.  
+      The complete AI Trainer service (unlimited chats and personalized plans)
+      is available inside your account after purchase.
+    </div>
+
+  </div>
+</body>
+</html>
