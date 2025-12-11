@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <style>
-    /* 和上面 Leash 完全同一套样式，方便三个页面统一风格 */
+    /* 和 Leash 完全同一套样式，方便三个页面统一风格 */
     *{box-sizing:border-box;margin:0;padding:0;}
     :root{
       --bg:#fff7f0;--accent:#ffb86b;--accent-strong:#ff914d;
@@ -50,6 +50,36 @@
       gap:18px;
       font-size:14px;
     }
+
+    .nav-login-area{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-left:8px;
+    }
+    .nav-login-email{
+      font-size:12px;
+      color:var(--text-soft);
+      max-width:160px;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .btn-mini{
+      padding:5px 10px;
+      border-radius:999px;
+      border:1px solid #f1c9a3;
+      background:#fff7f0;
+      font-size:12px;
+      cursor:pointer;
+    }
+    .btn-mini-danger{
+      border-color:#f3a3a3;
+    }
+    .btn-mini:hover{
+      background:#ffeede;
+    }
+
     .nav-links a{
       text-decoration:none;
       color:var(--text-soft);
@@ -256,7 +286,7 @@
         <a href="/programs.html">Programs</a>
         <a href="/bundle.html">Complete Pack</a>
         <a href="/ai.html">Ask a Dog Trainer — AI Unlimited</a>
-        <a href="/auth.html" class="nav-login">Log in</a>
+        <div id="nav-login-area" class="nav-login-area"></div>
       </div>
     </nav>
 
@@ -419,6 +449,53 @@
       <a href="/terms">Terms of Service</a>
       <a href="/contact.html">Contact</a>
     </footer>
+    <script>
+      (function () {
+        const loginArea = document.getElementById("nav-login-area");
+        const token = localStorage.getItem("calmpaw_token");
+
+        function currentRedirect() {
+          return window.location.pathname + window.location.search;
+        }
+
+        function goAuth() {
+          window.location.href = "/auth.html?redirect=" + encodeURIComponent(currentRedirect());
+        }
+
+        function logoutOnly() {
+          localStorage.removeItem("calmpaw_token");
+          localStorage.removeItem("calmpaw_email");
+        }
+
+        function logoutAndStay() {
+          logoutOnly();
+          window.location.reload();
+        }
+
+        if (loginArea) {
+          const email = localStorage.getItem("calmpaw_email");
+
+          if (token && email) {
+            loginArea.innerHTML = `
+              <span class="nav-login-email">${email}</span>
+              <button class="btn-mini" id="btn-switch-account">Switch</button>
+              <button class="btn-mini btn-mini-danger" id="btn-logout">Log out</button>
+            `;
+
+            document.getElementById("btn-switch-account").onclick = function () {
+              logoutOnly();
+              goAuth();
+            };
+            document.getElementById("btn-logout").onclick = logoutAndStay;
+          } else {
+            loginArea.innerHTML = `
+              <button class="btn-mini" id="btn-login-nav">Log in</button>
+            `;
+            document.getElementById("btn-login-nav").onclick = goAuth;
+          }
+        }
+      })();
+    </script>
   </div>
 </body>
 </html>
