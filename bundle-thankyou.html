@@ -26,7 +26,7 @@
       flex-direction:column;
       align-items:center;
     }
-    nav{
+    nav {
       width:100%;
       max-width:1000px;
       padding:16px 20px;
@@ -35,43 +35,35 @@
       align-items:center;
       margin-bottom:10px;
     }
-    nav a{
+    nav a {
       text-decoration:none;
       color:#3b2824;
       font-size:16px;
     }
-    nav .right a{
+    nav .right a {
       margin-left:20px;
       font-size:14px;
     }
     .card{
       width:100%;
-      max-width:720px;
+      max-width:820px;
       background:#fff;
       border-radius:var(--radius-lg);
       box-shadow:var(--shadow-soft);
       border:1px solid var(--border-soft);
-      padding:28px 24px 24px;
+      padding:32px 28px;
       margin-top:20px;
     }
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      padding:6px 14px;
-      border-radius:var(--radius-pill);
-      background:#ffeede;
-      font-size:12px;
-      color:#8a6a63;
-      margin-bottom:14px;
-    }
     h1{
-      font-size:24px;
+      font-size:26px;
       margin-bottom:8px;
+      text-align:center;
     }
     .lead{
-      font-size:14px;
+      font-size:15px;
       color:var(--text-soft);
       margin-bottom:18px;
+      text-align:center;
     }
     .notice{
       background:#fff7f0;
@@ -92,18 +84,11 @@
       color:var(--text-soft);
     }
     ul{margin-left:18px;margin-bottom:6px;}
-    .highlight{
-      background:#fff7f0;
-      border-radius:16px;
-      padding:12px 14px;
-      margin-top:10px;
-      font-size:13px;
-    }
     a.btn{
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      padding:10px 18px;
+      padding:12px 20px;
       border-radius:var(--radius-pill);
       background:linear-gradient(135deg,var(--accent),var(--accent-strong));
       color:#fff;
@@ -112,46 +97,19 @@
       font-weight:600;
       border:none;
       cursor:pointer;
-      box-shadow:0 14px 30px rgba(210,145,110,0.35);
-      transition:transform .08s ease, box-shadow .08s ease;
-    }
-    a.btn:hover{
-      transform:translateY(-1px);
-      box-shadow:0 18px 38px rgba(210,145,110,0.4);
-    }
-    a.btn-ghost{
-      background:#fff;
-      color:var(--accent-strong);
-      border:1px solid var(--accent);
-      box-shadow:none;
     }
     .plan-links{
       display:flex;
       flex-direction:column;
-      gap:10px;
+      gap:12px;
       margin:10px 0 4px;
     }
-    .plan-links a.btn{
+    iframe.preview-frame{
       width:100%;
-      justify-content:center;
-    }
-    @media (min-width:600px){
-      .plan-links{
-        flex-direction:row;
-        flex-wrap:wrap;
-      }
-      .plan-links a.btn{
-        width:auto;
-      }
-    }
-    .preview-frame{
-      width:100%;
-      max-width:100%;
-      height:520px;
-      border:1px solid #e2c9b6;
-      border-radius:18px;
-      margin:10px 0 6px;
-      background:#fff;
+      height:480px;
+      border:1px solid var(--border-soft);
+      border-radius:var(--radius-lg);
+      margin:14px 0;
     }
     footer{
       margin-top:24px;
@@ -160,122 +118,68 @@
       color:#8a6a63;
       text-align:center;
     }
-    footer a{
-      color:#ff914d;
-      text-decoration:none;
-      margin:0 8px;
-    }
+    footer a{color:#ff914d;text-decoration:none;margin:0 8px;}
     footer a:hover{text-decoration:underline;}
   </style>
 </head>
 <body>
 
-  <!-- 顶部导航 -->
   <nav>
     <a href="/" style="font-size:20px;font-weight:700;">CalmPaw Coach</a>
     <div class="right">
       <a href="/">Home</a>
-      <a href="/legal-information.html">Legal Information</a>
+      <a href="/legal.html">Legal Information</a>
     </div>
   </nav>
 
-  <!-- 主内容卡片 -->
   <main class="card">
-    <div class="badge">Thank you for your purchase</div>
-    <h1>CalmPaw Complete Pack — Barking, Anxiety & Leash Plans</h1>
-    <p class="lead">
-      Thank you for purchasing the CalmPaw Complete Pack.  
-      This bundle gives you access to all three <strong>digital</strong> training programs for your dog.
-      <strong>No physical goods will be shipped.</strong>
-    </p>
 
-    <!-- Digistore24 声明 -->
+    <h1>Thank You — CalmPaw Complete Pack</h1>
+    <p class="lead">Your digital training bundle is ready. No physical products will be shipped.</p>
+
     <div class="notice">
-      <strong>The debit is made by Digistore24.</strong><br/>
-      The withdrawal from your account will be done by Digistore24.  
+      <strong>The debit is made by Digistore24.</strong><br>
       Please look for “Digistore24” on your bank or card statement.
     </div>
 
-    <h2>What you have purchased</h2>
-    <p>
-      You have purchased a <strong>digital training bundle</strong> that includes the following programs:
-    </p>
-    <ul>
-      <li><strong>Stop Excessive Barking — 7-Day Plan</strong></li>
-      <li><strong>Leash Walking Mastery — 10-Day Plan</strong></li>
-      <li><strong>Separation Anxiety Reset — 14-Day Plan</strong></li>
-    </ul>
-    <p>
-      All content is delivered online as digital training plans and as a downloadable PDF eBook.  
-      You can access everything immediately on this page.
-    </p>
+    <h2>Online Preview (Full Pack)</h2>
+    <p>You can preview the entire CalmPaw Complete Pack directly on this page:</p>
 
-    <!-- ✅ 在线预览 + 下载 完整 PDF -->
-    <h2>Online preview & download (full CalmPaw Complete Pack)</h2>
-    <p>
-      You can preview the entire CalmPaw Complete Pack eBook directly on this page or download it to your device.
-    </p>
-
-    <!-- 这里的 src 请确保与你上传的 PDF 路径一致 -->
+    <!-- 在线预览 PDF -->
     <iframe
       class="preview-frame"
       src="/downloads/CalmPaw_Complete_Pack_FINAL.pdf">
     </iframe>
 
-    <div class="plan-links" style="margin-top:10px;">
-      <a href="/downloads/CalmPaw_Complete_Pack_FINAL.pdf" class="btn" download>
-        Download Complete Pack (PDF)
-      </a>
-    </div>
-
-    <!-- 三个计划的在线访问按钮 -->
-    <h2>Access your training plans now</h2>
-    <p>
-      Click the buttons below to open your digital plans immediately.  
-      You already paid for the bundle – <strong>no additional registration or payment is required.</strong>
-    </p>
-
-    <div class="plan-links">
-      <a href="/barking-plan-preview.html" class="btn">
-        Open 7-Day Barking Plan
-      </a>
-      <a href="/leash-plan-preview.html" class="btn">
-        Open 10-Day Leash Walking Plan
-      </a>
-      <a href="/anxiety-plan-preview.html" class="btn">
-        Open 14-Day Separation Anxiety Plan
-      </a>
-    </div>
-
-    <div class="highlight">
-      This is a <strong>digital product</strong>.  
-      You will also receive an email with your access links for the bundle.  
-      If you do not see the email, please also check your spam or promotions folder.
-    </div>
-
-    <!-- 可选账户说明：不要让审核误会必须登录才有内容 -->
-    <h2 style="margin-top:22px;">Optional: create your CalmPaw account</h2>
-    <p>
-      If you want to save your progress and return easily to all your plans in one place,  
-      you can also create an account or log in with the same email address you used during checkout:
-    </p>
-
-    <a href="/auth.html?redirect=/bundle-thankyou.html" class="btn btn-ghost" style="margin-top:12px;">
-      Create your account or log in to access your bundle
+    <!-- 下载 PDF -->
+    <a href="/downloads/CalmPaw_Complete_Pack_FINAL.pdf" class="btn" download>
+      Download Complete Pack (PDF)
     </a>
 
+    <h2>Access Your Training Plans Now</h2>
+    <p>You already paid for the bundle — no additional registration or payment is needed.</p>
+
+    <div class="plan-links">
+      <a class="btn" href="/barking-plan-preview.html">Open 7-Day Barking Plan</a>
+      <a class="btn" href="/leash-plan-preview.html">Open 10-Day Leash Walking Plan</a>
+      <a class="btn" href="/anxiety-plan-preview.html">Open 14-Day Separation Anxiety Plan</a>
+    </div>
+
+    <h2>Email Delivery</h2>
+    <p>Your access links have also been sent to your email. If you do not see the message, please check your spam or promotions folder.</p>
+
     <h2>Support</h2>
-    <p>
-      If you have any questions about your purchase or access, please contact us at  
-      <a href="mailto:support@aurumdesks.com">support@aurumdesks.com</a>.
+    <p>If you need help, contact us at:  
+      <a href="mailto:support@aurumdesks.com">support@aurumdesks.com</a>
     </p>
 
     <footer>
-      <a href="/refund">Refund Policy</a>
-      <a href="/terms">Terms of Service</a>
-      <a href="/privacy">Privacy Policy</a>
-      <a href="/legal-information.html">Legal Information</a>
+      <a href="/refund.html">Refund Policy</a>
+      <a href="/terms.html">Terms of Service</a>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/legal.html">Legal Information</a>
     </footer>
+
   </main>
 
 </body>
