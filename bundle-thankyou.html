@@ -26,7 +26,7 @@
       flex-direction:column;
       align-items:center;
     }
-    nav {
+    nav{
       width:100%;
       max-width:1000px;
       padding:16px 20px;
@@ -35,12 +35,12 @@
       align-items:center;
       margin-bottom:10px;
     }
-    nav a {
+    nav a{
       text-decoration:none;
       color:#3b2824;
       font-size:16px;
     }
-    nav .right a {
+    nav .right a{
       margin-left:20px;
       font-size:14px;
     }
@@ -113,6 +113,11 @@
       border:none;
       cursor:pointer;
       box-shadow:0 14px 30px rgba(210,145,110,0.35);
+      transition:transform .08s ease, box-shadow .08s ease;
+    }
+    a.btn:hover{
+      transform:translateY(-1px);
+      box-shadow:0 18px 38px rgba(210,145,110,0.4);
     }
     a.btn-ghost{
       background:#fff;
@@ -139,6 +144,15 @@
         width:auto;
       }
     }
+    .preview-frame{
+      width:100%;
+      max-width:100%;
+      height:520px;
+      border:1px solid #e2c9b6;
+      border-radius:18px;
+      margin:10px 0 6px;
+      background:#fff;
+    }
     footer{
       margin-top:24px;
       padding:16px 0 0;
@@ -146,18 +160,12 @@
       color:#8a6a63;
       text-align:center;
     }
-    footer a{color:#ff914d;text-decoration:none;margin:0 8px;}
-    footer a:hover{text-decoration:underline;}
-    /* 预览 iframe 简单适配 */
-    .preview-frame{
-      width:100%;
-      max-width:100%;
-      height:480px;
-      border:1px solid #e2c9b6;
-      border-radius:18px;
-      margin:10px 0 4px;
-      background:#fff;
+    footer a{
+      color:#ff914d;
+      text-decoration:none;
+      margin:0 8px;
     }
+    footer a:hover{text-decoration:underline;}
   </style>
 </head>
 <body>
@@ -178,28 +186,10 @@
     <p class="lead">
       Thank you for purchasing the CalmPaw Complete Pack.  
       This bundle gives you access to all three <strong>digital</strong> training programs for your dog.
-      No physical goods will be shipped.
+      <strong>No physical goods will be shipped.</strong>
     </p>
 
-    <!-- Digistore24 Trust Badge / Banner -->
-    <div style="margin-bottom:16px;">
-      <div style="display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border-radius:999px;background:#fffaf5;border:1px solid rgba(243,217,196,0.9);box-shadow:0 10px 26px rgba(210,145,110,0.15);">
-        <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
-          <defs>
-            <linearGradient id="ds24Shield" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#ffb86b"/>
-              <stop offset="100%" stop-color="#ff914d"/>
-            </linearGradient>
-          </defs>
-          <path fill="url(#ds24Shield)" d="M12 2.25l7 2.5v6.08c0 4.23-2.84 8.02-7 9.17-4.16-1.15-7-4.94-7-9.17v-6.08l7-2.5z"/>
-          <path fill="#fff" d="M10.5 12.25l-1.75-1.75-1.25 1.25 3 3 5-5-1.25-1.25z"/>
-        </svg>
-        <span style="font-size:14px;color:#7a5f58;font-weight:600;">
-          Digistore24 Secure Checkout
-        </span>
-      </div>
-    </div>
-
+    <!-- Digistore24 声明 -->
     <div class="notice">
       <strong>The debit is made by Digistore24.</strong><br/>
       The withdrawal from your account will be done by Digistore24.  
@@ -216,29 +206,29 @@
       <li><strong>Separation Anxiety Reset — 14-Day Plan</strong></li>
     </ul>
     <p>
-      All content is delivered online as digital training plans. No physical products will be shipped.
+      All content is delivered online as digital training plans and as a downloadable PDF eBook.  
+      You can access everything immediately on this page.
     </p>
 
-    <!-- ✅ 新增：在线预览 + 下载整个套餐 -->
-    <h2>Online preview & download (full pack)</h2>
+    <!-- ✅ 在线预览 + 下载 完整 PDF -->
+    <h2>Online preview & download (full CalmPaw Complete Pack)</h2>
     <p>
-      You can preview the entire CalmPaw Complete Pack directly on this page or download it as a PDF file.
+      You can preview the entire CalmPaw Complete Pack eBook directly on this page or download it to your device.
     </p>
 
-    <!-- 在线预览整个套餐 PDF（把 src 换成你真实的 PDF 路径） -->
+    <!-- 这里的 src 请确保与你上传的 PDF 路径一致 -->
     <iframe
       class="preview-frame"
-      src="/downloads/calm-complete-pack.pdf">
+      src="/downloads/CalmPaw_Complete_Pack_FINAL.pdf">
     </iframe>
 
     <div class="plan-links" style="margin-top:10px;">
-      <!-- 下载完整套餐 PDF（同样把 href 改成你的真实路径） -->
-      <a href="/downloads/calm-complete-pack.pdf" class="btn" download>
+      <a href="/downloads/CalmPaw_Complete_Pack_FINAL.pdf" class="btn" download>
         Download Complete Pack (PDF)
       </a>
     </div>
 
-    <!-- 直接访问三个计划（原来的按钮保留） -->
+    <!-- 三个计划的在线访问按钮 -->
     <h2>Access your training plans now</h2>
     <p>
       Click the buttons below to open your digital plans immediately.  
@@ -258,18 +248,19 @@
     </div>
 
     <div class="highlight">
+      This is a <strong>digital product</strong>.  
       You will also receive an email with your access links for the bundle.  
       If you do not see the email, please also check your spam or promotions folder.
     </div>
 
-    <!-- 可选：账户 / 会员区 -->
+    <!-- 可选账户说明：不要让审核误会必须登录才有内容 -->
     <h2 style="margin-top:22px;">Optional: create your CalmPaw account</h2>
     <p>
       If you want to save your progress and return easily to all your plans in one place,  
       you can also create an account or log in with the same email address you used during checkout:
     </p>
 
-    <a href="/auth.html?redirect=/bundle-access.html" class="btn btn-ghost" style="margin-top:12px;">
+    <a href="/auth.html?redirect=/bundle-thankyou.html" class="btn btn-ghost" style="margin-top:12px;">
       Create your account or log in to access your bundle
     </a>
 
