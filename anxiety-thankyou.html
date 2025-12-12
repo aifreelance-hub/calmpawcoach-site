@@ -86,12 +86,11 @@
       font-size:18px;
       margin:18px 0 8px;
     }
-    p,li{
+    p{
       font-size:14px;
       line-height:1.6;
       color:var(--text-soft);
     }
-    ul{margin-left:18px;margin-bottom:6px;}
     .highlight{
       background:#fff7f0;
       border-radius:16px;
@@ -142,78 +141,34 @@
     <h1>Separation Anxiety Reset — 14-Day Plan</h1>
     <p class="lead">
       Thank you for purchasing the CalmPaw 14-Day Separation Anxiety Reset training plan.
-      Below you will find important information about your product and access.
+      Click the button below to access your plan.
     </p>
 
     <div class="notice">
-      <strong>The debit is made by Digistore24 GmbH (Germany).</strong><br/>
+      <strong>The debit is made by Digistore24.</strong><br/>
       Please look for “Digistore24” on your bank or card statement.
     </div>
 
     <h2>Access your plan</h2>
     <p>
-      Click the button below to open your 14-day training plan directly.
-      No login is required.
+      Your plan is available in your CalmPaw account. Depending on your browser, you
+      may be asked to log in before you can view it.
     </p>
 
-    <a href="/anxiety-plan-preview.html" class="btn">
-      Open your 14-day plan →
+    <!-- 按钮：根据是否登录跳转到 access 或登录页 -->
+    <a href="#" class="btn" id="accessBtn">
+      Go to your 14-day plan →
     </a>
 
     <div class="small-url">
       If the button does not work, copy and paste this link into your browser:<br/>
-      https://calmpawcoach.com/anxiety-plan-preview.html
+      https://calmpawcoach.com/anxiety-access.html
     </div>
 
     <div class="highlight">
       An email with your access information has also been sent.  
       If you do not see it within a few minutes, please check your spam folder.
     </div>
-
-    <!-- ✅ 完整 14 天内容已加入 -->
-    <h2>Your Complete 14-Day Training Program</h2>
-
-    <p><strong>Day 1 — Safety Check & Baseline</strong><br>
-    Prepare a calm environment and record your dog’s starting anxiety level.</p>
-
-    <p><strong>Day 2 — Micro Absences</strong><br>
-    Practise 5–10 second absences that end before anxiety rises.</p>
-
-    <p><strong>Day 3 — Predictable Leaving Routine</strong><br>
-    Teach your dog a calm, consistent “owner leaving” routine.</p>
-
-    <p><strong>Day 4 — Calm Alone Moments</strong><br>
-    Build tiny moments of independence within the same room.</p>
-
-    <p><strong>Day 5 — Add Mild Sounds</strong><br>
-    Introduce soft environmental cues during short absences.</p>
-
-    <p><strong>Day 6 — Increase Absence Duration</strong><br>
-    Extend alone time to 30–45 seconds, only if calm.</p>
-
-    <p><strong>Day 7 — Build Consistency</strong><br>
-    Repeat micro absences 5–6 times daily.</p>
-
-    <p><strong>Day 8 — First 1–2 Minute Absence</strong><br>
-    Practice stepping away for 60–90 seconds.</p>
-
-    <p><strong>Day 9 — Calm Independence Skills</strong><br>
-    Encourage resting alone even while you are home.</p>
-
-    <p><strong>Day 10 — Moderate Absences</strong><br>
-    Build up to 2–3 minute absences in multiple repetitions.</p>
-
-    <p><strong>Day 11 — Door Practice</strong><br>
-    Teach your dog that door sounds do not mean panic.</p>
-
-    <p><strong>Day 12 — Short Outdoor Absences</strong><br>
-    Step outside for 30–60 seconds for the first time.</p>
-
-    <p><strong>Day 13 — Real-World Duration</strong><br>
-    Extend outside absences to 2–4 minutes.</p>
-
-    <p><strong>Day 14 — Review & Long-Term Plan</strong><br>
-    Evaluate progress and set weekly maintenance sessions.</p>
 
     <h2>Support</h2>
     <p>
@@ -228,6 +183,25 @@
       <a href="/legal">Legal Notice</a>
     </footer>
   </main>
+
+  <!-- 登录判断逻辑：已登录 → anxiety-access；未登录 → 先登录再跳回 -->
+  <script>
+    document.getElementById("accessBtn").addEventListener("click", function(e){
+      e.preventDefault();
+      const token = localStorage.getItem("calmpaw_token");
+
+      const target = "/anxiety-access.html";
+
+      if (token) {
+        // 已登录 → 直接访问计划页面
+        window.location.href = target;
+      } else {
+        // 未登录 → 先登录，登录后回到访问页
+        window.location.href =
+          "/auth.html?redirect=" + encodeURIComponent(target);
+      }
+    });
+  </script>
 
 </body>
 </html>
