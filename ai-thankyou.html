@@ -128,7 +128,7 @@
     <h1>CalmPaw AI Trainer — Monthly Subscription</h1>
 
     <p style="margin-bottom:18px;">
-      Thank you for your purchase. Click the button below to access your product.
+      Thank you for your purchase. Click the button below to access your AI Trainer.
     </p>
 
     <div class="notice">
@@ -136,8 +136,8 @@
       This description will appear on your bank or card statement.
     </div>
 
-    <!-- 按钮：根据是否登录跳转 -->
-    <a href="#" class="btn" id="accessBtn">Access Your AI Trainer</a>
+    <!-- 按钮：根据是否登录跳转到 /ai 或登录页 -->
+    <a href="#" class="btn" id="accessBtn">Go to AI Trainer</a>
 
   </main>
 
@@ -153,18 +153,18 @@
     </nav>
   </footer>
 
-  <!-- 登录状态自动判断逻辑 -->
+  <!-- 登录判断逻辑 -->
   <script>
     document.getElementById("accessBtn").addEventListener("click", function(e){
       e.preventDefault();
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("calmpaw_token");
 
       if (token) {
         // 已登录 → 直接去 AI 页面
         window.location.href = "/ai";
       } else {
-        // 未登录 → 先去登录
-        window.location.href = "/auth.html";
+        // 未登录 → 先去登录，登录后再跳回 /ai
+        window.location.href = "/auth.html?redirect=" + encodeURIComponent("/ai");
       }
     });
   </script>
