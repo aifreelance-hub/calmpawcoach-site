@@ -136,7 +136,7 @@
       This description will appear on your bank or card statement.
     </div>
 
-    <!-- ⭐ 自动判断是否登录的按钮 -->
+    <!-- 按钮：根据是否登录跳转 -->
     <a href="#" class="btn" id="accessBtn">Access Your AI Trainer</a>
 
   </main>
@@ -153,17 +153,17 @@
     </nav>
   </footer>
 
-  <!-- ⭐ 登录状态自动判断逻辑 -->
+  <!-- 登录状态自动判断逻辑 -->
   <script>
     document.getElementById("accessBtn").addEventListener("click", function(e){
       e.preventDefault();
       const token = localStorage.getItem("token");
 
       if (token) {
-        // 已登录 → 进入激活页面
-        window.location.href = "/ai-activate.html";
+        // 已登录 → 直接去 AI 页面
+        window.location.href = "/ai";
       } else {
-        // 未登录 → 跳到登录页
+        // 未登录 → 先去登录
         window.location.href = "/auth.html";
       }
     });
