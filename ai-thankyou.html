@@ -153,18 +153,24 @@
     </nav>
   </footer>
 
-  <!-- 登录判断逻辑 -->
+  <!-- 登录判断逻辑 + 自动携带 Digistore24 参数 -->
   <script>
     document.getElementById("accessBtn").addEventListener("click", function(e){
       e.preventDefault();
+
       const token = localStorage.getItem("calmpaw_token");
 
+      // ⭐ 自动把 Digistore24 的 transaction_id / order_id 等参数一起带过去
+      const search = window.location.search || "";
+      const target = "/ai" + search;
+
       if (token) {
-        // 已登录 → 直接去 AI 页面
-        window.location.href = "/ai";
+        // 已登录 → 直接进入 AI 页面（带订单参数，触发轮询激活）
+        window.location.href = target;
       } else {
-        // 未登录 → 先去登录，登录后再跳回 /ai
-        window.location.href = "/auth.html?redirect=" + encodeURIComponent("/ai");
+        // 未登录 → 登录后跳回带参数的 AI 页面
+        window.location.href =
+          "/auth.html?redirect=" + encodeURIComponent(target);
       }
     });
   </script>
