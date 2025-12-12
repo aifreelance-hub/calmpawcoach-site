@@ -218,14 +218,18 @@
   <script>
     document.getElementById("accessBtn").addEventListener("click", function(e){
       e.preventDefault();
+
       const token = localStorage.getItem("calmpaw_token");
-      const target = "/barking-access.html";
+
+      // ⭐ 把 Digistore24 订单参数（transaction_id / order_id 等）一起带去 access 页面
+      const search = window.location.search || "";
+      const target = "/barking-access.html" + search;
 
       if (token) {
-        // 已登录 → 直接访问计划页面
+        // 已登录 → 直接访问计划页面（带订单参数，触发轮询）
         window.location.href = target;
       } else {
-        // 未登录 → 先登录，登录后回到访问页
+        // 未登录 → 先登录，登录后回到带参数的访问页
         window.location.href =
           "/auth.html?redirect=" + encodeURIComponent(target);
       }
