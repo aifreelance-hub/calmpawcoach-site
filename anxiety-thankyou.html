@@ -190,13 +190,15 @@
       e.preventDefault();
       const token = localStorage.getItem("calmpaw_token");
 
-      const target = "/anxiety-access.html";
+      // ⭐ 把 Digistore24 返回的 transaction_id / order_id 等参数一起带到访问页
+      const search = window.location.search || "";
+      const target = "/anxiety-access.html" + search;
 
       if (token) {
-        // 已登录 → 直接访问计划页面
+        // 已登录 → 直接访问计划页面（带订单参数，触发轮询）
         window.location.href = target;
       } else {
-        // 未登录 → 先登录，登录后回到访问页
+        // 未登录 → 先登录，登录后回到带参数的访问页
         window.location.href =
           "/auth.html?redirect=" + encodeURIComponent(target);
       }
