@@ -78,28 +78,28 @@
       font-size:18px;
       margin:18px 0 8px;
     }
-    p,li{
+    p{
       font-size:14px;
       line-height:1.6;
       color:var(--text-soft);
     }
-    ul{margin-left:18px;margin-bottom:6px;}
-    .plan-block{
-      margin-top:18px;
-      padding:18px 16px;
-      border-radius:18px;
-      background:#fff7f0;
-      border:1px solid var(--border-soft);
+    a.btn{
+      display:inline-flex;
+      margin-top:16px;
+      padding:10px 18px;
+      border-radius:var(--radius-pill);
+      background:linear-gradient(135deg,var(--accent),var(--accent-strong));
+      color:#fff;
+      font-size:14px;
+      text-decoration:none;
+      font-weight:600;
+      cursor:pointer;
     }
-    .plan-block h3{
-      font-size:17px;
-      margin-bottom:6px;
-      color:var(--text-main);
-    }
-    .meta{
-      font-size:13px;
-      color:var(--text-soft);
-      margin-bottom:10px;
+    .small-url{
+      margin-top:8px;
+      font-size:12px;
+      word-break:break-all;
+      color:#8a6a63;
     }
     footer{
       margin-top:24px;
@@ -125,112 +125,42 @@
   <main class="card">
     <h1>Leash Walking Mastery — 10-Day Training Plan</h1>
     <p class="lead">
-      Thank you for your purchase. This is a <strong>digital training program</strong>.  
+      Thank you for your purchase. This is a <strong>digital training program</strong>.<br/>
       No physical products will be shipped.
     </p>
 
     <div class="notice">
-      <strong>The debit is made by Digistore24 GmbH (Germany).</strong><br/>
+      <strong>The debit is made by Digistore24.</strong><br/>
       Please look for “Digistore24” on your bank or card statement.
     </div>
 
     <h2>How to access your product</h2>
     <p>
-      You can read the full 10-day training plan directly on this page below.  
-      You may also save or print this page for your own use.  
-      Your access link has additionally been sent to you via email. If you do not see it, please check your spam or promotions folder.
+      Your full 10-day training plan is available in your CalmPaw account.
+      Depending on your browser, you may be asked to log in before you can view it.
     </p>
 
-    <div class="plan-block">
-      <h3>10-Day Training Plan — Leash Walking Mastery</h3>
-      <div class="meta">
-        A gentle, structured programme to teach your dog to walk calmly by your side without pulling.  
-        Short walks · Clear exercises · Real-life practice
-      </div>
+    <!-- 按钮：根据是否登录跳转到 leash-access 或登录页 -->
+    <a href="#" class="btn" id="accessBtn">
+      Go to your 10-day plan →
+    </a>
 
-      <p>This is a digital training plan included in your purchase. You can follow each day directly on this page.</p>
-
-      <p><strong>Day 1 — Equipment &amp; Safe Start (Set up)</strong><br/>
-      Choose safe, comfortable equipment and introduce it positively.</p>
-      <ul>
-        <li>Fit a well-fitting harness or flat collar (no choke/prong tools).</li>
-        <li>Let your dog wear the gear indoors with treats and praise.</li>
-        <li>Keep the first session very short and positive.</li>
-      </ul>
-
-      <p><strong>Day 2 — Reward “By My Side” (Foundation)</strong><br/>
-      Teach your dog that staying near your leg brings rewards.</p>
-      <ul>
-        <li>Stand still, mark and reward when your dog appears near your left or right leg.</li>
-        <li>Add a cue like “Close” once your dog understands.</li>
-        <li>Keep 3–4 mini sessions, 2–3 minutes each.</li>
-      </ul>
-
-      <p><strong>Day 3 — First Loose-Leash Steps Indoors (Low distraction)</strong><br/>
-      Start practising calm, short-distance walking where distractions are minimal.</p>
-      <ul>
-        <li>Take a few slow steps indoors and reward when the leash stays loose.</li>
-        <li>If your dog surges forward, simply stop and reset without tension.</li>
-        <li>Finish each tiny session with praise and play.</li>
-      </ul>
-
-      <p><strong>Day 4 — Introduce Direction Changes (Follow the handler)</strong><br/>
-      Teach your dog to follow your movements calmly.</p>
-      <ul>
-        <li>Walk forward 3–4 steps, then turn left or right gently.</li>
-        <li>Reward your dog for staying with you through the turn.</li>
-        <li>Avoid pulling — your movement should guide the behaviour.</li>
-      </ul>
-
-      <p><strong>Day 5 — Controlled Outdoor Start (New environment)</strong><br/>
-      Move outdoors but choose a quiet area with fewer distractions.</p>
-      <ul>
-        <li>Take only 1–2 minutes of walking before giving a break.</li>
-        <li>Reward check-ins (when your dog looks at you willingly).</li>
-        <li>Keep the leash loose; avoid correcting or yanking.</li>
-      </ul>
-
-      <p><strong>Day 6 — Build Focus Around Mild Distractions (Progression)</strong><br/>
-      Introduce gentle distractions while keeping expectations low.</p>
-      <ul>
-        <li>Walk near mild triggers such as distant people or parked bicycles.</li>
-        <li>Use “Look” or “Close” when your dog becomes slightly aroused.</li>
-        <li>Reward calm behaviour before your dog escalates.</li>
-      </ul>
-
-      <p><strong>Day 7 — Pattern Walking (Structure)</strong><br/>
-      Use predictable walking patterns to strengthen your dog’s confidence.</p>
-      <ul>
-        <li>Try figure-8s, loops or straight-line patterns in a quiet area.</li>
-        <li>Reward your dog for staying beside you through the pattern.</li>
-        <li>Repeat 2–3 short sessions.</li>
-      </ul>
-
-      <p><strong>Day 8 — Introduce Real-World Challenges (Applied practice)</strong><br/>
-      Start walking in slightly busier environments.</p>
-      <ul>
-        <li>Walk past driveways, moving cars at a distance, or mild street noise.</li>
-        <li>Reward frequently when your dog chooses loose-leash walking.</li>
-        <li>Move away if your dog becomes overstimulated.</li>
-      </ul>
-
-      <p><strong>Day 9 — Extend Duration &amp; Confidence (Stamina)</strong><br/>
-      Increase the total walking time while maintaining loose leash behaviour.</p>
-      <ul>
-        <li>Begin with short 1–2 minute intervals, adding time slowly.</li>
-        <li>Use calm praise and occasional treats to reinforce good choices.</li>
-        <li>End on success — don't wait until your dog is tired or frustrated.</li>
-      </ul>
-
-      <p><strong>Day 10 — Real-World Walk &amp; Long-Term Plan (Maintain)</strong><br/>
-      Put everything together in a normal walk and build a long-term routine.</p>
-      <ul>
-        <li>Choose a calm route and practise all skills from previous days.</li>
-        <li>Reward often for loose leash and voluntary check-ins.</li>
-        <li>Plan 2–3 “training walks” per week to maintain progress.</li>
-      </ul>
-
+    <div class="small-url">
+      If the button does not work, copy and paste this link into your browser:<br/>
+      https://calmpawcoach.com/leash-access.html
     </div>
+
+    <h2>Email delivery</h2>
+    <p>
+      Your access information has also been sent to your email. If you do not see the
+      message within a few minutes, please check your spam or promotions folder.
+    </p>
+
+    <h2>Support</h2>
+    <p>
+      If you have any questions about your purchase or access, please contact us at<br/>
+      <a href="mailto:support@aurumdesks.com">support@aurumdesks.com</a>.
+    </p>
 
     <footer>
       <a href="/refund.html">Refund Policy</a>
@@ -238,8 +168,25 @@
       <a href="/privacy.html">Privacy Policy</a>
       <a href="/legal.html">Legal Information</a>
     </footer>
-
   </main>
+
+  <!-- 登录判断逻辑：已登录 → leash-access；未登录 → 先登录再跳回 -->
+  <script>
+    document.getElementById("accessBtn").addEventListener("click", function(e){
+      e.preventDefault();
+      const token = localStorage.getItem("calmpaw_token");
+      const target = "/leash-access.html";
+
+      if (token) {
+        // 已登录 → 直接访问计划页面
+        window.location.href = target;
+      } else {
+        // 未登录 → 先登录，登录后回到访问页
+        window.location.href =
+          "/auth.html?redirect=" + encodeURIComponent(target);
+      }
+    });
+  </script>
 
 </body>
 </html>
