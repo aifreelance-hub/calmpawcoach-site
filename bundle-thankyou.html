@@ -133,7 +133,6 @@
 
     <div class="notice">
       <strong>The debit is made by Digistore24.</strong><br>
-      The withdrawal from your account will be done by Digistore24.
       Please look for “Digistore24” on your bank or card statement.
     </div>
 
@@ -144,7 +143,7 @@
       to log in before you can view the content.
     </p>
 
-    <!-- 按钮：根据是否登录跳转到 bundle-access 或登录页 -->
+    <!-- ⭐ 已改成带 Digistore24 参数的跳转逻辑 -->
     <a href="#" class="btn" id="accessBtn">
       Go to your Complete Pack →
     </a>
@@ -156,13 +155,13 @@
 
     <h2>Email delivery</h2>
     <p>
-      Your access information has also been sent to your email. If you do not see the
-      message within a few minutes, please check your spam or promotions folder.
+      Your access information has also been sent to your email.  
+      If you do not see the message, please check your spam folder.
     </p>
 
     <h2>Support</h2>
     <p>
-      If you need help with your purchase or access, contact us at:<br/>
+      Need help? Contact us at:<br/>
       <a href="mailto:support@aurumdesks.com">support@aurumdesks.com</a>.
     </p>
 
@@ -175,18 +174,22 @@
 
   </main>
 
-  <!-- 登录判断逻辑：已登录 → bundle-access；未登录 → 先登录再跳回 -->
+  <!-- ⭐ 登录判断 + transaction_id 订单参数同步 -->
   <script>
     document.getElementById("accessBtn").addEventListener("click", function(e){
       e.preventDefault();
+
       const token = localStorage.getItem("calmpaw_token");
-      const target = "/bundle-access";
+
+      // 自动把 Digistore24 的 transaction_id / order_id 参数带过去
+      const search = window.location.search || "";
+      const target = "/bundle-access" + search;
 
       if (token) {
-        // 已登录 → 直接访问完整包页面
+        // 已登录 → 直接跳 bundle-access?transaction_id=...
         window.location.href = target;
       } else {
-        // 未登录 → 先登录，登录后回到访问页
+        // 未登录 → 先登录再跳
         window.location.href =
           "/auth.html?redirect=" + encodeURIComponent(target);
       }
