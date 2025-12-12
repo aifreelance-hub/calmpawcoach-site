@@ -64,10 +64,10 @@
       font-size:24px;
       margin-bottom:8px;
     }
-    .lead{
+    p{
       font-size:14px;
+      line-height:1.6;
       color:var(--text-soft);
-      margin-bottom:18px;
     }
     .notice{
       background:#fff7f0;
@@ -77,34 +77,17 @@
       margin-bottom:18px;
       border:1px dashed var(--border-soft);
     }
-    .notice strong{color:var(--accent-strong);}
-    h2{
-      font-size:18px;
-      margin:18px 0 8px;
-    }
-    p,li{
-      font-size:14px;
-      line-height:1.6;
-      color:var(--text-soft);
-    }
-    ul{margin-left:18px;margin-bottom:6px;}
-    .highlight{
-      background:#fff7f0;
-      border-radius:16px;
-      padding:12px 14px;
-      margin-top:10px;
-      font-size:13px;
-    }
     a.btn{
       display:inline-flex;
       margin-top:20px;
-      padding:10px 22px;
+      padding:12px 28px;
       border-radius:var(--radius-pill);
       background:linear-gradient(135deg,var(--accent),var(--accent-strong));
       color:#fff;
-      font-size:14px;
+      font-size:15px;
       text-decoration:none;
       font-weight:600;
+      cursor:pointer;
     }
     .site-footer{
       width:100%;
@@ -143,48 +126,19 @@
     <div class="badge">Thank you for your purchase</div>
 
     <h1>CalmPaw AI Trainer — Monthly Subscription</h1>
-    <p class="lead">
-      Thank you for subscribing to the CalmPaw AI Trainer. Below you will find important details regarding your product and access.
+
+    <p style="margin-bottom:18px;">
+      Thank you for your purchase. Click the button below to access your product.
     </p>
 
     <div class="notice">
-      <strong>The debit is made by Digistore24 GmbH (Germany).</strong><br/>
-      The withdrawal on your bank or card statement will appear as “Digistore24”.
+      <strong>The debit is made by Digistore24.</strong><br/>
+      This description will appear on your bank or card statement.
     </div>
 
-    <h2>What you have purchased</h2>
-    <p>
-      You now have a <strong>30-day digital subscription</strong> to the CalmPaw AI Trainer, including:
-    </p>
-    <ul>
-      <li> access to the AI-powered dog training assistant</li>
-      <li>Personalized behavior guidance</li>
-      <li>Step-by-step AI-generated training exercises</li>
-      <li>24/7 digital service availability</li>
-      <li>No physical products included — digital service only</li>
-    </ul>
+    <!-- ⭐ 自动判断是否登录的按钮 -->
+    <a href="#" class="btn" id="accessBtn">Access Your AI Trainer</a>
 
-    <h2>Access & Delivery</h2>
-    <p>This is a digital product. No physical shipment is required.</p>
-
-    <div class="highlight">
-      <p>
-        Below is the publicly accessible demo version of the CalmPaw AI Trainer.
-        You can open it immediately — <strong>no login required</strong>.
-        This represents the digital content delivered with your subscription.
-      </p>
-    </div>
-
-    <!-- ⭐ The ONLY button kept: Public Demo -->
-    <a href="/ai-trainer-public.html" class="btn">
-      Open AI Trainer Demo (Public Access)
-    </a>
-
-    <h2>Support</h2>
-    <p>
-      If you need assistance or help accessing your product, please contact us at:<br>
-      <a href="mailto:support@aurumdesks.com">support@aurumdesks.com</a>
-    </p>
   </main>
 
   <!-- Footer -->
@@ -198,6 +152,22 @@
       <a href="/legal">Legal Notice</a>
     </nav>
   </footer>
+
+  <!-- ⭐ 登录状态自动判断逻辑 -->
+  <script>
+    document.getElementById("accessBtn").addEventListener("click", function(e){
+      e.preventDefault();
+      const token = localStorage.getItem("token");
+
+      if (token) {
+        // 已登录 → 进入激活页面
+        window.location.href = "/ai-activate.html";
+      } else {
+        // 未登录 → 跳到登录页
+        window.location.href = "/auth.html";
+      }
+    });
+  </script>
 
 </body>
 </html>
