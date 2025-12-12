@@ -140,26 +140,25 @@
       Depending on your browser, you may be asked to log in before you can view it.
     </p>
 
-    <!-- 按钮：根据是否登录跳转到 leash-access 或登录页 -->
     <a href="#" class="btn" id="accessBtn">
       Go to your 10-day plan →
     </a>
 
     <div class="small-url">
-      If the button does not work, copy and paste this link into your browser:<br/>
+      If the button does not work, copy and paste this link:<br/>
       https://calmpawcoach.com/leash-access.html
     </div>
 
     <h2>Email delivery</h2>
     <p>
-      Your access information has also been sent to your email. If you do not see the
-      message within a few minutes, please check your spam or promotions folder.
+      Your access information has also been sent to your email. If you do not see it,
+      please check your spam or promotions folder.
     </p>
 
     <h2>Support</h2>
     <p>
-      If you have any questions about your purchase or access, please contact us at<br/>
-      <a href="mailto:support@aurumdesks.com">support@aurumdesks.com</a>.
+      Questions? Contact us:<br/>
+      <a href="mailto:support@aurumdesks.com">support@aurumdesks.com</a>
     </p>
 
     <footer>
@@ -170,18 +169,22 @@
     </footer>
   </main>
 
-  <!-- 登录判断逻辑：已登录 → leash-access；未登录 → 先登录再跳回 -->
+  <!-- 登录判断 + 订单参数同步 -->
   <script>
     document.getElementById("accessBtn").addEventListener("click", function(e){
       e.preventDefault();
+
       const token = localStorage.getItem("calmpaw_token");
-      const target = "/leash-access.html";
+
+      // ⭐ 带上 Digistore24 订单参数（transaction_id, order_id 等）
+      const search = window.location.search || "";
+      const target = "/leash-access.html" + search;
 
       if (token) {
-        // 已登录 → 直接访问计划页面
+        // 已登录 → 直接跳到 leash-access?transaction_id=...
         window.location.href = target;
       } else {
-        // 未登录 → 先登录，登录后回到访问页
+        // 未登录 → 先登录，登录后再回到带参数的 access 页面
         window.location.href =
           "/auth.html?redirect=" + encodeURIComponent(target);
       }
