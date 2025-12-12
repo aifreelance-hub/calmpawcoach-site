@@ -120,7 +120,7 @@
       white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
     }
     .nav-auth-btn{
-      border:none;background:transparent;font-size:11px;color:#b05825;
+      border:none;background:透明;font-size:11px;color:#b05825;
       padding:4px 7px;border-radius:999px;cursor:pointer;
       transition:background 0.15s ease,color 0.15s ease;white-space:nowrap;
     }
@@ -203,6 +203,28 @@
       font-size:13px;color:var(--text-soft);
       margin-bottom:14px;
     }
+
+    /* ✅ 新增：订阅检查加载动画 */
+    .ai-loading-row{
+      display:none;
+      align-items:center;
+      gap:8px;
+      font-size:13px;
+      color:var(--text-soft);
+      margin:6px 0 12px;
+    }
+    .ai-spinner{
+      width:16px;
+      height:16px;
+      border-radius:999px;
+      border:2px solid rgba(0,0,0,0.06);
+      border-top-color:var(--accent-strong);
+      animation:ai-spin 0.8s linear infinite;
+    }
+    @keyframes ai-spin{
+      to{transform:rotate(360deg);}
+    }
+
     .state-title{font-size:14px;font-weight:600;margin-bottom:6px;color:var(--text-main);}
     .state-actions{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;}
 
@@ -366,6 +388,12 @@
           <div class="hero-pill">🔒 Private — just you and your AI trainer</div>
         </div>
 
+        <!-- ✅ 新增：订阅检查加载提示 -->
+        <div id="ai-loading-row" class="ai-loading-row">
+          <div class="ai-spinner"></div>
+          <div>Checking your AI Trainer subscription…</div>
+        </div>
+
         <!-- Logged in but no subscription -->
         <div id="state-no-sub" class="state-box hidden">
           <div class="state-title">$29/month — CalmPaw AI trainer</div>
@@ -450,6 +478,7 @@
     const chatSendBtn = document.getElementById("chat-send-btn");
     const subscribeLink = document.getElementById("ai-subscribe-link");
     const ctaBlock = document.getElementById("ai-cta-block");
+    const loadingRow = document.getElementById("ai-loading-row"); // ✅ 新增
 
     let history = [
       {
@@ -508,8 +537,12 @@
         chatStatusPill.textContent = "Please log in via the top-right button";
         setChatEnabled(false);
         if (ctaBlock) ctaBlock.style.display = "block";
+        if (loadingRow) loadingRow.style.display = "none"; // 未登录不显示加载
         return;
       }
+
+      // 有 token 时显示“正在检查订阅…”
+      if (loadingRow) loadingRow.style.display = "flex";
 
       try {
         const res = await fetch(API_BASE + "/auth/me", {
@@ -528,6 +561,7 @@
           chatStatusPill.textContent = "Please log in via the top-right button";
           setChatEnabled(false);
           if (ctaBlock) ctaBlock.style.display = "block";
+          if (loadingRow) loadingRow.style.display = "none";
           return;
         }
 
@@ -563,6 +597,7 @@
         chatStatusPill.textContent = "Error checking login";
         setChatEnabled(false);
         if (ctaBlock) ctaBlock.style.display = "block";
+        if (loadingRow) loadingRow.style.display = "none";
       }
     }
 
@@ -585,6 +620,7 @@
           chatStatusPill.textContent = "No active subscription";
           setChatEnabled(false);
           if (ctaBlock) ctaBlock.style.display = "block";
+          if (loadingRow) loadingRow.style.display = "none"; // 结束加载
           return;
         }
 
@@ -605,11 +641,13 @@
         chatStatusPill.textContent = "AI Trainer active";
         setChatEnabled(true);
         if (ctaBlock) ctaBlock.style.display = "none"; // hide purchase CTA when active
+        if (loadingRow) loadingRow.style.display = "none"; // 结束加载
       } catch (e) {
         console.error(e);
         chatStatusPill.textContent = "Error checking subscription";
         setChatEnabled(false);
         if (ctaBlock) ctaBlock.style.display = "block";
+        if (loadingRow) loadingRow.style.display = "none";
       }
     }
 
