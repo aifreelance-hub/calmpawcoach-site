@@ -78,12 +78,11 @@
       font-size:18px;
       margin:18px 0 8px;
     }
-    p,li{
+    p{
       font-size:14px;
       line-height:1.6;
       color:var(--text-soft);
     }
-    ul{margin-left:18px;margin-bottom:6px;}
     a.btn{
       display:inline-flex;
       align-items:center;
@@ -98,18 +97,11 @@
       border:none;
       cursor:pointer;
     }
-    .plan-links{
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      margin:10px 0 4px;
-    }
-    iframe.preview-frame{
-      width:100%;
-      height:480px;
-      border:1px solid var(--border-soft);
-      border-radius:var(--radius-lg);
-      margin:14px 0;
+    .small-url{
+      margin-top:8px;
+      font-size:12px;
+      word-break:break-all;
+      color:#8a6a63;
     }
     footer{
       margin-top:24px;
@@ -120,33 +112,6 @@
     }
     footer a{color:#ff914d;text-decoration:none;margin:0 8px;}
     footer a:hover{text-decoration:underline;}
-
-    /* 新增：页面内完整计划展示样式 */
-    .full-plans{
-      margin-top:30px;
-      padding-top:16px;
-      border-top:1px solid var(--border-soft);
-    }
-    .plan-section{
-      margin-top:22px;
-      padding:18px 16px;
-      border-radius:18px;
-      background:#fff7f0;
-      border:1px solid var(--border-soft);
-    }
-    .plan-section h3{
-      font-size:17px;
-      margin-bottom:6px;
-      color:var(--text-main);
-    }
-    .plan-section .meta{
-      font-size:13px;
-      color:var(--text-soft);
-      margin-bottom:10px;
-    }
-    .plan-section strong{
-      color:var(--text-main);
-    }
   </style>
 </head>
 <body>
@@ -167,331 +132,39 @@
     </p>
 
     <div class="notice">
-      <strong>The debit is made by Digistore24 GmbH (Germany).</strong><br>
+      <strong>The debit is made by Digistore24.</strong><br>
+      The withdrawal from your account will be done by Digistore24.
       Please look for “Digistore24” on your bank or card statement.
     </div>
 
-    <!-- PDF 预览 + 下载 -->
-    <h2>Online Preview (Full Pack)</h2>
-    <p>You can preview the entire CalmPaw Complete Pack directly on this page:</p>
+    <h2>Access your complete bundle</h2>
+    <p>
+      Your CalmPaw Complete Pack (barking, leash walking and separation anxiety plans)
+      is available in your CalmPaw account. Depending on your browser, you may be asked
+      to log in before you can view the content.
+    </p>
 
-    <iframe
-      class="preview-frame"
-      src="/downloads/CalmPaw_Complete_Pack_FINAL.pdf">
-    </iframe>
-
-    <a href="/downloads/CalmPaw_Complete_Pack_FINAL.pdf" class="btn" download>
-      Download Complete Pack (PDF)
+    <!-- 按钮：根据是否登录跳转到 bundle-access 或登录页 -->
+    <a href="#" class="btn" id="accessBtn">
+      Go to your Complete Pack →
     </a>
 
-    <!-- 按钮仍然保留（方便导航） -->
-    <h2>Access Your Training Plans Now</h2>
-    <p>You already paid for the bundle — no additional registration or payment is needed.</p>
-
-    <div class="plan-links">
-      <a class="btn" href="#barking-full">Open 7-Day Barking Plan (on this page)</a>
-      <a class="btn" href="#leash-full">Open 10-Day Leash Walking Plan (on this page)</a>
-      <a class="btn" href="#anxiety-full">Open 14-Day Separation Anxiety Plan (on this page)</a>
+    <div class="small-url">
+      If the button does not work, copy and paste this link into your browser:<br/>
+      https://calmpawcoach.com/bundle-access
     </div>
 
-    <h2>Email Delivery</h2>
+    <h2>Email delivery</h2>
     <p>
-      Your access links have also been sent to your email.  
-      If you do not see the message, please check your spam or promotions folder.
+      Your access information has also been sent to your email. If you do not see the
+      message within a few minutes, please check your spam or promotions folder.
     </p>
 
     <h2>Support</h2>
     <p>
-      If you need help, contact us at:  
-      <a href="mailto:support@aurumdesks.com">support@aurumdesks.com</a>
+      If you need help with your purchase or access, contact us at:<br/>
+      <a href="mailto:support@aurumdesks.com">support@aurumdesks.com</a>.
     </p>
-
-    <!-- ==== 这里开始：三个计划的完整内容直接展开在页面上 ==== -->
-    <div class="full-plans">
-      <h2>Full Training Plans (On This Page)</h2>
-
-      <!-- 7 Day Barking -->
-      <section id="barking-full" class="plan-section">
-        <h3>7-Day Training Plan — Stop Excessive Barking</h3>
-        <div class="meta">
-          Short daily sessions · Positive training · Clear progress every day
-        </div>
-        <p>
-          Follow this simple, step-by-step plan to reduce your dog's excessive barking in just 7 days.  
-          This is a digital training plan included in your CalmPaw Complete Pack. You can read it directly on this page from any device.
-        </p>
-
-        <p><strong>Day 1 — Track &amp; Understand the Barking (Observation day)</strong><br/>
-        Start by understanding when and why your dog barks.</p>
-        <ul>
-          <li>Write down the time, trigger, and duration of each barking episode.</li>
-          <li>Notice patterns: visitors, outside noises, boredom, separation, etc.</li>
-          <li>Keep sessions calm — today is about observing, not correcting.</li>
-        </ul>
-
-        <p><strong>Day 2 — Teach a Calm “Focus on Me” Cue (Foundation skill)</strong></p>
-        <ul>
-          <li>We teach your dog to look at you on cue so you can interrupt barking before it escalates.</li>
-          <li>Say your marker word (e.g. “Yes”) and reward when your dog looks at you.</li>
-          <li>Add a cue like “Look” after a few repetitions.</li>
-          <li>Practice 3–5 short sessions of 3 minutes each.</li>
-        </ul>
-
-        <p><strong>Day 3 — Introduce Controlled Triggers (Low-level practice)</strong></p>
-        <ul>
-          <li>Gently introduce mild versions of barking triggers while reinforcing calm behavior.</li>
-          <li>Play quiet doorbell sounds on your phone or create small outside noises.</li>
-          <li>Before your dog reacts, use “Look” and reward eye contact.</li>
-          <li>End before your dog gets overwhelmed.</li>
-        </ul>
-
-        <p><strong>Day 4 — Reward Quiet Moments (Change the habit)</strong></p>
-        <ul>
-          <li>Today you reward silence on purpose, so your dog learns that quiet pays.</li>
-          <li>Keep treats ready when you expect barking triggers.</li>
-          <li>When your dog chooses not to bark or stops quickly, quietly praise and reward.</li>
-          <li>Ignore attention-seeking barking as much as possible.</li>
-        </ul>
-
-        <p><strong>Day 5 — Add a “Quiet” Cue (Name the behavior)</strong></p>
-        <ul>
-          <li>Once your dog understands that calm is good, you add a clear “Quiet” cue.</li>
-          <li>Wait for a break in barking, calmly say “Quiet”, then reward.</li>
-          <li>Practice in very short bursts; never shout the cue.</li>
-          <li>Repeat with different low-level triggers.</li>
-        </ul>
-
-        <p><strong>Day 6 — Practice in Real-Life Situations (Generalisation)</strong></p>
-        <ul>
-          <li>Start using your new skills in normal daily situations.</li>
-          <li>Ask a friend to ring the bell or walk past your door.</li>
-          <li>Use “Look” and “Quiet” before barking escalates.</li>
-          <li>Reward generously for calm choices.</li>
-        </ul>
-
-        <p><strong>Day 7 — Review &amp; Long-Term Plan (Maintain progress)</strong></p>
-        <ul>
-          <li>Today you review progress and create a simple routine to keep barking under control.</li>
-          <li>Decide on 1–2 daily “calm training” moments you will keep.</li>
-          <li>Note what helped your dog the most this week.</li>
-          <li>Continue to reward quiet behaviour — good habits grow with practice.</li>
-        </ul>
-      </section>
-
-      <!-- 10 Day Leash -->
-      <section id="leash-full" class="plan-section">
-        <h3>10-Day Training Plan — Leash Walking Mastery</h3>
-        <div class="meta">
-          Short walks · Clear exercises · Real-life practice
-        </div>
-        <p>
-          A gentle, structured programme to teach your dog to walk calmly by your side without pulling.  
-          This is a digital training plan included in your CalmPaw Complete Pack. You can follow each day directly on this page.
-        </p>
-
-        <p><strong>Day 1 — Equipment &amp; Safe Start (Set up)</strong></p>
-        <ul>
-          <li>Choose safe, comfortable equipment and introduce it positively.</li>
-          <li>Fit a well-fitting harness or flat collar (no choke/prong tools).</li>
-          <li>Let your dog wear the gear indoors with treats and praise.</li>
-          <li>Keep the first session very short and positive.</li>
-        </ul>
-
-        <p><strong>Day 2 — Reward “By My Side” (Foundation)</strong></p>
-        <ul>
-          <li>Teach your dog that staying near your leg brings rewards.</li>
-          <li>Stand still, mark and reward when your dog appears near your left or right leg.</li>
-          <li>Add a cue like “Close” once your dog understands.</li>
-          <li>Keep 3–4 mini sessions, 2–3 minutes each.</li>
-        </ul>
-
-        <p><strong>Day 3 — First Loose-Leash Steps Indoors (Low distraction)</strong></p>
-        <ul>
-          <li>Start practising calm, short-distance walking where distractions are minimal.</li>
-          <li>Take a few slow steps indoors and reward when the leash stays loose.</li>
-          <li>If your dog surges forward, simply stop and reset without tension.</li>
-          <li>Finish each tiny session with praise and play.</li>
-        </ul>
-
-        <p><strong>Day 4 — Introduce Direction Changes (Follow the handler)</strong></p>
-        <ul>
-          <li>Teach your dog to follow your movements calmly.</li>
-          <li>Walk forward 3–4 steps, then turn left or right gently.</li>
-          <li>Reward your dog for staying with you through the turn.</li>
-          <li>Avoid pulling — your movement should guide the behaviour.</li>
-        </ul>
-
-        <p><strong>Day 5 — Controlled Outdoor Start (New environment)</strong></p>
-        <ul>
-          <li>Move outdoors but choose a quiet area with fewer distractions.</li>
-          <li>Take only 1–2 minutes of walking before giving a break.</li>
-          <li>Reward check-ins (when your dog looks at you willingly).</li>
-          <li>Keep the leash loose; avoid correcting or yanking.</li>
-        </ul>
-
-        <p><strong>Day 6 — Build Focus Around Mild Distractions (Progression)</strong></p>
-        <ul>
-          <li>Introduce gentle distractions while keeping expectations low.</li>
-          <li>Walk near mild triggers such as distant people or parked bicycles.</li>
-          <li>Use “Look” or “Close” when your dog becomes slightly aroused.</li>
-          <li>Reward calm behaviour before your dog escalates.</li>
-        </ul>
-
-        <p><strong>Day 7 — Pattern Walking (Structure)</strong></p>
-        <ul>
-          <li>Use predictable walking patterns to strengthen your dog’s confidence.</li>
-          <li>Try figure-8s, loops or straight-line patterns in a quiet area.</li>
-          <li>Reward your dog for staying beside you through the pattern.</li>
-          <li>Repeat 2–3 short sessions.</li>
-        </ul>
-
-        <p><strong>Day 8 — Introduce Real-World Challenges (Applied practice)</strong></p>
-        <ul>
-          <li>Start walking in slightly busier environments.</li>
-          <li>Walk past driveways, moving cars at a distance, or mild street noise.</li>
-          <li>Reward frequently when your dog chooses loose-leash walking.</li>
-          <li>Move away if your dog becomes overstimulated.</li>
-        </ul>
-
-        <p><strong>Day 9 — Extend Duration &amp; Confidence (Stamina)</strong></p>
-        <ul>
-          <li>Increase the total walking time while maintaining loose leash behaviour.</li>
-          <li>Begin with short 1–2 minute intervals, adding time slowly.</li>
-          <li>Use calm praise and occasional treats to reinforce good choices.</li>
-          <li>End on success — don't wait until your dog is tired or frustrated.</li>
-        </ul>
-
-        <p><strong>Day 10 — Real-World Walk &amp; Long-Term Plan (Maintain)</strong></p>
-        <ul>
-          <li>Put everything together in a normal walk and build a long-term routine.</li>
-          <li>Choose a calm route and practise all skills from previous days.</li>
-          <li>Reward often for loose leash and voluntary check-ins.</li>
-          <li>Plan 2–3 “training walks” per week to maintain progress.</li>
-        </ul>
-      </section>
-
-      <!-- 14 Day Anxiety -->
-      <section id="anxiety-full" class="plan-section">
-        <h3>14-Day Training Plan — Separation Anxiety Reset</h3>
-        <div class="meta">
-          Tiny absences · Calm routines · Gradual confidence building
-        </div>
-        <p>
-          A gentle step-by-step schedule to help your dog feel safer and calmer when home alone.  
-          This is a digital training plan included in your CalmPaw Complete Pack. Follow one small step each day.
-        </p>
-
-        <p><strong>Day 1 — Safety Check &amp; Baseline (Foundation)</strong></p>
-        <ul>
-          <li>Choose a quiet, safe area where your dog will stay when alone.</li>
-          <li>Provide water, a comfy bed, and a safe chew.</li>
-          <li>Record how long your dog can stay calm when you step out of sight.</li>
-        </ul>
-
-        <p><strong>Day 2 — Micro Absences (Seconds only)</strong></p>
-        <ul>
-          <li>Step out of the room for 5–10 seconds, then return calmly.</li>
-          <li>Repeat several times, always returning while your dog is still relatively calm.</li>
-          <li>Do 2–3 short sessions per day.</li>
-        </ul>
-
-        <p><strong>Day 3 — Predictable Leaving Routine (Structure)</strong></p>
-        <ul>
-          <li>Teach your dog that your leaving routine is calm and predictable.</li>
-          <li>Pick a simple routine (shoes → key → calm word → leave).</li>
-          <li>Practise 10–15 repetitions without actually leaving the home.</li>
-          <li>Reward calm behaviour during this routine.</li>
-        </ul>
-
-        <p><strong>Day 4 — Calm Alone Moments (First distance)</strong></p>
-        <ul>
-          <li>Start building tiny “alone moments” inside your home.</li>
-          <li>Walk to the other side of the room for 10–20 seconds.</li>
-          <li>Return calmly before your dog becomes anxious.</li>
-          <li>Repeat 5–6 times.</li>
-        </ul>
-
-        <p><strong>Day 5 — Add Mild Sounds (Low-level challenge)</strong></p>
-        <ul>
-          <li>Introduce gentle background noises while your dog is alone briefly.</li>
-          <li>Soft door sounds, quiet footsteps, or distant outside noise.</li>
-          <li>Keep absences short and end before anxiety builds.</li>
-          <li>Reward calmness with soft praise on return.</li>
-        </ul>
-
-        <p><strong>Day 6 — Increase Absence Duration (Progression)</strong></p>
-        <ul>
-          <li>Extend absence from 10–20 seconds to 30–45 seconds.</li>
-          <li>Move slowly — only increase duration if your dog stays calm.</li>
-          <li>Return immediately if anxiety rises.</li>
-          <li>Do 3–4 short sessions today.</li>
-        </ul>
-
-        <p><strong>Day 7 — Build Consistency (Routine)</strong></p>
-        <ul>
-          <li>Reinforce your dog’s confidence with predictable daily practice.</li>
-          <li>Practise 5–6 micro absences throughout the day.</li>
-          <li>Keep your leaving routine identical every time.</li>
-          <li>Avoid emotional greetings.</li>
-        </ul>
-
-        <p><strong>Day 8 — First 1–2 Minute Absence (Milestone)</strong></p>
-        <ul>
-          <li>Increase duration into the first meaningful absence territory.</li>
-          <li>Try 60–90 seconds away from your dog.</li>
-          <li>Monitor signs of stress — pacing, whining, licking.</li>
-          <li>Stop immediately if your dog becomes distressed.</li>
-        </ul>
-
-        <p><strong>Day 9 — Calm Independence Skills (Confidence)</strong></p>
-        <ul>
-          <li>Teach your dog to relax independently, even when you’re home.</li>
-          <li>Use scatter feeding or a chew toy during short solo moments.</li>
-          <li>Reward your dog for choosing to rest calmly.</li>
-          <li>Ignore demand barking for attention.</li>
-        </ul>
-
-        <p><strong>Day 10 — Moderate Absences (Stability)</strong></p>
-        <ul>
-          <li>Build duration gradually now that your dog has a foundation.</li>
-          <li>Practise 2–3 minute absences in several repetitions.</li>
-          <li>Keep everything predictable and calm.</li>
-          <li>Reward quiet behaviour softly after each return.</li>
-        </ul>
-
-        <p><strong>Day 11 — Door Practice (Realistic setup)</strong></p>
-        <ul>
-          <li>Help your dog understand that door sounds do not mean panic.</li>
-          <li>Open and close the door lightly during absence practice.</li>
-          <li>Use your calm cue if your dog becomes alert.</li>
-          <li>Keep absences under your dog’s panic threshold.</li>
-        </ul>
-
-        <p><strong>Day 12 — Short Outdoor Absences (Next level)</strong></p>
-        <ul>
-          <li>Practise leaving the house briefly for the first time.</li>
-          <li>Step outside for 30–60 seconds, then return quietly.</li>
-          <li>Do not ring the doorbell — keep triggers minimal.</li>
-          <li>Repeat 3–4 times.</li>
-        </ul>
-
-        <p><strong>Day 13 — Build Real-World Duration (Strengthening)</strong></p>
-        <ul>
-          <li>Increase outside absences to 2–4 minutes if your dog is coping well.</li>
-          <li>Keep your leaving routine the same every time.</li>
-          <li>Only extend duration when your dog remains calm.</li>
-          <li>Avoid emotional returns.</li>
-        </ul>
-
-        <p><strong>Day 14 — Review &amp; Long-Term Plan (Maintain)</strong></p>
-        <ul>
-          <li>Review your dog’s progress and create a sustainable long-term plan.</li>
-          <li>Write down what triggers still cause worry and avoid pushing too far.</li>
-          <li>Plan 3–4 calm-alone sessions per week going forward.</li>
-          <li>Seek a qualified behaviourist if your dog still shows severe anxiety.</li>
-        </ul>
-      </section>
-    </div>
 
     <footer>
       <a href="/refund.html">Refund Policy</a>
@@ -501,6 +174,24 @@
     </footer>
 
   </main>
+
+  <!-- 登录判断逻辑：已登录 → bundle-access；未登录 → 先登录再跳回 -->
+  <script>
+    document.getElementById("accessBtn").addEventListener("click", function(e){
+      e.preventDefault();
+      const token = localStorage.getItem("calmpaw_token");
+      const target = "/bundle-access";
+
+      if (token) {
+        // 已登录 → 直接访问完整包页面
+        window.location.href = target;
+      } else {
+        // 未登录 → 先登录，登录后回到访问页
+        window.location.href =
+          "/auth.html?redirect=" + encodeURIComponent(target);
+      }
+    });
+  </script>
 
 </body>
 </html>
